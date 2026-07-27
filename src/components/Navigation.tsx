@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Menu, X, MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import Logo from '@/components/Logo'
 import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
 
 type NavDict = {
@@ -88,14 +88,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
         <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL — home">
-            <Image
-              src={lang === 'he' ? '/he-logo.svg' : '/en-logo.svg'}
-              alt="PROPEL"
-              width={130}
-              height={38}
-              priority
-              className="h-9 w-auto object-contain sm:h-10"
-            />
+            <Logo className="text-[26px] sm:text-[28px]" />
           </Link>
 
           {/* Desktop nav links */}

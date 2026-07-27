@@ -42,13 +42,13 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
-// Display face only — used for large numerals and the 404 mark, never for body
-// copy, so it has no business competing on the critical path.
+// Preloaded because it renders the wordmark in the header — the first thing on
+// screen. Left unpreloaded it would visibly swap from the fallback face on the
+// logo itself.
 const raleway = Raleway({
   subsets: ['latin'],
   variable: '--font-raleway',
   display: 'swap',
-  preload: false,
 })
 
 // ── Route config ──────────────────────────────────────────────────────────────

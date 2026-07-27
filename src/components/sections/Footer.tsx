@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { MessageCircle, Phone, Mail } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
 import LocaleSwitch from '@/components/LocaleSwitch'
+import Logo from '@/components/Logo'
 
 type FooterDict = {
   tagline: string
@@ -51,13 +51,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Image
-              src="/logo-white.svg"
-              alt="PROPEL"
-              width={130}
-              height={38}
-              className="h-8 w-auto object-contain"
-            />
+            <Logo tone="dark" className="text-[26px]" />
             <p className="mt-4 max-w-[260px] text-[13px] leading-relaxed text-white/60">
               {dict.tagline}
             </p>
