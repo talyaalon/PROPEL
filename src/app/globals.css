@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Locale-aware font application ───────────────────────────────── */
+html[lang='he'] body {
+  font-family: var(--font-assistant), sans-serif;
+}
+
+html[lang='en'] body {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-brand-charcoal antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Premium text selection */
+  ::selection {
+    background-color: #1c1c1c;
+    color: #f9f7f2;
+  }
+
+  /* Clean focus ring — keyboard users only */
+  :focus-visible {
+    outline: 2px solid #1c1c1c;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-raleway), sans-serif;
+    font-weight: 800;
+  }
+
+  /* RTL-aware underline grow animation */
+  .underline-ltr {
+    transform-origin: left center;
+  }
+
+  .underline-rtl {
+    transform-origin: right center;
+  }
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="38" viewBox="0 0 130 38" fill="none">
+  <!-- Replace this file with your actual white logo for dark backgrounds -->
+  <rect width="130" height="38" fill="none"/>
+  <text
+    x="0"
+    y="28"
+    font-family="'Raleway', 'Arial Black', sans-serif"
+    font-size="26"
+    font-weight="900"
+    letter-spacing="-0.5"
+    fill="#FFFFFF"
+  >PROPEL</text>
+  <circle cx="124" cy="8" r="3" fill="#FFFFFF"/>
+</svg>

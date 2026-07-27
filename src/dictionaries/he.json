@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "title": "PROPEL | פיתוח ווב ואוטומציה עסקית",
+    "description": "PROPEL — סוכנות פיתוח ווב ואוטומציה עסקית לעסקים שרוצים לגדול בלי להילחם בטכנולוגיה"
+  },
+  "nav": {
+    "services": "שירותים",
+    "portfolio": "פורטפוליו",
+    "about": "אודות",
+    "cta": "בואו נדבר",
+    "toggle_lang": "EN",
+    "whatsapp_message": "היי PROPEL, בואו נדבר על פרויקט חדש."
+  },
+  "hero": {
+    "badge": "זמינים לפרויקטים חדשים",
+    "h1_pre": "מייעלים",
+    "h1_focus": "את מה שמאט אותך",
+    "h1_post": "",
+    "subtitle": "פיתוח ווב מתקדם, אוטומציה חכמה ושיווק ממוקד — סוכנות אחת שמניעה את העסק שלך קדימה.",
+    "cta_primary": "התחילו פרויקט",
+    "cta_secondary": "גלו את השירותים",
+    "whatsapp_message": "היי PROPEL, בואו נדבר על פרויקט חדש."
+  },
+  "stats": [
+    { "number": "120+", "label": "פרויקטים שהושלמו", "icon": "FolderOpen" },
+    { "number": "98%", "label": "שביעות רצון לקוחות", "icon": "Heart" },
+    { "number": "5★", "label": "דירוג ממוצע", "icon": "Star" }
+  ],
+  "services": {
+    "section_title": "השירותים שלנו",
+    "section_subtitle": "פתרונות דיגיטליים שמניעים עסקים קדימה מהיום הראשון",
+    "cta_label": "שוחח איתנו",
+    "items": [
+      {
+        "id": "webdev",
+        "icon": "Monitor",
+        "title": "פיתוח ווב",
+        "description": "אתרים מהירים, נגישים ומותאמים לכל מכשיר — בנויים לביצועים מקסימליים ולחוויית משתמש יוצאת דופן.",
+        "features": ["Next.js & React", "אופטימיזציית ביצועים", "עיצוב רספונסיבי", "ממשקים נגישים"],
+        "whatsapp_message": "היי PROPEL, אני מעוניין בשירותי פיתוח ווב שלכם."
+      },
+      {
+        "id": "automation",
+        "icon": "Zap",
+        "title": "אוטומציה עסקית",
+        "description": "אוטומציה חכמה לתהליכים עסקיים — חיסכון בזמן, צמצום שגיאות וצמיחה מהירה יותר.",
+        "features": ["אינטגרציות API", "זרימות עבודה אוטומטיות", "לוחות בקרה", "CRM חכם"],
+        "whatsapp_message": "היי PROPEL, אני מעוניין בשירותי אוטומציה עסקית שלכם."
+      },
+      {
+        "id": "seo",
+        "icon": "TrendingUp",
+        "title": "SEO ושיווק דיגיטלי",
+        "description": "אסטרטגיית SEO מבוססת נתונים שמניבה תנועה אורגנית ומביאה לקוחות אמיתיים לעסק שלך.",
+        "features": ["מחקר מילות מפתח", "SEO טכני", "תוכן אסטרטגי", "ניתוח מתחרים"],
+        "whatsapp_message": "היי PROPEL, אני מעוניין בשירותי SEO ושיווק דיגיטלי שלכם."
+      }
+    ]
+  },
+  "portfolio": {
+    "section_title": "הפרויקטים שלנו",
+    "section_subtitle": "כמה מהעבודות שאנחנו הכי גאים בהן",
+    "view_project": "פרטים נוספים",
+    "whatsapp_prefix": "היי PROPEL, ראיתי את הפרויקט",
+    "whatsapp_suffix": "ואני רוצה לדון בפרויקט דומה.",
+    "items": [
+      {
+        "id": "project1",
+        "title": "TechFlow — פלטפורמת SaaS",
+        "category": "פיתוח ווב",
+        "description": "פלטפורמת ניהול פרויקטים מלאה עם דאשבורד אנליטיקס ואינטגרציות API מתקדמות.",
+        "tags": ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
+        "color": "#E8E4DE"
+      },
+      {
+        "id": "project2",
+        "title": "RetailMax — חנות אונליין",
+        "category": "מסחר אלקטרוני",
+        "description": "חנות אינטרנטית עם מערכת ניהול מלאי, תשלומים ולוח בקרה למנהלים.",
+        "tags": ["Next.js", "Shopify", "Tailwind", "Node.js"],
+        "color": "#E4E8E0"
+      },
+      {
+        "id": "project3",
+        "title": "AutoFlow — אוטומציה עסקית",
+        "category": "אוטומציה",
+        "description": "מערכת אוטומציה שמחברת CRM, חשבוניות ואימייל מרקטינג בזרימת עבודה אחת.",
+        "tags": ["n8n", "Zapier", "HubSpot", "API"],
+        "color": "#E4E4E8"
+      },
+      {
+        "id": "project4",
+        "title": "LegalPro — משרד עורכי דין",
+        "category": "פיתוח ווב",
+        "description": "אתר ייצוגי עם מערכת ניהול לקוחות, קביעת פגישות ובסיס ידע משפטי.",
+        "tags": ["Next.js", "Sanity CMS", "Calendly", "TypeScript"],
+        "color": "#E8E8E4"
+      },
+      {
+        "id": "project5",
+        "title": "GrowthLab — SEO & Analytics",
+        "category": "SEO",
+        "description": "אסטרטגיית SEO מקיפה שהכפילה את התנועה האורגנית תוך 6 חודשים.",
+        "tags": ["SEO", "Google Analytics", "Search Console", "Content"],
+        "color": "#E8E0DC"
+      },
+      {
+        "id": "project6",
+        "title": "Studio3D — תיק עבודות",
+        "category": "עיצוב ואינטראקטיביות",
+        "description": "תיק עבודות אינטראקטיבי עם אנימציות 3D ומעברים חלקים.",
+        "tags": ["Next.js", "Three.js", "GSAP", "Tailwind"],
+        "color": "#DCE0E8"
+      }
+    ]
+  },
+  "about": {
+    "section_title": "אודות PROPEL",
+    "section_subtitle": "אנחנו לא סתם עוד סוכנות ווב",
+    "paragraphs": [
+      "PROPEL נוסדה מתוך אמונה אחת פשוטה: עסקים קטנים ובינוניים ראויים לאותה רמת ביצוע דיגיטלי שגדולי התאגידים מקבלים.",
+      "אנחנו בונים, אוטומטים ומשווקים — בגישה ממוקדת, ללא בירוקרטיה מיותרת, עם תוצאות שניתן למדוד."
+    ],
+    "values": [
+      {
+        "icon": "Target",
+        "title": "ממוקדי תוצאות",
+        "description": "כל פרויקט נמדד לפי ביצועים אמיתיים — לא לפי שעות עבודה"
+      },
+      {
+        "icon": "Zap",
+        "title": "מהירות ביצוע",
+        "description": "מפרויקט לאוויר בזמן שיא, ללא פשרות על איכות הקוד"
+      },
+      {
+        "icon": "Shield",
+        "title": "שקיפות מלאה",
+        "description": "תקשורת ישירה ופתוחה — על מה שאפשר ועל מה שלא"
+      }
+    ],
+    "cta_label": "בואו נעבוד יחד",
+    "whatsapp_message": "היי PROPEL, בואו נדבר על שיתוף פעולה."
+  },
+  "footer": {
+    "tagline": "מייעלים את מה שמאט אותך",
+    "links_title": "ניווט מהיר",
+    "contact_title": "צרו קשר",
+    "nav_services": "שירותים",
+    "nav_portfolio": "פורטפוליו",
+    "nav_about": "אודות",
+    "whatsapp_cta": "שוחח איתנו בוואטסאפ",
+    "copyright": "כל הזכויות שמורות © PROPEL",
+    "whatsapp_message": "היי PROPEL, אני רוצה ליצור קשר."
+  }
+}

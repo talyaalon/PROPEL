@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "title": "PROPEL | Web Development & Business Automation",
+    "description": "PROPEL — B2B web development and business automation agency for companies that want to grow without fighting technology"
+  },
+  "nav": {
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "about": "About",
+    "cta": "Let's Talk",
+    "toggle_lang": "HE",
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+  },
+  "hero": {
+    "badge": "Available for new projects",
+    "h1_pre": "We speed up",
+    "h1_focus": "what slows you down",
+    "h1_post": "",
+    "subtitle": "Advanced web development, smart automation, and focused marketing — one agency, built to move your business forward.",
+    "cta_primary": "Start a Project",
+    "cta_secondary": "Explore Services",
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+  },
+  "stats": [
+    { "number": "120+", "label": "Projects Completed", "icon": "FolderOpen" },
+    { "number": "98%", "label": "Client Satisfaction", "icon": "Heart" },
+    { "number": "5★", "label": "Average Rating", "icon": "Star" }
+  ],
+  "services": {
+    "section_title": "Our Services",
+    "section_subtitle": "Digital solutions that move businesses forward from day one",
+    "cta_label": "Talk to us",
+    "items": [
+      {
+        "id": "webdev",
+        "icon": "Monitor",
+        "title": "Web Development",
+        "description": "Fast, accessible, device-optimized websites — built for peak performance and exceptional user experience.",
+        "features": ["Next.js & React", "Performance Optimization", "Responsive Design", "Accessible Interfaces"],
+        "whatsapp_message": "Hi PROPEL, I'm interested in your web development services."
+      },
+      {
+        "id": "automation",
+        "icon": "Zap",
+        "title": "Business Automation",
+        "description": "Smart automation for business workflows — save time, reduce errors, and grow faster.",
+        "features": ["API Integrations", "Automated Workflows", "Custom Dashboards", "Smart CRM"],
+        "whatsapp_message": "Hi PROPEL, I'm interested in your business automation services."
+      },
+      {
+        "id": "seo",
+        "icon": "TrendingUp",
+        "title": "SEO & Digital Marketing",
+        "description": "Data-driven SEO strategy that generates organic traffic and brings real clients to your business.",
+        "features": ["Keyword Research", "Technical SEO", "Strategic Content", "Competitor Analysis"],
+        "whatsapp_message": "Hi PROPEL, I'm interested in your SEO and digital marketing services."
+      }
+    ]
+  },
+  "portfolio": {
+    "section_title": "Our Projects",
+    "section_subtitle": "Some of the work we're most proud of",
+    "view_project": "Learn More",
+    "whatsapp_prefix": "Hi PROPEL, I saw your project",
+    "whatsapp_suffix": "and would like to discuss something similar.",
+    "items": [
+      {
+        "id": "project1",
+        "title": "TechFlow — SaaS Platform",
+        "category": "Web Development",
+        "description": "Full project management platform with analytics dashboard and advanced API integrations.",
+        "tags": ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
+        "color": "#E8E4DE"
+      },
+      {
+        "id": "project2",
+        "title": "RetailMax — Online Store",
+        "category": "E-Commerce",
+        "description": "Online store with inventory management, payment processing, and an admin dashboard.",
+        "tags": ["Next.js", "Shopify", "Tailwind", "Node.js"],
+        "color": "#E4E8E0"
+      },
+      {
+        "id": "project3",
+        "title": "AutoFlow — Business Automation",
+        "category": "Automation",
+        "description": "Automation system connecting CRM, invoices, and email marketing in one workflow.",
+        "tags": ["n8n", "Zapier", "HubSpot", "API"],
+        "color": "#E4E4E8"
+      },
+      {
+        "id": "project4",
+        "title": "LegalPro — Law Firm",
+        "category": "Web Development",
+        "description": "Representative website with client management, appointment booking, and legal knowledge base.",
+        "tags": ["Next.js", "Sanity CMS", "Calendly", "TypeScript"],
+        "color": "#E8E8E4"
+      },
+      {
+        "id": "project5",
+        "title": "GrowthLab — SEO & Analytics",
+        "category": "SEO",
+        "description": "Comprehensive SEO strategy that doubled organic traffic within 6 months.",
+        "tags": ["SEO", "Google Analytics", "Search Console", "Content"],
+        "color": "#E8E0DC"
+      },
+      {
+        "id": "project6",
+        "title": "Studio3D — Portfolio",
+        "category": "Design & Interactivity",
+        "description": "Interactive portfolio with 3D animations and smooth transitions.",
+        "tags": ["Next.js", "Three.js", "GSAP", "Tailwind"],
+        "color": "#DCE0E8"
+      }
+    ]
+  },
+  "about": {
+    "section_title": "About PROPEL",
+    "section_subtitle": "We're not just another web agency",
+    "paragraphs": [
+      "PROPEL was founded on one simple belief: small and medium businesses deserve the same level of digital execution that major corporations receive.",
+      "We build, automate, and market — with a focused approach, no unnecessary bureaucracy, and results you can measure."
+    ],
+    "values": [
+      {
+        "icon": "Target",
+        "title": "Results-Focused",
+        "description": "Every project is measured by real performance — not billable hours"
+      },
+      {
+        "icon": "Zap",
+        "title": "Fast Execution",
+        "description": "From project kickoff to launch at record speed, without compromising code quality"
+      },
+      {
+        "icon": "Shield",
+        "title": "Full Transparency",
+        "description": "Direct and open communication — about what's possible and what isn't"
+      }
+    ],
+    "cta_label": "Let's Work Together",
+    "whatsapp_message": "Hi PROPEL, let's talk about working together."
+  },
+  "footer": {
+    "tagline": "Speed up what slows you down",
+    "links_title": "Quick Links",
+    "contact_title": "Get In Touch",
+    "nav_services": "Services",
+    "nav_portfolio": "Portfolio",
+    "nav_about": "About",
+    "whatsapp_cta": "Chat with us on WhatsApp",
+    "copyright": "All rights reserved © PROPEL",
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+  }
+}
