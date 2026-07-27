@@ -70,6 +70,20 @@ Connect the GitHub repository in the Netlify UI rather than uploading builds, so
 every push deploys and pull requests get previews. Set the environment variables
 in the Netlify project settings — `.env.local` is gitignored and never deployed.
 
+Current project: `propel-agency` (Netlify team `talyaalon`).
+
+### The contributor gate
+
+Netlify's free plan allows only one Git contributor on a **private** repository,
+and it identifies the contributor by **who pushed** — not by the commit author.
+A push from any other GitHub account is rejected before the build starts with
+"Build blocked: Unrecognized Git contributor", regardless of what the commit
+metadata says. Rewriting commit authorship does not work around it.
+
+This repository is public, which removes the restriction entirely. If it is ever
+made private again, every push must come from the GitHub account linked under
+Netlify → Members → Git Contributors, or builds will stop.
+
 ## Conventions worth keeping
 
 - Every call to action carries a `data-analytics="event:location"` attribute.
