@@ -7,6 +7,7 @@ import { professionalServiceSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import Reveal from '@/components/Reveal'
 import Hero from '@/components/sections/Hero'
+import TrustedBy from '@/components/sections/TrustedBy'
 import Services from '@/components/sections/Services'
 import Process from '@/components/sections/Process'
 import Portfolio from '@/components/sections/Portfolio'
@@ -57,6 +58,7 @@ export default async function Page({ params }: Props) {
           The hero is deliberately not wrapped in Reveal: it is above the fold,
           it already has its own entrance animation, and it is the LCP element. */}
       <Hero lang={lang} dict={dict.hero} />
+      <TrustedBy label={dict.trusted_by} />
 
       <Reveal>
         <Services dict={dict.services} />
