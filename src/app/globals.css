@@ -4,16 +4,21 @@
 
 html {
   scroll-behavior: smooth;
+  /* Matches the sticky nav height so anchor targets are not buried under it */
+  scroll-padding-top: 68px;
 }
 
-/* ── Locale-aware font application ───────────────────────────────── */
-html[lang='he'] body {
-  font-family: var(--font-assistant), sans-serif;
+@media (min-width: 640px) {
+  html {
+    scroll-padding-top: 76px;
+  }
 }
 
-html[lang='en'] body {
-  font-family: var(--font-dm-sans), sans-serif;
-}
+/*
+ * The body's font-family is applied by the layout via next/font's className, not
+ * here. Doing it in CSS hid the dependency from Next and cost the page a font
+ * preload it should have had.
+ */
 
 @layer base {
   body {
@@ -56,5 +61,60 @@ html[lang='en'] body {
 
   .underline-rtl {
     transform-origin: right center;
+  }
+
+  /*
+   * Shared grain texture. Previously this data-URI was inlined as a style
+   * attribute in both the nav and the hero, shipping the same ~300 bytes twice
+   * in the HTML of every page.
+   */
+  /*
+   * Scroll reveal. The hidden state is rendered by the server so there is no
+   * flash of visible-then-hidden content; the <noscript> rule in the layout and
+   * the reduced-motion block below both force it back to visible, so content is
+   * never trapped behind JavaScript or an accessibility preference.
+   */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+}
+
+/*
+ * ── Reduced motion ────────────────────────────────────────────────
+ * Vestibular disorders make parallax, fades and the pulsing availability dot
+ * genuinely unpleasant. Honour the OS-level preference everywhere at once.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Not just instant — never hidden in the first place */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

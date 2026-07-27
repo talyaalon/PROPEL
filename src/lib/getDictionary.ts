@@ -1,4 +1,4 @@
-import type { Locale } from '../../middleware'
+import type { Locale } from './i18n'
 
 const dictionaries = {
   he: () => import('@/dictionaries/he.json').then((m) => m.default),

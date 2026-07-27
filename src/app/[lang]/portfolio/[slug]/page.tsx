@@ -2,140 +2,142 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ExternalLink, ArrowRight } from 'lucide-react'
-import type { Locale } from '../../../../../middleware'
-import { getProjectBySlug, getAllProjectSlugs } from '@/sanity/lib/queries'
-import { urlForImage } from '@/sanity/lib/image'
-
-// ── ISR: revalidate every 60 seconds so new CMS content appears without redeploy
-export const revalidate = 60
+import { ExternalLink, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react'
+import { locales, isLocale } from '@/lib/i18n'
+import { getDictionary } from '@/lib/getDictionary'
+import { siteConfig } from '@/lib/config'
+import { getWhatsAppURL } from '@/lib/whatsapp'
+import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
+import { getProjects, getProjectBySlug } from '@/content/projects'
 
 type Props = {
-  params: Promise<{ lang: Locale; slug: string }>
+  params: Promise<{ lang: string; slug: string }>
+}
+
+// Only the slugs that exist are routable — anything else is a 404, not a
+// server render that then throws.
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return locales.flatMap((lang) =>
+    getProjects().map((project) => ({ lang, slug: project.slug }))
+  )
 }
 
 // ── Metadata ────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, slug } = await params
-  const project = await getProjectBySlug(slug)
+  if (!isLocale(lang)) return {}
+
+  const project = getProjectBySlug(slug)
   if (!project) return {}
-  const description = project.problem?.[lang] ?? ''
+
+  const description = project.summary[lang]
+  const url = `${siteConfig.url}/${lang}/portfolio/${project.slug}`
+
   return {
-    title: `${project.title} | PROPEL`,
-    description: description.slice(0, 155),
+    title: project.title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: {
+        he: `${siteConfig.url}/he/portfolio/${project.slug}`,
+        en: `${siteConfig.url}/en/portfolio/${project.slug}`,
+        'x-default': `${siteConfig.url}/he/portfolio/${project.slug}`,
+      },
+    },
+    openGraph: {
+      type: 'article',
+      title: `${project.title} | PROPEL`,
+      description,
+      url,
+    },
   }
 }
 
-// ── Static params — pre-render known slugs at build time ────────────────────
-
-export async function generateStaticParams() {
-  const slugs = await getAllProjectSlugs()
-  return ['he', 'en'].flatMap((lang) =>
-    slugs.map((slug) => ({ lang, slug }))
-  )
-}
-
-// ── Video URL transformer ────────────────────────────────────────────────────
-
-function getEmbedUrl(url: string): string | null {
-  try {
-    const u = new URL(url)
-    // YouTube: youtube.com/watch?v=ID  or  youtu.be/ID
-    if (u.hostname.includes('youtube.com')) {
-      const id = u.searchParams.get('v')
-      return id ? `https://www.youtube.com/embed/${id}` : null
-    }
-    if (u.hostname === 'youtu.be') {
-      const id = u.pathname.replace('/', '')
-      return id ? `https://www.youtube.com/embed/${id}` : null
-    }
-    // Vimeo: vimeo.com/ID
-    if (u.hostname.includes('vimeo.com')) {
-      const id = u.pathname.replace('/', '')
-      return id ? `https://player.vimeo.com/video/${id}` : null
-    }
-    return null
-  } catch {
-    return null
-  }
-}
-
-// ── UI labels (inline bilingual — avoids touching dict files for now) ────────
-
-const labels = {
-  he: {
-    backToPortfolio: 'חזרה לפורטפוליו',
-    problem: 'האתגר',
-    solution: 'הפתרון',
-    results: 'תוצאות',
-    visitSite: 'לאתר החי',
-    screenshots: 'צילומי מסך',
-  },
-  en: {
-    backToPortfolio: 'Back to Portfolio',
-    problem: 'The Challenge',
-    solution: 'The Solution',
-    results: 'Results',
-    visitSite: 'Visit Live Site',
-    screenshots: 'Screenshots',
-  },
-}
-
-// ── Page component ───────────────────────────────────────────────────────────
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function ProjectPage({ params }: Props) {
   const { lang, slug } = await params
-  const project = await getProjectBySlug(slug)
+  if (!isLocale(lang)) notFound()
 
+  const project = getProjectBySlug(slug)
   if (!project) notFound()
 
-  const t = labels[lang]
+  const dict = await getDictionary(lang)
+  const t = dict.portfolio.case_study
   const isRtl = lang === 'he'
-  const embedUrl = project.videoUrl ? getEmbedUrl(project.videoUrl) : null
+  const BackArrow = isRtl ? ArrowRight : ArrowLeft
 
-  const thumbnailUrl = project.thumbnail
-    ? urlForImage(project.thumbnail).width(1400).height(700).url()
-    : null
+  const published = getProjects()
+  const index = published.findIndex((p) => p.slug === project.slug)
+  const next = published[(index + 1) % published.length]
+  const hasNext = published.length > 1
 
   return (
-    <div className="min-h-screen bg-brand-cream">
+    <div className="bg-brand-cream">
+      <JsonLd schema={caseStudySchema(project, lang)} />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          { name: dict.nav.portfolio, url: `${siteConfig.url}/${lang}#portfolio` },
+          {
+            name: project.title,
+            url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
+          },
+        ])}
+      />
 
-      {/* ── Hero banner ──────────────────────────────────────────────────── */}
+      {/* ── Header ────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-charcoal text-brand-cream">
-        {/* Thumbnail as dim background */}
-        {thumbnailUrl && (
+        {project.thumbnail.src && (
           <div className="absolute inset-0">
             <Image
-              src={thumbnailUrl}
-              alt={project.title}
+              src={project.thumbnail.src}
+              alt=""
               fill
-              className="object-cover opacity-20"
               priority
+              className="object-cover opacity-20"
+              sizes="100vw"
             />
           </div>
         )}
 
-        <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-12 lg:px-16">
-          {/* Back link */}
+        <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-20">
           <Link
-            href={`/${lang}/#portfolio`}
-            className={`mb-10 inline-flex items-center gap-2 text-sm font-medium text-brand-light-steel transition-colors hover:text-brand-cream ${isRtl ? 'flex-row-reverse' : ''}`}
+            href={`/${lang}#portfolio`}
+            className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-brand-light-steel transition-colors hover:text-brand-cream"
           >
-            <ArrowRight
-              className={`h-4 w-4 transition-transform ${isRtl ? '' : 'rotate-180'}`}
-            />
-            {t.backToPortfolio}
+            <BackArrow className="h-4 w-4" aria-hidden="true" />
+            {t.back}
           </Link>
 
-          {/* Title */}
           <h1 className="mb-6 font-raleway text-4xl font-black leading-tight tracking-tight lg:text-[64px] lg:leading-none">
             {project.title}
           </h1>
 
-          {/* Tech stack chips */}
-          {project.techStack && project.techStack.length > 0 && (
-            <div className={`flex flex-wrap gap-2 ${isRtl ? 'justify-end' : 'justify-start'}`}>
+          {/* Client / year / category */}
+          <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
+            <div>
+              <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
+                {t.client}
+              </dt>
+              <dd className="mt-1 font-medium text-brand-cream">{project.client[lang]}</dd>
+            </div>
+            <div>
+              <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
+                {t.year}
+              </dt>
+              <dd className="mt-1 font-medium text-brand-cream" dir="ltr">
+                {project.year}
+              </dd>
+            </div>
+          </dl>
+
+          {project.techStack.length > 0 && (
+            <div className="flex flex-wrap gap-2">
               {project.techStack.map((tag) => (
                 <span
                   key={tag}
@@ -149,130 +151,132 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Main content grid ─────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-16 lg:py-24">
-        <div className={`grid gap-12 lg:grid-cols-2 lg:gap-20 ${isRtl ? 'direction-rtl' : ''}`}>
-
-          {/* Left column: Problem + Solution */}
-          <div className="space-y-12">
-            {/* Problem */}
-            {project.problem?.[lang] && (
-              <div>
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="block h-px w-8 bg-brand-charcoal" />
-                  <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-steel">
-                    {t.problem}
-                  </h2>
-                </div>
-                <p className="text-lg leading-relaxed text-brand-charcoal">
-                  {project.problem[lang]}
+      {/* ── Results strip ─────────────────────────────────────────────────── */}
+      {project.results.length > 0 && (
+        <section className="border-b border-brand-border bg-white" aria-label={t.results}>
+          <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-12">
+            {project.results.map((result) => (
+              <div key={result.label[lang]}>
+                <p className="font-raleway text-[40px] font-black leading-none tracking-tight text-brand-charcoal lg:text-[48px]">
+                  {result.metric}
+                </p>
+                <p className="mt-2 text-[14px] leading-snug text-brand-steel">
+                  {result.label[lang]}
                 </p>
               </div>
-            )}
-
-            {/* Solution */}
-            {project.solution?.[lang] && (
-              <div>
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="block h-px w-8 bg-brand-charcoal" />
-                  <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-steel">
-                    {t.solution}
-                  </h2>
-                </div>
-                <p className="text-lg leading-relaxed text-brand-charcoal">
-                  {project.solution[lang]}
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Right column: Results + CTA */}
-          <div className="flex flex-col gap-8">
-            {/* Results card */}
-            {project.result?.[lang] && (
-              <div className="rounded-[22px] bg-brand-charcoal p-8 text-brand-cream">
-                <h2 className="mb-6 text-xs font-bold uppercase tracking-[0.2em] text-brand-light-steel">
-                  {t.results}
-                </h2>
-                {/* Large display number decoration */}
-                <p className="font-raleway text-[56px] font-black leading-none text-white/10 select-none"
-                   aria-hidden="true">
-                  ↑
-                </p>
-                <p className="mt-4 text-lg leading-relaxed text-brand-cream/90">
-                  {project.result[lang]}
-                </p>
-              </div>
-            )}
-
-            {/* Live site CTA */}
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-3 rounded-full bg-brand-charcoal px-8 py-4 font-semibold text-brand-cream transition-all duration-300 hover:bg-brand-black hover:shadow-2xl hover:shadow-brand-charcoal/30"
-              >
-                <ExternalLink className="h-5 w-5 transition-transform group-hover:scale-110" />
-                {t.visitSite}
-              </a>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Media section ─────────────────────────────────────────────────── */}
-      {(embedUrl || (project.gallery && project.gallery.length > 0)) && (
-        <section className="border-t border-brand-border bg-white px-6 py-16 lg:px-16 lg:py-24">
-          <div className="mx-auto max-w-7xl">
-
-            {/* Video embed */}
-            {embedUrl && (
-              <div className="mb-16 overflow-hidden rounded-[22px] shadow-2xl">
-                <div className="relative aspect-video w-full">
-                  <iframe
-                    src={embedUrl}
-                    title={`${project.title} — video`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 h-full w-full border-0"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Screenshot gallery */}
-            {project.gallery && project.gallery.length > 0 && (
-              <>
-                <h2 className={`mb-8 text-xs font-bold uppercase tracking-[0.2em] text-brand-steel ${isRtl ? 'text-right' : ''}`}>
-                  {t.screenshots}
-                </h2>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {project.gallery.map((img, i) => {
-                    const src = urlForImage(img).width(800).height(560).url()
-                    return (
-                      <div
-                        key={img._key ?? i}
-                        className="overflow-hidden rounded-[16px] border border-brand-border bg-brand-cream shadow-sm transition-shadow hover:shadow-lg"
-                      >
-                        <div className="relative aspect-[10/7] w-full">
-                          <Image
-                            src={src}
-                            alt={img.alt ?? `${project.title} screenshot ${i + 1}`}
-                            fill
-                            className="object-cover"
-                            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                          />
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </>
-            )}
+            ))}
           </div>
         </section>
       )}
+
+      {/* ── Challenge / Solution ──────────────────────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+          <Block title={t.challenge} body={project.challenge[lang]} />
+          <Block title={t.solution} body={project.solution[lang]} />
+        </div>
+
+        {project.liveUrl && (
+          <div className="mt-12 lg:mt-16">
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 rounded-full bg-brand-charcoal px-8 py-4 font-semibold text-brand-cream transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-black hover:shadow-[0_12px_32px_rgba(17,17,17,0.28)]"
+            >
+              <ExternalLink className="h-5 w-5 transition-transform group-hover:scale-110" aria-hidden="true" />
+              {t.visit_site}
+            </a>
+          </div>
+        )}
+      </section>
+
+      {/* ── Gallery ───────────────────────────────────────────────────────── */}
+      {project.gallery && project.gallery.length > 0 && (
+        <section className="border-t border-brand-border bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="mb-8 text-xs font-bold uppercase tracking-[0.2em] text-brand-steel">
+              {t.screenshots}
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {project.gallery.map((image) => (
+                <div
+                  key={image.src}
+                  className="overflow-hidden rounded-[16px] border border-brand-border bg-brand-cream shadow-sm transition-shadow hover:shadow-lg"
+                >
+                  <div className="relative aspect-[10/7] w-full">
+                    <Image
+                      src={image.src}
+                      alt={image.alt[lang]}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Closing CTA + next project ────────────────────────────────────── */}
+      <section className="border-t border-brand-border px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="rounded-[28px] bg-brand-charcoal p-8 text-brand-cream sm:p-12">
+            <h2 className="text-2xl font-bold tracking-[-0.02em] sm:text-3xl">{t.cta_title}</h2>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-brand-cream/70">
+              {t.cta_body}
+            </p>
+            <a
+              href={getWhatsAppURL(
+                `${dict.portfolio.whatsapp_prefix} "${project.title}" ${dict.portfolio.whatsapp_suffix}`
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-analytics={`whatsapp:case-study-${project.slug}`}
+              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-cream px-8 py-4 text-[15px] font-semibold text-brand-charcoal transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
+            >
+              <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
+              {t.cta_label}
+            </a>
+          </div>
+
+          {hasNext && (
+            <Link
+              href={`/${lang}/portfolio/${next.slug}`}
+              className="group mt-8 flex items-center justify-between gap-4 rounded-[20px] border border-brand-border bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-card sm:p-7"
+            >
+              <span>
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-steel">
+                  {t.next_project}
+                </span>
+                <span className="mt-1.5 block text-[18px] font-bold tracking-[-0.01em] text-brand-charcoal">
+                  {next.title}
+                </span>
+              </span>
+              <span
+                className="text-brand-steel transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                aria-hidden="true"
+              >
+                {isRtl ? '←' : '→'}
+              </span>
+            </Link>
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+function Block({ title, body }: { title: string; body: string }) {
+  return (
+    <div>
+      <div className="mb-4 flex items-center gap-3">
+        <span className="block h-px w-8 bg-brand-charcoal" aria-hidden="true" />
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-steel">{title}</h2>
+      </div>
+      <p className="text-lg leading-relaxed text-brand-charcoal">{body}</p>
     </div>
   )
 }

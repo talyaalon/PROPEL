@@ -1,11 +1,15 @@
 {
   "meta": {
     "title": "PROPEL | Web Development & Business Automation",
-    "description": "PROPEL — B2B web development and business automation agency for companies that want to grow without fighting technology"
+    "description": "We build fast websites and automations that take manual work off your team, for small and mid-sized businesses. Scoping, development and launch on timelines you can plan around."
+  },
+  "a11y": {
+    "skip_to_content": "Skip to main content"
   },
   "nav": {
     "services": "Services",
-    "portfolio": "Portfolio",
+    "process": "Process",
+    "portfolio": "Work",
     "about": "About",
     "cta": "Let's Talk",
     "toggle_lang": "HE",
@@ -16,139 +20,219 @@
     "h1_pre": "We speed up",
     "h1_focus": "what slows you down",
     "h1_post": "",
-    "subtitle": "Advanced web development, smart automation, and focused marketing — one agency, built to move your business forward.",
-    "cta_primary": "Start a Project",
+    "subtitle": "Websites and automations for small and mid-sized businesses. Built fast, loading fast, and taking the manual work that eats your day off your plate.",
+    "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
+    "cta_note": "A 20-minute scoping call. No commitment.",
     "whatsapp_message": "Hi PROPEL, let's talk about a new project."
   },
-  "stats": [
-    { "number": "120+", "label": "Projects Completed", "icon": "FolderOpen" },
-    { "number": "98%", "label": "Client Satisfaction", "icon": "Heart" },
-    { "number": "5★", "label": "Average Rating", "icon": "Star" }
-  ],
   "services": {
-    "section_title": "Our Services",
-    "section_subtitle": "Digital solutions that move businesses forward from day one",
+    "section_title": "What We Do",
+    "section_subtitle": "Three disciplines, one goal — your business doing less work for the same result",
     "cta_label": "Talk to us",
+    "stack_label": "Built with",
     "items": [
       {
         "id": "webdev",
         "icon": "Monitor",
         "title": "Web Development",
-        "description": "Fast, accessible, device-optimized websites — built for peak performance and exceptional user experience.",
-        "features": ["Next.js & React", "Performance Optimization", "Responsive Design", "Accessible Interfaces"],
-        "whatsapp_message": "Hi PROPEL, I'm interested in your web development services."
+        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries — not just one that looks good in a deck.",
+        "outcomes": [
+          "Sub-second loads, even on mobile data",
+          "Built from the ground up to rank on Google",
+          "Accessible by standard, without bolt-on widgets",
+          "You own the code and the domain"
+        ],
+        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
+        "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
       },
       {
         "id": "automation",
         "icon": "Zap",
         "title": "Business Automation",
-        "description": "Smart automation for business workflows — save time, reduce errors, and grow faster.",
-        "features": ["API Integrations", "Automated Workflows", "Custom Dashboards", "Smart CRM"],
-        "whatsapp_message": "Hi PROPEL, I'm interested in your business automation services."
+        "description": "Any process you do by hand twice a day is a process you can stop doing.",
+        "outcomes": [
+          "Leads land in your CRM without retyping",
+          "Invoices and quotes go out on their own",
+          "Your systems talk to each other instead of through you",
+          "Alerts only for what actually needs you"
+        ],
+        "stack": ["n8n", "Make", "Zapier", "API"],
+        "whatsapp_message": "Hi PROPEL, I'd like to talk about automating my business."
       },
       {
         "id": "seo",
         "icon": "TrendingUp",
-        "title": "SEO & Digital Marketing",
-        "description": "Data-driven SEO strategy that generates organic traffic and brings real clients to your business.",
-        "features": ["Keyword Research", "Technical SEO", "Strategic Content", "Competitor Analysis"],
-        "whatsapp_message": "Hi PROPEL, I'm interested in your SEO and digital marketing services."
+        "title": "SEO & Organic Growth",
+        "description": "Show up exactly where your customers are searching — without paying for every click.",
+        "outcomes": [
+          "Mapping what your customers actually search for",
+          "Fixing the technical blockers holding back indexing",
+          "Content aimed at buying intent, not raw traffic",
+          "A monthly report with numbers, not promises"
+        ],
+        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
+        "whatsapp_message": "Hi PROPEL, I'd like to talk about organic growth."
       }
     ]
   },
   "portfolio": {
-    "section_title": "Our Projects",
-    "section_subtitle": "Some of the work we're most proud of",
-    "view_project": "Learn More",
+    "section_title": "Selected Work",
+    "section_subtitle": "What we built, and what it actually changed",
+    "view_project": "Read the case study",
+    "all_label": "All",
+    "categories": {
+      "web": "Web Development",
+      "ecommerce": "E-Commerce",
+      "automation": "Automation",
+      "seo": "SEO"
+    },
     "whatsapp_prefix": "Hi PROPEL, I saw your project",
-    "whatsapp_suffix": "and would like to discuss something similar.",
-    "items": [
+    "whatsapp_suffix": "and I'd like to discuss something similar.",
+    "case_study": {
+      "back": "Back to work",
+      "client": "Client",
+      "year": "Year",
+      "challenge": "The Challenge",
+      "solution": "The Solution",
+      "results": "The Results",
+      "visit_site": "Visit live site",
+      "screenshots": "Screenshots",
+      "next_project": "Next project",
+      "cta_title": "Facing something similar?",
+      "cta_body": "Tell us what's stuck and we'll tell you honestly whether — and how — we can help.",
+      "cta_label": "Let's talk"
+    }
+  },
+  "process": {
+    "section_title": "How it works",
+    "section_subtitle": "No surprises and no \"we'll get back to you\" that never does. Here is exactly what happens once you get in touch",
+    "steps": [
       {
-        "id": "project1",
-        "title": "TechFlow — SaaS Platform",
-        "category": "Web Development",
-        "description": "Full project management platform with analytics dashboard and advanced API integrations.",
-        "tags": ["Next.js", "TypeScript", "PostgreSQL", "Stripe"],
-        "color": "#E8E4DE"
+        "title": "Scoping call",
+        "duration": "20 minutes",
+        "description": "We work out what your business does, what's stuck, and what the goal is. If we're not the right fit, we'll say so on this call."
       },
       {
-        "id": "project2",
-        "title": "RetailMax — Online Store",
-        "category": "E-Commerce",
-        "description": "Online store with inventory management, payment processing, and an admin dashboard.",
-        "tags": ["Next.js", "Shopify", "Tailwind", "Node.js"],
-        "color": "#E4E8E0"
+        "title": "Proposal and scope",
+        "duration": "Within 3 working days",
+        "description": "One document: what we'll build, what we won't, what it costs and when it goes live. A final price, with nothing added along the way."
       },
       {
-        "id": "project3",
-        "title": "AutoFlow — Business Automation",
-        "category": "Automation",
-        "description": "Automation system connecting CRM, invoices, and email marketing in one workflow.",
-        "tags": ["n8n", "Zapier", "HubSpot", "API"],
-        "color": "#E4E4E8"
+        "title": "Development in stages",
+        "duration": "2-6 weeks",
+        "description": "You see a live version in the first week and review as we go. No waiting in the dark until the end."
       },
       {
-        "id": "project4",
-        "title": "LegalPro — Law Firm",
-        "category": "Web Development",
-        "description": "Representative website with client management, appointment booking, and legal knowledge base.",
-        "tags": ["Next.js", "Sanity CMS", "Calendly", "TypeScript"],
-        "color": "#E8E8E4"
-      },
-      {
-        "id": "project5",
-        "title": "GrowthLab — SEO & Analytics",
-        "category": "SEO",
-        "description": "Comprehensive SEO strategy that doubled organic traffic within 6 months.",
-        "tags": ["SEO", "Google Analytics", "Search Console", "Content"],
-        "color": "#E8E0DC"
-      },
-      {
-        "id": "project6",
-        "title": "Studio3D — Portfolio",
-        "category": "Design & Interactivity",
-        "description": "Interactive portfolio with 3D animations and smooth transitions.",
-        "tags": ["Next.js", "Three.js", "GSAP", "Tailwind"],
-        "color": "#DCE0E8"
+        "title": "Launch and support",
+        "duration": "30 days included",
+        "description": "We deploy, test and stay with you. The first month of fixes and adjustments is included in the price."
       }
     ]
   },
+  "testimonials": {
+    "section_title": "What clients say",
+    "section_subtitle": "Real people, real businesses"
+  },
+  "faq": {
+    "section_title": "Questions people ask before starting",
+    "section_subtitle": "Straight answers, no runaround",
+    "items": [
+      {
+        "question": "What does a website cost?",
+        "answer": "A business site usually starts in the low thousands, and a complex system with automations and integrations costs more. You'll get an exact range on the scoping call — not before we understand what you need, because any number before that is a guess."
+      },
+      {
+        "question": "How long does it take?",
+        "answer": "A business site: 2-3 weeks. A system with automations: 4-6 weeks. The date is set in the proposal and we hold ourselves to it. If something slips on our side, you hear about it immediately, not at the end."
+      },
+      {
+        "question": "Who owns the code and the domain?",
+        "answer": "You do. The domain is registered in your name, the code is handed over, and you are not locked in with us. If you want to continue with another developer you can, and that's completely fine."
+      },
+      {
+        "question": "What happens after launch?",
+        "answer": "The first month of fixes and adjustments is included. After that you can work with us on a monthly maintenance plan or on demand — no commitment required."
+      },
+      {
+        "question": "Do you work with very small businesses?",
+        "answer": "Yes. Some of our best projects have been one-person businesses drowning in manual work. If the budget doesn't stretch to a full project, we'll tell you what is worth doing with what you have."
+      },
+      {
+        "question": "What if we're not happy?",
+        "answer": "We stay with it until it works. Working in stages is exactly why — you see output as we go, rather than discovering at the end that we went the wrong way."
+      }
+    ]
+  },
+  "contact": {
+    "section_title": "Let's talk",
+    "section_subtitle": "Tell us what's stuck. We'll get back to you within one business day.",
+    "name_label": "Full name",
+    "business_label": "Business name",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "budget_label": "Approximate budget",
+    "budget_placeholder": "Choose a range",
+    "budget_options": ["Not sure yet", "Up to ₪10,000", "₪10,000-25,000", "₪25,000-50,000", "Over ₪50,000"],
+    "message_label": "What do you need?",
+    "message_placeholder": "A few lines about the business and what's stuck",
+    "optional": "optional",
+    "submit": "Send",
+    "sending": "Sending...",
+    "success_title": "Message sent",
+    "success_body": "We'll get back to you within one business day. Want an answer sooner? Message us on WhatsApp.",
+    "error": "Sending failed. Try again, or just message us on WhatsApp.",
+    "required_error": "Please provide a name, a way to reach you, and a short description.",
+    "email_error": "That email address doesn't look right.",
+    "contact_error": "Please leave a phone number or an email so we can get back to you.",
+    "privacy_note": "Your details are used only to get back to you. You can read our",
+    "privacy_link": "privacy policy",
+    "or_whatsapp": "Or message us on WhatsApp now",
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+  },
   "about": {
     "section_title": "About PROPEL",
-    "section_subtitle": "We're not just another web agency",
+    "section_subtitle": "Who's behind this",
     "paragraphs": [
-      "PROPEL was founded on one simple belief: small and medium businesses deserve the same level of digital execution that major corporations receive.",
-      "We build, automate, and market — with a focused approach, no unnecessary bureaucracy, and results you can measure."
+      "PROPEL was founded on one simple belief: small and mid-sized businesses deserve the same standard of digital execution large corporations get — without corporate pricing and without corporate timelines.",
+      "We build, automate and grow. We work directly with the business owner, with no layers of account management, and we measure every project by what it changed in the business."
     ],
     "values": [
       {
         "icon": "Target",
         "title": "Results-Focused",
-        "description": "Every project is measured by real performance — not billable hours"
+        "description": "Every project is measured by what changed in the business, not by hours logged"
       },
       {
         "icon": "Zap",
-        "title": "Fast Execution",
-        "description": "From project kickoff to launch at record speed, without compromising code quality"
+        "title": "Real Timelines",
+        "description": "A launch date agreed up front — and if it moves, you hear it from us first"
       },
       {
         "icon": "Shield",
         "title": "Full Transparency",
-        "description": "Direct and open communication — about what's possible and what isn't"
+        "description": "We'll tell you what you shouldn't build, even when it shrinks the project"
       }
     ],
     "cta_label": "Let's Work Together",
     "whatsapp_message": "Hi PROPEL, let's talk about working together."
   },
   "footer": {
-    "tagline": "Speed up what slows you down",
+    "tagline": "We speed up what slows you down",
     "links_title": "Quick Links",
     "contact_title": "Get In Touch",
     "nav_services": "Services",
-    "nav_portfolio": "Portfolio",
+    "nav_process": "Process",
+    "nav_portfolio": "Work",
     "nav_about": "About",
+    "nav_faq": "FAQ",
+    "nav_contact": "Contact",
     "whatsapp_cta": "Chat with us on WhatsApp",
+    "phone_label": "Phone",
+    "email_label": "Email",
+    "legal_title": "Information",
+    "accessibility": "Accessibility Statement",
+    "privacy": "Privacy Policy",
     "copyright": "All rights reserved © PROPEL",
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
   }
