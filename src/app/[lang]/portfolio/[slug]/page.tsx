@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* ── Header ────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-brand-charcoal text-brand-cream">
-        {project.thumbnail.src && (
+        {project.thumbnail?.src && (
           <div className="absolute inset-0">
             <Image
               src={project.thumbnail.src}
@@ -118,23 +118,29 @@ export default async function ProjectPage({ params }: Props) {
             {project.title}
           </h1>
 
-          {/* Client / year / category */}
-          <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
-            <div>
-              <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
-                {t.client}
-              </dt>
-              <dd className="mt-1 font-medium text-brand-cream">{project.client[lang]}</dd>
-            </div>
-            <div>
-              <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
-                {t.year}
-              </dt>
-              <dd className="mt-1 font-medium text-brand-cream" dir="ltr">
-                {project.year}
-              </dd>
-            </div>
-          </dl>
+          {/* Client / year — omitted entirely when unknown rather than shown blank */}
+          {(project.client || project.year) && (
+            <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
+              {project.client && (
+                <div>
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
+                    {t.client}
+                  </dt>
+                  <dd className="mt-1 font-medium text-brand-cream">{project.client[lang]}</dd>
+                </div>
+              )}
+              {project.year && (
+                <div>
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-light-steel">
+                    {t.year}
+                  </dt>
+                  <dd className="mt-1 font-medium text-brand-cream" dir="ltr">
+                    {project.year}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
 
           {project.techStack.length > 0 && (
             <div className="flex flex-wrap gap-2">
@@ -152,7 +158,7 @@ export default async function ProjectPage({ params }: Props) {
       </section>
 
       {/* ── Results strip ─────────────────────────────────────────────────── */}
-      {project.results.length > 0 && (
+      {project.results && project.results.length > 0 && (
         <section className="border-b border-brand-border bg-white" aria-label={t.results}>
           <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-12">
             {project.results.map((result) => (
@@ -170,11 +176,19 @@ export default async function ProjectPage({ params }: Props) {
       )}
 
       {/* ── Challenge / Solution ──────────────────────────────────────────── */}
+      {/* Falls back to the summary while the full narrative is still being written,
+          so a published project never renders an empty page. */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <Block title={t.challenge} body={project.challenge[lang]} />
-          <Block title={t.solution} body={project.solution[lang]} />
-        </div>
+        {project.challenge || project.solution ? (
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+            {project.challenge && <Block title={t.challenge} body={project.challenge[lang]} />}
+            {project.solution && <Block title={t.solution} body={project.solution[lang]} />}
+          </div>
+        ) : (
+          <p className="max-w-2xl text-lg leading-relaxed text-brand-charcoal">
+            {project.summary[lang]}
+          </p>
+        )}
 
         {project.liveUrl && (
           <div className="mt-12 lg:mt-16">

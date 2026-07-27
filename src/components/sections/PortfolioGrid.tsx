@@ -58,13 +58,13 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {visible.map((project) => {
           const waMessage = `${dict.whatsapp_prefix} "${project.title}" ${dict.whatsapp_suffix}`
-          const headline = project.results[0]
+          const headline = project.results?.[0]
 
           return (
             <article key={project.slug} className={cardBase}>
               {/* Thumbnail */}
               <div className="relative h-48 w-full overflow-hidden bg-brand-cream sm:h-52">
-                {project.thumbnail.src ? (
+                {project.thumbnail?.src ? (
                   <Image
                     src={project.thumbnail.src}
                     alt={project.thumbnail.alt[lang]}
