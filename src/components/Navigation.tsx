@@ -1,13 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { Menu, X, MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
 
 type NavDict = {
   services: string
+  process: string
   portfolio: string
   about: string
   cta: string
@@ -16,25 +19,27 @@ type NavDict = {
 }
 
 type Props = {
-  lang: 'he' | 'en'
+  lang: Locale
   dict: NavDict
+  /** The portfolio anchor is omitted when nothing is published, so the link never dangles. */
+  hasProjects: boolean
 }
 
-// Inline SVG noise — shared between nav and hero for the grain texture feel
-const NOISE_SVG =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")"
-
-export default function Navigation({ lang, dict }: Props) {
+export default function Navigation({ lang, dict, hasProjects }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+  const drawerRef = useRef<HTMLDivElement>(null)
 
-  const altLang = lang === 'he' ? 'en' : 'he'
+  const altLang = getAltLocale(lang)
+  const altHref = swapLocaleInPath(pathname, altLang)
   const isRtl = lang === 'he'
 
   const navLinks = [
-    { label: dict.services, href: '#services' },
-    { label: dict.portfolio, href: '#portfolio' },
-    { label: dict.about, href: '#about' },
+    { label: dict.services, href: `/${lang}#services` },
+    { label: dict.process, href: `/${lang}#process` },
+    ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}#portfolio` }] : []),
+    { label: dict.about, href: `/${lang}#about` },
   ]
 
   useEffect(() => {
@@ -42,6 +47,27 @@ export default function Navigation({ lang, dict }: Props) {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Close the drawer on Escape and lock background scroll while it is open.
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false)
+    }
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleKeyDown)
+
+    // Move focus into the drawer so keyboard users are not left behind the trigger
+    drawerRef.current?.querySelector<HTMLElement>('a')?.focus()
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen])
 
   return (
     <header
@@ -54,23 +80,21 @@ export default function Navigation({ lang, dict }: Props) {
         className="relative h-[68px] overflow-hidden border-b border-brand-border bg-brand-cream/95 backdrop-blur-xl sm:h-[76px]"
         aria-label="Primary navigation"
       >
-        {/* Grain texture overlay */}
         <div
-          className="pointer-events-none absolute inset-0 select-none opacity-[0.028]"
-          style={{ backgroundImage: NOISE_SVG, backgroundSize: '300px 300px' }}
+          className="bg-grain pointer-events-none absolute inset-0 select-none opacity-[0.028]"
           aria-hidden="true"
         />
 
         <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL home">
+          <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL — home">
             <Image
               src={lang === 'he' ? '/he-logo.svg' : '/en-logo.svg'}
               alt="PROPEL"
-              width={200}
-              height={56}
+              width={130}
+              height={38}
               priority
-              className="h-11 w-auto object-contain sm:h-12 md:h-14"
+              className="h-9 w-auto object-contain sm:h-10"
             />
           </Link>
 
@@ -83,7 +107,6 @@ export default function Navigation({ lang, dict }: Props) {
                 className="group relative text-[13px] font-medium tracking-wide text-brand-steel transition-colors duration-300 hover:text-brand-charcoal"
               >
                 {link.label}
-                {/* Animated underline */}
                 <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-charcoal transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-x-100" />
               </a>
             ))}
@@ -92,7 +115,8 @@ export default function Navigation({ lang, dict }: Props) {
           {/* Desktop actions */}
           <div className="hidden items-center gap-5 md:flex">
             <Link
-              href={`/${altLang}`}
+              href={altHref}
+              hrefLang={altLang}
               className="text-[13px] font-medium tracking-wide text-brand-steel transition-colors duration-300 hover:text-brand-charcoal"
             >
               {dict.toggle_lang}
@@ -101,6 +125,7 @@ export default function Navigation({ lang, dict }: Props) {
               href={getWhatsAppURL(dict.whatsapp_message)}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="whatsapp:nav"
               className="flex items-center gap-2 rounded-full bg-brand-black px-6 py-3 text-sm font-semibold tracking-wide text-white transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(17,17,17,0.28)] active:translate-y-0 active:scale-[0.97] active:shadow-none"
             >
               <MessageCircle className="h-4 w-4" />
@@ -114,6 +139,7 @@ export default function Navigation({ lang, dict }: Props) {
             className="rounded-xl p-2 text-brand-charcoal transition-colors duration-200 hover:bg-brand-border/40 md:hidden"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -123,6 +149,8 @@ export default function Navigation({ lang, dict }: Props) {
       {/* ── Mobile drawer ───────────────────────────────────────── */}
       {isOpen && (
         <div
+          id="mobile-menu"
+          ref={drawerRef}
           className={`animate-slide-down border-b border-brand-border bg-brand-cream px-4 pb-6 pt-3 shadow-card sm:px-6 md:hidden ${
             isRtl ? 'text-right' : 'text-left'
           }`}
@@ -141,7 +169,9 @@ export default function Navigation({ lang, dict }: Props) {
 
             <div className="mt-3 space-y-2 border-t border-brand-border pt-4">
               <Link
-                href={`/${altLang}`}
+                href={altHref}
+                hrefLang={altLang}
+                onClick={() => setIsOpen(false)}
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-steel transition-colors duration-200 hover:text-brand-charcoal"
               >
                 {dict.toggle_lang}
@@ -150,6 +180,7 @@ export default function Navigation({ lang, dict }: Props) {
                 href={getWhatsAppURL(dict.whatsapp_message)}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-analytics="whatsapp:nav-mobile"
                 className="flex items-center justify-center gap-2.5 rounded-full bg-brand-black px-5 py-4 text-sm font-semibold tracking-wide text-white transition-all duration-300 active:scale-[0.97]"
               >
                 <MessageCircle className="h-4 w-4" />

@@ -1,5 +1,6 @@
 import { Target, Zap, Shield, MessageCircle, type LucideIcon } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import type { Locale } from '@/lib/i18n'
 
 type Value = {
   icon: string
@@ -17,7 +18,7 @@ type AboutDict = {
 }
 
 type Props = {
-  lang: 'he' | 'en'
+  lang: Locale
   dict: AboutDict
 }
 
@@ -31,20 +32,27 @@ export default function About({ lang, dict }: Props) {
   const isRtl = lang === 'he'
 
   return (
-    <section id="about" className="bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
+    <section
+      id="about"
+      aria-labelledby="about-heading"
+      className="bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-32"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
 
           {/* ── Text column ───────────────────────────────────── */}
           {/* RTL: text reads right-to-left so it sits in the second visual column */}
           <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
-            {/* Eyebrow */}
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-steel/60">
+            {/* Eyebrow — full-strength steel; at 60% opacity this failed WCAG AA on white */}
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-steel">
               {dict.section_subtitle}
             </p>
 
             {/* Heading */}
-            <h2 className="text-3xl font-bold tracking-[-0.025em] text-brand-charcoal sm:text-4xl lg:text-[52px] lg:leading-[1.1]">
+            <h2
+              id="about-heading"
+              className="text-3xl font-bold tracking-[-0.025em] text-brand-charcoal sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
+            >
               {dict.section_title}
             </h2>
 
@@ -62,6 +70,7 @@ export default function About({ lang, dict }: Props) {
               href={getWhatsAppURL(dict.whatsapp_message)}
               target="_blank"
               rel="noopener noreferrer"
+              data-analytics="whatsapp:about"
               className="inline-flex w-fit items-center gap-2.5 rounded-full bg-brand-black px-8 py-4 text-[15px] font-semibold tracking-wide text-white transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(17,17,17,0.28)] active:translate-y-0 active:scale-[0.97] active:shadow-none"
             >
               <MessageCircle className="h-[18px] w-[18px]" />
