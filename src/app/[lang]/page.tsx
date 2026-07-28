@@ -52,11 +52,11 @@ export default async function Page({ params }: Props) {
       <JsonLd schema={faqSchema(dict.faq.items)} />
 
       {/* Order follows the questions a prospect asks, in the order they ask them:
-          what do you do → how does it work → prove it → who are you → what about
-          … → how do I start.
+ what do you do → how does it work → prove it → who are you → what about
+ … → how do I start.
 
-          The hero is deliberately not wrapped in Reveal: it is above the fold,
-          it already has its own entrance animation, and it is the LCP element. */}
+ The hero is deliberately not wrapped in Reveal: it is above the fold,
+ it already has its own entrance animation, and it is the LCP element. */}
       <Hero lang={lang} dict={dict.hero} />
       <TrustedBy label={dict.trusted_by} />
 

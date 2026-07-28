@@ -112,8 +112,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
 export const privacyPolicy: Record<Locale, LegalDocument> = {
   he: {
     title: 'מדיניות פרטיות',
-    intro:
-      'המדיניות הזו מסבירה איזה מידע אנחנו אוספים דרך האתר, למה, ומה הזכויות שלכם לגביו.',
+    intro: 'המדיניות הזו מסבירה איזה מידע אנחנו אוספים דרך האתר, למה, ומה הזכויות שלכם לגביו.',
     updatedLabel: 'עודכן לאחרונה',
     sections: [
       {
@@ -194,7 +193,9 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
       },
       {
         heading: 'Privacy contact',
-        paragraphs: ['For any question about this policy, contact us using the details at the foot of the page.'],
+        paragraphs: [
+          'For any question about this policy, contact us using the details at the foot of the page.',
+        ],
       },
     ],
   },

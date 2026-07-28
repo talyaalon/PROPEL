@@ -31,62 +31,60 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const tagline = isLocale(lang) ? TAGLINE[lang] : TAGLINE.en
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          backgroundColor: '#F9F7F2',
-          padding: '80px',
-        }}
-      >
-        {/* Mark */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div
-            style={{
-              width: 72,
-              height: 72,
-              borderRadius: 16,
-              backgroundColor: '#111111',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#F9F7F2',
-              fontSize: 44,
-              fontWeight: 900,
-            }}
-          >
-            P
-          </div>
-          <div style={{ fontSize: 40, fontWeight: 800, color: '#111111', letterSpacing: -1 }}>
-            PROPEL
-          </div>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        backgroundColor: '#090316',
+        padding: '80px',
+      }}
+    >
+      {/* Mark */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <div
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: 16,
+            backgroundColor: '#FFD36A',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#090316',
+            fontSize: 44,
+            fontWeight: 900,
+          }}
+        >
+          P
         </div>
-
-        {/* Headline */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div
-            style={{
-              fontSize: 82,
-              fontWeight: 800,
-              color: '#1C1C1C',
-              letterSpacing: -3,
-              lineHeight: 1.05,
-              maxWidth: 900,
-            }}
-          >
-            We speed up what slows you down
-          </div>
-          <div style={{ fontSize: 34, color: '#6B7280' }}>{tagline}</div>
+        <div style={{ fontSize: 40, fontWeight: 800, color: '#FFF8EF', letterSpacing: -1 }}>
+          PROPEL
         </div>
-
-        {/* Rule */}
-        <div style={{ display: 'flex', height: 6, width: 160, backgroundColor: '#111111' }} />
       </div>
-    ),
-    size
+
+      {/* Headline */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div
+          style={{
+            fontSize: 82,
+            fontWeight: 800,
+            color: '#FFF8EF',
+            letterSpacing: -3,
+            lineHeight: 1.05,
+            maxWidth: 900,
+          }}
+        >
+          We speed up what slows you down
+        </div>
+        <div style={{ fontSize: 34, color: '#AAA0BA' }}>{tagline}</div>
+      </div>
+
+      {/* Rule */}
+      <div style={{ display: 'flex', height: 6, width: 160, backgroundColor: '#FFD36A' }} />
+    </div>,
+    size,
   )
 }

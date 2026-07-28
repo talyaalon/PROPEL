@@ -16,47 +16,37 @@ type ProcessDict = {
  */
 export default function Process({ dict }: { dict: ProcessDict }) {
   return (
-    <section
-      id="process"
-      aria-labelledby="process-heading"
-      className="bg-brand-cream px-4 py-20 sm:px-6 lg:px-8 lg:py-32"
-    >
+    <section id="process" aria-labelledby="process-heading" className="section">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center lg:mb-20">
           <h2
             id="process-heading"
-            className="text-3xl font-bold tracking-[-0.025em] text-brand-charcoal sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
+            className="text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
           >
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-steel sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-muted sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>
 
         <ol className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {dict.steps.map((step, index) => (
-            <li
-              key={step.title}
-              className="relative flex flex-col rounded-[24px] border border-brand-border bg-white p-7 shadow-soft transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1.5 hover:shadow-card sm:rounded-[28px]"
-            >
+            <li key={step.title} className="card flex flex-col">
               {/* Step number */}
-              <span
-                className="font-raleway text-[42px] font-black leading-none tracking-tight text-brand-charcoal/[0.12]"
-                aria-hidden="true"
-              >
+              <span className="num text-[42px] leading-none opacity-30" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              <h3 className="mt-5 text-[17px] font-bold tracking-[-0.015em] text-brand-charcoal">
+              <h3 className="mt-5 text-[17px] font-bold tracking-[-0.015em] text-brand-ink">
                 {step.title}
               </h3>
 
-              <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-steel">
+              <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-muted">
                 {step.duration}
               </p>
 
-              <p className="mt-4 text-[14px] leading-relaxed text-brand-steel">
+              <p className="mt-4 text-[14px] leading-relaxed text-brand-muted">
                 {step.description}
               </p>
             </li>

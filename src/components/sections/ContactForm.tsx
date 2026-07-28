@@ -45,12 +45,12 @@ export default function ContactForm({ lang, dict }: Props) {
 
   if (state.status === 'success') {
     return (
-      <div className="rounded-[24px] border border-brand-border bg-white p-8 text-center shadow-soft sm:p-12">
+      <div className=" border border-brand-ink/15 bg-brand-deep p-8 text-center sm:p-12">
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
-        <h3 className="mt-5 text-[20px] font-bold tracking-[-0.015em] text-brand-charcoal">
+        <h3 className="mt-5 text-[20px] font-bold tracking-[-0.015em] text-brand-ink">
           {dict.success_title}
         </h3>
-        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-steel">
+        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-muted">
           {dict.success_body}
         </p>
         <a
@@ -58,7 +58,7 @@ export default function ContactForm({ lang, dict }: Props) {
           target="_blank"
           rel="noopener noreferrer"
           data-analytics="whatsapp:contact-success"
-          className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-black px-7 py-3.5 text-[14px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(17,17,17,0.28)]"
+          className="mt-7 inline-flex items-center gap-2.5 rounded-full btn"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
           WhatsApp
@@ -80,7 +80,7 @@ export default function ContactForm({ lang, dict }: Props) {
   return (
     <form
       action={formAction}
-      className="rounded-[24px] border border-brand-border bg-white p-6 shadow-soft sm:p-8"
+      className=" border border-brand-ink/15 bg-brand-deep p-6 sm:p-8"
       noValidate
     >
       {errorMessage && (
@@ -95,7 +95,13 @@ export default function ContactForm({ lang, dict }: Props) {
       {/* Honeypot — hidden from people, irresistible to bots */}
       <div className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
         <label htmlFor="company_website">Company website</label>
-        <input id="company_website" name="company_website" type="text" tabIndex={-1} autoComplete="off" />
+        <input
+          id="company_website"
+          name="company_website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
@@ -107,8 +113,22 @@ export default function ContactForm({ lang, dict }: Props) {
           hint={dict.optional}
           autoComplete="organization"
         />
-        <Field id="phone" name="phone" type="tel" label={dict.phone_label} autoComplete="tel" dir="ltr" />
-        <Field id="email" name="email" type="email" label={dict.email_label} autoComplete="email" dir="ltr" />
+        <Field
+          id="phone"
+          name="phone"
+          type="tel"
+          label={dict.phone_label}
+          autoComplete="tel"
+          dir="ltr"
+        />
+        <Field
+          id="email"
+          name="email"
+          type="email"
+          label={dict.email_label}
+          autoComplete="email"
+          dir="ltr"
+        />
 
         <div className="sm:col-span-2">
           <Label htmlFor="budget" text={dict.budget_label} hint={dict.optional} />
@@ -116,7 +136,7 @@ export default function ContactForm({ lang, dict }: Props) {
             id="budget"
             name="budget"
             defaultValue=""
-            className="w-full rounded-xl border border-brand-border bg-brand-cream px-4 py-3 text-[15px] text-brand-charcoal transition-colors duration-200 focus:border-brand-charcoal focus:bg-white"
+            className="w-full rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-deep"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -137,16 +157,19 @@ export default function ContactForm({ lang, dict }: Props) {
             rows={5}
             required
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-border bg-brand-cream px-4 py-3 text-[15px] leading-relaxed text-brand-charcoal transition-colors duration-200 placeholder:text-brand-steel/60 focus:border-brand-charcoal focus:bg-white"
+            className="w-full resize-y rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-muted/60 focus:border-brand-ink focus:bg-brand-deep"
           />
         </div>
       </div>
 
       <SubmitButton dict={dict} />
 
-      <p className="mt-4 text-[12px] leading-relaxed text-brand-steel">
+      <p className="mt-4 text-[12px] leading-relaxed text-brand-muted">
         {dict.privacy_note}{' '}
-        <Link href={`/${lang}/privacy`} className="underline underline-offset-2 hover:text-brand-charcoal">
+        <Link
+          href={`/${lang}/privacy`}
+          className="underline underline-offset-2 hover:text-brand-ink"
+        >
           {dict.privacy_link}
         </Link>
         .
@@ -165,7 +188,7 @@ function SubmitButton({ dict }: { dict: ContactDict }) {
       type="submit"
       disabled={pending}
       data-analytics="contact:submit"
-      className="mt-7 w-full rounded-full bg-brand-black px-8 py-4 text-[15px] font-semibold tracking-wide text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(17,17,17,0.28)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none sm:w-auto sm:px-12"
+      className="mt-7 w-full rounded-full btn"
     >
       {pending ? dict.sending : dict.submit}
     </button>
@@ -184,7 +207,7 @@ function Label({
   hint?: string
 }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-medium text-brand-charcoal">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-medium text-brand-ink">
       {text}
       {required && (
         <span className="text-red-600" aria-hidden="true">
@@ -192,7 +215,7 @@ function Label({
           *
         </span>
       )}
-      {hint && <span className="font-normal text-brand-steel"> ({hint})</span>}
+      {hint && <span className="font-normal text-brand-muted"> ({hint})</span>}
     </label>
   )
 }
@@ -226,7 +249,7 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         dir={dir}
-        className="w-full rounded-xl border border-brand-border bg-brand-cream px-4 py-3 text-[15px] text-brand-charcoal transition-colors duration-200 placeholder:text-brand-steel/60 focus:border-brand-charcoal focus:bg-white"
+        className="w-full rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-muted/60 focus:border-brand-ink focus:bg-brand-deep"
       />
     </div>
   )

@@ -19,9 +19,7 @@ function getPreferredLocale(request: NextRequest): Locale {
   if (!header) return defaultLocale
 
   // 'en-US,en;q=0.9,he;q=0.8' → ['en-us', 'en', 'he']
-  const tags = header
-    .split(',')
-    .map((part) => part.split(';')[0].trim().toLowerCase())
+  const tags = header.split(',').map((part) => part.split(';')[0].trim().toLowerCase())
 
   for (const tag of tags) {
     const base = tag.split('-')[0]

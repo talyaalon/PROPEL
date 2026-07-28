@@ -7,26 +7,61 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    /*
+     * Zero corner radius across the whole site.
+     *
+     * Declared at `theme` level rather than `extend` so it replaces Tailwind's
+     * scale outright: every `rounded-*` utility already in the codebase — 78 of
+     * them, including `rounded-full` — collapses to square without touching each
+     * call site. The keys are kept (rather than dropping the scale) so existing
+     * classes still generate rather than silently vanishing.
+     */
+    borderRadius: {
+      none: '0px',
+      DEFAULT: '0px',
+      sm: '0px',
+      md: '0px',
+      lg: '0px',
+      xl: '0px',
+      '2xl': '0px',
+      '3xl': '0px',
+      full: '0px',
+    },
+
     extend: {
       colors: {
-        'brand-cream': '#F9F7F2',
-        'brand-black': '#111111',
-        'brand-charcoal': '#1C1C1C',
-        'brand-steel': '#6B7280',
-        'brand-light-steel': '#9CA3AF',
-        'brand-border': '#DDD9D2',
+        brand: {
+          // Surfaces
+          void: '#090316',
+          deep: '#050210',
+          // Type
+          ink: '#FFF8EF',
+          lead: '#DED2EC',
+          muted: '#AAA0BA',
+          // Accents
+          gold: '#FFD36A',
+          goldDeep: '#FFB000',
+          cyan: '#39C8FF',
+          pink: '#FF3DAE',
+          // Retained light-theme surface
+          cream: '#F9F7F2',
+        },
       },
+
       fontFamily: {
-        assistant: ['var(--font-assistant)', 'sans-serif'],
-        'dm-sans': ['var(--font-dm-sans)', 'sans-serif'],
-        raleway: ['var(--font-raleway)', 'sans-serif'],
+        /*
+         * Chakra Petch first for Latin and numerals, Heebo behind it for Hebrew.
+         * Chakra Petch has no Hebrew glyphs, so Hebrew text falls through to
+         * Heebo automatically — which is exactly the intended split.
+         */
+        display: ['var(--font-chakra)', 'var(--font-heebo)', 'sans-serif'],
+        body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
       },
-      boxShadow: {
-        soft: '0 1px 3px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.03)',
-        card: '0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)',
-        'card-hover': '0 16px 48px rgba(0,0,0,0.10), 0 4px 16px rgba(0,0,0,0.06)',
-        nav: '0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.05)',
+
+      transitionTimingFunction: {
+        smooth: 'cubic-bezier(.16,1,.3,1)',
       },
+
       keyframes: {
         'underline-grow': {
           '0%': { transform: 'scaleX(0)' },
@@ -45,18 +80,15 @@ const config: Config = {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
       },
+
       animation: {
-        'underline-grow':
-          'underline-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both',
-        'fade-up': 'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
-        'fade-up-delay':
-          'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both',
-        'fade-up-delay-2':
-          'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both',
-        'fade-up-delay-3':
-          'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both',
-        'fade-in': 'fade-in 0.8s ease 0.6s both',
-        'slide-down': 'slide-down 0.22s cubic-bezier(0.25, 1, 0.5, 1) both',
+        'underline-grow': 'underline-grow 0.9s cubic-bezier(.16,1,.3,1) 0.5s both',
+        'fade-up': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) both',
+        'fade-up-delay': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.15s both',
+        'fade-up-delay-2': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.3s both',
+        'fade-up-delay-3': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.45s both',
+        'fade-in': 'fade-in 0.68s cubic-bezier(.16,1,.3,1) 0.4s both',
+        'slide-down': 'slide-down 0.22s cubic-bezier(.16,1,.3,1) both',
       },
     },
   },

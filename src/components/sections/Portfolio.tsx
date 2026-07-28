@@ -25,20 +25,16 @@ export default function Portfolio({ lang, dict }: Props) {
   if (projects.length === 0) return null
 
   return (
-    <section
-      id="portfolio"
-      aria-labelledby="portfolio-heading"
-      className="bg-brand-cream px-4 py-20 sm:px-6 lg:px-8 lg:py-32"
-    >
+    <section id="portfolio" aria-labelledby="portfolio-heading" className="section">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 text-center lg:mb-16">
           <h2
             id="portfolio-heading"
-            className="text-3xl font-bold tracking-[-0.025em] text-brand-charcoal sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
+            className="text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
           >
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-steel sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-muted sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>

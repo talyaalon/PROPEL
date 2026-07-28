@@ -2,10 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ── Theme ─────────────────────────────────────────────────────────────────────
+ * Dark is the default. The original cream palette is still fully available by
+ * putting data-theme="light" on <html> — nothing was deleted, only demoted.
+ *
+ * Anything that must flip between themes reads a variable; the accent hues
+ * (gold, cyan, pink) are deliberately constant in both.
+ */
+:root {
+  --surface: #090316;
+  --surface-deep: #050210;
+  --surface-card: rgba(8, 9, 11, 0.9);
+  --text: #fff8ef;
+  --text-soft: #ded2ec;
+  --text-muted: #aaa0ba;
+  --hairline: rgba(255, 248, 239, 0.15);
+  --hairline-strong: rgba(255, 248, 239, 0.28);
+  --grid-line: rgba(255, 248, 239, 0.035);
+  --selection-bg: #ffd36a;
+  --selection-fg: #11130d;
+}
+
+:root[data-theme='light'] {
+  --surface: #f9f7f2;
+  --surface-deep: #efece4;
+  --surface-card: rgba(255, 255, 255, 0.92);
+  --text: #14121a;
+  --text-soft: #3d3748;
+  --text-muted: #5c5470;
+  --hairline: rgba(20, 18, 26, 0.16);
+  --hairline-strong: rgba(20, 18, 26, 0.3);
+  --grid-line: rgba(20, 18, 26, 0.045);
+  --selection-bg: #14121a;
+  --selection-fg: #f9f7f2;
+}
+
 html {
   scroll-behavior: smooth;
   /* Matches the sticky nav height so anchor targets are not buried under it */
   scroll-padding-top: 68px;
+  background-color: var(--surface);
 }
 
 @media (min-width: 640px) {
@@ -14,15 +51,17 @@ html {
   }
 }
 
-/*
- * The body's font-family is applied by the layout via next/font's className, not
- * here. Doing it in CSS hid the dependency from Next and cost the page a font
- * preload it should have had.
- */
-
 @layer base {
   body {
-    @apply bg-brand-cream text-brand-charcoal antialiased;
+    @apply font-body antialiased;
+    color: var(--text);
+    background-color: var(--surface);
+    /* Technical grid. Sits on the page rather than on a wrapper so it survives
+       every section background. */
+    background-image:
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(var(--grid-line) 1px, transparent 1px);
+    background-size: 72px 72px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -34,40 +73,154 @@ html {
     box-sizing: border-box;
   }
 
-  /* Premium text selection */
-  ::selection {
-    background-color: #1c1c1c;
-    color: #f9f7f2;
+  /*
+   * Headings.
+   *
+   * `tracking-normal` throughout, deliberately: negative letter-spacing on
+   * Hebrew pulls the glyphs into each other and damages legibility in a way it
+   * does not in Latin. Tracking is applied only to Latin-only elements —
+   * buttons, tags, eyebrows, nav — never to running text.
+   */
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-bold uppercase tracking-normal;
+    color: var(--text);
   }
 
-  /* Clean focus ring — keyboard users only */
+  h1 {
+    font-size: clamp(42px, 5.6vw, 66px);
+    line-height: 0.98;
+  }
+
+  h2 {
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.04;
+  }
+
+  h3 {
+    font-size: 21px;
+    line-height: 1.25;
+    text-transform: none;
+  }
+
+  ::selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-fg);
+  }
+
+  /* Keyboard users only */
   :focus-visible {
-    outline: 2px solid #1c1c1c;
+    outline: 2px solid #ffd36a;
     outline-offset: 3px;
-    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .section {
+    @apply px-4 sm:px-6 lg:px-8;
+    padding-top: 130px;
+    padding-bottom: 72px;
+  }
+
+  /* ── Eyebrow ──────────────────────────────────────────────────────────────
+     Small gold label with a rule running off its leading edge. The rule is
+     positioned with logical properties so it sits on the right in Hebrew and
+     the left in English without a second rule. */
+  .eyebrow {
+    @apply relative inline-flex items-center font-display text-[11px] font-semibold uppercase tracking-[.18em];
+    color: #ffd36a;
+    padding-inline-start: 68px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    width: 56px;
+    height: 2px;
+    background: linear-gradient(90deg, #ffd36a, #ffb000);
+    transform: translateY(-50%);
+  }
+
+  /* ── Card ─────────────────────────────────────────────────────────────── */
+  .card {
+    @apply relative overflow-hidden p-7 transition-all duration-500 ease-smooth;
+    background: var(--surface-card);
+    border: 1px solid var(--hairline);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #ffd36a, #ff3dae);
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover,
+  .card:focus-within {
+    border-color: #ffd36a;
+    transform: translateY(-4px);
+  }
+
+  .card:hover::after,
+  .card:focus-within::after {
+    width: 100%;
+  }
+
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 px-8 py-4 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-500 ease-smooth;
+    background: #ffd36a;
+    color: #11130d;
+    border: 1px solid #ffd36a;
+  }
+
+  .btn:hover {
+    background: #fff8ef;
+    border-color: #fff8ef;
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2.5 px-8 py-4 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-500 ease-smooth;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--hairline-strong);
+  }
+
+  .btn-ghost:hover {
+    border-color: #ffd36a;
+    color: #ffd36a;
+    transform: translateY(-2px);
+  }
+
+  /* ── Tag ──────────────────────────────────────────────────────────────── */
+  .tag {
+    @apply inline-flex items-center px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[.1em];
+    color: var(--text-muted);
+    border: 1px solid var(--hairline);
+  }
+
+  /* ── Figure ───────────────────────────────────────────────────────────── */
+  .num {
+    @apply font-display font-bold;
+    color: #ffd36a;
   }
 }
 
 @layer utilities {
-  .font-display {
-    font-family: var(--font-raleway), sans-serif;
-    font-weight: 800;
+  /* Shared grain texture, kept from the previous system. */
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
   }
 
-  /* RTL-aware underline grow animation */
-  .underline-ltr {
-    transform-origin: left center;
-  }
-
-  .underline-rtl {
-    transform-origin: right center;
-  }
-
-  /*
-   * Shared grain texture. Previously this data-URI was inlined as a style
-   * attribute in both the nav and the hero, shipping the same ~300 bytes twice
-   * in the HTML of every page.
-   */
   /*
    * Scroll reveal. The hidden state is rendered by the server so there is no
    * flash of visible-then-hidden content; the <noscript> rule in the layout and
@@ -78,8 +231,8 @@ html {
     opacity: 0;
     transform: translateY(22px);
     transition:
-      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal.is-visible {
@@ -87,9 +240,13 @@ html {
     transform: none;
   }
 
-  .bg-grain {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
+  /* RTL-aware underline grow animation */
+  .underline-ltr {
+    transform-origin: left center;
+  }
+
+  .underline-rtl {
+    transform-origin: right center;
   }
 }
 
