@@ -45,7 +45,7 @@ export default function Hero({ lang, dict }: Props) {
 
             {/* H1 */}
             <h1
-              className={`animate-fade-up-delay text-[40px] font-extrabold leading-[1.06] tracking-[-0.03em] text-brand-ink sm:text-5xl lg:text-[64px] lg:leading-[1.04] ${
+              className={`animate-fade-up-delay text-[40px] font-extrabold leading-[1.06] text-brand-ink sm:text-5xl lg:text-[64px] lg:leading-[1.04] ${
                 isRtl ? 'font-assistant' : 'font-dm-sans'
               }`}
             >

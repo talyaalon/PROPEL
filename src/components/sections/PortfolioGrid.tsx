@@ -24,7 +24,7 @@ type Props = {
 }
 
 const cardBase =
-  'group flex flex-col overflow-hidden border border-brand-ink/15 bg-brand-deep transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-2 hover: focus-within:-translate-y-2 focus-within:'
+  'group flex flex-col overflow-hidden border border-brand-ink/15 bg-brand-deep transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
 
 const tagBase =
   'rounded-full border border-brand-ink/15 bg-brand-void px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-brand-muted'
@@ -69,7 +69,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     src={project.thumbnail.src}
                     alt={project.thumbnail.alt[lang]}
                     fill
-                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-[1.04]"
+                    className="object-cover transition-transform duration-700 ease-smooth group-hover:scale-[1.04]"
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   />
                 ) : (
@@ -89,9 +89,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
               {/* Content */}
               <div className="flex flex-1 flex-col p-6 sm:p-7">
-                <h3 className="mb-2 text-[16px] font-bold tracking-[-0.01em] text-brand-ink">
-                  {project.title}
-                </h3>
+                <h3 className="mb-2 text-[16px] font-bold text-brand-ink">{project.title}</h3>
 
                 <p className="mb-5 flex-1 text-[14px] leading-relaxed text-brand-muted">
                   {project.summary[lang]}

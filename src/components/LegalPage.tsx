@@ -18,9 +18,7 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-      <h1 className="text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl lg:text-5xl">
-        {doc.title}
-      </h1>
+      <h1 className="text-brand-ink">{doc.title}</h1>
 
       <p className="mt-3 text-[13px] text-brand-muted">
         {doc.updatedLabel}: <time dateTime={siteConfig.legalUpdated}>{formattedDate}</time>
@@ -31,9 +29,7 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
       <div className="mt-12 space-y-10">
         {doc.sections.map((section) => (
           <section key={section.heading}>
-            <h2 className="mb-4 text-[19px] font-bold tracking-[-0.015em] text-brand-ink">
-              {section.heading}
-            </h2>
+            <h2 className="mb-4 text-[19px] font-bold text-brand-ink">{section.heading}</h2>
 
             {section.paragraphs?.map((paragraph) => (
               <p key={paragraph} className="mb-3 text-[16px] leading-[1.8] text-brand-muted">
@@ -61,10 +57,8 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
         ))}
 
         {contactBlock && (
-          <section className=" border border-brand-ink/15 bg-brand-deep p-6 sm:p-7">
-            <h2 className="mb-4 text-[19px] font-bold tracking-[-0.015em] text-brand-ink">
-              {contactBlock.heading}
-            </h2>
+          <section className="card p-6 sm:p-7">
+            <h2 className="mb-4 text-[19px] font-bold text-brand-ink">{contactBlock.heading}</h2>
             <ul className="space-y-2">
               {contactBlock.lines.map((line) => (
                 <li key={line} className="text-[16px] leading-[1.7] text-brand-muted">

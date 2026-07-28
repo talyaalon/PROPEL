@@ -71,9 +71,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-        scrolled ? '' : ''
-      }`}
+      className={`sticky top-0 z-50 transition-all duration-500 ease-smooth ${scrolled ? '' : ''}`}
     >
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
@@ -100,7 +98,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
                 className="group relative text-[13px] font-medium tracking-wide text-brand-muted transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-ink transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-x-100" />
+                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-ink transition-transform duration-300 ease-smooth group-hover:scale-x-100" />
               </a>
             ))}
           </div>

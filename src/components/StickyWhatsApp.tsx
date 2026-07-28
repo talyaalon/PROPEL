@@ -45,7 +45,7 @@ export default function StickyWhatsApp({ message, label }: { message: string; la
       rel="noopener noreferrer"
       aria-label={label}
       data-analytics="whatsapp:sticky-mobile"
-      className={`fixed bottom-5 end-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-brand-gold text-brand-deep transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] active:scale-95 md:hidden ${
+      className={`fixed bottom-5 end-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-brand-gold text-brand-deep transition-all duration-300 ease-smooth active:scale-95 md:hidden ${
         visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'
       }`}
     >

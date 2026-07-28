@@ -112,9 +112,7 @@ export default async function ProjectPage({ params }: Props) {
             {t.back}
           </Link>
 
-          <h1 className="mb-6 font-display text-4xl font-black leading-tight tracking-tight lg:text-[64px] lg:leading-none">
-            {project.title}
-          </h1>
+          <h1 className="mb-6 font-display leading-none">{project.title}</h1>
 
           {/* Client / year — omitted entirely when unknown rather than shown blank */}
           {(project.client || project.year) && (
@@ -237,7 +235,7 @@ export default async function ProjectPage({ params }: Props) {
       <section className="border-t border-brand-ink/15 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-7xl">
           <div className="card p-8 sm:p-12">
-            <h2 className="text-2xl font-bold tracking-[-0.02em] sm:text-3xl">{t.cta_title}</h2>
+            <h2 className="font-display">{t.cta_title}</h2>
             <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-brand-lead">
               {t.cta_body}
             </p>
@@ -258,13 +256,13 @@ export default async function ProjectPage({ params }: Props) {
           {hasNext && (
             <Link
               href={`/${lang}/portfolio/${next.slug}`}
-              className="group mt-8 flex items-center justify-between gap-4 border border-brand-ink/15 bg-brand-deep p-6 transition-all duration-300 hover:-translate-y-1 hover: sm:p-7"
+              className="card group mt-8 flex items-center justify-between gap-4 p-6 sm:p-7"
             >
               <span>
                 <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-muted">
                   {t.next_project}
                 </span>
-                <span className="mt-1.5 block text-[18px] font-bold tracking-[-0.01em] text-brand-ink">
+                <span className="mt-1.5 block text-[18px] font-bold text-brand-ink">
                   {next.title}
                 </span>
               </span>

@@ -44,10 +44,7 @@ export default function About({ lang, dict }: Props) {
             </p>
 
             {/* Heading */}
-            <h2
-              id="about-heading"
-              className="text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
-            >
+            <h2 id="about-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
               {dict.section_title}
             </h2>
 
@@ -81,7 +78,7 @@ export default function About({ lang, dict }: Props) {
               return (
                 <div
                   key={value.title}
-                  className="flex items-start gap-5 border border-brand-ink/15 bg-brand-void p-6 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-1 hover: sm:gap-6"
+                  className="flex items-start gap-5 border border-brand-ink/15 bg-brand-void p-6 transition-all duration-500 ease-smooth hover:-translate-y-1  sm:gap-6"
                 >
                   {/* Icon box */}
                   <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-brand-deep ">
@@ -90,9 +87,7 @@ export default function About({ lang, dict }: Props) {
 
                   {/* Text */}
                   <div className="min-w-0">
-                    <h3 className="mb-1.5 text-[15px] font-bold tracking-[-0.01em] text-brand-ink">
-                      {value.title}
-                    </h3>
+                    <h3 className="mb-1.5 text-[15px] font-bold text-brand-ink">{value.title}</h3>
                     <p className="text-[13px] leading-relaxed text-brand-muted">
                       {value.description}
                     </p>

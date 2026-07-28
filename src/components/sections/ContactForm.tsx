@@ -45,11 +45,9 @@ export default function ContactForm({ lang, dict }: Props) {
 
   if (state.status === 'success') {
     return (
-      <div className=" border border-brand-ink/15 bg-brand-deep p-8 text-center sm:p-12">
+      <div className="card p-8 text-center sm:p-12">
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
-        <h3 className="mt-5 text-[20px] font-bold tracking-[-0.015em] text-brand-ink">
-          {dict.success_title}
-        </h3>
+        <h3 className="mt-5 text-[20px] font-bold text-brand-ink">{dict.success_title}</h3>
         <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-muted">
           {dict.success_body}
         </p>
@@ -78,11 +76,7 @@ export default function ContactForm({ lang, dict }: Props) {
       : null
 
   return (
-    <form
-      action={formAction}
-      className=" border border-brand-ink/15 bg-brand-deep p-6 sm:p-8"
-      noValidate
-    >
+    <form action={formAction} className="card p-6 sm:p-8" noValidate>
       {errorMessage && (
         <p
           role="alert"

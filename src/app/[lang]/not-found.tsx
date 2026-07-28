@@ -15,9 +15,7 @@ export default function NotFound() {
         <p className="font-display text-[96px] font-black leading-none tracking-tight text-brand-ink/10 sm:text-[128px]">
           404
         </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl">
-          {copy.title}
-        </h1>
+        <h1 className="mt-2 text-brand-ink">{copy.title}</h1>
         <p className="mt-4 text-[16px] leading-[1.75] text-brand-muted">{copy.body}</p>
         <Link href={`/${lang}`} className="mt-8 inline-flex items-center rounded-full btn">
           {copy.cta}

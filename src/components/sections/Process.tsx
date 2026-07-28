@@ -19,10 +19,7 @@ export default function Process({ dict }: { dict: ProcessDict }) {
     <section id="process" aria-labelledby="process-heading" className="section">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center lg:mb-20">
-          <h2
-            id="process-heading"
-            className="text-3xl font-bold tracking-[-0.025em] text-brand-ink sm:text-4xl lg:text-[52px] lg:leading-[1.1]"
-          >
+          <h2 id="process-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-muted sm:text-[17px]">
@@ -38,9 +35,7 @@ export default function Process({ dict }: { dict: ProcessDict }) {
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              <h3 className="mt-5 text-[17px] font-bold tracking-[-0.015em] text-brand-ink">
-                {step.title}
-              </h3>
+              <h3 className="mt-5 text-[17px] font-bold text-brand-ink">{step.title}</h3>
 
               <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-muted">
                 {step.duration}
