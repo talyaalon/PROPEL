@@ -44,7 +44,12 @@
           "Accessible by standard, without bolt-on widgets",
           "You own the code and the domain"
         ],
-        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
+        "stack": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
       },
       {
@@ -58,7 +63,12 @@
           "Your systems talk to each other instead of through you",
           "Alerts only for what actually needs you"
         ],
-        "stack": ["n8n", "Make", "Zapier", "API"],
+        "stack": [
+          "n8n",
+          "Make",
+          "Zapier",
+          "API"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about automating my business."
       },
       {
@@ -72,8 +82,44 @@
           "Content aimed at buying intent, not raw traffic",
           "A monthly report with numbers, not promises"
         ],
-        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
+        "stack": [
+          "Search Console",
+          "GA4",
+          "Ahrefs",
+          "Schema.org"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about organic growth."
+      },
+      {
+        "id": "migration",
+        "icon": "Code2",
+        "featured": true,
+        "title": "Migration to clean code you own",
+        "badge": "NEW",
+        "description": "We rebuild WordPress or Base44 sites in clean code — same design or better, no plugins, no platform lock-in. When we are done, the code is registered to you.",
+        "features_label": "What you get",
+        "outcomes": [
+          "Full ownership: repo, domain and hosting in your name — zero vendor lock-in",
+          "No platform subscriptions and no monthly plugin licences",
+          "Far faster: static code instead of 20 plugins running on every request",
+          "Zero plugin updates and zero third-party plugin vulnerabilities",
+          "SEO preserved: same URLs, complete 301 redirects, meta and schema",
+          "Total control: any change is possible, no \"the plugin doesn't support that\"",
+          "Content, forms and tracking (GA4/GTM) migrated one-to-one",
+          "Readable, documented code — any developer can pick it up"
+        ],
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind",
+          "Git",
+          "Vercel",
+          "301 Redirects",
+          "GA4"
+        ],
+        "cta_label": "Free fit check",
+        "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
+        "analytics": "whatsapp:service-migration"
       }
     ]
   },
@@ -174,7 +220,13 @@
     "email_label": "Email",
     "budget_label": "Approximate budget",
     "budget_placeholder": "Choose a range",
-    "budget_options": ["Not sure yet", "Up to ₪10,000", "₪10,000-25,000", "₪25,000-50,000", "Over ₪50,000"],
+    "budget_options": [
+      "Not sure yet",
+      "Up to ₪10,000",
+      "₪10,000-25,000",
+      "₪25,000-50,000",
+      "Over ₪50,000"
+    ],
     "message_label": "What do you need?",
     "message_placeholder": "A few lines about the business and what's stuck",
     "optional": "optional",

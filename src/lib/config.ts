@@ -83,10 +83,14 @@ export function assertProductionConfig(): void {
   const problems: string[] = []
 
   if (usesPlaceholderPhone) {
-    problems.push('NEXT_PUBLIC_WHATSAPP_PHONE is still the placeholder — every CTA on the site is a dead link.')
+    problems.push(
+      'NEXT_PUBLIC_WHATSAPP_PHONE is still the placeholder — every CTA on the site is a dead link.',
+    )
   }
   if (usesPlaceholderDomain) {
-    problems.push('NEXT_PUBLIC_SITE_URL is still the placeholder — canonical URLs, hreflang and OG tags point at a domain you do not own.')
+    problems.push(
+      'NEXT_PUBLIC_SITE_URL is still the placeholder — canonical URLs, hreflang and OG tags point at a domain you do not own.',
+    )
   }
 
   if (problems.length === 0) return
@@ -94,8 +98,12 @@ export function assertProductionConfig(): void {
   const message = `[PROPEL config]\n  - ${problems.join('\n  - ')}`
 
   if (isProductionDeploy()) {
-    throw new Error(`${message}\n\nSet these in your project's environment variables before deploying to production.`)
+    throw new Error(
+      `${message}\n\nSet these in your project's environment variables before deploying to production.`,
+    )
   }
 
-  console.warn(`${message}\n  (This is a warning locally; it becomes a build failure on a production deploy.)`)
+  console.warn(
+    `${message}\n  (This is a warning locally; it becomes a build failure on a production deploy.)`,
+  )
 }

@@ -2,10 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ── Theme ─────────────────────────────────────────────────────────────────────
+ * Dark is the default. The original cream palette is still fully available by
+ * putting data-theme="light" on <html> — nothing was deleted, only demoted.
+ *
+ * Anything that must flip between themes reads a variable. The accent is
+ * deliberately constant in both: it is the brand, not a surface.
+ */
+:root {
+  --surface: #090316;
+  --surface-deep: #050210;
+  --panel: rgba(8, 9, 11, 0.9);
+  --text: #fff8ef;
+  --text-lead: #ded2ec;
+  --text-muted: #aaa0ba;
+  --line: rgba(255, 248, 239, 0.15);
+  --line-strong: rgba(255, 248, 239, 0.28);
+  --grid-line: rgba(255, 248, 239, 0.035);
+  --selection-bg: #c8ff3d;
+  --selection-fg: #0b1200;
+}
+
+:root[data-theme='light'] {
+  --surface: #f9f7f2;
+  --surface-deep: #efece4;
+  --panel: rgba(255, 255, 255, 0.92);
+  --text: #14121a;
+  --text-lead: #3d3748;
+  /* Darkened against the cream surface: #AAA0BA on #F9F7F2 is only 2.4:1. */
+  --text-muted: #5c5470;
+  --line: rgba(20, 18, 26, 0.16);
+  --line-strong: rgba(20, 18, 26, 0.3);
+  --grid-line: rgba(20, 18, 26, 0.045);
+  --selection-bg: #14121a;
+  --selection-fg: #f9f7f2;
+}
+
 html {
   scroll-behavior: smooth;
   /* Matches the sticky nav height so anchor targets are not buried under it */
   scroll-padding-top: 68px;
+  background-color: var(--surface);
 }
 
 @media (min-width: 640px) {
@@ -14,15 +52,18 @@ html {
   }
 }
 
-/*
- * The body's font-family is applied by the layout via next/font's className, not
- * here. Doing it in CSS hid the dependency from Next and cost the page a font
- * preload it should have had.
- */
-
 @layer base {
   body {
-    @apply bg-brand-cream text-brand-charcoal antialiased;
+    @apply font-body antialiased;
+    color: var(--text);
+    background-color: var(--surface);
+    /* Technical grid. Applied to the page rather than a wrapper so it survives
+       every section background. */
+    background-image:
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(var(--grid-line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    font-size: 16px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -34,24 +75,192 @@ html {
     box-sizing: border-box;
   }
 
-  /* Premium text selection */
-  ::selection {
-    background-color: #1c1c1c;
-    color: #f9f7f2;
+  /*
+   * Headings.
+   *
+   * `tracking-normal` throughout, deliberately: negative letter-spacing pulls
+   * Hebrew glyphs into each other in a way it does not in Latin. Tracking is
+   * applied only to Latin-only elements — buttons, tags, eyebrows, nav — and
+   * never to running text in either language.
+   */
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-bold uppercase tracking-normal;
+    color: var(--text);
   }
 
-  /* Clean focus ring — keyboard users only */
+  h1 {
+    font-size: clamp(42px, 5.6vw, 66px);
+    line-height: 0.98;
+  }
+
+  h2 {
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.04;
+  }
+
+  h3 {
+    font-size: 21px;
+    line-height: 1.25;
+    text-transform: none;
+  }
+
+  ::selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-fg);
+  }
+
+  /* Keyboard users only */
   :focus-visible {
-    outline: 2px solid #1c1c1c;
+    outline: 2px solid theme('colors.brand.accent');
     outline-offset: 3px;
-    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .section {
+    @apply px-4 sm:px-6 lg:px-8;
+    padding-top: 130px;
+    padding-bottom: 72px;
+  }
+
+  /* Opening paragraph under a heading */
+  .lead {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--text-lead);
+  }
+
+  /* Running body copy */
+  .body-text {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+
+  /* ── Eyebrow ──────────────────────────────────────────────────────────────
+     Small accent label with a rule running off its leading edge. Positioned
+     with logical properties, so the rule sits to the right of the label in
+     Hebrew and to the left in English from a single declaration. */
+  .eyebrow {
+    @apply relative inline-flex items-center font-display text-[14px] font-semibold uppercase tracking-[.18em];
+    color: theme('colors.brand.accent');
+    padding-inline-start: 72px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    width: 56px;
+    height: 2px;
+    background-color: theme('colors.brand.accent');
+    transform: translateY(-50%);
+  }
+
+  /* ── Card ─────────────────────────────────────────────────────────────── */
+  .card {
+    @apply relative overflow-hidden transition-all duration-200 ease-smooth;
+    padding: 28px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(
+      90deg,
+      theme('colors.brand.accent'),
+      theme('colors.brand.accentDeep')
+    );
+    transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover,
+  .card:focus-within {
+    border-color: rgb(200 255 61 / 0.55);
+    transform: translateY(-4px);
+  }
+
+  .card:hover::after,
+  .card:focus-within::after {
+    width: 100%;
+  }
+
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    height: 48px;
+    background: theme('colors.brand.accent');
+    color: #0b1200;
+    border: 1px solid theme('colors.brand.accent');
+  }
+
+  .btn:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    height: 48px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line);
+  }
+
+  .btn-ghost:hover {
+    border-color: theme('colors.brand.accent');
+    color: theme('colors.brand.accent');
+    transform: translateY(-2px);
+  }
+
+  /* ── Tag ──────────────────────────────────────────────────────────────── */
+  .tag {
+    @apply inline-flex items-center px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em];
+    color: var(--text-lead);
+    border: 1px solid var(--line);
+  }
+
+  /* ── Figure ───────────────────────────────────────────────────────────── */
+  .num {
+    @apply font-display font-bold;
+    color: theme('colors.brand.accent');
   }
 }
 
 @layer utilities {
-  .font-display {
-    font-family: var(--font-raleway), sans-serif;
-    font-weight: 800;
+  /* Shared grain texture, carried over from the previous system. */
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+  }
+
+  /*
+   * Scroll reveal. The hidden state is server-rendered so there is no flash of
+   * visible-then-hidden content; the <noscript> rule in the layout and the
+   * reduced-motion block below both force it back to visible, so content is
+   * never trapped behind JavaScript or an accessibility preference.
+   */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 680ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 680ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
   }
 
   /* RTL-aware underline grow animation */
@@ -62,48 +271,19 @@ html {
   .underline-rtl {
     transform-origin: right center;
   }
-
-  /*
-   * Shared grain texture. Previously this data-URI was inlined as a style
-   * attribute in both the nav and the hero, shipping the same ~300 bytes twice
-   * in the HTML of every page.
-   */
-  /*
-   * Scroll reveal. The hidden state is rendered by the server so there is no
-   * flash of visible-then-hidden content; the <noscript> rule in the layout and
-   * the reduced-motion block below both force it back to visible, so content is
-   * never trapped behind JavaScript or an accessibility preference.
-   */
-  .reveal {
-    opacity: 0;
-    transform: translateY(22px);
-    transition:
-      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .reveal.is-visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .bg-grain {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 300px 300px;
-  }
 }
 
 /*
  * ── Reduced motion ────────────────────────────────────────────────
- * Vestibular disorders make parallax, fades and the pulsing availability dot
- * genuinely unpleasant. Honour the OS-level preference everywhere at once.
+ * Vestibular disorders make fades and the pulsing availability dot genuinely
+ * unpleasant. Honour the OS-level preference everywhere at once.
  */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  /* Not just instant — never hidden in the first place */
+  /* Not merely instant — never hidden in the first place */
   .reveal {
     opacity: 1 !important;
     transform: none !important;

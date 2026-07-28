@@ -71,13 +71,11 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-        scrolled ? 'shadow-nav' : ''
-      }`}
+      className={`sticky top-0 z-50 transition-all duration-500 ease-smooth ${scrolled ? '' : ''}`}
     >
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
-        className="relative h-[68px] overflow-hidden border-b border-brand-border bg-brand-cream/95 backdrop-blur-xl sm:h-[76px]"
+        className="relative h-[68px] overflow-hidden border-b border-brand-ink/15 bg-brand-void/95 backdrop-blur-xl sm:h-[76px]"
         aria-label="Primary navigation"
       >
         <div
@@ -97,10 +95,10 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
               <a
                 key={link.href}
                 href={link.href}
-                className="group relative text-[13px] font-medium tracking-wide text-brand-steel transition-colors duration-300 hover:text-brand-charcoal"
+                className="group relative text-[13px] font-medium tracking-wide text-brand-muted transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-charcoal transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-x-100" />
+                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-ink transition-transform duration-300 ease-smooth group-hover:scale-x-100" />
               </a>
             ))}
           </div>
@@ -110,7 +108,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
             <Link
               href={altHref}
               hrefLang={altLang}
-              className="text-[13px] font-medium tracking-wide text-brand-steel transition-colors duration-300 hover:text-brand-charcoal"
+              className="text-[13px] font-medium tracking-wide text-brand-muted transition-colors duration-300 hover:text-brand-ink"
             >
               {dict.toggle_lang}
             </Link>
@@ -119,7 +117,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics="whatsapp:nav"
-              className="flex items-center gap-2 rounded-full bg-brand-black px-6 py-3 text-sm font-semibold tracking-wide text-white transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(17,17,17,0.28)] active:translate-y-0 active:scale-[0.97] active:shadow-none"
+              className="flex items-center gap-2 rounded-full btn"
             >
               <MessageCircle className="h-4 w-4" />
               {dict.cta}
@@ -129,7 +127,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
           {/* Mobile hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="rounded-xl p-2 text-brand-charcoal transition-colors duration-200 hover:bg-brand-border/40 md:hidden"
+            className="rounded-xl p-2 text-brand-ink transition-colors duration-200 hover:bg-brand-ink/10 md:hidden"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -144,7 +142,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
         <div
           id="mobile-menu"
           ref={drawerRef}
-          className={`animate-slide-down border-b border-brand-border bg-brand-cream px-4 pb-6 pt-3 shadow-card sm:px-6 md:hidden ${
+          className={`animate-slide-down border-b border-brand-ink/15 bg-brand-void px-4 pb-6 pt-3 sm:px-6 md:hidden ${
             isRtl ? 'text-right' : 'text-left'
           }`}
         >
@@ -154,18 +152,18 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-3 text-[15px] font-medium text-brand-charcoal transition-colors duration-200 hover:bg-brand-border/40"
+                className="rounded-xl px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-ink/10"
               >
                 {link.label}
               </a>
             ))}
 
-            <div className="mt-3 space-y-2 border-t border-brand-border pt-4">
+            <div className="mt-3 space-y-2 border-t border-brand-ink/15 pt-4">
               <Link
                 href={altHref}
                 hrefLang={altLang}
                 onClick={() => setIsOpen(false)}
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-steel transition-colors duration-200 hover:text-brand-charcoal"
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-muted transition-colors duration-200 hover:text-brand-ink"
               >
                 {dict.toggle_lang}
               </Link>
@@ -174,7 +172,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-analytics="whatsapp:nav-mobile"
-                className="flex items-center justify-center gap-2.5 rounded-full bg-brand-black px-5 py-4 text-sm font-semibold tracking-wide text-white transition-all duration-300 active:scale-[0.97]"
+                className="flex items-center justify-center gap-2.5 rounded-full btn"
               >
                 <MessageCircle className="h-4 w-4" />
                 {dict.cta}

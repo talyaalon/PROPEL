@@ -19,7 +19,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 export async function submitContact(
   _prev: ContactState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ContactState> {
   // Honeypot: a real person never fills a field they cannot see. Return success
   // so the bot has no signal that it was caught.
@@ -53,7 +53,7 @@ export async function submitContact(
   if (!apiKey || !inbox) {
     console.warn(
       '[PROPEL contact] RESEND_API_KEY or CONTACT_INBOX_EMAIL is not set — logging the submission instead of sending it:\n' +
-        body
+        body,
     )
     return { status: 'success' }
   }

@@ -39,9 +39,7 @@ export function trackEvent(name: string, props: EventProps = {}): void {
 export default function Analytics() {
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
-        '[data-analytics]'
-      )
+      const target = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-analytics]')
       if (!target) return
 
       const value = target.dataset.analytics
