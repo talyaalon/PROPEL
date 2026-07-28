@@ -48,10 +48,10 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
         <div>
           <div className="mb-6 flex items-center gap-4">
             <span className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center border border-brand-ink/15">
-              <Icon className="h-5 w-5 text-brand-gold" />
+              <Icon className="h-5 w-5 text-brand-accent" />
             </span>
             {service.badge && (
-              <span className="inline-flex items-center bg-brand-gold px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-[.1em] text-brand-deep">
+              <span className="inline-flex items-center bg-brand-accent px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-[.1em] text-brand-deep">
                 {service.badge}
               </span>
             )}
@@ -77,7 +77,7 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
                 className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-lead"
               >
                 <Check
-                  className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-gold"
+                  className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent"
                   aria-hidden="true"
                 />
                 {outcome}

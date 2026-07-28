@@ -49,7 +49,7 @@ export default function Services({ dict }: Props) {
             return (
               <div key={service.id} className="card flex flex-col">
                 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center border border-brand-ink/15">
-                  <Icon className="h-5 w-5 text-brand-gold" />
+                  <Icon className="h-5 w-5 text-brand-accent" />
                 </div>
 
                 <h3 className="mb-3">{service.title}</h3>
@@ -66,7 +66,7 @@ export default function Services({ dict }: Props) {
                       className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-lead"
                     >
                       <Check
-                        className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-gold"
+                        className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent"
                         aria-hidden="true"
                       />
                       {outcome}
@@ -93,7 +93,7 @@ export default function Services({ dict }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-analytics={`whatsapp:service-${service.id}`}
-                  className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[13px] font-bold uppercase tracking-[.08em] text-brand-gold transition-colors duration-500 ease-smooth hover:text-brand-ink"
+                  className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[13px] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
                 >
                   {dict.cta_label}
                   <span
