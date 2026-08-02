@@ -11,6 +11,7 @@ import Footer from '@/components/sections/Footer'
 import Analytics from '@/components/Analytics'
 import StickyWhatsApp from '@/components/StickyWhatsApp'
 import ScrollProgress from '@/components/ScrollProgress'
+import { themeInitScript } from '@/components/ThemeToggle'
 import '../globals.css'
 
 // Fails a production deploy that still carries placeholder contact details.
@@ -73,8 +74,11 @@ type Props = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#090316',
-  colorScheme: 'dark',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F4F5F7' },
+    { media: '(prefers-color-scheme: dark)', color: '#1F2124' },
+  ],
+  colorScheme: 'light dark',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -124,14 +128,19 @@ export default async function RootLayout({ children, params }: Props) {
     <html
       lang={lang}
       dir={getDirection(lang)}
-      /* No data-theme attribute means dark. Set data-theme="light" here to
- serve the original cream palette instead — every surface, text and
- hairline colour flips through CSS variables in globals.css. */
+      /* No data-theme attribute means light. ThemeToggle writes data-theme="dark",
+         and themeInitScript below restores the stored choice before first paint —
+         every surface, text and accent colour flips through CSS variables. */
       className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable}`}
     >
       <head>
+        {/* Applies the stored theme before the browser paints. A client
+            component cannot run this early, so without it a returning dark-mode
+            visitor sees a flash of the light page on every navigation. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+
         {/* Scroll-reveal sections start hidden. If the bundle never runs, this
- guarantees the page is still fully readable. */}
+            guarantees the page is still fully readable. */}
         <noscript>
           <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
@@ -139,13 +148,18 @@ export default async function RootLayout({ children, params }: Props) {
       <body>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:bg-brand-accent focus:px-6 focus:py-3 focus:font-display focus:text-sm focus:font-bold focus:uppercase focus:tracking-[.08em] focus:text-brand-deep"
+          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:bg-brand-accent focus:px-6 focus:py-3 focus:font-display focus:text-sm focus:font-bold focus:uppercase focus:tracking-[.08em] focus:text-brand-surface"
         >
           {dict.a11y.skip_to_content}
         </a>
 
         <ScrollProgress />
-        <Navigation lang={lang} dict={dict.nav} hasProjects={hasProjects} />
+        <Navigation
+          lang={lang}
+          dict={dict.nav}
+          hasProjects={hasProjects}
+          themeLabel={dict.a11y.toggle_theme}
+        />
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />
 

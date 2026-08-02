@@ -22,7 +22,7 @@ export default function Contact({ lang, dict }: Props) {
             <h2 id="contact-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">
               {dict.section_title}
             </h2>
-            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-muted sm:text-[17px]">
+            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[17px]">
               {dict.section_subtitle}
             </p>
 
@@ -32,7 +32,7 @@ export default function Contact({ lang, dict }: Props) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-analytics="whatsapp:contact-section"
-                className="flex items-center gap-4 border border-brand-ink/15 bg-brand-void p-4 transition-all duration-300 hover:-translate-y-0.5 "
+                className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
               >
                 <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                   <MessageCircle className="h-5 w-5 text-green-600" aria-hidden="true" />
@@ -43,9 +43,9 @@ export default function Contact({ lang, dict }: Props) {
               {siteConfig.phoneDisplay && (
                 <a
                   href={`tel:${siteConfig.phoneDisplay.replace(/[^\d+]/g, '')}`}
-                  className="flex items-center gap-4 border border-brand-ink/15 bg-brand-void p-4 transition-all duration-300 hover:-translate-y-0.5 "
+                  className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
                 >
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-deep ">
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Phone className="h-4 w-4 text-brand-ink" aria-hidden="true" />
                   </span>
                   <span className="text-[14px] font-medium text-brand-ink" dir="ltr">
@@ -57,9 +57,9 @@ export default function Contact({ lang, dict }: Props) {
               {siteConfig.email && (
                 <a
                   href={`mailto:${siteConfig.email}`}
-                  className="flex items-center gap-4 border border-brand-ink/15 bg-brand-void p-4 transition-all duration-300 hover:-translate-y-0.5 "
+                  className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
                 >
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-deep ">
+                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Mail className="h-4 w-4 text-brand-ink" aria-hidden="true" />
                   </span>
                   <span className="text-[14px] font-medium text-brand-ink" dir="ltr">

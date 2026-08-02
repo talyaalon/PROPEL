@@ -28,7 +28,7 @@ export default function Logo({ tone = 'light', className = '' }: Props) {
   return (
     <span
       className={`font-display inline-flex items-baseline gap-[0.14em] font-black leading-none tracking-[-0.035em] ${
-        tone === 'dark' ? 'text-brand-ink' : 'text-brand-deep'
+        tone === 'dark' ? 'text-brand-ink' : 'text-brand-surface'
       } ${className}`}
     >
       PROPEL

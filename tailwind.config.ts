@@ -2,13 +2,19 @@ import type { Config } from 'tailwindcss'
 
 /*
  * ── The accent ────────────────────────────────────────────────────────────────
- * PROPEL runs on a single accent hue. It is declared here, once, and everything
- * downstream — Tailwind utilities, the component layer in globals.css, the
- * scroll progress bar — reads it from `brand.accent` / `brand.accentDeep`.
- * Changing the brand accent is a one-line edit to these two constants.
+ * PROPEL runs on one accent hue: dark red.
+ *
+ * It needs two values, not one. Measured against the two surfaces:
+ *
+ *            on mist #F4F5F7      on char #1F2124
+ *   #8E1B1B      8.3:1 (AAA)          1.8:1 (fails)
+ *   #E05C5C      3.9:1 (large only)   4.5:1 (AA)
+ *
+ * A single red cannot serve both themes — dark red on a dark surface is not
+ * merely dull, it is unreadable. So the accent is a CSS variable that flips with
+ * the theme, declared once in globals.css. Everything downstream reads
+ * `brand.accent` and never a literal.
  */
-const ACCENT = '#C8FF3D'
-const ACCENT_DEEP = '#A6E01F'
 
 const config: Config = {
   content: [
@@ -21,10 +27,8 @@ const config: Config = {
      * Zero corner radius across the whole site, buttons and cards included.
      *
      * Declared at `theme` level rather than `extend` so it replaces Tailwind's
-     * scale outright: the 78 `rounded-*` utilities already in the codebase —
-     * `rounded-full` among them — collapse to square without editing each call
-     * site. The keys are kept rather than dropped so existing classes still
-     * generate instead of silently vanishing.
+     * scale outright: every `rounded-*` utility in the codebase — `rounded-full`
+     * included — collapses to square without editing each call site.
      */
     borderRadius: {
       none: '0px',
@@ -41,21 +45,27 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          // Surfaces
-          void: '#090316',
-          deep: '#050210',
-          // Type
-          ink: '#FFF8EF',
-          lead: '#DED2EC',
-          muted: '#AAA0BA',
-          // Accent — single hue, see above
-          accent: ACCENT,
-          accentDeep: ACCENT_DEEP,
-          // Retained light-theme surface
-          cream: '#F9F7F2',
-          // Structural
-          line: 'rgba(255,248,239,.15)',
-          panel: 'rgba(8,9,11,.9)',
+          /*
+           * Semantic tokens. These resolve through CSS variables so a single set
+           * of utility classes serves both themes — no `dark:` variant on every
+           * element, and no duplicated markup.
+           */
+          surface: 'var(--surface)',
+          raised: 'var(--raised)',
+          panel: 'var(--panel)',
+          ink: 'var(--ink)',
+          slate: 'var(--slate)',
+          line: 'var(--line)',
+          accent: 'var(--accent)',
+          accentSoft: 'var(--accent-soft)',
+
+          /* Fixed values, for the rare place that must not flip with the theme. */
+          mist: '#F4F5F7',
+          paper: '#FFFFFF',
+          char: '#1F2124',
+          coal: '#26292E',
+          redDeep: '#8E1B1B',
+          redLight: '#E05C5C',
         },
       },
 
@@ -64,7 +74,7 @@ const config: Config = {
          * Chakra Petch carries no Hebrew glyphs, and that is the mechanism
          * rather than a limitation: Latin and digits render in its technical
          * letterforms while Hebrew falls through to Heebo automatically, per
-         * character, with no locale branching anywhere in the markup.
+         * character, with no locale branching in the markup.
          */
         display: ['var(--font-chakra)', 'var(--font-heebo)', 'sans-serif'],
         body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],

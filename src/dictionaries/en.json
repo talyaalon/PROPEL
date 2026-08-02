@@ -4,7 +4,8 @@
     "description": "We build fast websites and automations that take manual work off your team, for small and mid-sized businesses. Scoping, development and launch on timelines you can plan around."
   },
   "a11y": {
-    "skip_to_content": "Skip to main content"
+    "skip_to_content": "Skip to main content",
+    "toggle_theme": "Toggle colour theme"
   },
   "nav": {
     "services": "Services",
@@ -13,7 +14,8 @@
     "about": "About",
     "cta": "Let's Talk",
     "toggle_lang": "HE",
-    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
+    "blog": "Blog"
   },
   "hero": {
     "badge": "Available for new projects",
@@ -287,6 +289,7 @@
     "accessibility": "Accessibility Statement",
     "privacy": "Privacy Policy",
     "copyright": "All rights reserved © PROPEL",
-    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
+    "nav_blog": "Blog"
   }
 }

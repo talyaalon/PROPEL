@@ -24,7 +24,7 @@ export default function Testimonials({ lang, dict }: Props) {
           <h2 id="testimonials-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-muted sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -33,10 +33,10 @@ export default function Testimonials({ lang, dict }: Props) {
           {testimonials.map((testimonial) => (
             <figure
               key={testimonial.name}
-              className="flex flex-col border border-brand-ink/15 bg-brand-void p-7 sm:p-8"
+              className="flex flex-col border border-brand-line bg-brand-surface p-7 sm:p-8"
             >
               <Quote
-                className="h-7 w-7 flex-shrink-0 text-brand-ink/15 rtl:-scale-x-100"
+                className="h-7 w-7 flex-shrink-0 text-brand-slate rtl:-scale-x-100"
                 aria-hidden="true"
               />
 
@@ -44,7 +44,7 @@ export default function Testimonials({ lang, dict }: Props) {
                 {testimonial.quote[lang]}
               </blockquote>
 
-              <figcaption className="mt-7 flex items-center gap-4 border-t border-brand-ink/15 pt-6">
+              <figcaption className="mt-7 flex items-center gap-4 border-t border-brand-line pt-6">
                 {testimonial.photo ? (
                   <Image
                     src={testimonial.photo}
@@ -55,7 +55,7 @@ export default function Testimonials({ lang, dict }: Props) {
                   />
                 ) : (
                   <span
-                    className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-brand-deep text-[14px] font-bold text-brand-ink "
+                    className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-brand-panel text-[14px] font-bold text-brand-ink "
                     aria-hidden="true"
                   >
                     {testimonial.name.charAt(0)}
@@ -65,7 +65,7 @@ export default function Testimonials({ lang, dict }: Props) {
                   <span className="block text-[14px] font-bold text-brand-ink">
                     {testimonial.name}
                   </span>
-                  <span className="block text-[13px] text-brand-muted">
+                  <span className="block text-[13px] text-brand-slate">
                     {testimonial.role[lang]}
                   </span>
                 </span>

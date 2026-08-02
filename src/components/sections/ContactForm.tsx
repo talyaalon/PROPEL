@@ -48,7 +48,7 @@ export default function ContactForm({ lang, dict }: Props) {
       <div className="card p-8 text-center sm:p-12">
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
         <h3 className="mt-5 text-[20px] font-bold text-brand-ink">{dict.success_title}</h3>
-        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-muted">
+        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-slate">
           {dict.success_body}
         </p>
         <a
@@ -130,7 +130,7 @@ export default function ContactForm({ lang, dict }: Props) {
             id="budget"
             name="budget"
             defaultValue=""
-            className="w-full rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-deep"
+            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -151,14 +151,14 @@ export default function ContactForm({ lang, dict }: Props) {
             rows={5}
             required
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-muted/60 focus:border-brand-ink focus:bg-brand-deep"
+            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
 
       <SubmitButton dict={dict} />
 
-      <p className="mt-4 text-[12px] leading-relaxed text-brand-muted">
+      <p className="mt-4 text-[12px] leading-relaxed text-brand-slate">
         {dict.privacy_note}{' '}
         <Link
           href={`/${lang}/privacy`}
@@ -209,7 +209,7 @@ function Label({
           *
         </span>
       )}
-      {hint && <span className="font-normal text-brand-muted"> ({hint})</span>}
+      {hint && <span className="font-normal text-brand-slate"> ({hint})</span>}
     </label>
   )
 }
@@ -243,7 +243,7 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         dir={dir}
-        className="w-full rounded-xl border border-brand-ink/15 bg-brand-void px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-muted/60 focus:border-brand-ink focus:bg-brand-deep"
+        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )
