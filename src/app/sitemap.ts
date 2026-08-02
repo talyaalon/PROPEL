@@ -20,9 +20,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: path === '' ? 1 : path.startsWith('/portfolio') ? 0.8 : 0.3,
       alternates: {
         languages: Object.fromEntries(
-          locales.map((alt) => [alt, `${siteConfig.url}/${alt}${path}`])
+          locales.map((alt) => [alt, `${siteConfig.url}/${alt}${path}`]),
         ),
       },
-    }))
+    })),
   )
 }

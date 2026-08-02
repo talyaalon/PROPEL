@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Metadata, Viewport } from 'next'
-import { Assistant, DM_Sans, Raleway } from 'next/font/google'
+import { Assistant, Chakra_Petch, Heebo } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { locales, getDirection, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
@@ -10,6 +10,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/sections/Footer'
 import Analytics from '@/components/Analytics'
 import StickyWhatsApp from '@/components/StickyWhatsApp'
+import ScrollProgress from '@/components/ScrollProgress'
 import '../globals.css'
 
 // Fails a production deploy that still carries placeholder contact details.
@@ -17,37 +18,36 @@ assertProductionConfig()
 
 // ── Fonts ─────────────────────────────────────────────────────────────────────
 //
-// All three are declared without a `weight`, which makes next/font fetch the
-// *variable* build of each family: one file covering every weight the design
-// uses (400–800) instead of a separate static file per weight. That also means
-// `font-extrabold` on the H1 renders as a real 800 rather than a browser-faked
-// bold, which is what the previous 300–700 weight list produced.
+// Two roles, three families:
 //
-// The body carries the active locale's font *className*, not just its CSS
-// variable. That distinction matters: binding font-family through a stylesheet
-// rule (`html[lang='he'] body { … }`, as this project did before) hides the
-// dependency from Next, which then emits no font preload at all and makes the
-// browser wait for the CSS to parse before it even discovers the font. Applying
-// the className gives Next the static signal it needs.
+// display Chakra Petch → Heebo headings, buttons, tags, numerals
+// body Assistant → Heebo running text
+//
+// Chakra Petch carries no Hebrew glyphs, which is what makes the split work
+// rather than something to work around: Latin and digits render in Chakra
+// Petch's technical letterforms while Hebrew falls through to Heebo
+// automatically, per character, with no locale branching in the markup.
+//
+// Chakra Petch and Heebo are requested at fixed weights because neither ships a
+// variable build on Google Fonts; Assistant is left variable.
+
+const chakraPetch = Chakra_Petch({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-chakra',
+  display: 'swap',
+})
+
+const heebo = Heebo({
+  subsets: ['hebrew', 'latin'],
+  weight: ['400', '500', '700', '800'],
+  variable: '--font-heebo',
+  display: 'swap',
+})
 
 const assistant = Assistant({
   subsets: ['hebrew', 'latin'],
   variable: '--font-assistant',
-  display: 'swap',
-})
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  display: 'swap',
-})
-
-// Preloaded because it renders the wordmark in the header — the first thing on
-// screen. Left unpreloaded it would visibly swap from the fallback face on the
-// logo itself.
-const raleway = Raleway({
-  subsets: ['latin'],
-  variable: '--font-raleway',
   display: 'swap',
 })
 
@@ -73,8 +73,8 @@ type Props = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#F9F7F2',
-  colorScheme: 'light',
+  themeColor: '#090316',
+  colorScheme: 'dark',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -124,31 +124,32 @@ export default async function RootLayout({ children, params }: Props) {
     <html
       lang={lang}
       dir={getDirection(lang)}
-      className={`${assistant.variable} ${dmSans.variable} ${raleway.variable}`}
+      /* No data-theme attribute means dark. Set data-theme="light" here to
+ serve the original cream palette instead — every surface, text and
+ hairline colour flips through CSS variables in globals.css. */
+      className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable}`}
     >
       <head>
         {/* Scroll-reveal sections start hidden. If the bundle never runs, this
-            guarantees the page is still fully readable. */}
+ guarantees the page is still fully readable. */}
         <noscript>
           <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
       </head>
-      <body className={lang === 'he' ? assistant.className : dmSans.className}>
+      <body>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-brand-black focus:px-6 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:bg-brand-accent focus:px-6 focus:py-3 focus:font-display focus:text-sm focus:font-bold focus:uppercase focus:tracking-[.08em] focus:text-brand-deep"
         >
           {dict.a11y.skip_to_content}
         </a>
 
+        <ScrollProgress />
         <Navigation lang={lang} dict={dict.nav} hasProjects={hasProjects} />
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />
 
-        <StickyWhatsApp
-          message={dict.footer.whatsapp_message}
-          label={dict.footer.whatsapp_cta}
-        />
+        <StickyWhatsApp message={dict.footer.whatsapp_message} label={dict.footer.whatsapp_cta} />
         <Analytics />
       </body>
     </html>
