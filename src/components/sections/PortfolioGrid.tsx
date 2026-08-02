@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
+import ProjectScreens from '@/components/ProjectScreens'
 import { MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
@@ -62,27 +62,17 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
           return (
             <article key={project.slug} className={cardBase}>
-              {/* Thumbnail */}
-              <div className="relative h-48 w-full overflow-hidden bg-brand-surface sm:h-52">
-                {project.thumbnail?.src ? (
-                  <Image
-                    src={project.thumbnail.src}
-                    alt={project.thumbnail.alt[lang]}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-smooth group-hover:scale-[1.04]"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  />
-                ) : (
-                  <span
-                    className="absolute bottom-3 end-4 select-none font-display text-[80px] font-black leading-none text-black/[0.05]"
-                    aria-hidden="true"
-                  >
-                    {project.title.charAt(0)}
-                  </span>
-                )}
+              {/* Device previews — the site scrolls inside the frames on hover,
+                  or on entering the viewport where there is no hover. */}
+              <div className="relative bg-brand-surface px-4 pb-4 pt-6">
+                <ProjectScreens
+                  desktop={project.screens?.desktop}
+                  mobile={project.screens?.mobile}
+                  title={`${project.title} — ${dict.categories[project.category]}`}
+                />
 
                 {/* Category chip */}
-                <span className="absolute start-4 top-4 rounded-full border border-brand-line bg-brand-panel px-3 py-1 text-[11px] font-semibold tracking-wide text-brand-ink backdrop-blur-sm">
+                <span className="absolute start-4 top-4 z-10 border border-brand-line bg-brand-panel px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em] text-brand-ink">
                   {dict.categories[project.category]}
                 </span>
               </div>
