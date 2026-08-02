@@ -291,5 +291,21 @@
     "copyright": "All rights reserved © PROPEL",
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
     "nav_blog": "Blog"
+  },
+  "blog": {
+    "eyebrow": "Resources",
+    "title": "Resources and articles",
+    "subtitle": "Sources we go back to ourselves — performance, organic search, accessibility and building things properly. Our own writing will appear here.",
+    "meta_title": "Resources and articles on web development and SEO",
+    "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development — selected by PROPEL.",
+    "all_label": "All",
+    "read_more": "Read more",
+    "external_note": "External link, opens in a new tab",
+    "topics": {
+      "web": "Build & performance",
+      "seo": "Organic search",
+      "automation": "Automation",
+      "ecommerce": "E-commerce"
+    }
   }
 }

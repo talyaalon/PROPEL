@@ -14,6 +14,7 @@ type FooterDict = {
   nav_process: string
   nav_portfolio: string
   nav_about: string
+  nav_blog: string
   nav_faq: string
   nav_contact: string
   whatsapp_cta: string
@@ -40,6 +41,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
     { label: dict.nav_process, href: `/${lang}#process` },
     ...(hasProjects ? [{ label: dict.nav_portfolio, href: `/${lang}#portfolio` }] : []),
     { label: dict.nav_about, href: `/${lang}#about` },
+    { label: dict.nav_blog, href: `/${lang}/blog` },
     { label: dict.nav_faq, href: `/${lang}#faq` },
     { label: dict.nav_contact, href: `/${lang}#contact` },
   ]

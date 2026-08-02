@@ -8,7 +8,7 @@ import { getProjects } from '@/content/projects'
  * treats the two locales as one document rather than as duplicates.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ['', '/accessibility', '/privacy']
+  const staticPaths = ['', '/blog', '/accessibility', '/privacy']
   const projectPaths = getProjects().map((project) => `/portfolio/${project.slug}`)
   const allPaths = [...staticPaths, ...projectPaths]
 
@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteConfig.url}/${lang}${path}`,
       lastModified: new Date(),
       changeFrequency: path === '' ? ('weekly' as const) : ('monthly' as const),
-      priority: path === '' ? 1 : path.startsWith('/portfolio') ? 0.8 : 0.3,
+      priority: path === '' ? 1 : path.startsWith('/portfolio') || path === '/blog' ? 0.8 : 0.3,
       alternates: {
         languages: Object.fromEntries(
           locales.map((alt) => [alt, `${siteConfig.url}/${alt}${path}`]),
