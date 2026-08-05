@@ -38,19 +38,19 @@ export default function About({ dict }: Props) {
               mirror in Hebrew. Source order alone is correct. */}
           <div className="flex flex-col gap-7">
             {/* Eyebrow - full-strength steel; at 60% opacity this failed WCAG AA on white */}
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.section_subtitle}
             </p>
 
             {/* Heading */}
-            <h2 id="about-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
+            <h2 id="about-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
               {dict.section_title}
             </h2>
 
             {/* Body paragraphs */}
             <div className="flex flex-col gap-5">
               {dict.paragraphs.map((paragraph, i) => (
-                <p key={i} className="text-[16px] leading-[1.8] text-brand-slate">
+                <p key={i} className="text-[1rem] leading-[1.8] text-brand-slate">
                   {paragraph}
                 </p>
               ))}
@@ -86,8 +86,8 @@ export default function About({ dict }: Props) {
 
                   {/* Text */}
                   <div className="min-w-0">
-                    <h3 className="mb-1.5 text-[15px] font-bold text-brand-ink">{value.title}</h3>
-                    <p className="text-[13px] leading-relaxed text-brand-slate">
+                    <h3 className="mb-1.5 text-[0.9375rem] font-bold text-brand-ink">{value.title}</h3>
+                    <p className="text-[0.8125rem] leading-relaxed text-brand-slate">
                       {value.description}
                     </p>
                   </div>

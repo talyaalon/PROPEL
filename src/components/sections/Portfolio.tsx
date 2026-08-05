@@ -33,10 +33,10 @@ export default function Portfolio({ lang, dict }: Props) {
     <section id="portfolio" aria-labelledby="portfolio-heading" className="section">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 text-center lg:mb-14">
-          <h2 id="portfolio-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
+          <h2 id="portfolio-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
             {dict.section_subtitle}
           </p>
         </div>

@@ -42,6 +42,35 @@ const config: Config = {
       full: '0px',
     },
 
+    /*
+     * The spacing scale in px rather than rem.
+     *
+     * Every value here is identical to Tailwind's default at the default root
+     * size - `p-6` is 24px either way - so nothing moves at 100%. What changes
+     * is the coupling.
+     *
+     * Tailwind's scale is rem-based, which means padding, gaps and fixed widths
+     * all grow in lockstep with the root font size. That is exactly wrong for a
+     * text-size control: at 200% a card's own padding doubled to 96px inside a
+     * 375px viewport, so the content had 215px to fit into and the grid
+     * overflowed the screen by 84px. Measured, before this change: fine to
+     * 150%, then reflow failure.
+     *
+     * Type scales, chrome does not. That separation is what lets the
+     * accessibility menu offer 200% and satisfy 1.4.4 rather than appear to.
+     *
+     * Declared at `theme` level so it replaces the default scale outright -
+     * under `extend` the rem values would survive alongside these.
+     */
+    spacing: Object.fromEntries([
+      ['px', '1px'],
+      ['0', '0px'],
+      ...[
+        0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40,
+        44, 48, 52, 56, 60, 64, 72, 80, 96,
+      ].map((step) => [String(step), `${step * 4}px`]),
+    ]),
+
     extend: {
       colors: {
         brand: {

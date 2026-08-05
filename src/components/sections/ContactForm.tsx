@@ -71,8 +71,8 @@ export default function ContactForm({ lang, dict }: Props) {
         className="card p-8 text-center outline-none sm:p-12"
       >
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
-        <h3 className="mt-5 text-[20px] font-bold text-brand-ink">{dict.success_title}</h3>
-        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-slate">
+        <h3 className="mt-5 text-[1.25rem] font-bold text-brand-ink">{dict.success_title}</h3>
+        <p className="mx-auto mt-3 max-w-sm text-[0.9375rem] leading-[1.75] text-brand-slate">
           {dict.success_body}
         </p>
         <a
@@ -108,7 +108,7 @@ export default function ContactForm({ lang, dict }: Props) {
           id="contact-error"
           role="alert"
           tabIndex={-1}
-          className="mb-6 border border-brand-accent bg-brand-accent/10 px-4 py-3 text-[14px] text-brand-accent outline-none"
+          className="mb-6 border border-brand-accent bg-brand-accent/10 px-4 py-3 text-[0.875rem] text-brand-accent outline-none"
         >
           {errorMessage}
         </p>
@@ -172,7 +172,7 @@ export default function ContactForm({ lang, dict }: Props) {
             id="budget"
             name="budget"
             defaultValue={values?.budget ?? ''}
-            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -196,14 +196,14 @@ export default function ContactForm({ lang, dict }: Props) {
             aria-invalid={invalidField === 'message' || undefined}
             aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
 
       <SubmitButton dict={dict} />
 
-      <p className="mt-4 text-[12px] leading-relaxed text-brand-slate">
+      <p className="mt-4 text-[0.75rem] leading-relaxed text-brand-slate">
         {dict.privacy_note}{' '}
         <Link
           href={`/${lang}/privacy`}
@@ -246,7 +246,7 @@ function Label({
   hint?: string
 }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-medium text-brand-ink">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-[0.8125rem] font-medium text-brand-ink">
       {text}
       {required && (
         <span className="text-brand-accent" aria-hidden="true">
@@ -296,7 +296,7 @@ function Field({
         defaultValue={defaultValue}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? 'contact-error' : undefined}
-        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )

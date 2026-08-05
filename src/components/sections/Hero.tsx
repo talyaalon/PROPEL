@@ -47,7 +47,7 @@ export default function Hero({ lang, dict }: Props) {
                 exists as a token, so English fell back to the body face. The base
                 layer already gives h1 the display family, which resolves to
                 Chakra Petch for Latin and Heebo for Hebrew on its own. */}
-            <h1 className="animate-fade-up-delay text-[40px] leading-[1.06] text-brand-ink sm:text-5xl lg:text-[64px] lg:leading-[1.04]">
+            <h1 className="animate-fade-up-delay text-[2.5rem] leading-[1.06] text-brand-ink sm:text-5xl lg:text-[4rem] lg:leading-[1.04]">
               {dict.h1_pre}
               {dict.h1_pre ? ' ' : ''}
               {/* Animated underline on focus word */}
@@ -65,12 +65,12 @@ export default function Hero({ lang, dict }: Props) {
             {/* The slogan. It was the H1 until the H1 had to say what the
                 business sells - a heading with no search volume was spending
                 the strongest signal on the most important page for nothing. */}
-            <p className="tagline animate-fade-up-delay-2 text-[19px] leading-snug sm:text-[22px]">
+            <p className="tagline animate-fade-up-delay-2 text-[1.1875rem] leading-snug sm:text-[1.375rem]">
               {dict.tagline_line}
             </p>
 
             {/* Subtitle */}
-            <p className="animate-fade-up-delay-2 max-w-[500px] text-lg leading-[1.75] text-brand-slate sm:text-[19px]">
+            <p className="animate-fade-up-delay-2 max-w-[500px] text-lg leading-[1.75] text-brand-slate sm:text-[1.1875rem]">
               {dict.subtitle}
             </p>
 
@@ -89,7 +89,7 @@ export default function Hero({ lang, dict }: Props) {
                 </a>
                 <a
                   href="#services"
-                  className="flex items-center gap-2 text-[15px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="flex items-center gap-2 text-[0.9375rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.cta_secondary}
                   <ChevronDown className="h-4 w-4" />
@@ -97,7 +97,7 @@ export default function Hero({ lang, dict }: Props) {
               </div>
 
               {/* Risk reversal - removes the "what am I signing up for" hesitation */}
-              <p className="text-[13px] text-brand-slate/90">{dict.cta_note}</p>
+              <p className="text-[0.8125rem] text-brand-slate/90">{dict.cta_note}</p>
             </div>
           </div>
 

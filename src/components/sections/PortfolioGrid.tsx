@@ -29,10 +29,10 @@ type Props = {
 }
 
 const cardBase =
-  'group flex flex-col overflow-hidden border border-brand-line bg-brand-panel transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
+  'group flex min-w-0 flex-col overflow-hidden border border-brand-line bg-brand-panel transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
 
 const tagBase =
-  'rounded-full border border-brand-line bg-brand-surface px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-brand-slate'
+  'rounded-full border border-brand-line bg-brand-surface px-2.5 py-0.5 text-[0.6875rem] font-medium tracking-wide text-brand-slate'
 
 export default function PortfolioGrid({ lang, dict, projects, categories }: Props) {
   const [active, setActive] = useState<ProjectCategory | 'all'>('all')
@@ -83,31 +83,31 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   />
                 ) : (
                   <div className="flex min-h-[120px] items-center justify-center border border-brand-line bg-brand-panel px-6 py-8">
-                    <span className="text-center text-[13px] leading-relaxed text-brand-slate">
+                    <span className="text-center text-[0.8125rem] leading-relaxed text-brand-slate">
                       {dict.private_project}
                     </span>
                   </div>
                 )}
 
                 {/* Category chip */}
-                <span className="absolute start-4 top-4 z-10 border border-brand-line bg-brand-panel px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em] text-brand-ink">
+                <span className="absolute start-4 top-4 z-10 border border-brand-line bg-brand-panel px-3 py-1 font-display text-[0.6875rem] font-semibold uppercase tracking-[.06em] text-brand-ink">
                   {dict.categories[project.category]}
                 </span>
               </div>
 
               {/* Content */}
               <div className="flex flex-1 flex-col p-6 sm:p-7">
-                <h3 className="mb-2 text-[16px] font-bold text-brand-ink">{project.title}</h3>
+                <h3 className="mb-2 text-[1rem] font-bold text-brand-ink">{project.title}</h3>
 
-                <p className="mb-5 flex-1 text-[14px] leading-relaxed text-brand-slate">
+                <p className="mb-5 flex-1 text-[0.875rem] leading-relaxed text-brand-slate">
                   {project.summary[lang]}
                 </p>
 
                 {/* Headline result - the single most persuasive thing on the card */}
                 {headline && (
                   <div className="mb-5 flex items-baseline gap-2 border-t border-brand-line pt-4">
-                    <span className="num text-[26px] leading-none">{headline.metric}</span>
-                    <span className="text-[12px] leading-snug text-brand-slate">
+                    <span className="num text-[1.625rem] leading-none">{headline.metric}</span>
+                    <span className="text-[0.75rem] leading-snug text-brand-slate">
                       {headline.label[lang]}
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                 <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
                   <Link
                     href={`/${lang}/portfolio/${project.slug}`}
-                    className="text-[13px] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
+                    className="text-[0.8125rem] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
                   >
                     {dict.view_project}
                     <span className="sr-only"> - {project.title}</span>
@@ -136,7 +136,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     target="_blank"
                     rel="noopener noreferrer"
                     data-analytics={`whatsapp:project-${project.slug}`}
-                    className="flex items-center gap-1.5 text-[13px] text-brand-slate transition-colors duration-200 hover:text-brand-ink"
+                    className="flex items-center gap-1.5 text-[0.8125rem] text-brand-slate transition-colors duration-200 hover:text-brand-ink"
                   >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
                     WhatsApp
@@ -156,7 +156,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
          */}
         <article className="flex flex-col items-center justify-start self-start border border-brand-accent bg-brand-panel p-8 text-center">
           <h3 className="text-brand-accent">{dict.cta_title}</h3>
-          <p className="mt-3 text-[14px] leading-relaxed text-brand-slate">{dict.cta_body}</p>
+          <p className="mt-3 text-[0.875rem] leading-relaxed text-brand-slate">{dict.cta_body}</p>
           <a
             href={getWhatsAppURL(dict.cta_whatsapp)}
             target="_blank"
@@ -187,7 +187,7 @@ function FilterChip({
       type="button"
       onClick={onClick}
       aria-pressed={isActive}
-      className={`rounded-full border px-4 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 ${
+      className={`rounded-full border px-4 py-2 text-[0.8125rem] font-medium tracking-wide transition-all duration-300 ${
         isActive
           ? 'border-brand-accent bg-brand-accent text-brand-surface'
           : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-slate hover:text-brand-ink'

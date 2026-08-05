@@ -61,7 +61,7 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
               <div className="mb-4 flex items-center justify-between gap-3">
                 <span className="tag">{dict.topics[article.topic]}</span>
                 {external && (
-                  <span className="font-display text-[11px] uppercase tracking-[.06em] text-brand-slate">
+                  <span className="font-display text-[0.6875rem] uppercase tracking-[.06em] text-brand-slate">
                     {article.source}
                   </span>
                 )}
@@ -69,18 +69,18 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
 
               <h2 className="mb-3">{article.title[lang]}</h2>
 
-              <p className="mb-6 flex-1 text-[14px] leading-relaxed text-brand-slate">
+              <p className="mb-6 flex-1 text-[0.875rem] leading-relaxed text-brand-slate">
                 {article.excerpt[lang]}
               </p>
 
               <div className="mt-auto flex items-center justify-between gap-3 border-t border-brand-line pt-4">
-                <span className="inline-flex items-center gap-1.5 font-display text-[13px] font-bold uppercase tracking-[.08em] text-brand-accent">
+                <span className="inline-flex items-center gap-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent">
                   {dict.read_more}
                   {external && (
                     <ArrowUpRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />
                   )}
                 </span>
-                <time dateTime={article.date} className="text-[12px] text-brand-slate">
+                <time dateTime={article.date} className="text-[0.75rem] text-brand-slate">
                   {formatDate(article.date)}
                 </time>
               </div>
@@ -128,7 +128,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={isActive}
-      className={`border px-4 py-2 font-display text-[12px] font-semibold uppercase tracking-[.06em] transition-all duration-200 ease-smooth ${
+      className={`border px-4 py-2 font-display text-[0.75rem] font-semibold uppercase tracking-[.06em] transition-all duration-200 ease-smooth ${
         isActive
           ? 'border-brand-accent bg-brand-accent text-brand-surface'
           : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-accent hover:text-brand-accent'

@@ -21,10 +21,10 @@ export default function Faq({ dict }: { dict: FaqDict }) {
     <section id="faq" aria-labelledby="faq-heading" className="section section--band">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 text-center lg:mb-14">
-          <h2 id="faq-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">
+          <h2 id="faq-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function Faq({ dict }: { dict: FaqDict }) {
           {dict.items.map((item) => (
             <details key={item.question} className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-6 text-start transition-colors duration-200 hover:bg-brand-surface sm:p-7 [&::-webkit-details-marker]:hidden">
-                <h3 className="text-[16px] font-bold text-brand-ink sm:text-[17px]">
+                <h3 className="text-[1rem] font-bold text-brand-ink sm:text-[1.0625rem]">
                   {item.question}
                 </h3>
                 <Plus
@@ -41,7 +41,7 @@ export default function Faq({ dict }: { dict: FaqDict }) {
                   aria-hidden="true"
                 />
               </summary>
-              <p className="px-6 pb-6 text-[15px] leading-[1.8] text-brand-slate sm:px-7 sm:pb-7">
+              <p className="px-6 pb-6 text-[0.9375rem] leading-[1.8] text-brand-slate sm:px-7 sm:pb-7">
                 {item.answer}
               </p>
             </details>

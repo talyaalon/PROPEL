@@ -53,14 +53,44 @@ function findBrowser() {
 }
 
 /**
- * Settles a page for measurement.
+ * Settles a page for measurement, and refuses to measure an unstyled one.
  *
  * `.reveal` starts at `opacity: 0` and `translateY(22px)`, server-rendered, so
  * a page measured as loaded is a page whose content is transparent and 22px out
  * of position. Forcing the class on is not cosmetic - without it every gap
  * below the fold is wrong by 22px and every contrast sample reads 0 alpha.
+ *
+ * The stylesheet check is the more important half. A server left holding the
+ * port after a rebuild serves HTML whose asset hashes no longer resolve; the
+ * page renders with no CSS at all and every number comes out *better*. Gaps
+ * collapse, the page shortens by a third, contrast reads 21:1 in both themes,
+ * and text-scaling reports a perfect x2.00 because everything is already at the
+ * browser default. It has cost three runs. It throws now.
  */
 async function settle(page) {
+  const styled = await page.evaluate(() => {
+    // `.section` sets horizontal padding in every breakpoint. Unstyled, it is 0.
+    const section = document.querySelector('.section')
+    const padded = section ? parseFloat(getComputedStyle(section).paddingLeft) > 0 : false
+    const sheets = [...document.styleSheets].filter((s) => {
+      try {
+        return s.cssRules.length > 0
+      } catch {
+        return true
+      }
+    }).length
+    return { padded, sheets }
+  })
+
+  if (!styled.padded) {
+    throw new Error(
+      `The page rendered without CSS (${styled.sheets} stylesheet(s), .section has no padding).\n` +
+        'A stale server is almost certainly holding the port and serving asset hashes\n' +
+        'from a previous build. Kill it and re-run `npm run start` before measuring:\n' +
+        "  Get-NetTCPConnection -LocalPort 4455 -State Listen | %{ Stop-Process -Id $_.OwningProcess -Force }",
+    )
+  }
+
   await page.evaluate(() => {
     document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'))
   })

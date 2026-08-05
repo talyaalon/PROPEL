@@ -40,7 +40,7 @@ export default function BrandLockup({ lang, tagline }: Props) {
         </span>
       ) : (
         <div className="flex w-full max-w-[380px] items-center justify-center px-6 py-10">
-          <Logo tagline={tagline} className="text-[52px] sm:text-[62px]" />
+          <Logo tagline={tagline} className="text-[3.25rem] sm:text-[3.875rem]" />
         </div>
       )}
     </div>

@@ -171,7 +171,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 />
               </span>
             ) : (
-              <Logo className="text-[26px] sm:text-[28px]" />
+              <Logo className="text-[1.625rem] sm:text-[1.75rem]" />
             )}
           </Link>
 
@@ -181,7 +181,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               <NavLink
                 key={link.href}
                 href={link.href}
-                className="group relative text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                className="group relative text-[0.8125rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
                 {/* Logical `start-0` and `origin-*` keyed off the locale: the
@@ -206,7 +206,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               prefetch={false}
               lang={altLang}
               aria-label={a11y.switch_language}
-              className="text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+              className="text-[0.8125rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             >
               {dict.toggle_lang}
             </Link>
@@ -251,7 +251,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               <NavLink
                 key={link.href}
                 href={link.href}
-                className="px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
+                className="px-4 py-3 text-[0.9375rem] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
               >
                 {link.label}
               </NavLink>

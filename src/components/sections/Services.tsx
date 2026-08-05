@@ -37,7 +37,7 @@ export default function Services({ dict }: Props) {
           <h2 id="services-heading" className="max-w-3xl">
             {dict.section_title}
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[17px]">
+          <p className="mt-5 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -48,14 +48,14 @@ export default function Services({ dict }: Props) {
             const Icon = serviceIcons[service.icon] ?? Monitor
 
             return (
-              <div key={service.id} className="card flex flex-col">
+              <div key={service.id} className="card flex min-w-0 flex-col">
                 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center border border-brand-line">
                   <Icon className="h-5 w-5 text-brand-accent" />
                 </div>
 
                 <h3 className="mb-3">{service.title}</h3>
 
-                <p className="mb-6 text-[14px] leading-relaxed text-brand-slate">
+                <p className="mb-6 text-[0.875rem] leading-relaxed text-brand-slate">
                   {service.description}
                 </p>
 
@@ -64,7 +64,7 @@ export default function Services({ dict }: Props) {
                   {service.outcomes.map((outcome) => (
                     <li
                       key={outcome}
-                      className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-ink"
+                      className="flex items-start gap-2.5 text-[0.8125rem] leading-snug text-brand-ink"
                     >
                       <Check
                         className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent"
@@ -77,7 +77,7 @@ export default function Services({ dict }: Props) {
 
                 {/* Tech stack - demoted to a footnote, where it belongs */}
                 <div className="mb-6">
-                  <p className="mb-2 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-slate">
+                  <p className="mb-2 font-display text-[0.625rem] font-semibold uppercase tracking-[.18em] text-brand-slate">
                     {dict.stack_label}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -94,7 +94,7 @@ export default function Services({ dict }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-analytics={`whatsapp:service-${service.id}`}
-                  className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[13px] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
+                  className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
                 >
                   {dict.cta_label}
                   <span

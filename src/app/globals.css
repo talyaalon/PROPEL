@@ -88,7 +88,15 @@ html {
     @apply font-body antialiased;
     color: var(--ink);
     background-color: var(--surface);
-    font-size: 16px;
+    /*
+     * No `font-size` here, deliberately.
+     *
+     * `font-size: 16px` on the body pinned the base to a fixed anchor, so
+     * nothing downstream could respond to the root - a text-size control, or a
+     * visitor who has set a larger default in their browser, moved nothing at
+     * all above 640px. The root is 16px by default anyway; letting it govern is
+     * the whole point.
+     */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -116,17 +124,17 @@ html {
   h3 {
     @apply font-display font-bold tracking-normal;
     color: var(--ink);
-    font-size: 21px;
+    font-size: 1.3125rem;
     line-height: 1.25;
   }
 
   h1 {
-    font-size: clamp(42px, 5.6vw, 66px);
+    font-size: clamp(2.625rem, 5.6vw, 4.125rem);
     line-height: 0.98;
   }
 
   h2 {
-    font-size: clamp(30px, 3.6vw, 46px);
+    font-size: clamp(1.875rem, 3.6vw, 2.875rem);
     line-height: 1.04;
   }
 
@@ -191,14 +199,14 @@ html {
 
   /* Opening paragraph under a heading */
   .lead {
-    font-size: 19px;
+    font-size: 1.1875rem;
     line-height: 1.7;
     color: var(--ink);
   }
 
   /* Running body copy */
   .body-text {
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.75;
     color: var(--slate);
   }
@@ -207,7 +215,7 @@ html {
      Positioned with logical properties, so the rule sits to the right of the
      label in Hebrew and to the left in English from one declaration. */
   .eyebrow {
-    @apply relative inline-flex items-center font-display text-[14px] font-semibold uppercase tracking-[.18em];
+    @apply relative inline-flex items-center font-display text-[0.875rem] font-semibold uppercase tracking-[.18em];
     color: var(--accent);
     padding-inline-start: 72px;
   }
@@ -255,7 +263,7 @@ html {
 
   /* ── Buttons ──────────────────────────────────────────────────────────── */
   .btn {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
     background: var(--accent);
     color: var(--on-accent);
@@ -270,7 +278,7 @@ html {
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
     background: transparent;
     color: var(--ink);
@@ -285,7 +293,7 @@ html {
 
   /* ── Tag ──────────────────────────────────────────────────────────────── */
   .tag {
-    @apply inline-flex items-center px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em];
+    @apply inline-flex items-center px-2.5 py-1 font-display text-[0.6875rem] font-semibold uppercase tracking-[.06em];
     color: var(--slate);
     border: 1px solid var(--line);
   }
