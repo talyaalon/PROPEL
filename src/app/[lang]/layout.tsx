@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react'
 import type { Metadata, Viewport } from 'next'
-import { Assistant, Chakra_Petch, Heebo } from 'next/font/google'
+import { Assistant, Chakra_Petch, Frank_Ruhl_Libre, Heebo } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { locales, getDirection, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig, assertProductionConfig } from '@/lib/config'
 import { getProjects } from '@/content/projects'
+import { getLogoSrc } from '@/lib/brandAssets'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/sections/Footer'
 import Analytics from '@/components/Analytics'
@@ -44,6 +45,16 @@ const heebo = Heebo({
   weight: ['400', '500', '700', '800'],
   variable: '--font-heebo',
   display: 'swap',
+})
+
+// Tagline only — the serif in the printed lockup. Not preloaded: it renders a
+// single line, well below the critical path.
+const frankRuhl = Frank_Ruhl_Libre({
+  subsets: ['hebrew', 'latin'],
+  weight: ['400', '500'],
+  variable: '--font-frank',
+  display: 'swap',
+  preload: false,
 })
 
 const assistant = Assistant({
@@ -131,7 +142,7 @@ export default async function RootLayout({ children, params }: Props) {
       /* No data-theme attribute means light. ThemeToggle writes data-theme="dark",
          and themeInitScript below restores the stored choice before first paint —
          every surface, text and accent colour flips through CSS variables. */
-      className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable}`}
+      className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable} ${frankRuhl.variable}`}
     >
       <head>
         {/* Applies the stored theme before the browser paints. A client
@@ -159,6 +170,7 @@ export default async function RootLayout({ children, params }: Props) {
           dict={dict.nav}
           hasProjects={hasProjects}
           themeLabel={dict.a11y.toggle_theme}
+          logoSrc={getLogoSrc(lang)}
         />
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />

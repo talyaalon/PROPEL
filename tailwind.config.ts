@@ -51,11 +51,13 @@ const config: Config = {
            * element, and no duplicated markup.
            */
           surface: 'var(--surface)',
+          header: 'var(--header)',
           raised: 'var(--raised)',
           panel: 'var(--panel)',
           ink: 'var(--ink)',
           slate: 'var(--slate)',
           line: 'var(--line)',
+          silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',
 
@@ -78,6 +80,10 @@ const config: Config = {
          */
         display: ['var(--font-chakra)', 'var(--font-heebo)', 'sans-serif'],
         body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
+        /* Echoes the serif tagline on the printed logo. Frank Ruhl Libre is one
+           of the few quality Hebrew serifs on Google Fonts, so one family
+           covers the tagline in both languages. */
+        serif: ['var(--font-frank)', 'Georgia', 'serif'],
       },
 
       transitionTimingFunction: {

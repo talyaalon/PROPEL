@@ -18,7 +18,6 @@
     "blog": "Blog"
   },
   "hero": {
-    "badge": "Available for new projects",
     "h1_pre": "We speed up",
     "h1_focus": "what slows you down",
     "h1_post": "",
@@ -26,7 +25,8 @@
     "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
     "cta_note": "A 20-minute scoping call. No commitment.",
-    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
+    "brand_tagline": "Speed up what slows you down"
   },
   "trusted_by": "Businesses working with us",
   "services": {

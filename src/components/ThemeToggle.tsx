@@ -61,8 +61,8 @@ export default function ThemeToggle({ label }: { label: string }) {
  */
 export const themeInitScript = `
 (function(){try{
-  var s = localStorage.getItem('${THEME_KEY}');
-  var d = s ? s === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (d) document.documentElement.dataset.theme = 'dark';
+  if (localStorage.getItem('${THEME_KEY}') === 'dark') {
+    document.documentElement.dataset.theme = 'dark';
+  }
 }catch(e){}})();
 `.trim()

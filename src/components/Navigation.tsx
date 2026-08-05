@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import Image from 'next/image'
 import Logo from '@/components/Logo'
 import ThemeToggle from '@/components/ThemeToggle'
 import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
@@ -25,11 +26,13 @@ type Props = {
   dict: NavDict
   /** Accessible name for the light/dark switch. */
   themeLabel: string
+  /** Resolved on the server; null when no artwork has been added. */
+  logoSrc: string | null
   /** The portfolio anchor is omitted when nothing is published, so the link never dangles. */
   hasProjects: boolean
 }
 
-export default function Navigation({ lang, dict, hasProjects, themeLabel }: Props) {
+export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSrc }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
@@ -80,7 +83,7 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel }: Prop
     >
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
-        className="relative h-[68px] overflow-hidden border-b border-brand-line bg-brand-surface backdrop-blur-xl sm:h-[76px]"
+        className="header-band relative h-[68px] overflow-hidden border-b border-brand-line backdrop-blur-xl sm:h-[76px]"
         aria-label="Primary navigation"
       >
         <div
@@ -91,7 +94,18 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel }: Prop
         <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL — home">
-            <Logo className="text-[26px] sm:text-[28px]" />
+            {logoSrc ? (
+              <Image
+                src={logoSrc}
+                alt="PROPEL"
+                width={1200}
+                height={377}
+                priority
+                className="h-9 w-auto sm:h-10"
+              />
+            ) : (
+              <Logo className="text-[26px] sm:text-[28px]" />
+            )}
           </Link>
 
           {/* Desktop nav links */}
@@ -148,7 +162,7 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel }: Prop
         <div
           id="mobile-menu"
           ref={drawerRef}
-          className={`animate-slide-down border-b border-brand-line bg-brand-surface px-4 pb-6 pt-3 sm:px-6 md:hidden ${
+          className={`animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 sm:px-6 md:hidden ${
             isRtl ? 'text-right' : 'text-left'
           }`}
         >

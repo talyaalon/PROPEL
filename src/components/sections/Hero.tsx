@@ -1,10 +1,9 @@
 import { MessageCircle, ChevronDown } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
-import HeroVisual from '@/components/HeroVisual'
+import BrandLockup from '@/components/BrandLockup'
 
 type HeroDict = {
-  badge: string
   h1_pre: string
   h1_focus: string
   h1_post: string
@@ -12,6 +11,7 @@ type HeroDict = {
   cta_primary: string
   cta_secondary: string
   cta_note: string
+  brand_tagline: string
   whatsapp_message: string
 }
 
@@ -24,31 +24,29 @@ export default function Hero({ lang, dict }: Props) {
   const isRtl = lang === 'he'
 
   return (
-    <section className="relative overflow-hidden bg-brand-surface px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-32">
+    <section className="header-band relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-10 lg:px-8 lg:pb-24 lg:pt-12">
       <div
         className="bg-grain pointer-events-none absolute inset-0 select-none opacity-[0.028]"
         aria-hidden="true"
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {/*
+            No order override on either column.
+            Source order alone gives the right result in both directions: the
+            text comes first, so in Hebrew it lands on the right with the logo
+            to its left, and in English the two swap without a second rule.
+          */}
           {/* ── Text column ───────────────────────────────────── */}
-          <div className={`flex flex-col gap-7 lg:gap-9 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
-            {/* Availability badge */}
-            <div className="animate-fade-up inline-flex w-fit items-center gap-2.5 rounded-full border border-brand-line bg-brand-panel px-4 py-2 backdrop-blur-sm">
-              <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
-              </span>
-              <span className="text-[13px] font-medium text-brand-slate">{dict.badge}</span>
-            </div>
-
+          <div className="flex flex-col gap-6 lg:gap-8">
             {/* H1 */}
-            <h1
-              className={`animate-fade-up-delay text-[40px] font-extrabold leading-[1.06] text-brand-ink sm:text-5xl lg:text-[64px] lg:leading-[1.04] ${
-                isRtl ? 'font-assistant' : 'font-dm-sans'
-              }`}
-            >
+            {/* No per-locale font class here. `font-dm-sans` and `font-assistant`
+                were left over from the previous type system — dm-sans no longer
+                exists as a token, so English fell back to the body face. The base
+                layer already gives h1 the display family, which resolves to
+                Chakra Petch for Latin and Heebo for Hebrew on its own. */}
+            <h1 className="animate-fade-up-delay text-[40px] leading-[1.06] text-brand-ink sm:text-5xl lg:text-[64px] lg:leading-[1.04]">
               {dict.h1_pre}
               {dict.h1_pre ? ' ' : ''}
               {/* Animated underline on focus word */}
@@ -98,8 +96,8 @@ export default function Hero({ lang, dict }: Props) {
           </div>
 
           {/* ── Visual panel ──────────────────────────────────── */}
-          <div className={`animate-fade-in ${isRtl ? 'lg:order-1' : 'lg:order-2'}`}>
-            <HeroVisual />
+          <div className="animate-fade-in">
+            <BrandLockup lang={lang} tagline={dict.brand_tagline} />
           </div>
         </div>
       </div>
