@@ -134,7 +134,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                 {siteConfig.phoneDisplay && (
                   <li>
                     <a
-                      href={`tel:${siteConfig.phoneDisplay.replace(/[^\d+]/g, '')}`}
+                      href={`tel:${siteConfig.phoneDial}`}
                       className="flex items-center gap-3 text-[0.8125rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />

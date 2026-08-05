@@ -44,7 +44,7 @@ export default function Contact({ lang, dict }: Props) {
 
               {siteConfig.phoneDisplay && (
                 <a
-                  href={`tel:${siteConfig.phoneDisplay.replace(/[^\d+]/g, '')}`}
+                  href={`tel:${siteConfig.phoneDial}`}
                   className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
                 >
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">

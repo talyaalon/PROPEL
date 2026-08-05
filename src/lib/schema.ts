@@ -25,7 +25,7 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
     description,
     inLanguage: lang === 'he' ? 'he-IL' : 'en',
     areaServed: { '@type': 'Country', name: 'Israel' },
-    telephone: siteConfig.phoneDisplay || undefined,
+    telephone: siteConfig.phoneDial || undefined,
     email: siteConfig.email || undefined,
     /*
      * A band, not a price. The FAQ already tells visitors projects "usually

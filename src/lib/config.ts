@@ -14,6 +14,27 @@
 const PLACEHOLDER_PHONE = '972501234567'
 const PLACEHOLDER_DOMAIN = 'https://propel.co.il'
 
+/**
+ * An Israeli number in the form a machine dials, from the form a person reads.
+ *
+ *   050-515-4143  ->  +972505154143
+ *
+ * The page shows the local form, because that is what an Israeli visitor
+ * recognises. `tel:` and schema.org's `telephone` both want the international
+ * one: a bare `0505154143` is ambiguous to anything outside the country, and
+ * Google treats an un-dialable `telephone` as no telephone at all.
+ *
+ * Anything already in international form is passed through, so a number written
+ * as +972... or 972... keeps working.
+ */
+export function toInternational(local: string): string {
+  const digits = local.replace(/[^\d+]/g, '')
+  if (digits.startsWith('+')) return digits
+  if (digits.startsWith('972')) return `+${digits}`
+  if (digits.startsWith('0')) return `+972${digits.slice(1)}`
+  return digits
+}
+
 // ── Values ────────────────────────────────────────────────────────────────────
 
 export const siteConfig = {
@@ -23,8 +44,13 @@ export const siteConfig = {
   /** International format, digits only — e.g. 972501234567. Used for every wa.me deep link. */
   whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? PLACEHOLDER_PHONE,
 
-  /** Displayed in the footer and used as the tel: link target. */
+  /** As printed on the page - the local form an Israeli visitor recognises. */
   phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? '',
+
+  /** The same number in the form `tel:` and schema.org want. */
+  phoneDial: process.env.NEXT_PUBLIC_PHONE_DISPLAY
+    ? toInternational(process.env.NEXT_PUBLIC_PHONE_DISPLAY)
+    : '',
 
   /** Public contact address, shown in the footer. */
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
