@@ -4,6 +4,7 @@ import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getArticles, getUsedTopics } from '@/content/articles'
+import { getProjects } from '@/content/projects'
 import BlogGrid from '@/components/sections/BlogGrid'
 
 type Props = {
@@ -44,7 +45,18 @@ export default async function BlogPage({ params }: Props) {
           <p className="lead mt-5 max-w-2xl">{dict.blog.subtitle}</p>
         </div>
 
-        <BlogGrid lang={lang} dict={dict.blog} articles={getArticles()} topics={getUsedTopics()} />
+        <BlogGrid
+          lang={lang}
+          dict={dict.blog}
+          articles={getArticles()}
+          topics={getUsedTopics()}
+          // The three with a public URL - the ones a reader can actually go
+          // and look at. Air Manage and BOM sit behind a login.
+          projects={getProjects()
+            .filter((project) => project.screens)
+            .slice(0, 3)
+            .map(({ slug, title, summary }) => ({ slug, title, summary }))}
+        />
       </div>
     </section>
   )

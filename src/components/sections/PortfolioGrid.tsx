@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import ProjectScreens from '@/components/ProjectScreens'
 import FilterChips from '@/components/FilterChips'
-import { MessageCircle } from 'lucide-react'
+import { MessageCircle, Lock } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
 import type { Project, ProjectCategory } from '@/content/projects'
@@ -88,8 +88,19 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     title={`${project.title} - ${dict.categories[project.category]}`}
                   />
                 ) : (
-                  <div className="flex min-h-[120px] items-center justify-center border border-brand-line bg-brand-panel px-6 py-8">
-                    <span className="text-center text-[0.8125rem] leading-relaxed text-brand-slate">
+                  /*
+                   * A grey box with grey text in it reads as a screenshot that
+                   * failed to load - which is worse than the empty frame it
+                   * replaced, because it sits beside a CTA card with an accent
+                   * border that unambiguously reads as designed. The lock says
+                   * "this is deliberate" before the sentence is read, and the
+                   * accent rule ties it to the rest of the system.
+                   */
+                  <div className="flex min-h-[176px] flex-col items-center justify-center gap-3 border border-brand-line bg-brand-panel px-6 py-10 text-center">
+                    <span className="flex h-11 w-11 items-center justify-center border border-brand-accent text-brand-accent">
+                      <Lock className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <span className="max-w-[220px] text-[0.8125rem] leading-relaxed text-brand-slate">
                       {dict.private_project}
                     </span>
                   </div>

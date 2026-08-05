@@ -324,7 +324,9 @@
     },
     "filter_label": "Filter articles by topic",
     "filter_status": "{n} articles shown",
-    "filter_status_one": "1 article shown"
+    "filter_status_one": "1 article shown",
+    "related_title": "From our work",
+    "related_body": "The articles above explain the principles. These are the sites where they actually live."
   },
   "a11y_menu": {
     "title": "Accessibility",

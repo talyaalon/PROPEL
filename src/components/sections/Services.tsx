@@ -60,7 +60,7 @@ export default function Services({ dict }: Props) {
                 </p>
 
                 {/* Outcomes - what the client gets, not which framework we use */}
-                <ul className="mb-7 flex-1 space-y-2.5">
+                <ul className="mb-7 flex-1 grid gap-x-6 gap-y-2.5 sm:grid-cols-2 lg:grid-cols-1">
                   {service.outcomes.map((outcome) => (
                     <li
                       key={outcome}
