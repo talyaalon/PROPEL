@@ -155,7 +155,11 @@
       "cta_title": "Facing something similar?",
       "cta_body": "Tell us what's stuck and we'll tell you honestly whether - and how - we can help.",
       "cta_label": "Let's talk"
-    }
+    },
+    "cta_title": "The next one could be yours",
+    "cta_body": "Tell me what is slowing you down - a site, a manual process, systems that do not talk to each other - and I will come back with something concrete.",
+    "cta_button": "Talk on WhatsApp",
+    "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project."
   },
   "process": {
     "section_title": "How it works",

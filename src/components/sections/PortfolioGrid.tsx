@@ -14,6 +14,10 @@ type PortfolioDict = {
   categories: Record<ProjectCategory, string>
   whatsapp_prefix: string
   whatsapp_suffix: string
+  cta_title: string
+  cta_body: string
+  cta_button: string
+  cta_whatsapp: string
 }
 
 type Props = {
@@ -129,6 +133,27 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
             </article>
           )
         })}
+
+        {/*
+         * Five projects in a three-column grid leave one cell empty - a
+         * card-height hole, the largest single gap on the page. Rather than
+         * stretching the last row to hide it, the cell carries the invitation
+         * that the whole section is building towards. Six items, two full rows.
+         */}
+        <article className="flex flex-col justify-center border border-brand-accent/40 bg-brand-panel p-8 text-center">
+          <h3 className="text-brand-accent">{dict.cta_title}</h3>
+          <p className="mt-3 text-[14px] leading-relaxed text-brand-slate">{dict.cta_body}</p>
+          <a
+            href={getWhatsAppURL(dict.cta_whatsapp)}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-analytics="whatsapp:portfolio-cta"
+            className="btn mx-auto mt-6"
+          >
+            <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
+            {dict.cta_button}
+          </a>
+        </article>
       </div>
     </>
   )

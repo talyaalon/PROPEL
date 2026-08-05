@@ -20,12 +20,20 @@
 :root {
   /* Sampled from the logo: warm paper, not the cool grey it replaced. */
   --surface: #f6f5f1;
+  /* One step down from the surface, so alternating sections separate while
+     cards - which sit on `--panel`, one step up - still lift off both. */
+  --band: #eeece5;
   --header: #e9e7e1;
   --paper: url('/paper.webp');
+  /* The header band is already the logo's own paper, so the plate is
+     invisible here. See `.logo-plate`. */
+  --logo-plate: transparent;
   --raised: #fbfaf7;
   --panel: #faf9f6;
   --ink: #1f221c;
-  --slate: #6a6d64;
+  /* #6a6d64 measured 4.26:1 on the header band - every nav link failed AA.
+     Darkened to 5.0:1 there and 5.3:1 on the band. */
+  --slate: #5f6259;
   --silver: #9ea29b;
   --line: rgba(31, 34, 28, 0.14);
   --line-strong: rgba(31, 34, 28, 0.3);
@@ -40,8 +48,13 @@
   /* The same warmth carried into the dark surfaces, so the logo sits on a
      related colour rather than a neutral grey. */
   --surface: #1c1e19;
+  --band: #161813;
   --header: #171915;
   --paper: none;
+  /* The supplied artwork is transparent with near-black ink, so on a dark
+     band it vanished. Rather than recolour a logo that has to be used
+     exactly as given, it gets its paper back. */
+  --logo-plate: #e9e7e1;
   --raised: #24271f;
   --panel: #24271f;
   --ink: #f1efea;
@@ -130,10 +143,50 @@ html {
 }
 
 @layer components {
+  /* ── Section rhythm ───────────────────────────────────────────────────────
+     The vertical padding used to be two fixed values, 130px and 72px, while
+     only the horizontal padding was responsive. A 375px phone was therefore
+     given exactly the same 130px of air above every heading as a 1440px
+     desktop, and the six gaps between sections came to 951px of empty screen.
+
+     It scales now. Top is larger than bottom on purpose: a heading needs more
+     air above it than the content it follows needs below, and the asymmetry
+     is what makes a new section read as a beginning rather than a continuation.
+
+     Sections cannot be addressed as siblings - each one is wrapped in its own
+     <Reveal> - so `.section + .section` would never match and the padding has
+     to live here. */
   .section {
     @apply px-4 sm:px-6 lg:px-8;
-    padding-top: 130px;
-    padding-bottom: 72px;
+    padding-top: 40px;
+    padding-bottom: 28px;
+  }
+
+  @media (min-width: 640px) {
+    .section {
+      padding-top: 52px;
+      padding-bottom: 36px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section {
+      padding-top: 68px;
+      padding-bottom: 40px;
+    }
+  }
+
+  /* Alternating band.
+
+     Six sections ran on one uninterrupted colour, so a large gap read as "the
+     page has ended" rather than "a section has ended". A change of surface
+     does the separating work that padding was being asked to do, which is what
+     lets the padding come down. Cards stay on `--panel`, one step lighter, so
+     they still lift off the band. */
+  .section--band {
+    background-color: var(--band);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   /* Opening paragraph under a heading */
@@ -257,6 +310,17 @@ html {
     background-size: cover;
   }
 
+  /* The logo's paper.
+
+     Transparent in light mode, where the header band already is that paper, so
+     the plate costs nothing there. In dark mode it becomes the cream itself and
+     the mark reads as a printed logo laid on the page. The padding is constant
+     across both themes so switching does not shift the layout. */
+  .logo-plate {
+    background-color: var(--logo-plate);
+    padding: 6px 10px;
+  }
+
   /* Serif tagline, echoing the lockup on the printed logo. */
   .tagline {
     @apply font-serif;
@@ -329,13 +393,16 @@ html {
   }
 
   @media (max-width: 767px) {
+    /* The desktop capture is 1566px wide; at 343px it is a grey smear that
+       costs 140px of height plus a gap. The phone capture is near 1:1 here
+       and is the more useful of the two on a phone, so it carries the card
+       alone. */
     .screen--desktop {
-      width: 100%;
-      min-height: 140px;
+      display: none;
     }
     .screen--phone {
       width: 100%;
-      min-height: 250px;
+      min-height: 210px;
       margin-inline-start: 0;
     }
   }

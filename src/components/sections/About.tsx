@@ -32,9 +32,9 @@ export default function About({ lang, dict }: Props) {
   const isRtl = lang === 'he'
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="section">
+    <section id="about" aria-labelledby="about-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
           {/* ── Text column ───────────────────────────────────── */}
           {/* RTL: text reads right-to-left so it sits in the second visual column */}
           <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>

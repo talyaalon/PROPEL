@@ -27,15 +27,17 @@ export default function BrandLockup({ lang, tagline }: Props) {
   return (
     <div className="flex items-center justify-center">
       {artwork ? (
-        <Image
-          src={artwork}
-          alt={`PROPEL - ${tagline}`}
-          width={1200}
-          height={377}
-          priority
-          sizes="(min-width: 1024px) 44vw, 90vw"
-          className="h-auto w-full max-w-[380px]"
-        />
+        <span className="logo-plate inline-flex w-full max-w-[400px] justify-center">
+          <Image
+            src={artwork}
+            alt={`PROPEL - ${tagline}`}
+            width={1200}
+            height={377}
+            priority
+            sizes="(min-width: 1024px) 44vw, 90vw"
+            className="h-auto w-full"
+          />
+        </span>
       ) : (
         <div className="flex w-full max-w-[380px] items-center justify-center px-6 py-10">
           <Logo tagline={tagline} className="text-[52px] sm:text-[62px]" />

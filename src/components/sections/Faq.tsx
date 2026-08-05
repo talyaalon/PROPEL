@@ -20,7 +20,7 @@ export default function Faq({ dict }: { dict: FaqDict }) {
   return (
     <section id="faq" aria-labelledby="faq-heading" className="section">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-12 text-center lg:mb-16">
+        <div className="mb-8 text-center lg:mb-14">
           <h2 id="faq-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">
             {dict.section_title}
           </h2>

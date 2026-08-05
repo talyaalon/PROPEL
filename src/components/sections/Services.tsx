@@ -31,7 +31,7 @@ export default function Services({ dict }: Props) {
     <section id="services" aria-labelledby="services-heading" className="section">
       <div className="mx-auto max-w-7xl">
         {/* Section header */}
-        <div className="mb-14 lg:mb-20">
+        <div className="mb-9 lg:mb-16">
           <p className="eyebrow mb-6">Services</p>
           <h2 id="services-heading" className="max-w-3xl">
             {dict.section_title}

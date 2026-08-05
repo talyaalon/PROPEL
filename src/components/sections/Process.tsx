@@ -16,7 +16,7 @@ type ProcessDict = {
  */
 export default function Process({ dict }: { dict: ProcessDict }) {
   return (
-    <section id="process" aria-labelledby="process-heading" className="section">
+    <section id="process" aria-labelledby="process-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center lg:mb-20">
           <h2 id="process-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">

@@ -121,14 +121,17 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
           {/* Logo */}
           <Link href={`/${lang}`} className="flex-shrink-0" aria-label={a11y.home}>
             {logoSrc ? (
-              <Image
-                src={logoSrc}
-                alt="PROPEL"
-                width={1200}
-                height={377}
-                priority
-                className="h-9 w-auto sm:h-10"
-              />
+              <span className="logo-plate inline-flex">
+                <Image
+                  src={logoSrc}
+                  alt="PROPEL"
+                  width={1200}
+                  height={377}
+                  priority
+                  sizes="(min-width: 640px) 130px, 115px"
+                  className="h-9 w-auto sm:h-10"
+                />
+              </span>
             ) : (
               <Logo className="text-[26px] sm:text-[28px]" />
             )}
