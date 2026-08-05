@@ -5,7 +5,13 @@
   },
   "a11y": {
     "skip_to_content": "Skip to main content",
-    "toggle_theme": "Toggle colour theme"
+    "toggle_theme": "Toggle colour theme",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "primary_nav": "Primary navigation",
+    "home": "PROPEL - home",
+    "toggle_motion": "Pause animations on this page",
+    "switch_language": "מעבר לעברית"
   },
   "nav": {
     "services": "Services",
@@ -18,9 +24,9 @@
     "blog": "Blog"
   },
   "hero": {
-    "h1_pre": "We speed up",
-    "h1_focus": "what slows you down",
-    "h1_post": "",
+    "h1_pre": "",
+    "h1_focus": "Websites and automation",
+    "h1_post": "for growing businesses",
     "subtitle": "Websites and automations for small and mid-sized businesses. Built fast, loading fast, and taking the manual work that eats your day off your plate.",
     "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
@@ -123,7 +129,8 @@
         "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
         "analytics": "whatsapp:service-migration"
       }
-    ]
+    ],
+    "eyebrow": "Services"
   },
   "portfolio": {
     "section_title": "Selected Work",
@@ -151,7 +158,15 @@
       "cta_title": "Facing something similar?",
       "cta_body": "Tell us what's stuck and we'll tell you honestly whether - and how - we can help.",
       "cta_label": "Let's talk"
-    }
+    },
+    "cta_title": "The next one could be yours",
+    "cta_body": "Tell me what is slowing you down - a site, a manual process, systems that do not talk to each other - and I will come back with something concrete.",
+    "cta_button": "Talk on WhatsApp",
+    "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project.",
+    "private_project": "Private project - the system sits behind a login",
+    "filter_label": "Filter work by category",
+    "filter_status": "{n} projects shown",
+    "filter_status_one": "1 project shown"
   },
   "process": {
     "section_title": "How it works",
@@ -306,6 +321,21 @@
       "seo": "Organic search",
       "automation": "Automation",
       "ecommerce": "E-commerce"
-    }
+    },
+    "filter_label": "Filter articles by topic",
+    "filter_status": "{n} articles shown",
+    "filter_status_one": "1 article shown"
+  },
+  "a11y_menu": {
+    "title": "Accessibility",
+    "open": "Open the accessibility menu",
+    "close": "Close the accessibility menu",
+    "text_size": "Text size",
+    "contrast": "High contrast",
+    "links": "Highlight links",
+    "spacing": "Increased line spacing",
+    "motion": "Pause animations",
+    "reset": "Reset",
+    "statement": "Accessibility statement"
   }
 }

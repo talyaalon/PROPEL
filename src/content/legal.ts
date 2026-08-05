@@ -38,7 +38,15 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
       {
         heading: 'רמת ההנגשה',
         paragraphs: [
-          'האתר נבנה בהתאם לתקן הישראלי ת"י 5568 ברמה AA, המבוסס על הנחיות WCAG 2.0 של ארגון W3C.',
+          'האתר נבנה בהתאם לתקן הישראלי ת"י 5568 ברמה AA, המבוסס על הנחיות WCAG 2.1 של ארגון W3C.',
+          'ההנגשה נבדקה בפועל, במדידה ולא בהערכה: יחסי ניגודיות מחושבים מהצבעים שהדפדפן מציג בפועל, מעבר מלא במקלדת בכל עמוד, ובדיקת הגדלת טקסט עד 200%. הבדיקות מורצות בשתי השפות ובשני מצבי התצוגה, בהיר וכהה.',
+        ],
+      },
+      {
+        heading: 'תפריט הנגישות',
+        paragraphs: [
+          'בפינה התחתונה של כל עמוד יש כפתור נגישות. הוא פותח תפריט שמאפשר להתאים את האתר: הגדלת טקסט עד 200%, מצב ניגודיות גבוהה, הדגשת קישורים, ריווח שורות מוגדל, ועצירת האנימציות בעמוד. ההעדפות נשמרות בדפדפן שלכם ונשארות בכל מעבר בין עמודים.',
+          'שלושה דברים שבמכוון אינם בתפריט, כי הם לא עוזרים: "מצב קורא מסך" (קורא המסך שלכם כבר פועל, ואתר שמנסה לעזור לו רק מפריע), היפוך צבעים (הוא הורס את הלוגו ואת צילומי המסך), וסמן עכבר גדול (מערכת ההפעלה שלכם עושה את זה טוב יותר).',
         ],
       },
       {
@@ -48,8 +56,10 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
           'ניווט מלא באמצעות מקלדת, כולל סימון ברור של מוקד המיקוד',
           'קישור "דילוג לתוכן הראשי" בתחילת כל עמוד',
           'טקסט חלופי לתמונות שנושאות מידע',
-          'יחסי ניגודיות העומדים בדרישות התקן',
-          'תמיכה בהעדפת המערכת להפחתת אנימציות',
+          'יחסי ניגודיות שנמדדו ועומדים בדרישות התקן בשני מצבי התצוגה',
+          'אפשרות לעצור כל אנימציה אוטומטית בעמוד',
+          'הגדלת טקסט עד 200% ללא אובדן תוכן וללא גלילה אופקית',
+          'תמיכה בהעדפת המערכת להפחתת אנימציות, בנוסף לכפתור העצירה',
           'תמיכה מלאה בכיווניות ימין-לשמאל בעברית',
         ],
       },
@@ -57,6 +67,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'מגבלות ידועות',
         paragraphs: [
           'ייתכן שתוכן שמוטמע מגורם צד שלישי אינו נגיש במלואו, מכיוון שאינו בשליטתנו. אנחנו פועלים לצמצם שימוש בתוכן כזה.',
+          'צילומי המסך של אתרי הלקוחות בעמוד העבודות מוכרזים בשם הפרויקט, אבל התוכן שבתוכם אינו מוקרא - הם תמונות ממשק. התיאור המילולי של כל פרויקט נמצא בטקסט שלצידם.',
         ],
       },
       {
@@ -76,7 +87,22 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
       {
         heading: 'Conformance level',
         paragraphs: [
-          'This site is built to the Israeli standard IS 5568 at level AA, which is based on the W3C WCAG 2.0 guidelines.',
+          'This site is built to the Israeli standard IS 5568 at level AA, which is based on the W3C WCAG 2.1 guidelines.',
+        ],
+        // Kept concrete on purpose. "Tested for accessibility" is what every
+        // statement says; naming what was measured is what makes it checkable.
+      },
+      {
+        heading: 'How it was checked',
+        paragraphs: [
+          'Measured rather than estimated: contrast ratios computed from the colours the browser actually paints, a full keyboard pass on every page, and text enlarged to 200%. Every check is run in both languages and in both light and dark mode.',
+        ],
+      },
+      {
+        heading: 'The accessibility menu',
+        paragraphs: [
+          'There is an accessibility button in the bottom corner of every page. It opens a menu that lets you adjust the site: text size up to 200%, a high-contrast mode, highlighted links, increased line spacing, and a control that stops the animations on the page. Your choices are stored in your browser and stay applied as you move between pages.',
+          'Three things are deliberately absent, because they do not help: a "screen reader mode" (your screen reader is already running, and a site that tries to assist it only interferes), colour inversion (it destroys the logo and the client screenshots), and a large-cursor toggle (your operating system does that better).',
         ],
       },
       {
@@ -86,8 +112,10 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
           'Full keyboard navigation with a clearly visible focus indicator',
           'A "skip to main content" link at the start of every page',
           'Alternative text for images that carry information',
-          'Contrast ratios that meet the standard',
-          'Support for the system-level reduced-motion preference',
+          'Contrast ratios measured against the standard in both display modes',
+          'A control to stop every automatic animation on the page',
+          'Text enlargement to 200% with no loss of content and no sideways scrolling',
+          'Support for the system-level reduced-motion preference, alongside the stop control',
           'Full right-to-left support in Hebrew',
         ],
       },
@@ -95,6 +123,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'Known limitations',
         paragraphs: [
           'Third-party embedded content may not be fully accessible, as it is outside our control. We work to keep such content to a minimum.',
+          'The client-site screenshots in the portfolio are announced by project name, but what they contain is not read aloud - they are interface images. Each project is described in the text beside them.',
         ],
       },
       {

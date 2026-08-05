@@ -1,6 +1,5 @@
 import { Target, Zap, Shield, MessageCircle, type LucideIcon } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
-import type { Locale } from '@/lib/i18n'
 
 type Value = {
   icon: string
@@ -18,7 +17,6 @@ type AboutDict = {
 }
 
 type Props = {
-  lang: Locale
   dict: AboutDict
 }
 
@@ -28,30 +26,31 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
 }
 
-export default function About({ lang, dict }: Props) {
-  const isRtl = lang === 'he'
-
+export default function About({ dict }: Props) {
   return (
-    <section id="about" aria-labelledby="about-heading" className="section">
+    <section id="about" aria-labelledby="about-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* ── Text column ───────────────────────────────────── */}
-          {/* RTL: text reads right-to-left so it sits in the second visual column */}
-          <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* ── Text column ─────────────────────────────────────
+              No order override. `order` is already direction-aware inside an
+              RTL grid, so the ternary that used to be here reversed a reversal
+              and left About as the only section on the page that did not
+              mirror in Hebrew. Source order alone is correct. */}
+          <div className="flex flex-col gap-7">
             {/* Eyebrow - full-strength steel; at 60% opacity this failed WCAG AA on white */}
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.section_subtitle}
             </p>
 
             {/* Heading */}
-            <h2 id="about-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
+            <h2 id="about-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
               {dict.section_title}
             </h2>
 
             {/* Body paragraphs */}
             <div className="flex flex-col gap-5">
               {dict.paragraphs.map((paragraph, i) => (
-                <p key={i} className="text-[16px] leading-[1.8] text-brand-slate">
+                <p key={i} className="text-[1rem] leading-[1.8] text-brand-slate">
                   {paragraph}
                 </p>
               ))}
@@ -71,7 +70,7 @@ export default function About({ lang, dict }: Props) {
           </div>
 
           {/* ── Values column ─────────────────────────────────── */}
-          <div className={`flex flex-col gap-4 ${isRtl ? 'lg:order-1' : 'lg:order-2'}`}>
+          <div className="flex flex-col gap-4">
             {dict.values.map((value) => {
               const Icon: LucideIcon = iconMap[value.icon] ?? Target
 
@@ -87,8 +86,10 @@ export default function About({ lang, dict }: Props) {
 
                   {/* Text */}
                   <div className="min-w-0">
-                    <h3 className="mb-1.5 text-[15px] font-bold text-brand-ink">{value.title}</h3>
-                    <p className="text-[13px] leading-relaxed text-brand-slate">
+                    <h3 className="mb-1.5 text-[0.9375rem] font-bold text-brand-ink">
+                      {value.title}
+                    </h3>
+                    <p className="text-[0.8125rem] leading-relaxed text-brand-slate">
                       {value.description}
                     </p>
                   </div>

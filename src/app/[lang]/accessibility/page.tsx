@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { locales, isLocale } from '@/lib/i18n'
 import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { accessibilityStatement } from '@/content/legal'
 import LegalPage from '@/components/LegalPage'
 
@@ -19,18 +20,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const doc = accessibilityStatement[lang]
 
-  return {
+  return pageMetadata({
+    lang,
+    path: 'accessibility',
     title: doc.title,
     description: doc.intro,
-    alternates: {
-      canonical: `${siteConfig.url}/${lang}/accessibility`,
-      languages: {
-        he: `${siteConfig.url}/he/accessibility`,
-        en: `${siteConfig.url}/en/accessibility`,
-        'x-default': `${siteConfig.url}/he/accessibility`,
-      },
-    },
-  }
+  })
 }
 
 export default async function AccessibilityPage({ params }: Props) {

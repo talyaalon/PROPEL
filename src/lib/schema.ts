@@ -19,21 +19,41 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
     legalName: siteConfig.legalName || undefined,
     url: `${siteConfig.url}/${lang}`,
     logo: `${siteConfig.url}/icon.svg`,
+    // The share card doubles as the business image. Without one there is no
+    // photograph of the business anywhere in the graph.
+    image: `${siteConfig.url}/${lang}/opengraph-image`,
     description,
     inLanguage: lang === 'he' ? 'he-IL' : 'en',
     areaServed: { '@type': 'Country', name: 'Israel' },
-    telephone: siteConfig.phoneDisplay || undefined,
+    telephone: siteConfig.phoneDial || undefined,
     email: siteConfig.email || undefined,
-    knowsAbout: ['Web development', 'Business process automation', 'Search engine optimization'],
+    /*
+     * A band, not a price. The FAQ already tells visitors projects "usually
+     * start in the low thousands of shekels", so this says nothing new - it
+     * just says it in the form Google reads. Anything more precise would need
+     * to come from the owner.
+     */
+    priceRange: '₪₪',
+    knowsAbout: [
+      'Web development',
+      'Business process automation',
+      'Search engine optimization',
+      'Legacy system migration',
+    ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Services',
-      itemListElement: ['Web development', 'Business automation', 'SEO and organic growth'].map(
-        (name) => ({
-          '@type': 'Offer',
-          itemOffered: { '@type': 'Service', name },
-        }),
-      ),
+      // The migration service shipped without being added here, so the
+      // catalogue listed three of the four services the page renders.
+      itemListElement: [
+        'Web development',
+        'Business automation',
+        'SEO and organic growth',
+        'Legacy migration to clean, owned code',
+      ].map((name) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name },
+      })),
     },
   }
 }
@@ -70,7 +90,14 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
     name: project.title,
     description: project.summary[lang],
     inLanguage: lang === 'he' ? 'he-IL' : 'en',
-    dateCreated: String(project.year),
+    /*
+     * Every other optional field in this file uses `|| undefined`, which strips
+     * the key. This one did not: no project defines `year`, and
+     * `String(undefined)` is the literal string "undefined", which shipped on
+     * all ten case-study URLs. A validator rejects it as an invalid Date, and a
+     * visual scan of the JSON passes it.
+     */
+    ...(project.year ? { dateCreated: String(project.year) } : {}),
     url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
     creator: { '@id': `${siteConfig.url}/#organization` },
     keywords: project.techStack.join(', '),

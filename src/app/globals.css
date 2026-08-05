@@ -20,12 +20,20 @@
 :root {
   /* Sampled from the logo: warm paper, not the cool grey it replaced. */
   --surface: #f6f5f1;
+  /* One step down from the surface, so alternating sections separate while
+     cards - which sit on `--panel`, one step up - still lift off both. */
+  --band: #eeece5;
   --header: #e9e7e1;
   --paper: url('/paper.webp');
+  /* The header band is already the logo's own paper, so the plate is
+     invisible here. See `.logo-plate`. */
+  --logo-plate: transparent;
   --raised: #fbfaf7;
   --panel: #faf9f6;
   --ink: #1f221c;
-  --slate: #6a6d64;
+  /* #6a6d64 measured 4.26:1 on the header band - every nav link failed AA.
+     Darkened to 5.0:1 there and 5.3:1 on the band. */
+  --slate: #5f6259;
   --silver: #9ea29b;
   --line: rgba(31, 34, 28, 0.14);
   --line-strong: rgba(31, 34, 28, 0.3);
@@ -40,8 +48,13 @@
   /* The same warmth carried into the dark surfaces, so the logo sits on a
      related colour rather than a neutral grey. */
   --surface: #1c1e19;
+  --band: #161813;
   --header: #171915;
   --paper: none;
+  /* The supplied artwork is transparent with near-black ink, so on a dark
+     band it vanished. Rather than recolour a logo that has to be used
+     exactly as given, it gets its paper back. */
+  --logo-plate: #e9e7e1;
   --raised: #24271f;
   --panel: #24271f;
   --ink: #f1efea;
@@ -75,7 +88,15 @@ html {
     @apply font-body antialiased;
     color: var(--ink);
     background-color: var(--surface);
-    font-size: 16px;
+    /*
+     * No `font-size` here, deliberately.
+     *
+     * `font-size: 16px` on the body pinned the base to a fixed anchor, so
+     * nothing downstream could respond to the root - a text-size control, or a
+     * visitor who has set a larger default in their browser, moved nothing at
+     * all above 640px. The root is 16px by default anyway; letting it govern is
+     * the whole point.
+     */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -103,17 +124,34 @@ html {
   h3 {
     @apply font-display font-bold tracking-normal;
     color: var(--ink);
-    font-size: 21px;
+    font-size: 1.3125rem;
     line-height: 1.25;
   }
 
+  /*
+   * The clamp floor is what scales with the root - the `vw` term does not - so
+   * at 200% these are the only headings that can outgrow their box. "Accessibility"
+   * is a single unbreakable 596px word at that size, and the statement page,
+   * which claims text reaches 200% without sideways scrolling, was the worst
+   * offender on the site: 237px of overflow at 375, starting from 125%.
+   *
+   * Two changes: a lower floor, which leaves every rendered size identical at
+   * 100% because the `vw` term wins there, and `overflow-wrap` so a word that
+   * still cannot fit breaks instead of pushing the page sideways.
+   */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+  }
+
   h1 {
-    font-size: clamp(42px, 5.6vw, 66px);
+    font-size: clamp(1.75rem, 5.6vw, 4.125rem);
     line-height: 0.98;
   }
 
   h2 {
-    font-size: clamp(30px, 3.6vw, 46px);
+    font-size: clamp(1.375rem, 3.6vw, 2.875rem);
     line-height: 1.04;
   }
 
@@ -130,31 +168,64 @@ html {
 }
 
 @layer components {
+  /* ── Section rhythm ───────────────────────────────────────────────────────
+     The vertical padding used to be two fixed values, 130px and 72px, while
+     only the horizontal padding was responsive. A 375px phone was therefore
+     given exactly the same 130px of air above every heading as a 1440px
+     desktop, and the six gaps between sections came to 951px of empty screen.
+
+     It scales now. Top is larger than bottom on purpose: a heading needs more
+     air above it than the content it follows needs below, and the asymmetry
+     is what makes a new section read as a beginning rather than a continuation.
+
+     Sections cannot be addressed as siblings - each one is wrapped in its own
+     <Reveal> - so `.section + .section` would never match and the padding has
+     to live here. */
   .section {
     @apply px-4 sm:px-6 lg:px-8;
-    padding-top: 130px;
-    padding-bottom: 72px;
+    padding-top: 40px;
+    padding-bottom: 28px;
+  }
+
+  @media (min-width: 640px) {
+    .section {
+      padding-top: 52px;
+      padding-bottom: 36px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .section {
+      padding-top: 68px;
+      padding-bottom: 40px;
+    }
+  }
+
+  /* Alternating band.
+
+     Six sections ran on one uninterrupted colour, so a large gap read as "the
+     page has ended" rather than "a section has ended". A change of surface
+     does the separating work that padding was being asked to do, which is what
+     lets the padding come down. Cards stay on `--panel`, one step lighter, so
+     they still lift off the band. */
+  .section--band {
+    background-color: var(--band);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
 
   /* Opening paragraph under a heading */
   .lead {
-    font-size: 19px;
+    font-size: 1.1875rem;
     line-height: 1.7;
     color: var(--ink);
-  }
-
-  /* Running body copy */
-  .body-text {
-    font-size: 16px;
-    line-height: 1.75;
-    color: var(--slate);
   }
 
   /* ── Eyebrow ──────────────────────────────────────────────────────────────
      Positioned with logical properties, so the rule sits to the right of the
      label in Hebrew and to the left in English from one declaration. */
   .eyebrow {
-    @apply relative inline-flex items-center font-display text-[14px] font-semibold uppercase tracking-[.18em];
+    @apply relative inline-flex items-center font-display text-[0.875rem] font-semibold uppercase tracking-[.18em];
     color: var(--accent);
     padding-inline-start: 72px;
   }
@@ -202,7 +273,7 @@ html {
 
   /* ── Buttons ──────────────────────────────────────────────────────────── */
   .btn {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
     background: var(--accent);
     color: var(--on-accent);
@@ -216,23 +287,9 @@ html {
     transform: translateY(-2px);
   }
 
-  .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
-    height: 48px;
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--line-strong);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    transform: translateY(-2px);
-  }
-
   /* ── Tag ──────────────────────────────────────────────────────────────── */
   .tag {
-    @apply inline-flex items-center px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em];
+    @apply inline-flex items-center px-2.5 py-1 font-display text-[0.6875rem] font-semibold uppercase tracking-[.06em];
     color: var(--slate);
     border: 1px solid var(--line);
   }
@@ -247,11 +304,25 @@ html {
      paint it from `center top`, so the texture lines up across the border
      between them. */
   .header-band {
-    background-color: #e9e7e1;
+    /* Reads the token, which flips with the theme. This was hardcoded to the
+       light paper colour, so in dark mode the nav, the drawer and the whole
+       hero rendered cream-on-cream — the h1 measured 1.08:1. */
+    background-color: var(--header);
     background-image: var(--paper);
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
+  }
+
+  /* The logo's paper.
+
+     Transparent in light mode, where the header band already is that paper, so
+     the plate costs nothing there. In dark mode it becomes the cream itself and
+     the mark reads as a printed logo laid on the page. The padding is constant
+     across both themes so switching does not shift the layout. */
+  .logo-plate {
+    background-color: var(--logo-plate);
+    padding: 6px 10px;
   }
 
   /* Serif tagline, echoing the lockup on the printed logo. */
@@ -326,13 +397,16 @@ html {
   }
 
   @media (max-width: 767px) {
+    /* The desktop capture is 1566px wide; at 343px it is a grey smear that
+       costs 140px of height plus a gap. The phone capture is near 1:1 here
+       and is the more useful of the two on a phone, so it carries the card
+       alone. */
     .screen--desktop {
-      width: 100%;
-      min-height: 140px;
+      display: none;
     }
     .screen--phone {
       width: 100%;
-      min-height: 250px;
+      min-height: 210px;
       margin-inline-start: 0;
     }
   }
@@ -372,6 +446,109 @@ html {
   .underline-rtl {
     transform-origin: right center;
   }
+}
+
+/*
+ * ── Accessibility preferences ─────────────────────────────────────────────────
+ * Set by AccessibilityMenu as attributes on <html>, and restored before first
+ * paint by `a11yInitScript`. Driving them from CSS rather than React means no
+ * component needs to know a preference exists, and a preference reaches
+ * content that has not mounted yet.
+ *
+ * Text size is not here: it is the root `font-size`, which the whole rem type
+ * scale already hangs off.
+ */
+
+/* High contrast.
+   A third set of values for the same tokens, exactly as the dark theme works -
+   so every existing utility class picks it up with no new selectors. Pushed to
+   pure black or white on the two text tokens and a stronger rule, which is what
+   the preference is actually asking for. */
+:root[data-a11y-contrast] {
+  --ink: #000000;
+  --slate: #2b2e28;
+  --line: rgba(0, 0, 0, 0.55);
+  --line-strong: rgba(0, 0, 0, 0.8);
+  --accent: #5e1506;
+  --accent-soft: rgba(94, 21, 6, 0.75);
+  --panel: #ffffff;
+  --surface: #ffffff;
+  --band: #f2f1ec;
+  --raised: #ffffff;
+  /* Without these the nav band kept the ordinary cream while the page went
+     white, and selected text painted the old accent against the new one. */
+  --header: #f2f1ec;
+  --selection-bg: #5e1506;
+  --selection-fg: #ffffff;
+}
+
+:root[data-theme='dark'][data-a11y-contrast] {
+  --ink: #ffffff;
+  --slate: #e6e4de;
+  --line: rgba(255, 255, 255, 0.6);
+  --line-strong: rgba(255, 255, 255, 0.85);
+  --accent: #ff9b78;
+  --accent-soft: rgba(255, 155, 120, 0.8);
+  --panel: #000000;
+  --surface: #000000;
+  --band: #0b0c09;
+  --raised: #0b0c09;
+  --header: #0b0c09;
+  --selection-bg: #ff9b78;
+  --selection-fg: #000000;
+}
+
+/* Highlight links.
+   Scoped to links inside content. The nav, the footer and anything already
+   carrying a button treatment are excluded - underlining those makes the page
+   harder to read, not easier, which is the opposite of the request. */
+:root[data-a11y-links] main a:not(.btn) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  font-weight: 600;
+}
+
+/* Text spacing.
+   Line height and paragraph spacing only. No letter-spacing: it pulls Hebrew
+   glyphs apart in a way that hurts readability rather than helping it, which is
+   why WCAG 1.4.12 sets a word-spacing target and this does not chase it. */
+:root[data-a11y-spacing] p,
+:root[data-a11y-spacing] li,
+:root[data-a11y-spacing] .lead {
+  line-height: 2 !important;
+  word-spacing: 0.16em;
+}
+
+:root[data-a11y-spacing] p + p {
+  margin-top: 1.5em;
+}
+
+/*
+ * ── Paused motion ─────────────────────────────────────────────────────────────
+ * The Level A mechanism required by WCAG 2.2.2, set by MotionToggle. Deliberately
+ * the same rules as the reduced-motion block below, keyed to an attribute
+ * instead of a media query - a system preference is not a control on the page,
+ * so it cannot satisfy the criterion on its own.
+ *
+ * Doing it here rather than in React means ProjectScreens needs no knowledge of
+ * it, and `!important` on the attribute beats the `is-playing` class.
+ */
+:root[data-motion='paused'] .screen,
+:root[data-motion='paused'] .screen:hover,
+:root[data-motion='paused'] .card:hover .screen,
+:root[data-motion='paused'] .card:focus-within .screen,
+:root[data-motion='paused'] .screen.is-playing {
+  background-position: center top !important;
+  transition: none !important;
+}
+
+:root[data-motion='paused'] *,
+:root[data-motion='paused'] *::before,
+:root[data-motion='paused'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
 /*

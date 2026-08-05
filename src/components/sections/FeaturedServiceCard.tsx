@@ -51,7 +51,7 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
               <Icon className="h-5 w-5 text-brand-accent" />
             </span>
             {service.badge && (
-              <span className="inline-flex items-center bg-brand-accent px-2.5 py-1 font-display text-[11px] font-bold uppercase tracking-[.1em] text-brand-surface">
+              <span className="inline-flex items-center bg-brand-accent px-2.5 py-1 font-display text-[0.6875rem] font-bold uppercase tracking-[.1em] text-brand-surface">
                 {service.badge}
               </span>
             )}
@@ -59,13 +59,13 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
 
           <h3 className="mb-4">{service.title}</h3>
 
-          <p className="text-[15px] leading-[1.75] text-brand-slate">{service.description}</p>
+          <p className="text-[0.9375rem] leading-[1.75] text-brand-slate">{service.description}</p>
         </div>
 
         {/* ── Outcomes ──────────────────────────────────────────────────── */}
         <div>
           {service.features_label && (
-            <p className="mb-4 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-slate">
+            <p className="mb-4 font-display text-[0.625rem] font-semibold uppercase tracking-[.18em] text-brand-slate">
               {service.features_label}
             </p>
           )}
@@ -74,7 +74,7 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
             {service.outcomes.map((outcome) => (
               <li
                 key={outcome}
-                className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-ink"
+                className="flex items-start gap-2.5 text-[0.8125rem] leading-snug text-brand-ink"
               >
                 <Check
                   className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent"
@@ -88,7 +88,7 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
 
         {/* ── Stack + CTA ───────────────────────────────────────────────── */}
         <div className="flex flex-col">
-          <p className="mb-2 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-slate">
+          <p className="mb-2 font-display text-[0.625rem] font-semibold uppercase tracking-[.18em] text-brand-slate">
             {stackLabel}
           </p>
 

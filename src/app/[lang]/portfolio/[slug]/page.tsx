@@ -6,6 +6,7 @@ import { ExternalLink, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
@@ -32,27 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
 
-  const description = project.summary[lang]
-  const url = `${siteConfig.url}/${lang}/portfolio/${project.slug}`
-
-  return {
+  return pageMetadata({
+    lang,
+    path: `portfolio/${project.slug}`,
     title: project.title,
-    description,
-    alternates: {
-      canonical: url,
-      languages: {
-        he: `${siteConfig.url}/he/portfolio/${project.slug}`,
-        en: `${siteConfig.url}/en/portfolio/${project.slug}`,
-        'x-default': `${siteConfig.url}/he/portfolio/${project.slug}`,
-      },
-    },
-    openGraph: {
-      type: 'article',
-      title: `${project.title} | PROPEL`,
-      description,
-      url,
-    },
-  }
+    description: project.summary[lang],
+    type: 'article',
+  })
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
@@ -119,7 +106,7 @@ export default async function ProjectPage({ params }: Props) {
             <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
               {project.client && (
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.client}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink">{project.client[lang]}</dd>
@@ -127,7 +114,7 @@ export default async function ProjectPage({ params }: Props) {
               )}
               {project.year && (
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.year}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink" dir="ltr">
@@ -159,8 +146,8 @@ export default async function ProjectPage({ params }: Props) {
           <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-12">
             {project.results.map((result) => (
               <div key={result.label[lang]}>
-                <p className="num text-[40px] leading-none lg:text-[48px]">{result.metric}</p>
-                <p className="mt-2 text-[14px] leading-snug text-brand-slate">
+                <p className="num text-[2.5rem] leading-none lg:text-[3rem]">{result.metric}</p>
+                <p className="mt-2 text-[0.875rem] leading-snug text-brand-slate">
                   {result.label[lang]}
                 </p>
               </div>
@@ -236,7 +223,9 @@ export default async function ProjectPage({ params }: Props) {
         <div className="mx-auto max-w-7xl">
           <div className="card p-8 sm:p-12">
             <h2 className="font-display">{t.cta_title}</h2>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-brand-ink">{t.cta_body}</p>
+            <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-ink">
+              {t.cta_body}
+            </p>
             <a
               href={getWhatsAppURL(
                 `${dict.portfolio.whatsapp_prefix} "${project.title}" ${dict.portfolio.whatsapp_suffix}`,
@@ -244,7 +233,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics={`whatsapp:case-study-${project.slug}`}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[15px] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
+              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[0.9375rem] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
             >
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
               {t.cta_label}
@@ -257,19 +246,20 @@ export default async function ProjectPage({ params }: Props) {
               className="card group mt-8 flex items-center justify-between gap-4 p-6 sm:p-7"
             >
               <span>
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                <span className="block text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                   {t.next_project}
                 </span>
-                <span className="mt-1.5 block text-[18px] font-bold text-brand-ink">
+                <span className="mt-1.5 block text-[1.125rem] font-bold text-brand-ink">
                   {next.title}
                 </span>
               </span>
-              <span
-                className="text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+              {/* An icon rather than the literal glyph - see Services.tsx.
+                  U+2192 is absent from Chakra Petch and dragged in two Heebo
+                  symbol subsets. `rtl:-scale-x-100` mirrors it. */}
+              <ArrowRight
+                className="h-4 w-4 text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
                 aria-hidden="true"
-              >
-                {isRtl ? '←' : '→'}
-              </span>
+              />
             </Link>
           )}
         </div>

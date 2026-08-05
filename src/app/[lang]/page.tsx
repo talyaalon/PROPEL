@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
-import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { professionalServiceSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import Reveal from '@/components/Reveal'
@@ -25,19 +25,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(lang)) return {}
   const dict = await getDictionary(lang)
 
-  return {
+  /*
+   * Through the shared helper like every other route. The homepage was the one
+   * page that still wrote its own metadata with no `openGraph` block, and it
+   * looked correct only because the layout it inherits from happens to be the
+   * homepage's own. Any layout-level change would have broken it silently,
+   * which is the exact failure the helper exists to prevent.
+   */
+  return pageMetadata({
+    lang,
+    path: '',
     title: dict.meta.title,
     description: dict.meta.description,
-    alternates: {
-      canonical: `${siteConfig.url}/${lang}`,
-      languages: {
-        he: `${siteConfig.url}/he`,
-        en: `${siteConfig.url}/en`,
-        // Tells Google which version to serve to visitors it has no match for
-        'x-default': `${siteConfig.url}/he`,
-      },
-    },
-  }
+  })
 }
 
 export default async function Page({ params }: Props) {
@@ -73,7 +73,7 @@ export default async function Page({ params }: Props) {
         <Testimonials lang={lang} dict={dict.testimonials} />
       </Reveal>
       <Reveal>
-        <About lang={lang} dict={dict.about} />
+        <About dict={dict.about} />
       </Reveal>
       <Reveal>
         <Faq dict={dict.faq} />

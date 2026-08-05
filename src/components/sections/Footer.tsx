@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { NavLink } from '@/components/Navigation'
 import { MessageCircle, Phone, Mail } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
@@ -52,9 +53,9 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
         <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Logo tone="dark" tagline={dict.tagline} className="text-[26px]" />
+            <Logo tagline={dict.tagline} className="text-[1.625rem]" />
             {(siteConfig.legalName || siteConfig.businessId) && (
-              <p className="mt-4 text-[12px] leading-relaxed text-brand-slate">
+              <p className="mt-4 text-[0.75rem] leading-relaxed text-brand-slate">
                 {siteConfig.legalName}
                 {siteConfig.legalName && siteConfig.businessId ? ' · ' : ''}
                 {siteConfig.businessId}
@@ -64,18 +65,18 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Quick links */}
           <div>
-            <h2 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.links_title}
             </h2>
             <ul className="space-y-3.5">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <NavLink
                     href={link.href}
-                    className="text-[13px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                    className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                   >
                     {link.label}
-                  </a>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -83,14 +84,14 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Legal */}
           <div>
-            <h2 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.legal_title}
             </h2>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href={`/${lang}/accessibility`}
-                  className="text-[13px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.accessibility}
                 </Link>
@@ -98,7 +99,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               <li>
                 <Link
                   href={`/${lang}/privacy`}
-                  className="text-[13px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.privacy}
                 </Link>
@@ -108,7 +109,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Contact */}
           <div>
-            <h2 className="mb-5 text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.contact_title}
             </h2>
 
@@ -117,12 +118,14 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics="whatsapp:footer"
-              className="flex items-center gap-4 border border-brand-line bg-brand-line p-5 transition-all duration-500 ease-smooth hover:border-brand-line hover:bg-brand-line hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+              className="flex items-center gap-4 border border-brand-line bg-brand-panel p-5 transition-all duration-500 ease-smooth hover:border-brand-line hover:bg-brand-line hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
             >
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                 <MessageCircle className="h-5 w-5 text-green-400" />
               </div>
-              <span className="text-[13px] font-medium text-brand-ink">{dict.whatsapp_cta}</span>
+              <span className="text-[0.8125rem] font-medium text-brand-ink">
+                {dict.whatsapp_cta}
+              </span>
             </a>
 
             {/* Direct contact details - B2B buyers look for these to confirm you are a real business */}
@@ -131,8 +134,8 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                 {siteConfig.phoneDisplay && (
                   <li>
                     <a
-                      href={`tel:${siteConfig.phoneDisplay.replace(/[^\d+]/g, '')}`}
-                      className="flex items-center gap-3 text-[13px] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                      href={`tel:${siteConfig.phoneDial}`}
+                      className="flex items-center gap-3 text-[0.8125rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                       <span className="sr-only">{dict.phone_label}: </span>
@@ -144,7 +147,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                   <li>
                     <a
                       href={`mailto:${siteConfig.email}`}
-                      className="flex items-center gap-3 text-[13px] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                      className="flex items-center gap-3 text-[0.8125rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                       <span className="sr-only">{dict.email_label}: </span>
@@ -159,11 +162,11 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
         {/* ── Bottom bar ──────────────────────────────────────── */}
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-brand-line pt-6 sm:flex-row sm:items-center lg:mt-16 lg:pt-8">
-          <p className="text-[12px] text-brand-slate">{dict.copyright}</p>
+          <p className="text-[0.75rem] text-brand-slate">{dict.copyright}</p>
           <LocaleSwitch
             lang={lang}
             label={altLangLabel}
-            className="text-[11px] font-semibold tracking-[0.15em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+            className="text-[0.6875rem] font-semibold tracking-[0.15em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
           />
         </div>
       </div>

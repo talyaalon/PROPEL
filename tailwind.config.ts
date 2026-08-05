@@ -2,18 +2,24 @@ import type { Config } from 'tailwindcss'
 
 /*
  * ── The accent ────────────────────────────────────────────────────────────────
- * PROPEL runs on one accent hue: dark red.
+ * PROPEL runs on one accent hue: the dark red from the printed logo.
  *
  * It needs two values, not one. Measured against the two surfaces:
  *
- *            on mist #F4F5F7      on char #1F2124
- *   #8E1B1B      8.3:1 (AAA)          1.8:1 (fails)
- *   #E05C5C      3.9:1 (large only)   4.5:1 (AA)
+ *              on #f6f5f1 light    on #1c1e19 dark
+ *   #7a1c09       9.6:1 (AAA)          1.5:1 (fails)
+ *   #e0714d       3.4:1 (large only)   5.3:1 (AA)
  *
- * A single red cannot serve both themes — dark red on a dark surface is not
+ * A single red cannot serve both themes - dark red on a dark surface is not
  * merely dull, it is unreadable. So the accent is a CSS variable that flips with
  * the theme, declared once in globals.css. Everything downstream reads
  * `brand.accent` and never a literal.
+ *
+ * One consequence worth knowing: because these are bare `var()` values with no
+ * `<alpha-value>` placeholder, Tailwind cannot generate opacity modifiers from
+ * them. `border-brand-accent/40` compiles to nothing at all, silently, and the
+ * element falls through to a hardcoded preflight grey. Check with
+ * `npm run audit -- css <class>` before assuming a class does what it reads as.
  */
 
 const config: Config = {
@@ -42,6 +48,35 @@ const config: Config = {
       full: '0px',
     },
 
+    /*
+     * The spacing scale in px rather than rem.
+     *
+     * Every value here is identical to Tailwind's default at the default root
+     * size - `p-6` is 24px either way - so nothing moves at 100%. What changes
+     * is the coupling.
+     *
+     * Tailwind's scale is rem-based, which means padding, gaps and fixed widths
+     * all grow in lockstep with the root font size. That is exactly wrong for a
+     * text-size control: at 200% a card's own padding doubled to 96px inside a
+     * 375px viewport, so the content had 215px to fit into and the grid
+     * overflowed the screen by 84px. Measured, before this change: fine to
+     * 150%, then reflow failure.
+     *
+     * Type scales, chrome does not. That separation is what lets the
+     * accessibility menu offer 200% and satisfy 1.4.4 rather than appear to.
+     *
+     * Declared at `theme` level so it replaces the default scale outright -
+     * under `extend` the rem values would survive alongside these.
+     */
+    spacing: Object.fromEntries([
+      ['px', '1px'],
+      ['0', '0px'],
+      ...[
+        0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 20, 24, 28, 32, 36, 40,
+        44, 48, 52, 56, 60, 64, 72, 80, 96,
+      ].map((step) => [String(step), `${step * 4}px`]),
+    ]),
+
     extend: {
       colors: {
         brand: {
@@ -60,14 +95,9 @@ const config: Config = {
           silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',
-
-          /* Fixed values, for the rare place that must not flip with the theme. */
-          mist: '#F4F5F7',
-          paper: '#FFFFFF',
-          char: '#1F2124',
-          coal: '#26292E',
-          redDeep: '#8E1B1B',
-          redLight: '#E05C5C',
+          /* Readable on the accent - the accent's own foreground, not the page's. */
+          onAccent: 'var(--on-accent)',
+          band: 'var(--band)',
         },
       },
 
@@ -77,8 +107,21 @@ const config: Config = {
          * rather than a limitation: Latin and digits render in its technical
          * letterforms while Hebrew falls through to Heebo automatically, per
          * character, with no locale branching in the markup.
+         *
+         * The raw family name comes first, not `var(--font-chakra)`. That
+         * variable expands to `"Chakra Petch", "Chakra Petch Fallback"`, and the
+         * fallback is next/font's metric-adjusted *local Arial* - which does
+         * carry Hebrew. So it satisfied every Hebrew character before the
+         * cascade ever reached Heebo, and every Hebrew heading on the primary
+         * locale rendered in Arial while Heebo shipped in the build and was
+         * never downloaded by anyone. Confirmed per node with glyph counts:
+         * h1 was Arial x7 glyphs.
+         *
+         * Ordering the raw name, then Heebo, then the metric fallback keeps the
+         * no-layout-shift benefit for Latin and gets Hebrew the face it was
+         * chosen for.
          */
-        display: ['var(--font-chakra)', 'var(--font-heebo)', 'sans-serif'],
+        display: ['Chakra Petch', 'var(--font-heebo)', 'var(--font-chakra)', 'sans-serif'],
         body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
         /* Echoes the serif tagline on the printed logo. Frank Ruhl Libre is one
            of the few quality Hebrew serifs on Google Fonts, so one family
@@ -111,10 +154,8 @@ const config: Config = {
 
       animation: {
         'underline-grow': 'underline-grow 0.68s cubic-bezier(.16,1,.3,1) 0.5s both',
-        'fade-up': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) both',
         'fade-up-delay': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.15s both',
         'fade-up-delay-2': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.3s both',
-        'fade-up-delay-3': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.45s both',
         'fade-in': 'fade-in 0.68s cubic-bezier(.16,1,.3,1) 0.4s both',
         'slide-down': 'slide-down 0.2s cubic-bezier(.16,1,.3,1) both',
       },

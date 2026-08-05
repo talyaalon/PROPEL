@@ -10,9 +10,9 @@ import { getLogoSrc } from '@/lib/brandAssets'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/sections/Footer'
 import Analytics from '@/components/Analytics'
-import StickyWhatsApp from '@/components/StickyWhatsApp'
+import FloatingRail from '@/components/FloatingRail'
+import { prefsInitScript } from '@/lib/clientPrefs'
 import ScrollProgress from '@/components/ScrollProgress'
-import { themeInitScript } from '@/components/ThemeToggle'
 import '../globals.css'
 
 // Fails a production deploy that still carries placeholder contact details.
@@ -40,9 +40,16 @@ const chakraPetch = Chakra_Petch({
   display: 'swap',
 })
 
+/*
+ * Hebrew subset only, and only the two weights headings actually use. Latin in
+ * the display face is Chakra Petch's job, and body text is Assistant's - which
+ * carries Hebrew of its own. Four weights across two subsets was 92.7KB in the
+ * build that no visitor ever downloaded, because of the fallback ordering
+ * described in tailwind.config.ts.
+ */
 const heebo = Heebo({
-  subsets: ['hebrew', 'latin'],
-  weight: ['400', '500', '700', '800'],
+  subsets: ['hebrew'],
+  weight: ['400', '700'],
   variable: '--font-heebo',
   display: 'swap',
 })
@@ -51,7 +58,10 @@ const heebo = Heebo({
 // single line, well below the critical path.
 const frankRuhl = Frank_Ruhl_Libre({
   subsets: ['hebrew', 'latin'],
-  weight: ['400', '500'],
+  // One weight. `.tagline` applies no weight of its own, so 500 was downloaded
+  // and never used - and this family already costs the most bytes per word on
+  // the site.
+  weight: ['400'],
   variable: '--font-frank',
   display: 'swap',
   preload: false,
@@ -84,12 +94,23 @@ type Props = {
   params: Promise<{ lang: string }>
 }
 
+/*
+ * The colour under the browser chrome.
+ *
+ * These two hexes were `brand.mist` and `brand.char` from the palette before
+ * last, and neither exists in globals.css any more. The page paints `#F6F5F1`
+ * in both cases, so a phone in dark mode showed a near-black address bar
+ * directly above a cream page.
+ *
+ * Keyed to nothing, because the theme here is not keyed to the system
+ * preference - it is `data-theme` on <html>, set by ThemeToggle from
+ * localStorage, and there is no `prefers-color-scheme` block in the stylesheet.
+ * Declaring `light dark` while only ever painting light is the mismatch that
+ * produced the seam. `--header` is the value actually under the chrome.
+ */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F4F5F7' },
-    { media: '(prefers-color-scheme: dark)', color: '#1F2124' },
-  ],
-  colorScheme: 'light dark',
+  themeColor: '#E9E7E1',
+  colorScheme: 'light',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -140,23 +161,46 @@ export default async function RootLayout({ children, params }: Props) {
       lang={lang}
       dir={getDirection(lang)}
       /* No data-theme attribute means light. ThemeToggle writes data-theme="dark",
-         and themeInitScript below restores the stored choice before first paint —
+         and prefsInitScript below restores the stored choice before first paint -
          every surface, text and accent colour flips through CSS variables. */
       className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable} ${frankRuhl.variable}`}
     >
-      <head>
-        {/* Applies the stored theme before the browser paints. A client
-            component cannot run this early, so without it a returning dark-mode
-            visitor sees a flash of the light page on every navigation. */}
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      {/*
+        No literal <head> element.
+
+        There was one, holding all three of the tags below, and the App Router
+        silently dropped its contents - the inline script was in the React tree
+        and simply never reached the served HTML. Confirmed by grepping the
+        response: zero occurrences of `localStorage`. So the theme had in fact
+        never been restored before first paint, and a returning dark-mode
+        visitor got a flash of the light page on every single navigation.
+
+        React 19 hoists `<link>` and `<script>` from anywhere in the tree into
+        <head> on its own, so declaring them here as ordinary children is both
+        correct and what actually ships.
+      */}
+      <body>
+        {/*
+          The paper texture is the LCP element on every page - it fills the
+          header band, so it is the largest thing painted above the fold. It was
+          being discovered by the CSS parser rather than the preload scanner,
+          which put it 362ms behind two logo preloads that are not the LCP: on
+          throttled 4G it started at 567ms and finished at 1,925ms, for a
+          measured LCP of 2.84s at 1440. Declaring it moves the request to the
+          front of the queue.
+        */}
+        <link rel="preload" as="image" href="/paper.webp" fetchPriority="high" />
+
+        {/* Applies the stored theme and accessibility preferences before the
+            browser paints. A client component cannot run this early. */}
+        <script dangerouslySetInnerHTML={{ __html: prefsInitScript }} />
 
         {/* Scroll-reveal sections start hidden. If the bundle never runs, this
             guarantees the page is still fully readable. */}
         <noscript>
           <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
-      </head>
-      <body>
+
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[100] focus:bg-brand-accent focus:px-6 focus:py-3 focus:font-display focus:text-sm focus:font-bold focus:uppercase focus:tracking-[.08em] focus:text-brand-surface"
@@ -164,18 +208,31 @@ export default async function RootLayout({ children, params }: Props) {
           {dict.a11y.skip_to_content}
         </a>
 
+        {/*
+          Before the header in the DOM, though it paints in the bottom corner -
+          it is `position: fixed`, so the two are independent. This is what puts
+          the pause control ahead of the motion it governs in the tab order;
+          last in <body> made it tab stop 49 of 49 while the animated cards
+          began at stop 10.
+        */}
+        <FloatingRail
+          a11yDict={dict.a11y_menu}
+          statementHref={`/${lang}/accessibility`}
+          whatsappMessage={dict.footer.whatsapp_message}
+          whatsappLabel={dict.footer.whatsapp_cta}
+        />
+
         <ScrollProgress />
         <Navigation
           lang={lang}
           dict={dict.nav}
           hasProjects={hasProjects}
-          themeLabel={dict.a11y.toggle_theme}
+          a11y={dict.a11y}
           logoSrc={getLogoSrc(lang)}
         />
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />
 
-        <StickyWhatsApp message={dict.footer.whatsapp_message} label={dict.footer.whatsapp_cta} />
         <Analytics />
       </body>
     </html>

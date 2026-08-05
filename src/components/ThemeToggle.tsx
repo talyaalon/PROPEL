@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
 
-export const THEME_KEY = 'propel-theme'
+import { THEME_KEY } from '@/lib/clientPrefs'
 
 /**
  * Light/dark switch.
@@ -53,16 +53,3 @@ export default function ThemeToggle({ label }: { label: string }) {
     </button>
   )
 }
-
-/**
- * Runs before first paint, so the correct theme is on <html> by the time the
- * browser draws anything. Kept deliberately tiny and dependency-free; it is
- * inlined into <head>, not bundled.
- */
-export const themeInitScript = `
-(function(){try{
-  if (localStorage.getItem('${THEME_KEY}') === 'dark') {
-    document.documentElement.dataset.theme = 'dark';
-  }
-}catch(e){}})();
-`.trim()

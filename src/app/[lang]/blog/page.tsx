@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
-import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { getArticles, getUsedTopics } from '@/content/articles'
 import BlogGrid from '@/components/sections/BlogGrid'
 
@@ -19,18 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!isLocale(lang)) return {}
   const dict = await getDictionary(lang)
 
-  return {
+  return pageMetadata({
+    lang,
+    path: 'blog',
     title: dict.blog.meta_title,
     description: dict.blog.meta_description,
-    alternates: {
-      canonical: `${siteConfig.url}/${lang}/blog`,
-      languages: {
-        he: `${siteConfig.url}/he/blog`,
-        en: `${siteConfig.url}/en/blog`,
-        'x-default': `${siteConfig.url}/he/blog`,
-      },
-    },
-  }
+  })
 }
 
 export default async function BlogPage({ params }: Props) {

@@ -34,5 +34,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Claude Code local tooling config
-.claude/
+# Claude Code local tooling config.
+#
+# Ignored per file, not as a directory: git does not descend into an excluded
+# directory, so a `!` rule for something inside `.claude/` would never match.
+# The reviewer definitions in .claude/agents are project documentation - they
+# encode how this codebase is meant to be audited - and are tracked.
+.claude/settings.json
+.claude/settings.local.json

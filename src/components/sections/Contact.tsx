@@ -14,15 +14,15 @@ type Props = {
 
 export default function Contact({ lang, dict }: Props) {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="section">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+    <section id="contact" aria-labelledby="contact-heading" className="section section--band">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
           {/* ── Intro + direct channels ─────────────────────────── */}
           <div>
-            <h2 id="contact-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">
+            <h2 id="contact-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
               {dict.section_title}
             </h2>
-            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[17px]">
+            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
               {dict.section_subtitle}
             </p>
 
@@ -37,18 +37,20 @@ export default function Contact({ lang, dict }: Props) {
                 <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                   <MessageCircle className="h-5 w-5 text-green-600" aria-hidden="true" />
                 </span>
-                <span className="text-[14px] font-medium text-brand-ink">{dict.or_whatsapp}</span>
+                <span className="text-[0.875rem] font-medium text-brand-ink">
+                  {dict.or_whatsapp}
+                </span>
               </a>
 
               {siteConfig.phoneDisplay && (
                 <a
-                  href={`tel:${siteConfig.phoneDisplay.replace(/[^\d+]/g, '')}`}
+                  href={`tel:${siteConfig.phoneDial}`}
                   className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
                 >
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Phone className="h-4 w-4 text-brand-ink" aria-hidden="true" />
                   </span>
-                  <span className="text-[14px] font-medium text-brand-ink" dir="ltr">
+                  <span className="text-[0.875rem] font-medium text-brand-ink" dir="ltr">
                     {siteConfig.phoneDisplay}
                   </span>
                 </a>
@@ -62,7 +64,7 @@ export default function Contact({ lang, dict }: Props) {
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Mail className="h-4 w-4 text-brand-ink" aria-hidden="true" />
                   </span>
-                  <span className="text-[14px] font-medium text-brand-ink" dir="ltr">
+                  <span className="text-[0.875rem] font-medium text-brand-ink" dir="ltr">
                     {siteConfig.email}
                   </span>
                 </a>

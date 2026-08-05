@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { locales, isLocale } from '@/lib/i18n'
-import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { privacyPolicy } from '@/content/legal'
 import LegalPage from '@/components/LegalPage'
 
@@ -19,18 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const doc = privacyPolicy[lang]
 
-  return {
+  return pageMetadata({
+    lang,
+    path: 'privacy',
     title: doc.title,
     description: doc.intro,
-    alternates: {
-      canonical: `${siteConfig.url}/${lang}/privacy`,
-      languages: {
-        he: `${siteConfig.url}/he/privacy`,
-        en: `${siteConfig.url}/en/privacy`,
-        'x-default': `${siteConfig.url}/he/privacy`,
-      },
-    },
-  }
+  })
 }
 
 export default async function PrivacyPage({ params }: Props) {

@@ -14,6 +14,27 @@
 const PLACEHOLDER_PHONE = '972501234567'
 const PLACEHOLDER_DOMAIN = 'https://propel.co.il'
 
+/**
+ * An Israeli number in the form a machine dials, from the form a person reads.
+ *
+ *   050-515-4143  ->  +972505154143
+ *
+ * The page shows the local form, because that is what an Israeli visitor
+ * recognises. `tel:` and schema.org's `telephone` both want the international
+ * one: a bare `0505154143` is ambiguous to anything outside the country, and
+ * Google treats an un-dialable `telephone` as no telephone at all.
+ *
+ * Anything already in international form is passed through, so a number written
+ * as +972... or 972... keeps working.
+ */
+export function toInternational(local: string): string {
+  const digits = local.replace(/[^\d+]/g, '')
+  if (digits.startsWith('+')) return digits
+  if (digits.startsWith('972')) return `+${digits}`
+  if (digits.startsWith('0')) return `+972${digits.slice(1)}`
+  return digits
+}
+
 // ── Values ────────────────────────────────────────────────────────────────────
 
 export const siteConfig = {
@@ -23,14 +44,16 @@ export const siteConfig = {
   /** International format, digits only — e.g. 972501234567. Used for every wa.me deep link. */
   whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? PLACEHOLDER_PHONE,
 
-  /** Displayed in the footer and used as the tel: link target. */
+  /** As printed on the page - the local form an Israeli visitor recognises. */
   phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? '',
+
+  /** The same number in the form `tel:` and schema.org want. */
+  phoneDial: process.env.NEXT_PUBLIC_PHONE_DISPLAY
+    ? toInternational(process.env.NEXT_PUBLIC_PHONE_DISPLAY)
+    : '',
 
   /** Public contact address, shown in the footer. */
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
-
-  /** Where the contact form delivers. Server-side only. */
-  inboxEmail: process.env.CONTACT_INBOX_EMAIL ?? '',
 
   /** Registered business name + number, shown in the footer for B2B credibility. */
   legalName: process.env.NEXT_PUBLIC_LEGAL_NAME ?? '',
@@ -90,6 +113,35 @@ export function assertProductionConfig(): void {
   if (usesPlaceholderDomain) {
     problems.push(
       'NEXT_PUBLIC_SITE_URL is still the placeholder - canonical URLs, hreflang and OG tags point at a domain you do not own.',
+    )
+  }
+
+  /*
+   * A visitor who does not use WhatsApp currently has one route to this
+   * business, and it is the form at 91% scroll depth. Sixteen of the
+   * seventeen calls to action on the homepage are the same wa.me link.
+   */
+  if (!siteConfig.phoneDisplay) {
+    problems.push(
+      'NEXT_PUBLIC_PHONE_DISPLAY is not set - there is no phone number anywhere on the site, and the business schema has no telephone.',
+    )
+  }
+  if (!siteConfig.email) {
+    problems.push(
+      'NEXT_PUBLIC_CONTACT_EMAIL is not set - there is no email address anywhere on the site, and the business schema has no email.',
+    )
+  }
+
+  /*
+   * The accessibility statement renders its coordinator block only when one of
+   * these exists, so with all of them empty the site publishes a statement
+   * claiming AA conformance and naming nobody. The Israeli regulations require
+   * a named person and a way to reach them; a statement without one is worse
+   * than no statement.
+   */
+  if (!siteConfig.a11yContactName && !siteConfig.phoneDisplay && !siteConfig.email) {
+    problems.push(
+      'No accessibility coordinator is reachable - set NEXT_PUBLIC_A11Y_CONTACT_NAME (and a phone or email). The statement publishes without one.',
     )
   }
 

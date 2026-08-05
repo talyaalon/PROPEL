@@ -14,26 +14,47 @@
  */
 
 type Props = {
-  /** `dark` renders on the dark footer panel. */
-  tone?: 'light' | 'dark'
   /** Serif line beneath the wordmark, as on the printed lockup. */
   tagline?: string
   className?: string
 }
 
-export default function Logo({ tone = 'light', tagline, className = '' }: Props) {
-  // Charcoal on paper, paper on charcoal. The mark is never the accent — that
-  // is how the printed logo reads, and it keeps the red for calls to action.
-  const colour = tone === 'dark' ? 'text-brand-surface' : 'text-brand-ink'
+/*
+ * There used to be a `tone` prop here that rendered the wordmark in `--surface`
+ * — the page background colour. Its only use was the footer, where it produced
+ * 1.04:1 in light and 1.11:1 in dark: an invisible logo in both themes. It was
+ * a leftover from the earlier dark-footer design. `--ink` is correct on every
+ * surface the mark actually appears on.
+ */
+export default function Logo({ tagline, className = '' }: Props) {
+  const colour = 'text-brand-ink'
 
   return (
     <span className={`inline-flex flex-col ${tagline ? 'gap-1.5' : ''} ${className}`}>
+      {/* The mark stands in for the O, so the text nodes alone read as
+          "PR PEL". One label over the lockup restores the company name. */}
+      {/*
+        `dir="ltr"` is load-bearing. `inline-flex` inherits `direction: rtl`
+        from <html> on the Hebrew site, and flex items lay out in the inline
+        direction - so the three children `PR`, the mark and `PEL` rendered as
+        `PEL ⟋ PR`. The company name was displayed backwards in the footer of
+        every Hebrew page. The header was unaffected because it uses the
+        artwork image, so this was the only place the site spelled its own name
+        in text, and it spelled it wrong.
+
+        `font-bold` rather than `font-black`: Chakra Petch is loaded at 400,
+        600 and 700, so 900 was being synthesised by the browser - a faux bold,
+        on the one mark where it shows most.
+      */}
       <span
-        className={`font-display inline-flex items-center gap-[0.02em] font-black leading-none tracking-[-0.02em] ${colour}`}
+        aria-label="PROPEL"
+        role="img"
+        dir="ltr"
+        className={`font-display inline-flex items-center gap-[0.02em] font-bold leading-none tracking-[-0.02em] ${colour}`}
       >
-        PR
+        <span aria-hidden="true">PR</span>
         <ArrowMark />
-        PEL
+        <span aria-hidden="true">PEL</span>
       </span>
 
       {tagline && (

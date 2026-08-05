@@ -10,6 +10,14 @@ type PortfolioDict = {
   categories: Record<ProjectCategory, string>
   whatsapp_prefix: string
   whatsapp_suffix: string
+  cta_title: string
+  cta_body: string
+  cta_button: string
+  cta_whatsapp: string
+  filter_label: string
+  filter_status: string
+  filter_status_one: string
+  private_project: string
 }
 
 type Props = {
@@ -27,11 +35,11 @@ export default function Portfolio({ lang, dict }: Props) {
   return (
     <section id="portfolio" aria-labelledby="portfolio-heading" className="section">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center lg:mb-16">
-          <h2 id="portfolio-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
+        <div className="mb-8 text-center lg:mb-14">
+          <h2 id="portfolio-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
             {dict.section_subtitle}
           </p>
         </div>

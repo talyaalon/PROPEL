@@ -1,12 +1,30 @@
 'use client'
 
-import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, MessageCircle } from 'lucide-react'
-import { submitContact, type ContactState } from '@/actions/contact'
+import { normalise, validate, type ContactField, type ContactValues } from '@/lib/contactValidation'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
+
+/**
+ * The contact form, submitting to Netlify Forms.
+ *
+ * It used to be a React Server Action calling Resend. Netlify captures
+ * submissions itself and emails them on, which removes the third-party account,
+ * the API key and the whole class of "the key is missing so the enquiry went to
+ * a log file" failure - and it keeps every submission in the Netlify dashboard,
+ * so a notification email that bounces is not a lost lead.
+ *
+ * The cost is that Netlify's form detection runs over static files at deploy
+ * time and cannot see anything React renders. So the browser posts to
+ * `public/__forms.html`, which exists purely to be detected, and the field
+ * names there have to match the ones below exactly.
+ *
+ * Validation therefore runs here rather than on a server. A bot posting
+ * directly at the endpoint bypasses it; Netlify's spam filter and the honeypot
+ * are what handle that, not this component.
+ */
 
 export type ContactDict = {
   name_label: string
@@ -38,17 +56,98 @@ type Props = {
   dict: ContactDict
 }
 
-const initialState: ContactState = { status: 'idle' }
+type Status =
+  | { kind: 'idle' }
+  | { kind: 'sending' }
+  | { kind: 'success' }
+  | { kind: 'error'; reason: 'required' | 'email' | 'contact' | 'send'; field?: ContactField }
 
 export default function ContactForm({ lang, dict }: Props) {
-  const [state, formAction] = useActionState(submitContact, initialState)
+  const [state, setState] = useState<Status>({ kind: 'idle' })
+  // Held in state rather than read back off the DOM, so a failed submit
+  // re-renders with everything the visitor typed still in place.
+  const [values, setValues] = useState<Partial<ContactValues>>({})
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  const successRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  if (state.status === 'success') {
+  const invalidField = state.kind === 'error' ? state.field : undefined
+
+  /*
+   * Both outcomes replace or precede content without moving focus, so neither
+   * is announced and the reading position is lost. Sending focus to the message
+   * is what makes the result perceivable rather than merely visible.
+   */
+  useEffect(() => {
+    if (state.kind === 'error') errorRef.current?.focus()
+    if (state.kind === 'success') successRef.current?.focus()
+  }, [state])
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = new FormData(form)
+
+    // A real person never fills a field they cannot see. Silently succeed, so
+    // the bot gets no signal that it was caught.
+    if (data.get('company_website')) {
+      setState({ kind: 'success' })
+      return
+    }
+
+    const raw = Object.fromEntries([...data.entries()].map(([k, v]) => [k, String(v)]))
+    const clean = normalise(raw)
+    setValues(clean)
+
+    const problem = validate(clean)
+    if (problem) {
+      setState({ kind: 'error', reason: problem.reason, field: problem.field })
+      return
+    }
+
+    setState({ kind: 'sending' })
+    try {
+      const body = new URLSearchParams({
+        'form-name': 'contact',
+        ...clean,
+        // Tells the notification which side of the site the enquiry came from.
+        locale: lang,
+      })
+
+      /*
+       * This always fails with 405 under `next start` locally, and that is not
+       * a bug to chase: nothing is listening for a POST to a static file. On
+       * Netlify the edge intercepts the request before it reaches the file,
+       * stores the submission and sends the notification. The only place to
+       * verify the success path is a real deploy.
+       */
+      const response = await fetch('/__forms.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+
+      if (!response.ok) throw new Error(`Netlify Forms returned ${response.status}`)
+      setState({ kind: 'success' })
+      form.reset()
+    } catch (error) {
+      console.error('[PROPEL contact] submission failed:', error)
+      setState({ kind: 'error', reason: 'send' })
+    }
+  }
+
+  if (state.kind === 'success') {
     return (
-      <div className="card p-8 text-center sm:p-12">
+      <div
+        ref={successRef}
+        role="status"
+        aria-live="polite"
+        tabIndex={-1}
+        className="card p-8 text-center outline-none sm:p-12"
+      >
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
-        <h3 className="mt-5 text-[20px] font-bold text-brand-ink">{dict.success_title}</h3>
-        <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-slate">
+        <h3 className="mt-5 text-[1.25rem] font-bold text-brand-ink">{dict.success_title}</h3>
+        <p className="mx-auto mt-3 max-w-sm text-[0.9375rem] leading-[1.75] text-brand-slate">
           {dict.success_body}
         </p>
         <a
@@ -66,7 +165,7 @@ export default function ContactForm({ lang, dict }: Props) {
   }
 
   const errorMessage =
-    state.status === 'error'
+    state.kind === 'error'
       ? {
           required: dict.required_error,
           email: dict.email_error,
@@ -76,11 +175,23 @@ export default function ContactForm({ lang, dict }: Props) {
       : null
 
   return (
-    <form action={formAction} className="card p-6 sm:p-8" noValidate>
+    <form
+      ref={formRef}
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      onSubmit={onSubmit}
+      className="card p-6 sm:p-8"
+      noValidate
+    >
+      <input type="hidden" name="form-name" value="contact" />
       {errorMessage && (
         <p
+          ref={errorRef}
+          id="contact-error"
           role="alert"
-          className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] text-red-800"
+          tabIndex={-1}
+          className="mb-6 border border-brand-accent bg-brand-accent/10 px-4 py-3 text-[0.875rem] text-brand-accent outline-none"
         >
           {errorMessage}
         </p>
@@ -99,13 +210,23 @@ export default function ContactForm({ lang, dict }: Props) {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field id="name" name="name" label={dict.name_label} required autoComplete="name" />
+        <Field
+          id="name"
+          name="name"
+          label={dict.name_label}
+          required
+          autoComplete="name"
+          defaultValue={values?.name}
+          invalid={invalidField === 'name'}
+        />
         <Field
           id="business"
           name="business"
           label={dict.business_label}
           hint={dict.optional}
           autoComplete="organization"
+          defaultValue={values?.business}
+          invalid={invalidField === 'business'}
         />
         <Field
           id="phone"
@@ -114,6 +235,8 @@ export default function ContactForm({ lang, dict }: Props) {
           label={dict.phone_label}
           autoComplete="tel"
           dir="ltr"
+          defaultValue={values?.phone}
+          invalid={invalidField === 'phone'}
         />
         <Field
           id="email"
@@ -122,6 +245,8 @@ export default function ContactForm({ lang, dict }: Props) {
           label={dict.email_label}
           autoComplete="email"
           dir="ltr"
+          defaultValue={values?.email}
+          invalid={invalidField === 'email'}
         />
 
         <div className="sm:col-span-2">
@@ -129,8 +254,8 @@ export default function ContactForm({ lang, dict }: Props) {
           <select
             id="budget"
             name="budget"
-            defaultValue=""
-            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
+            defaultValue={values?.budget ?? ''}
+            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -150,15 +275,18 @@ export default function ContactForm({ lang, dict }: Props) {
             name="message"
             rows={5}
             required
+            defaultValue={values?.message}
+            aria-invalid={invalidField === 'message' || undefined}
+            aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
 
-      <SubmitButton dict={dict} />
+      <SubmitButton dict={dict} pending={state.kind === 'sending'} />
 
-      <p className="mt-4 text-[12px] leading-relaxed text-brand-slate">
+      <p className="mt-4 text-[0.75rem] leading-relaxed text-brand-slate">
         {dict.privacy_note}{' '}
         <Link
           href={`/${lang}/privacy`}
@@ -174,9 +302,7 @@ export default function ContactForm({ lang, dict }: Props) {
 
 // ── Pieces ────────────────────────────────────────────────────────────────────
 
-function SubmitButton({ dict }: { dict: ContactDict }) {
-  const { pending } = useFormStatus()
-
+function SubmitButton({ dict, pending }: { dict: ContactDict; pending: boolean }) {
   return (
     <button
       type="submit"
@@ -201,10 +327,10 @@ function Label({
   hint?: string
 }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-medium text-brand-ink">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-[0.8125rem] font-medium text-brand-ink">
       {text}
       {required && (
-        <span className="text-red-600" aria-hidden="true">
+        <span className="text-brand-accent" aria-hidden="true">
           {' '}
           *
         </span>
@@ -223,6 +349,8 @@ function Field({
   hint,
   autoComplete,
   dir,
+  defaultValue,
+  invalid,
 }: {
   id: string
   name: string
@@ -232,6 +360,9 @@ function Field({
   hint?: string
   autoComplete?: string
   dir?: 'ltr' | 'rtl'
+  defaultValue?: string
+  /** Marks this control as the one the error message refers to. */
+  invalid?: boolean
 }) {
   return (
     <div>
@@ -243,7 +374,10 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         dir={dir}
-        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
+        defaultValue={defaultValue}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? 'contact-error' : undefined}
+        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )
