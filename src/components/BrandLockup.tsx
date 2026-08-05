@@ -29,7 +29,7 @@ export default function BrandLockup({ lang, tagline }: Props) {
       {artwork ? (
         <Image
           src={artwork}
-          alt={`PROPEL — ${tagline}`}
+          alt={`PROPEL - ${tagline}`}
           width={1200}
           height={377}
           priority

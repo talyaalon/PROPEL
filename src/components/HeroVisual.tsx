@@ -57,7 +57,7 @@ export default function HeroVisual() {
       </div>
 
       {/* ── Automation flow card ───────────────────────────────── */}
-      {/* Overlaps the frame's lower corner — the second half of what we sell */}
+      {/* Overlaps the frame's lower corner - the second half of what we sell */}
       <div className="absolute -bottom-6 end-3 border border-brand-accent bg-brand-surface px-4 py-3.5 sm:end-6 sm:px-5">
         <div className="flex items-center gap-2.5 sm:gap-3">
           <FlowNode icon={<Globe className="h-3.5 w-3.5" />} />

@@ -90,7 +90,7 @@ export default function Hero({ lang, dict }: Props) {
                 </a>
               </div>
 
-              {/* Risk reversal — removes the "what am I signing up for" hesitation */}
+              {/* Risk reversal - removes the "what am I signing up for" hesitation */}
               <p className="text-[13px] text-brand-slate/90">{dict.cta_note}</p>
             </div>
           </div>

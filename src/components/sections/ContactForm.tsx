@@ -86,7 +86,7 @@ export default function ContactForm({ lang, dict }: Props) {
         </p>
       )}
 
-      {/* Honeypot — hidden from people, irresistible to bots */}
+      {/* Honeypot - hidden from people, irresistible to bots */}
       <div className="absolute h-0 w-0 overflow-hidden" aria-hidden="true">
         <label htmlFor="company_website">Company website</label>
         <input

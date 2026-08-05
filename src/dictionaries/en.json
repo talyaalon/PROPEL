@@ -31,7 +31,7 @@
   "trusted_by": "Businesses working with us",
   "services": {
     "section_title": "What We Do",
-    "section_subtitle": "Three disciplines, one goal — your business doing less work for the same result",
+    "section_subtitle": "Three disciplines, one goal - your business doing less work for the same result",
     "cta_label": "Talk to us",
     "stack_label": "Built with",
     "items": [
@@ -39,7 +39,7 @@
         "id": "webdev",
         "icon": "Monitor",
         "title": "Web Development",
-        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries — not just one that looks good in a deck.",
+        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
         "outcomes": [
           "Sub-second loads, even on mobile data",
           "Built from the ground up to rank on Google",
@@ -77,7 +77,7 @@
         "id": "seo",
         "icon": "TrendingUp",
         "title": "SEO & Organic Growth",
-        "description": "Show up exactly where your customers are searching — without paying for every click.",
+        "description": "Show up exactly where your customers are searching - without paying for every click.",
         "outcomes": [
           "Mapping what your customers actually search for",
           "Fixing the technical blockers holding back indexing",
@@ -98,17 +98,17 @@
         "featured": true,
         "title": "Migration to clean code you own",
         "badge": "NEW",
-        "description": "We rebuild WordPress or Base44 sites in clean code — same design or better, no plugins, no platform lock-in. When we are done, the code is registered to you.",
+        "description": "We rebuild WordPress or Base44 sites in clean code - same design or better, no plugins, no platform lock-in. When we are done, the code is registered to you.",
         "features_label": "What you get",
         "outcomes": [
-          "Full ownership: repo, domain and hosting in your name — zero vendor lock-in",
+          "Full ownership: repo, domain and hosting in your name - zero vendor lock-in",
           "No platform subscriptions and no monthly plugin licences",
           "Far faster: static code instead of 20 plugins running on every request",
           "Zero plugin updates and zero third-party plugin vulnerabilities",
           "SEO preserved: same URLs, complete 301 redirects, meta and schema",
           "Total control: any change is possible, no \"the plugin doesn't support that\"",
           "Content, forms and tracking (GA4/GTM) migrated one-to-one",
-          "Readable, documented code — any developer can pick it up"
+          "Readable, documented code - any developer can pick it up"
         ],
         "stack": [
           "Next.js",
@@ -149,7 +149,7 @@
       "screenshots": "Screenshots",
       "next_project": "Next project",
       "cta_title": "Facing something similar?",
-      "cta_body": "Tell us what's stuck and we'll tell you honestly whether — and how — we can help.",
+      "cta_body": "Tell us what's stuck and we'll tell you honestly whether - and how - we can help.",
       "cta_label": "Let's talk"
     }
   },
@@ -189,7 +189,7 @@
     "items": [
       {
         "question": "What does a website cost?",
-        "answer": "A business site usually starts in the low thousands, and a complex system with automations and integrations costs more. You'll get an exact range on the scoping call — not before we understand what you need, because any number before that is a guess."
+        "answer": "A business site usually starts in the low thousands, and a complex system with automations and integrations costs more. You'll get an exact range on the scoping call - not before we understand what you need, because any number before that is a guess."
       },
       {
         "question": "How long does it take?",
@@ -201,7 +201,7 @@
       },
       {
         "question": "What happens after launch?",
-        "answer": "The first month of fixes and adjustments is included. After that you can work with us on a monthly maintenance plan or on demand — no commitment required."
+        "answer": "The first month of fixes and adjustments is included. After that you can work with us on a monthly maintenance plan or on demand - no commitment required."
       },
       {
         "question": "Do you work with very small businesses?",
@@ -209,7 +209,7 @@
       },
       {
         "question": "What if we're not happy?",
-        "answer": "We stay with it until it works. Working in stages is exactly why — you see output as we go, rather than discovering at the end that we went the wrong way."
+        "answer": "We stay with it until it works. Working in stages is exactly why - you see output as we go, rather than discovering at the end that we went the wrong way."
       }
     ]
   },
@@ -249,7 +249,7 @@
     "section_title": "About PROPEL",
     "section_subtitle": "Who's behind this",
     "paragraphs": [
-      "PROPEL was founded on one simple belief: small and mid-sized businesses deserve the same standard of digital execution large corporations get — without corporate pricing and without corporate timelines.",
+      "PROPEL was founded on one simple belief: small and mid-sized businesses deserve the same standard of digital execution large corporations get - without corporate pricing and without corporate timelines.",
       "We build, automate and grow. We work directly with the business owner, with no layers of account management, and we measure every project by what it changed in the business."
     ],
     "values": [
@@ -261,7 +261,7 @@
       {
         "icon": "Zap",
         "title": "Real Timelines",
-        "description": "A launch date agreed up front — and if it moves, you hear it from us first"
+        "description": "A launch date agreed up front - and if it moves, you hear it from us first"
       },
       {
         "icon": "Shield",
@@ -295,9 +295,9 @@
   "blog": {
     "eyebrow": "Resources",
     "title": "Resources and articles",
-    "subtitle": "Sources we go back to ourselves — performance, organic search, accessibility and building things properly. Our own writing will appear here.",
+    "subtitle": "Sources we go back to ourselves - performance, organic search, accessibility and building things properly. Our own writing will appear here.",
     "meta_title": "Resources and articles on web development and SEO",
-    "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development — selected by PROPEL.",
+    "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development - selected by PROPEL.",
     "all_label": "All",
     "read_more": "Read more",
     "external_note": "External link, opens in a new tab",

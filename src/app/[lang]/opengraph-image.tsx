@@ -15,7 +15,7 @@ import { locales, isLocale } from '@/lib/i18n'
 
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
-export const alt = 'PROPEL — web development and business automation'
+export const alt = 'PROPEL - web development and business automation'
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }))

@@ -38,7 +38,7 @@ export default function About({ lang, dict }: Props) {
           {/* ── Text column ───────────────────────────────────── */}
           {/* RTL: text reads right-to-left so it sits in the second visual column */}
           <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
-            {/* Eyebrow — full-strength steel; at 60% opacity this failed WCAG AA on white */}
+            {/* Eyebrow - full-strength steel; at 60% opacity this failed WCAG AA on white */}
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.section_subtitle}
             </p>

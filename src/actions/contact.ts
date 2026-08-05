@@ -52,7 +52,7 @@ export async function submitContact(
 
   if (!apiKey || !inbox) {
     console.warn(
-      '[PROPEL contact] RESEND_API_KEY or CONTACT_INBOX_EMAIL is not set — logging the submission instead of sending it:\n' +
+      '[PROPEL contact] RESEND_API_KEY or CONTACT_INBOX_EMAIL is not set - logging the submission instead of sending it:\n' +
         body,
     )
     return { status: 'success' }
@@ -70,7 +70,7 @@ export async function submitContact(
         to: [inbox],
         // So hitting reply in the inbox answers the prospect directly
         reply_to: email || undefined,
-        subject: `פנייה חדשה מהאתר — ${name}${business ? ` (${business})` : ''}`,
+        subject: `פנייה חדשה מהאתר - ${name}${business ? ` (${business})` : ''}`,
         text: body,
       }),
     })

@@ -30,12 +30,12 @@ export const notFoundCopy: Record<Locale, ErrorCopy> = {
 export const errorCopy: Record<Locale, ErrorCopy> = {
   he: {
     title: 'משהו השתבש',
-    body: 'נתקלנו בתקלה בטעינת הדף. אפשר לנסות שוב, ואם זה חוזר — נשמח לשמוע.',
+    body: 'נתקלנו בתקלה בטעינת הדף. אפשר לנסות שוב, ואם זה חוזר - נשמח לשמוע.',
     cta: 'נסו שוב',
   },
   en: {
     title: 'Something went wrong',
-    body: "We hit a problem loading this page. Try again — and if it keeps happening, we'd like to know.",
+    body: "We hit a problem loading this page. Try again - and if it keeps happening, we'd like to know.",
     cta: 'Try again',
   },
 }

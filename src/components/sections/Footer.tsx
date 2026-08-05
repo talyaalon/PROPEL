@@ -125,7 +125,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               <span className="text-[13px] font-medium text-brand-ink">{dict.whatsapp_cta}</span>
             </a>
 
-            {/* Direct contact details — B2B buyers look for these to confirm you are a real business */}
+            {/* Direct contact details - B2B buyers look for these to confirm you are a real business */}
             {(siteConfig.phoneDisplay || siteConfig.email) && (
               <ul className="mt-5 space-y-3">
                 {siteConfig.phoneDisplay && (

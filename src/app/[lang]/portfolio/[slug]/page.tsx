@@ -114,7 +114,7 @@ export default async function ProjectPage({ params }: Props) {
 
           <h1 className="mb-6 font-display leading-none">{project.title}</h1>
 
-          {/* Client / year — omitted entirely when unknown rather than shown blank */}
+          {/* Client / year - omitted entirely when unknown rather than shown blank */}
           {(project.client || project.year) && (
             <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
               {project.client && (

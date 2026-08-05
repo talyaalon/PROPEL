@@ -71,8 +71,8 @@ export const articles: Article[] = [
     topic: 'web',
     date: '2026-07-01',
     title: {
-      he: 'Core Web Vitals — המדדים שגוגל באמת מודד',
-      en: 'Core Web Vitals — the metrics Google actually measures',
+      he: 'Core Web Vitals - המדדים שגוגל באמת מודד',
+      en: 'Core Web Vitals - the metrics Google actually measures',
     },
     excerpt: {
       he: 'המדריך הרשמי של צוות Chrome לשלושת המדדים שקובעים אם אתר נחשב מהיר: זמן טעינת התוכן המרכזי, תגובתיות לאינטראקציה ויציבות הפריסה.',
@@ -131,8 +131,8 @@ export const articles: Article[] = [
       en: 'Optimizing in Next.js',
     },
     excerpt: {
-      he: 'תמונות, פונטים, סקריפטים וטעינה עצלה — התיעוד הרשמי של המנגנונים שהופכים אתר לקוד סטטי שנטען מיד.',
-      en: 'Images, fonts, scripts and lazy loading — the official documentation for the machinery that turns a site into static code that loads instantly.',
+      he: 'תמונות, פונטים, סקריפטים וטעינה עצלה - התיעוד הרשמי של המנגנונים שהופכים אתר לקוד סטטי שנטען מיד.',
+      en: 'Images, fonts, scripts and lazy loading - the official documentation for the machinery that turns a site into static code that loads instantly.',
     },
   },
   {
@@ -145,8 +145,8 @@ export const articles: Article[] = [
       en: 'Structured data for a local business',
     },
     excerpt: {
-      he: 'הסכמה שמאפשרת לגוגל להבין שאתר הוא עסק — שם, טלפון, שעות ואזור שירות. זה מה שמייצר תוצאות מועשרות.',
-      en: 'The schema that lets Google understand a site is a business — name, phone, hours and service area. This is what produces rich results.',
+      he: 'הסכמה שמאפשרת לגוגל להבין שאתר הוא עסק - שם, טלפון, שעות ואזור שירות. זה מה שמייצר תוצאות מועשרות.',
+      en: 'The schema that lets Google understand a site is a business - name, phone, hours and service area. This is what produces rich results.',
     },
   },
 ]

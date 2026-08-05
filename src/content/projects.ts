@@ -83,7 +83,7 @@ export const projects: Project[] = [
       desktop: '/projects/jcafe-kosher/desktop.webp',
       mobile: '/projects/jcafe-kosher/mobile.webp',
     },
-    title: 'J-Cafe — The Kosher Place',
+    title: 'J-Cafe - The Kosher Place',
     category: 'ecommerce',
     summary: {
       he: 'מסחר אונליין דו-לשוני לשישה סניפים בתאילנד, כולל מסכי מלקט ומסכי מטבח (KDS).',
@@ -126,8 +126,8 @@ export const projects: Project[] = [
     title: 'כנפיים לעוף',
     category: 'web',
     summary: {
-      he: 'אתר מכון טיפול והכשרה בן 24 עמודים, עם עמוד ייעודי לכל מתודה — CBT, NLP, EMR והוראה מתקנת.',
-      en: 'A 24-page site for a therapy and training practice, with a dedicated page for each method — CBT, NLP, EMR and remedial teaching.',
+      he: 'אתר מכון טיפול והכשרה בן 24 עמודים, עם עמוד ייעודי לכל מתודה - CBT, NLP, EMR והוראה מתקנת.',
+      en: 'A 24-page site for a therapy and training practice, with a dedicated page for each method - CBT, NLP, EMR and remedial teaching.',
     },
     results: [
       { metric: '24', label: { he: 'עמודים', en: 'pages' } },
@@ -146,8 +146,8 @@ export const projects: Project[] = [
     title: 'BOM & Recipes',
     category: 'automation',
     summary: {
-      he: 'ניהול עצי מוצר ומתכונים עם תמחור אוטומטי — מחיר עלות, ריטייל וסיטונאי — וייבוא ישיר מקבצי Excel קיימים.',
-      en: 'Bill-of-materials and recipe management with automatic costing — cost, retail and wholesale pricing — importing straight from existing Excel files.',
+      he: 'ניהול עצי מוצר ומתכונים עם תמחור אוטומטי - מחיר עלות, ריטייל וסיטונאי - וייבוא ישיר מקבצי Excel קיימים.',
+      en: 'Bill-of-materials and recipe management with automatic costing - cost, retail and wholesale pricing - importing straight from existing Excel files.',
     },
     techStack: ['React', 'Vercel', 'Neon', 'Supabase', 'openpyxl'],
     liveUrl: 'https://bom-recipes.vercel.app',
@@ -161,8 +161,8 @@ export const projects: Project[] = [
     title: 'Air Manage',
     category: 'automation',
     summary: {
-      he: 'אפליקציית ניהול משימות לצוותי תחזוקה, אחזקה ושירותי ניקיון — הקצאה, מעקב וסגירת קריאות. בשימוש יומיומי בארגון.',
-      en: 'Task management for maintenance, upkeep and cleaning teams — assignment, tracking and closing work orders. In daily use inside an organisation.',
+      he: 'אפליקציית ניהול משימות לצוותי תחזוקה, אחזקה ושירותי ניקיון - הקצאה, מעקב וסגירת קריאות. בשימוש יומיומי בארגון.',
+      en: 'Task management for maintenance, upkeep and cleaning teams - assignment, tracking and closing work orders. In daily use inside an organisation.',
     },
     techStack: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
     liveUrl: 'https://air-manage-app.netlify.app',

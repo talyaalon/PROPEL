@@ -84,12 +84,12 @@ export function assertProductionConfig(): void {
 
   if (usesPlaceholderPhone) {
     problems.push(
-      'NEXT_PUBLIC_WHATSAPP_PHONE is still the placeholder — every CTA on the site is a dead link.',
+      'NEXT_PUBLIC_WHATSAPP_PHONE is still the placeholder - every CTA on the site is a dead link.',
     )
   }
   if (usesPlaceholderDomain) {
     problems.push(
-      'NEXT_PUBLIC_SITE_URL is still the placeholder — canonical URLs, hreflang and OG tags point at a domain you do not own.',
+      'NEXT_PUBLIC_SITE_URL is still the placeholder - canonical URLs, hreflang and OG tags point at a domain you do not own.',
     )
   }
 

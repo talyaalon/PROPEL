@@ -36,7 +36,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
   return (
     <>
-      {/* Category filter — only worth showing once there is more than one category */}
+      {/* Category filter - only worth showing once there is more than one category */}
       {categories.length > 1 && (
         <div className="mb-10 flex flex-wrap justify-center gap-2" role="group">
           <FilterChip
@@ -62,13 +62,13 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
           return (
             <article key={project.slug} className={cardBase}>
-              {/* Device previews — the site scrolls inside the frames on hover,
+              {/* Device previews - the site scrolls inside the frames on hover,
                   or on entering the viewport where there is no hover. */}
               <div className="relative bg-brand-surface px-4 pb-4 pt-6">
                 <ProjectScreens
                   desktop={project.screens?.desktop}
                   mobile={project.screens?.mobile}
-                  title={`${project.title} — ${dict.categories[project.category]}`}
+                  title={`${project.title} - ${dict.categories[project.category]}`}
                 />
 
                 {/* Category chip */}
@@ -85,7 +85,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   {project.summary[lang]}
                 </p>
 
-                {/* Headline result — the single most persuasive thing on the card */}
+                {/* Headline result - the single most persuasive thing on the card */}
                 {headline && (
                   <div className="mb-5 flex items-baseline gap-2 border-t border-brand-line pt-4">
                     <span className="num text-[26px] leading-none">{headline.metric}</span>
@@ -111,7 +111,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     className="text-[13px] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
                   >
                     {dict.view_project}
-                    <span className="sr-only"> — {project.title}</span>
+                    <span className="sr-only"> - {project.title}</span>
                   </Link>
                   <a
                     href={getWhatsAppURL(waMessage)}
@@ -122,7 +122,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
                     WhatsApp
-                    <span className="sr-only"> — {project.title}</span>
+                    <span className="sr-only"> - {project.title}</span>
                   </a>
                 </div>
               </div>

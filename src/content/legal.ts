@@ -118,7 +118,7 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
       {
         heading: 'איזה מידע נאסף',
         paragraphs: [
-          'אנחנו אוספים רק מידע שאתם מוסרים לנו ביוזמתכם — למשל כשאתם פונים אלינו דרך וואטסאפ, טלפון או אימייל. איננו דורשים הרשמה ואיננו אוספים מידע רגיש.',
+          'אנחנו אוספים רק מידע שאתם מוסרים לנו ביוזמתכם - למשל כשאתם פונים אלינו דרך וואטסאפ, טלפון או אימייל. איננו דורשים הרשמה ואיננו אוספים מידע רגיש.',
         ],
       },
       {
@@ -162,7 +162,7 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
       {
         heading: 'What we collect',
         paragraphs: [
-          'We collect only information you choose to give us — for example when you contact us by WhatsApp, phone or email. We do not require registration and we do not collect sensitive information.',
+          'We collect only information you choose to give us - for example when you contact us by WhatsApp, phone or email. We do not require registration and we do not collect sensitive information.',
         ],
       },
       {

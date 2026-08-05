@@ -58,7 +58,7 @@ export default function Services({ dict }: Props) {
                   {service.description}
                 </p>
 
-                {/* Outcomes — what the client gets, not which framework we use */}
+                {/* Outcomes - what the client gets, not which framework we use */}
                 <ul className="mb-7 flex-1 space-y-2.5">
                   {service.outcomes.map((outcome) => (
                     <li
@@ -74,7 +74,7 @@ export default function Services({ dict }: Props) {
                   ))}
                 </ul>
 
-                {/* Tech stack — demoted to a footnote, where it belongs */}
+                {/* Tech stack - demoted to a footnote, where it belongs */}
                 <div className="mb-6">
                   <p className="mb-2 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-slate">
                     {dict.stack_label}
@@ -108,7 +108,7 @@ export default function Services({ dict }: Props) {
           })}
         </div>
 
-        {/* Featured service — spans the full grid width beneath the standard three */}
+        {/* Featured service - spans the full grid width beneath the standard three */}
         {featured.map((service) => (
           <FeaturedServiceCard key={service.id} service={service} stackLabel={dict.stack_label} />
         ))}
