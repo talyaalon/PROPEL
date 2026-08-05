@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import ProjectScreens from '@/components/ProjectScreens'
+import FilterChips from '@/components/FilterChips'
 import { MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
@@ -18,6 +19,8 @@ type PortfolioDict = {
   cta_body: string
   cta_button: string
   cta_whatsapp: string
+  filter_label: string
+  filter_status: string
   private_project: string
 }
 
@@ -43,21 +46,19 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
     <>
       {/* Category filter - only worth showing once there is more than one category */}
       {categories.length > 1 && (
-        <div className="mb-10 flex flex-wrap justify-center gap-2" role="group">
-          <FilterChip
-            label={dict.all_label}
-            isActive={active === 'all'}
-            onClick={() => setActive('all')}
-          />
-          {categories.map((category) => (
-            <FilterChip
-              key={category}
-              label={dict.categories[category]}
-              isActive={active === category}
-              onClick={() => setActive(category)}
-            />
-          ))}
-        </div>
+        <FilterChips
+          label={dict.filter_label}
+          status={dict.filter_status.replace('{n}', String(visible.length))}
+          active={active}
+          onChange={setActive}
+          options={[
+            { value: 'all' as const, label: dict.all_label },
+            ...categories.map((category) => ({
+              value: category,
+              label: dict.categories[category],
+            })),
+          ]}
+        />
       )}
 
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
@@ -170,30 +171,5 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
         </article>
       </div>
     </>
-  )
-}
-
-function FilterChip({
-  label,
-  isActive,
-  onClick,
-}: {
-  label: string
-  isActive: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={isActive}
-      className={`rounded-full border px-4 py-2 text-[0.8125rem] font-medium tracking-wide transition-all duration-300 ${
-        isActive
-          ? 'border-brand-accent bg-brand-accent text-brand-surface'
-          : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-slate hover:text-brand-ink'
-      }`}
-    >
-      {label}
-    </button>
   )
 }

@@ -164,7 +164,9 @@
     "cta_body": "Tell me what is slowing you down - a site, a manual process, systems that do not talk to each other - and I will come back with something concrete.",
     "cta_button": "Talk on WhatsApp",
     "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project.",
-    "private_project": "Private project - the system sits behind a login"
+    "private_project": "Private project - the system sits behind a login",
+    "filter_label": "Filter work by category",
+    "filter_status": "{n} projects shown"
   },
   "process": {
     "section_title": "How it works",
@@ -320,7 +322,9 @@
       "seo": "Organic search",
       "automation": "Automation",
       "ecommerce": "E-commerce"
-    }
+    },
+    "filter_label": "Filter articles by topic",
+    "filter_status": "{n} articles shown"
   },
   "a11y_menu": {
     "title": "Accessibility",

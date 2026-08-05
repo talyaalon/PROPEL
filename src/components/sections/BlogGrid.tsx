@@ -2,12 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import FilterChips from '@/components/FilterChips'
 import { ArrowUpRight } from 'lucide-react'
 import type { Locale } from '@/lib/i18n'
 import { isExternal, type Article, type ArticleTopic } from '@/content/articles'
 
 type BlogDict = {
   all_label: string
+  filter_label: string
+  filter_status: string
   topics: Record<ArticleTopic, string>
   read_more: string
   external_note: string
@@ -34,21 +37,16 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
   return (
     <>
       {topics.length > 1 && (
-        <div className="mb-10 flex flex-wrap gap-2" role="group">
-          <Chip
-            label={dict.all_label}
-            isActive={active === 'all'}
-            onClick={() => setActive('all')}
-          />
-          {topics.map((topic) => (
-            <Chip
-              key={topic}
-              label={dict.topics[topic]}
-              isActive={active === topic}
-              onClick={() => setActive(topic)}
-            />
-          ))}
-        </div>
+        <FilterChips
+          label={dict.filter_label}
+          status={dict.filter_status.replace('{n}', String(visible.length))}
+          active={active}
+          onChange={setActive}
+          options={[
+            { value: 'all' as const, label: dict.all_label },
+            ...topics.map((topic) => ({ value: topic, label: dict.topics[topic] })),
+          ]}
+        />
       )}
 
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
@@ -111,30 +109,5 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
         })}
       </div>
     </>
-  )
-}
-
-function Chip({
-  label,
-  isActive,
-  onClick,
-}: {
-  label: string
-  isActive: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={isActive}
-      className={`border px-4 py-2 font-display text-[0.75rem] font-semibold uppercase tracking-[.06em] transition-all duration-200 ease-smooth ${
-        isActive
-          ? 'border-brand-accent bg-brand-accent text-brand-surface'
-          : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-accent hover:text-brand-accent'
-      }`}
-    >
-      {label}
-    </button>
   )
 }

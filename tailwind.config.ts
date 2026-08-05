@@ -107,8 +107,21 @@ const config: Config = {
          * rather than a limitation: Latin and digits render in its technical
          * letterforms while Hebrew falls through to Heebo automatically, per
          * character, with no locale branching in the markup.
+         *
+         * The raw family name comes first, not `var(--font-chakra)`. That
+         * variable expands to `"Chakra Petch", "Chakra Petch Fallback"`, and the
+         * fallback is next/font's metric-adjusted *local Arial* - which does
+         * carry Hebrew. So it satisfied every Hebrew character before the
+         * cascade ever reached Heebo, and every Hebrew heading on the primary
+         * locale rendered in Arial while Heebo shipped in the build and was
+         * never downloaded by anyone. Confirmed per node with glyph counts:
+         * h1 was Arial x7 glyphs.
+         *
+         * Ordering the raw name, then Heebo, then the metric fallback keeps the
+         * no-layout-shift benefit for Latin and gets Hebrew the face it was
+         * chosen for.
          */
-        display: ['var(--font-chakra)', 'var(--font-heebo)', 'sans-serif'],
+        display: ['Chakra Petch', 'var(--font-heebo)', 'var(--font-chakra)', 'sans-serif'],
         body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
         /* Echoes the serif tagline on the printed logo. Frank Ruhl Libre is one
            of the few quality Hebrew serifs on Google Fonts, so one family

@@ -40,9 +40,16 @@ const chakraPetch = Chakra_Petch({
   display: 'swap',
 })
 
+/*
+ * Hebrew subset only, and only the two weights headings actually use. Latin in
+ * the display face is Chakra Petch's job, and body text is Assistant's - which
+ * carries Hebrew of its own. Four weights across two subsets was 92.7KB in the
+ * build that no visitor ever downloaded, because of the fallback ordering
+ * described in tailwind.config.ts.
+ */
 const heebo = Heebo({
-  subsets: ['hebrew', 'latin'],
-  weight: ['400', '500', '700', '800'],
+  subsets: ['hebrew'],
+  weight: ['400', '700'],
   variable: '--font-heebo',
   display: 'swap',
 })
@@ -51,7 +58,10 @@ const heebo = Heebo({
 // single line, well below the critical path.
 const frankRuhl = Frank_Ruhl_Libre({
   subsets: ['hebrew', 'latin'],
-  weight: ['400', '500'],
+  // One weight. `.tagline` applies no weight of its own, so 500 was downloaded
+  // and never used - and this family already costs the most bytes per word on
+  // the site.
+  weight: ['400'],
   variable: '--font-frank',
   display: 'swap',
   preload: false,
