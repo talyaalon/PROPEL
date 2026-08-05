@@ -293,7 +293,11 @@ html {
     cursor: pointer;
   }
 
+  /* Hovering the frame or anywhere on the card it sits in starts the scroll —
+     the whole card is the affordance, not just the image. */
   .screen:hover,
+  .card:hover .screen,
+  .card:focus-within .screen,
   .screen.is-playing {
     background-position: center bottom;
   }

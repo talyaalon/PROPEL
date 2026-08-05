@@ -62,8 +62,11 @@ export type Project = {
   /** Measurable outcomes. The most persuasive part of the page. */
   results?: ProjectResult[]
   /**
-   * Full-page screenshots driving the scrolling screen previews. Both are
-   * ~5000px tall; see public/projects/README.md for how to capture them.
+   * Full-page screenshots driving the scrolling screen previews.
+   *
+   * Captured by `npm run shots`. Only publicly browsable sites have them —
+   * a login screen says nothing about the work, so projects behind one keep
+   * the empty frame instead.
    */
   screens?: { desktop: string; mobile: string }
   thumbnail?: ProjectImage
@@ -139,10 +142,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'bom-recipes',
-    screens: {
-      desktop: '/projects/bom-recipes/desktop.webp',
-      mobile: '/projects/bom-recipes/mobile.webp',
-    },
     title: 'BOM & Recipes',
     category: 'automation',
     summary: {
@@ -154,10 +153,6 @@ export const projects: Project[] = [
   },
   {
     slug: 'air-manage',
-    screens: {
-      desktop: '/projects/air-manage/desktop.webp',
-      mobile: '/projects/air-manage/mobile.webp',
-    },
     title: 'Air Manage',
     category: 'automation',
     summary: {
