@@ -21,6 +21,7 @@ type PortfolioDict = {
   cta_whatsapp: string
   filter_label: string
   filter_status: string
+  filter_status_one: string
   private_project: string
 }
 
@@ -48,7 +49,11 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
       {categories.length > 1 && (
         <FilterChips
           label={dict.filter_label}
-          status={dict.filter_status.replace('{n}', String(visible.length))}
+          status={
+            visible.length === 1
+              ? dict.filter_status_one
+              : dict.filter_status.replace('{n}', String(visible.length))
+          }
           active={active}
           onChange={setActive}
           options={[

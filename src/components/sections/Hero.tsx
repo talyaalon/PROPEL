@@ -7,7 +7,6 @@ type HeroDict = {
   h1_pre: string
   h1_focus: string
   h1_post: string
-  tagline_line: string
   subtitle: string
   cta_primary: string
   cta_secondary: string
@@ -61,13 +60,6 @@ export default function Hero({ lang, dict }: Props) {
               </span>
               {dict.h1_post ? ` ${dict.h1_post}` : ''}
             </h1>
-
-            {/* The slogan. It was the H1 until the H1 had to say what the
-                business sells - a heading with no search volume was spending
-                the strongest signal on the most important page for nothing. */}
-            <p className="tagline animate-fade-up-delay-2 text-[1.1875rem] leading-snug sm:text-[1.375rem]">
-              {dict.tagline_line}
-            </p>
 
             {/* Subtitle */}
             <p className="animate-fade-up-delay-2 max-w-[500px] text-lg leading-[1.75] text-brand-slate sm:text-[1.1875rem]">

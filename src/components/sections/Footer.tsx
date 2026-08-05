@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { NavLink } from '@/components/Navigation'
 import { MessageCircle, Phone, Mail } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
@@ -70,12 +71,12 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
             <ul className="space-y-3.5">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <NavLink
                     href={link.href}
                     className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                   >
                     {link.label}
-                  </a>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -117,7 +118,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics="whatsapp:footer"
-              className="flex items-center gap-4 border border-brand-line bg-brand-line p-5 transition-all duration-500 ease-smooth hover:border-brand-line hover:bg-brand-line hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+              className="flex items-center gap-4 border border-brand-line bg-brand-panel p-5 transition-all duration-500 ease-smooth hover:border-brand-line hover:bg-brand-line hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
             >
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                 <MessageCircle className="h-5 w-5 text-green-400" />

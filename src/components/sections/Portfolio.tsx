@@ -16,6 +16,7 @@ type PortfolioDict = {
   cta_whatsapp: string
   filter_label: string
   filter_status: string
+  filter_status_one: string
   private_project: string
 }
 

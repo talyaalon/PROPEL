@@ -13,11 +13,12 @@ import StickyWhatsApp from './StickyWhatsApp'
  *
  * `end-5` rather than `right-5`: it flips to the left in Hebrew on its own.
  *
- * `flex-col-reverse` puts WhatsApp at the bottom visually while placing the
- * accessibility trigger first in the DOM, and therefore first in the tab order
- * of the pair. That ordering is deliberate - the menu contains the pause
- * control for the project-card animation, and a control for stopping motion
- * that comes after the motion is not much of a control.
+ * `flex-col-reverse` renders the first DOM child at the bottom, so the
+ * accessibility trigger sits in the corner with WhatsApp stacked above it, and
+ * the trigger is also first in the tab order of the pair. Both halves matter:
+ * the menu holds the pause control for the project-card animation, and a
+ * control for stopping motion that comes after the motion is not much of a
+ * control. The rail as a whole is mounted early in <body> for the same reason.
  *
  * `relative` on the container is what the panel anchors to, so it opens upward
  * from the trigger on whichever side the rail is on.

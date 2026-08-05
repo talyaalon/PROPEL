@@ -11,6 +11,7 @@ type BlogDict = {
   all_label: string
   filter_label: string
   filter_status: string
+  filter_status_one: string
   topics: Record<ArticleTopic, string>
   read_more: string
   external_note: string
@@ -39,7 +40,11 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
       {topics.length > 1 && (
         <FilterChips
           label={dict.filter_label}
-          status={dict.filter_status.replace('{n}', String(visible.length))}
+          status={
+            visible.length === 1
+              ? dict.filter_status_one
+              : dict.filter_status.replace('{n}', String(visible.length))
+          }
           active={active}
           onChange={setActive}
           options={[

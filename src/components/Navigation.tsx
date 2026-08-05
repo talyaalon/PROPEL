@@ -35,6 +35,7 @@ type A11yDict = {
 type NavLinkProps = {
   href: string
   className: string
+  onNavigate?: () => void
   children: React.ReactNode
 }
 
@@ -48,11 +49,36 @@ type Props = {
   hasProjects: boolean
 }
 
+/*
+ * `navLinks` mixes same-page anchors with real routes. Rendering all of them as
+ * a plain <a> meant /blog re-downloaded, re-parsed and re-hydrated the whole
+ * bundle on every visit - a white flash on a phone, and the mechanism behind
+ * the sticky WhatsApp button losing its reference to #contact for the session.
+ *
+ * Declared at module scope, not inside Navigation. A component defined in a
+ * render body is a new type on every render, so React was destroying and
+ * rebuilding every nav link on each drawer open and each pathname change -
+ * discarding prefetch observers, restarting transitions, and dropping focus on
+ * a nav link to <body>.
+ */
+export function NavLink({ href, className, onNavigate, children }: NavLinkProps) {
+  return href.includes('#') ? (
+    <a href={href} onClick={onNavigate} className={className}>
+      {children}
+    </a>
+  ) : (
+    <Link href={href} onClick={onNavigate} className={className}>
+      {children}
+    </Link>
+  )
+}
+
 export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const drawerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
 
   const altLang = getAltLocale(lang)
   const altHref = swapLocaleInPath(pathname, altLang)
@@ -71,24 +97,6 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
    * page of the site, and consumed as `` - both branches
    * empty. A listener and a re-render for nothing.
    */
-
-  /*
-   * `navLinks` mixes same-page anchors with real routes. Rendering all of them
-   * as a plain <a> meant /blog re-downloaded, re-parsed and re-hydrated the
-   * whole bundle on every visit - a white flash on a phone, and the mechanism
-   * behind the sticky WhatsApp button losing its reference to #contact for the
-   * rest of the session.
-   */
-  const NavLink = ({ href, className, children }: NavLinkProps) =>
-    href.includes('#') ? (
-      <a href={href} onClick={() => setIsOpen(false)} className={className}>
-        {children}
-      </a>
-    ) : (
-      <Link href={href} onClick={() => setIsOpen(false)} className={className}>
-        {children}
-      </Link>
-    )
 
   /*
    * Drawer side effects: Escape to close, background scroll lock, focus moved
@@ -124,9 +132,18 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
      * unreachable - the user could neither see it nor scroll to it. `inert`
      * removes those nodes from the tab order and the accessibility tree at
      * once, which is both the focus trap and the screen-reader fix.
+     *
+     * By exclusion, not by list. This used to name `#main` and `footer`
+     * explicitly, and two commits later the floating accessibility rail was
+     * added as a third body child - so focus escaped straight back out of the
+     * drawer into it, and the trigger there opened a second dialog on top of
+     * this one. Excluding the header instead means a sibling added tomorrow is
+     * covered without anyone remembering to add it.
      */
-    const outside = [document.getElementById('main'), document.querySelector('footer')]
-    outside.forEach((node) => node?.setAttribute('inert', ''))
+    const outside = [...document.body.children].filter(
+      (node) => node !== headerRef.current && !node.hasAttribute('inert'),
+    )
+    outside.forEach((node) => node.setAttribute('inert', ''))
     document.addEventListener('keydown', handleKeyDown)
     window.addEventListener('resize', handleResize, { passive: true })
 
@@ -134,7 +151,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
 
     return () => {
       document.body.style.overflow = previousOverflow
-      outside.forEach((node) => node?.removeAttribute('inert'))
+      outside.forEach((node) => node.removeAttribute('inert'))
       document.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('resize', handleResize)
       // Without this the closing drawer unmounts the focused node and focus
@@ -144,7 +161,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
   }, [isOpen])
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ease-smooth `}>
+    <header ref={headerRef} className="sticky top-0 z-50 transition-all duration-500 ease-smooth">
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
         className="header-band relative h-[68px] overflow-hidden border-b border-brand-line backdrop-blur-xl sm:h-[76px]"
@@ -180,6 +197,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}
+                onNavigate={() => setIsOpen(false)}
                 href={link.href}
                 className="group relative text-[0.8125rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
               >
@@ -250,6 +268,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
             {navLinks.map((link) => (
               <NavLink
                 key={link.href}
+                onNavigate={() => setIsOpen(false)}
                 href={link.href}
                 className="px-4 py-3 text-[0.9375rem] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
               >

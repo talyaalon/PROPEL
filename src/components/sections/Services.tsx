@@ -1,4 +1,4 @@
-import { Monitor, Zap, TrendingUp, Code2, Check, type LucideIcon } from 'lucide-react'
+import { Monitor, Zap, TrendingUp, Code2, Check, ArrowRight, type LucideIcon } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import FeaturedServiceCard, { type ServiceItem } from './FeaturedServiceCard'
 
@@ -97,12 +97,17 @@ export default function Services({ dict }: Props) {
                   className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
                 >
                   {dict.cta_label}
-                  <span
-                    className="transition-transform duration-500 ease-smooth group-hover/cta:translate-x-1 rtl:-scale-x-100 rtl:group-hover/cta:-translate-x-1"
+                  {/*
+                    An icon, not the literal → character. Chakra Petch has no
+                    U+2192, so the cascade fell through to Heebo and pulled two
+                    symbol subsets - 37KB on every page in both locales, to
+                    render three arrows. lucide is already a dependency and
+                    already draws this exact arrow in the case-study footer.
+                  */}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-500 ease-smooth group-hover/cta:translate-x-1 rtl:-scale-x-100 rtl:group-hover/cta:-translate-x-1"
                     aria-hidden="true"
-                  >
-                    →
-                  </span>
+                  />
                 </a>
               </div>
             )

@@ -54,9 +54,23 @@ export function pageMetadata({
       description,
       url,
       locale: lang === 'he' ? 'he_IL' : 'en_US',
-      // Explicit, because setting `openGraph` at page level otherwise stops the
-      // parent's opengraph-image route from being resolved at all.
-      images: [`${siteConfig.url}/${lang}/opengraph-image`],
+      /*
+       * Explicit, because setting `openGraph` at page level otherwise stops the
+       * parent's opengraph-image route from being resolved at all - and with
+       * the dimensions, because a bare URL forces WhatsApp and LinkedIn to
+       * fetch the image before they can lay the card out. Next supplies all
+       * four automatically for the route it resolves itself; a hand-written
+       * entry has to carry them.
+       */
+      images: [
+        {
+          url: `${siteConfig.url}/${lang}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: title,
+          type: 'image/png',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',

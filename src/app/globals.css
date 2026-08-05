@@ -128,13 +128,30 @@ html {
     line-height: 1.25;
   }
 
+  /*
+   * The clamp floor is what scales with the root - the `vw` term does not - so
+   * at 200% these are the only headings that can outgrow their box. "Accessibility"
+   * is a single unbreakable 596px word at that size, and the statement page,
+   * which claims text reaches 200% without sideways scrolling, was the worst
+   * offender on the site: 237px of overflow at 375, starting from 125%.
+   *
+   * Two changes: a lower floor, which leaves every rendered size identical at
+   * 100% because the `vw` term wins there, and `overflow-wrap` so a word that
+   * still cannot fit breaks instead of pushing the page sideways.
+   */
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+  }
+
   h1 {
-    font-size: clamp(2.625rem, 5.6vw, 4.125rem);
+    font-size: clamp(1.75rem, 5.6vw, 4.125rem);
     line-height: 0.98;
   }
 
   h2 {
-    font-size: clamp(1.875rem, 3.6vw, 2.875rem);
+    font-size: clamp(1.375rem, 3.6vw, 2.875rem);
     line-height: 1.04;
   }
 
@@ -453,10 +470,16 @@ html {
   --line: rgba(0, 0, 0, 0.55);
   --line-strong: rgba(0, 0, 0, 0.8);
   --accent: #5e1506;
+  --accent-soft: rgba(94, 21, 6, 0.75);
   --panel: #ffffff;
   --surface: #ffffff;
   --band: #f2f1ec;
   --raised: #ffffff;
+  /* Without these the nav band kept the ordinary cream while the page went
+     white, and selected text painted the old accent against the new one. */
+  --header: #f2f1ec;
+  --selection-bg: #5e1506;
+  --selection-fg: #ffffff;
 }
 
 :root[data-theme='dark'][data-a11y-contrast] {
@@ -465,10 +488,14 @@ html {
   --line: rgba(255, 255, 255, 0.6);
   --line-strong: rgba(255, 255, 255, 0.85);
   --accent: #ff9b78;
+  --accent-soft: rgba(255, 155, 120, 0.8);
   --panel: #000000;
   --surface: #000000;
   --band: #0b0c09;
   --raised: #0b0c09;
+  --header: #0b0c09;
+  --selection-bg: #ff9b78;
+  --selection-fg: #000000;
 }
 
 /* Highlight links.

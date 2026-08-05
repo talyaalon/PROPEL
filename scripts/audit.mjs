@@ -69,9 +69,16 @@ function findBrowser() {
  */
 async function settle(page) {
   const styled = await page.evaluate(() => {
-    // `.section` sets horizontal padding in every breakpoint. Unstyled, it is 0.
+    /*
+     * `.section` sets horizontal padding at every breakpoint, so unstyled it is
+     * 0. The legal pages have no `.section` element at all, and gating on it
+     * alone aborted the whole run two pages in - so the body's background,
+     * which the stylesheet always sets, is the fallback.
+     */
     const section = document.querySelector('.section')
-    const padded = section ? parseFloat(getComputedStyle(section).paddingLeft) > 0 : false
+    const padded = section
+      ? parseFloat(getComputedStyle(section).paddingLeft) > 0
+      : getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)'
     const sheets = [...document.styleSheets].filter((s) => {
       try {
         return s.cssRules.length > 0
@@ -120,6 +127,21 @@ async function gaps(browser) {
        * flow, which produced negatives in the thousands.
        */
       const painted = (el, edge) => {
+        /*
+         * Chrome hides the content of a closed <details> through the UA shadow
+         * tree, so it has no `overflow: hidden` ancestor to detect and still
+         * reports a live 82-132px rect. The FAQ container used to carry
+         * `overflow-hidden`, which caught it; that was removed to stop the
+         * focus ring being clipped, and this boundary started reporting a
+         * phantom negative gap again.
+         */
+        const inClosedDetails = (node) => {
+          for (let n = node.parentElement; n; n = n.parentElement) {
+            if (n.tagName === 'DETAILS' && !n.open) return true
+          }
+          return false
+        }
+
         const clip = (node) => {
           let box = node.getBoundingClientRect()
           for (let n = node.parentElement; n; n = n.parentElement) {
@@ -138,6 +160,7 @@ async function gaps(browser) {
         for (const node of el.querySelectorAll('*')) {
           const s = getComputedStyle(node)
           if (s.position === 'fixed' || s.display === 'none' || s.visibility === 'hidden') continue
+          if (inClosedDetails(node)) continue
           const box = clip(node)
           if (box.bottom <= box.top) continue // fully clipped, paints nothing
           values.push(edge === 'bottom' ? box.bottom : box.top)

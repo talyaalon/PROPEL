@@ -1,7 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { A11Y_KEY } from '@/lib/clientPrefs'
+import { useMotionPaused } from './useMotionPaused'
+import FilterChips from './FilterChips'
 import {
   Accessibility,
   X,
@@ -54,15 +57,24 @@ type Props = {
 /** Root font size per step. 100% is the browser default and stores nothing. */
 const TEXT_STEPS = [100, 115, 130, 150, 175, 200]
 
+/*
+ * `motion` is deliberately absent.
+ *
+ * It used to live here as well as in MotionToggle, each with its own copy and
+ * its own storage key, and the result defeated the Level A mechanism the
+ * control exists to provide: pausing from the nav and then changing any
+ * unrelated preference here restarted the animation, because `apply()` wrote
+ * this object's stale `motion: false` back to the document. It is read from
+ * and written to the document now, through `useMotionPaused`.
+ */
 type Prefs = {
   text: number
   contrast: boolean
   links: boolean
   spacing: boolean
-  motion: boolean
 }
 
-const DEFAULTS: Prefs = { text: 100, contrast: false, links: false, spacing: false, motion: false }
+const DEFAULTS: Prefs = { text: 100, contrast: false, links: false, spacing: false }
 
 function apply(prefs: Prefs) {
   const root = document.documentElement
@@ -80,15 +92,12 @@ function apply(prefs: Prefs) {
   flag('data-a11y-contrast', prefs.contrast)
   flag('data-a11y-links', prefs.links)
   flag('data-a11y-spacing', prefs.spacing)
-
-  // Shared with MotionToggle in the nav, so the two controls agree.
-  if (prefs.motion) root.dataset.motion = 'paused'
-  else delete root.dataset.motion
 }
 
 export default function AccessibilityMenu({ dict, statementHref }: Props) {
   const [open, setOpen] = useState(false)
   const [prefs, setPrefs] = useState<Prefs>(DEFAULTS)
+  const [paused, setPaused] = useMotionPaused()
   const panelRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
@@ -96,8 +105,6 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
     try {
       const stored = localStorage.getItem(A11Y_KEY)
       if (stored) setPrefs({ ...DEFAULTS, ...JSON.parse(stored) })
-      else if (document.documentElement.dataset.motion === 'paused')
-        setPrefs((p) => ({ ...p, motion: true }))
     } catch {
       // Corrupt or unreadable storage falls back to defaults rather than throwing.
     }
@@ -117,6 +124,9 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
   const reset = () => {
     setPrefs(DEFAULTS)
     apply(DEFAULTS)
+    // Motion is stored under its own key, so clearing this one left the page
+    // unpaused but the preference intact - it came back on the next load.
+    setPaused(false)
     try {
       localStorage.removeItem(A11Y_KEY)
     } catch {
@@ -125,14 +135,19 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
   }
 
   /*
-   * The panel is a dialog, and is held to what a dialog owes: Escape closes it,
-   * focus moves in on open and returns to the trigger on close, and focus is
-   * trapped while it is open.
+   * A disclosure, not a modal dialog - and it now says so.
    *
-   * Written from scratch rather than copied from the mobile drawer. That
-   * pattern failed all three - and an accessibility menu that is itself
-   * inaccessible is worse than none, because it is the part of the site a
-   * regulator reads first.
+   * It previously trapped Tab at both ends while declaring `aria-modal=
+   * "false"`, which is a direct contradiction: a screen-reader user is told the
+   * rest of the page is reachable and then cannot Tab to it. A small settings
+   * popover in the corner has no business making the page inert, so the honest
+   * resolution is the other one - the trap is gone, Tab leaves naturally, and
+   * Escape and click-outside still close it.
+   *
+   * Written from scratch rather than copied from the mobile drawer, whose
+   * pattern failed Escape, focus-in and focus-return alike. An accessibility
+   * menu that is itself inaccessible is worse than none, because it is the part
+   * of the site a regulator opens first.
    */
   useEffect(() => {
     if (!open) return
@@ -146,28 +161,20 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
       )
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpen(false)
-        return
-      }
-      if (event.key !== 'Tab') return
-
-      const items = focusable()
-      if (items.length === 0) return
-      const first = items[0]
-      const last = items[items.length - 1]
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault()
-        last.focus()
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault()
-        first.focus()
-      }
+      if (event.key === 'Escape') setOpen(false)
     }
 
     const onPointerDown = (event: MouseEvent) => {
-      if (!panel.contains(event.target as Node) && event.target !== trigger) setOpen(false)
+      /*
+       * `contains`, not identity. The trigger holds a centred 24px icon inside
+       * a 48px button, so a click aimed at the icon - which is what a button
+       * with a centred glyph invites - has the <svg> as its target, not the
+       * <button>. The identity check passed, this handler closed the panel, and
+       * the button's own onClick then re-opened it: the menu could only be
+       * closed by hitting the ~12px frame around the icon.
+       */
+      const target = event.target as Node
+      if (!panel.contains(target) && !trigger?.contains(target)) setOpen(false)
     }
 
     document.addEventListener('keydown', onKeyDown)
@@ -177,11 +184,12 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('mousedown', onPointerDown)
-      trigger?.focus()
+      // Only if the panel still holds focus. Closing because the visitor
+      // clicked a nav link used to drag focus down to the corner trigger, so
+      // the next page began with focus in the bottom corner.
+      if (panel.contains(document.activeElement)) trigger?.focus()
     }
   }, [open])
-
-  const textIndex = TEXT_STEPS.indexOf(prefs.text)
 
   return (
     <>
@@ -191,7 +199,9 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-label={dict.open}
         aria-expanded={open}
-        aria-controls="a11y-panel"
+        // Only while the panel exists - `aria-controls` pointing at nothing is
+        // worse than absent, and `aria-expanded` already carries the state.
+        aria-controls={open ? 'a11y-panel' : undefined}
         className="flex h-12 w-12 items-center justify-center border border-brand-line bg-brand-panel text-brand-ink shadow-sm transition-colors duration-200 ease-smooth hover:border-brand-accent hover:text-brand-accent"
       >
         <Accessibility className="h-6 w-6" aria-hidden="true" />
@@ -201,15 +211,21 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
         <div
           id="a11y-panel"
           ref={panelRef}
-          role="dialog"
-          aria-modal="false"
+          role="group"
           aria-label={dict.title}
           /*
            * Anchored to the rail rather than to the viewport, so it opens
            * upward from the button on the side the rail sits on - which is the
            * right in English and the left in Hebrew, from one declaration.
            */
-          className="absolute bottom-0 end-14 max-h-[70vh] w-[min(19rem,calc(100vw-5rem))] overflow-y-auto border border-brand-line bg-brand-panel p-5 shadow-lg"
+          /*
+           * px on both terms. `calc(100vw - 5rem)` doubled to `100vw - 160px`
+           * at 200% text and left a 160px panel on a 320px phone - three of the
+           * six size steps were pushed outside it, so a visitor who stepped up
+           * to 150% could no longer reach 200%. Every other spacing value moved
+           * to px in the type refactor; this arbitrary one was missed.
+           */
+          className="absolute bottom-0 end-14 max-h-[70vh] w-[min(304px,calc(100vw-80px))] overflow-y-auto border border-brand-line bg-brand-panel p-5 shadow-lg"
         >
           <div className="mb-4 flex items-center justify-between gap-4">
             <h2 className="text-[0.9375rem] font-bold text-brand-ink">{dict.title}</h2>
@@ -233,28 +249,24 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
               {dict.text_size}
             </p>
             {/*
-             * A radio group, not six toggles. The steps are mutually exclusive,
-             * and `aria-pressed` on a mutually exclusive set tells a screen
-             * reader there are six independent switches, five of them off.
-             */}
-            <div role="radiogroup" aria-labelledby="a11y-text-label" className="flex gap-1">
-              {TEXT_STEPS.map((step, i) => (
-                <button
-                  key={step}
-                  type="button"
-                  role="radio"
-                  aria-checked={textIndex === i}
-                  onClick={() => update({ text: step })}
-                  className={`flex-1 border py-1.5 text-[0.75rem] font-semibold transition-colors duration-200 ${
-                    textIndex === i
-                      ? 'border-brand-accent bg-brand-accent text-brand-onAccent'
-                      : 'border-brand-line text-brand-slate hover:border-brand-accent hover:text-brand-accent'
-                  }`}
-                >
-                  {step === 100 ? 'A' : `${step}%`}
-                </button>
-              ))}
-            </div>
+              The same component the portfolio and blog filters use. This was a
+              hand-rolled set of six `role="radio"` buttons with no tabIndex and
+              no key handler: the role promises arrow-key operation and Tab-out,
+              and it delivered neither, while taking six tab stops in a
+              thirteen-stop panel. The working implementation was sixty lines
+              away and had been written for exactly this.
+            */}
+            <FilterChips
+              label={dict.text_size}
+              status={`${prefs.text}%`}
+              active={String(prefs.text)}
+              onChange={(value) => update({ text: Number(value) })}
+              options={TEXT_STEPS.map((step) => ({
+                value: String(step),
+                label: step === 100 ? 'A' : `${step}%`,
+              }))}
+              className="grid grid-cols-6 gap-1"
+            />
           </div>
 
           {/* ── Switches ──────────────────────────────────────────────────── */}
@@ -280,8 +292,8 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
             <Switch
               icon={<Pause className="h-4 w-4" aria-hidden="true" />}
               label={dict.motion}
-              on={prefs.motion}
-              onChange={() => update({ motion: !prefs.motion })}
+              on={paused}
+              onChange={() => setPaused(!paused)}
             />
           </div>
 
@@ -294,12 +306,13 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               {dict.reset}
             </button>
-            <a
+            <Link
               href={statementHref}
+              onClick={() => setOpen(false)}
               className="text-[0.75rem] text-brand-slate underline underline-offset-2 transition-colors duration-200 hover:text-brand-accent"
             >
               {dict.statement}
-            </a>
+            </Link>
           </div>
         </div>
       )}

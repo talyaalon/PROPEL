@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Pause, Play } from 'lucide-react'
 
-import { MOTION_KEY } from '@/lib/clientPrefs'
+import { useMotionPaused } from './useMotionPaused'
 
 /**
  * Stops the automatic motion on the page.
@@ -28,31 +28,15 @@ import { MOTION_KEY } from '@/lib/clientPrefs'
  * in globals.css under `:root[data-motion='paused']`.
  */
 export default function MotionToggle({ label }: { label: string }) {
-  const [paused, setPaused] = useState(false)
+  const [paused, setPaused] = useMotionPaused()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setPaused(document.documentElement.dataset.motion === 'paused')
-    setMounted(true)
-  }, [])
-
-  const toggle = () => {
-    const next = !paused
-    setPaused(next)
-    if (next) document.documentElement.dataset.motion = 'paused'
-    else delete document.documentElement.dataset.motion
-    try {
-      localStorage.setItem(MOTION_KEY, next ? 'paused' : 'auto')
-    } catch {
-      // Private browsing can refuse writes. The control still works for this
-      // page view; it just will not be remembered.
-    }
-  }
+  useEffect(() => setMounted(true), [])
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={() => setPaused(!paused)}
       aria-label={label}
       // Until mounted the icon would render from the default state and could
       // contradict what the inline script has already applied.

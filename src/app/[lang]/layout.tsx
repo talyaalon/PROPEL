@@ -208,6 +208,20 @@ export default async function RootLayout({ children, params }: Props) {
           {dict.a11y.skip_to_content}
         </a>
 
+        {/*
+          Before the header in the DOM, though it paints in the bottom corner -
+          it is `position: fixed`, so the two are independent. This is what puts
+          the pause control ahead of the motion it governs in the tab order;
+          last in <body> made it tab stop 49 of 49 while the animated cards
+          began at stop 10.
+        */}
+        <FloatingRail
+          a11yDict={dict.a11y_menu}
+          statementHref={`/${lang}/accessibility`}
+          whatsappMessage={dict.footer.whatsapp_message}
+          whatsappLabel={dict.footer.whatsapp_cta}
+        />
+
         <ScrollProgress />
         <Navigation
           lang={lang}
@@ -219,12 +233,6 @@ export default async function RootLayout({ children, params }: Props) {
         <main id="main">{children}</main>
         <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />
 
-        <FloatingRail
-          a11yDict={dict.a11y_menu}
-          statementHref={`/${lang}/accessibility`}
-          whatsappMessage={dict.footer.whatsapp_message}
-          whatsappLabel={dict.footer.whatsapp_cta}
-        />
         <Analytics />
       </body>
     </html>

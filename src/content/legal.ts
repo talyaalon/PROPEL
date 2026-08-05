@@ -67,7 +67,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'מגבלות ידועות',
         paragraphs: [
           'ייתכן שתוכן שמוטמע מגורם צד שלישי אינו נגיש במלואו, מכיוון שאינו בשליטתנו. אנחנו פועלים לצמצם שימוש בתוכן כזה.',
-          'צילומי המסך של אתרי הלקוחות בעמוד העבודות הם תמונות ממשק, ולא מוקראים על ידי קורא מסך. התיאור המילולי של כל פרויקט נמצא בטקסט שלצידם.',
+          'צילומי המסך של אתרי הלקוחות בעמוד העבודות מוכרזים בשם הפרויקט, אבל התוכן שבתוכם אינו מוקרא - הם תמונות ממשק. התיאור המילולי של כל פרויקט נמצא בטקסט שלצידם.',
         ],
       },
       {
@@ -123,7 +123,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'Known limitations',
         paragraphs: [
           'Third-party embedded content may not be fully accessible, as it is outside our control. We work to keep such content to a minimum.',
-          'The client-site screenshots in the portfolio are interface images and are not read aloud by a screen reader. Each project is described in the text beside them.',
+          'The client-site screenshots in the portfolio are announced by project name, but what they contain is not read aloud - they are interface images. Each project is described in the text beside them.',
         ],
       },
       {

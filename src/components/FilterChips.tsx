@@ -41,6 +41,8 @@ type Props<T extends string> = {
   label: string
   /** Announced when the selection changes, e.g. "3 projects shown". */
   status: string
+  /** Layout of the group. Defaults to the centred row the sections use. */
+  className?: string
 }
 
 export default function FilterChips<T extends string>({
@@ -49,6 +51,7 @@ export default function FilterChips<T extends string>({
   onChange,
   label,
   status,
+  className = 'mb-10 flex flex-wrap justify-center gap-2',
 }: Props<T>) {
   const groupId = useId()
   const refs = useRef<(HTMLButtonElement | null)[]>([])
@@ -84,12 +87,7 @@ export default function FilterChips<T extends string>({
 
   return (
     <>
-      <div
-        role="radiogroup"
-        aria-label={label}
-        id={groupId}
-        className="mb-10 flex flex-wrap justify-center gap-2"
-      >
+      <div role="radiogroup" aria-label={label} id={groupId} className={className}>
         {options.map((option, i) => {
           const isActive = option.value === active
           return (
@@ -105,7 +103,7 @@ export default function FilterChips<T extends string>({
               tabIndex={isActive ? 0 : -1}
               onClick={() => onChange(option.value)}
               onKeyDown={(event) => onKeyDown(event, i)}
-              className={`border px-4 py-2 font-display text-[0.75rem] font-semibold uppercase tracking-[.06em] transition-all duration-200 ease-smooth ${
+              className={`min-w-[44px] border px-3 py-2 font-display text-[0.75rem] font-semibold uppercase tracking-[.06em] transition-all duration-200 ease-smooth ${
                 isActive
                   ? 'border-brand-accent bg-brand-accent text-brand-onAccent'
                   : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-accent hover:text-brand-accent'

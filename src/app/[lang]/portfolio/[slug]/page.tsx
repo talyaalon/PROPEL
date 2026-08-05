@@ -253,12 +253,13 @@ export default async function ProjectPage({ params }: Props) {
                   {next.title}
                 </span>
               </span>
-              <span
-                className="text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+              {/* An icon rather than the literal glyph - see Services.tsx.
+                  U+2192 is absent from Chakra Petch and dragged in two Heebo
+                  symbol subsets. `rtl:-scale-x-100` mirrors it. */}
+              <ArrowRight
+                className="h-4 w-4 text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
                 aria-hidden="true"
-              >
-                {isRtl ? '←' : '→'}
-              </span>
+              />
             </Link>
           )}
         </div>
