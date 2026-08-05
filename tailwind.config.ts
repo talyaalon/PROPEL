@@ -2,18 +2,24 @@ import type { Config } from 'tailwindcss'
 
 /*
  * ── The accent ────────────────────────────────────────────────────────────────
- * PROPEL runs on one accent hue: dark red.
+ * PROPEL runs on one accent hue: the dark red from the printed logo.
  *
  * It needs two values, not one. Measured against the two surfaces:
  *
- *            on mist #F4F5F7      on char #1F2124
- *   #8E1B1B      8.3:1 (AAA)          1.8:1 (fails)
- *   #E05C5C      3.9:1 (large only)   4.5:1 (AA)
+ *              on #f6f5f1 light    on #1c1e19 dark
+ *   #7a1c09       9.6:1 (AAA)          1.5:1 (fails)
+ *   #e0714d       3.4:1 (large only)   5.3:1 (AA)
  *
- * A single red cannot serve both themes — dark red on a dark surface is not
+ * A single red cannot serve both themes - dark red on a dark surface is not
  * merely dull, it is unreadable. So the accent is a CSS variable that flips with
  * the theme, declared once in globals.css. Everything downstream reads
  * `brand.accent` and never a literal.
+ *
+ * One consequence worth knowing: because these are bare `var()` values with no
+ * `<alpha-value>` placeholder, Tailwind cannot generate opacity modifiers from
+ * them. `border-brand-accent/40` compiles to nothing at all, silently, and the
+ * element falls through to a hardcoded preflight grey. Check with
+ * `npm run audit -- css <class>` before assuming a class does what it reads as.
  */
 
 const config: Config = {
@@ -89,14 +95,9 @@ const config: Config = {
           silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',
-
-          /* Fixed values, for the rare place that must not flip with the theme. */
-          mist: '#F4F5F7',
-          paper: '#FFFFFF',
-          char: '#1F2124',
-          coal: '#26292E',
-          redDeep: '#8E1B1B',
-          redLight: '#E05C5C',
+          /* Readable on the accent - the accent's own foreground, not the page's. */
+          onAccent: 'var(--on-accent)',
+          band: 'var(--band)',
         },
       },
 
@@ -140,10 +141,8 @@ const config: Config = {
 
       animation: {
         'underline-grow': 'underline-grow 0.68s cubic-bezier(.16,1,.3,1) 0.5s both',
-        'fade-up': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) both',
         'fade-up-delay': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.15s both',
         'fade-up-delay-2': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.3s both',
-        'fade-up-delay-3': 'fade-up 0.68s cubic-bezier(.16,1,.3,1) 0.45s both',
         'fade-in': 'fade-in 0.68s cubic-bezier(.16,1,.3,1) 0.4s both',
         'slide-down': 'slide-down 0.2s cubic-bezier(.16,1,.3,1) both',
       },

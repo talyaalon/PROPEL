@@ -86,7 +86,9 @@ export default function About({ dict }: Props) {
 
                   {/* Text */}
                   <div className="min-w-0">
-                    <h3 className="mb-1.5 text-[0.9375rem] font-bold text-brand-ink">{value.title}</h3>
+                    <h3 className="mb-1.5 text-[0.9375rem] font-bold text-brand-ink">
+                      {value.title}
+                    </h3>
                     <p className="text-[0.8125rem] leading-relaxed text-brand-slate">
                       {value.description}
                     </p>

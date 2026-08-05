@@ -122,7 +122,9 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                 <MessageCircle className="h-5 w-5 text-green-400" />
               </div>
-              <span className="text-[0.8125rem] font-medium text-brand-ink">{dict.whatsapp_cta}</span>
+              <span className="text-[0.8125rem] font-medium text-brand-ink">
+                {dict.whatsapp_cta}
+              </span>
             </a>
 
             {/* Direct contact details - B2B buyers look for these to confirm you are a real business */}

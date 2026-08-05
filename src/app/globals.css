@@ -204,13 +204,6 @@ html {
     color: var(--ink);
   }
 
-  /* Running body copy */
-  .body-text {
-    font-size: 1rem;
-    line-height: 1.75;
-    color: var(--slate);
-  }
-
   /* ── Eyebrow ──────────────────────────────────────────────────────────────
      Positioned with logical properties, so the rule sits to the right of the
      label in Hebrew and to the left in English from one declaration. */
@@ -274,20 +267,6 @@ html {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--surface);
-    transform: translateY(-2px);
-  }
-
-  .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
-    height: 48px;
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--line-strong);
-  }
-
-  .btn-ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
     transform: translateY(-2px);
   }
 
@@ -450,6 +429,72 @@ html {
   .underline-rtl {
     transform-origin: right center;
   }
+}
+
+/*
+ * ── Accessibility preferences ─────────────────────────────────────────────────
+ * Set by AccessibilityMenu as attributes on <html>, and restored before first
+ * paint by `a11yInitScript`. Driving them from CSS rather than React means no
+ * component needs to know a preference exists, and a preference reaches
+ * content that has not mounted yet.
+ *
+ * Text size is not here: it is the root `font-size`, which the whole rem type
+ * scale already hangs off.
+ */
+
+/* High contrast.
+   A third set of values for the same tokens, exactly as the dark theme works -
+   so every existing utility class picks it up with no new selectors. Pushed to
+   pure black or white on the two text tokens and a stronger rule, which is what
+   the preference is actually asking for. */
+:root[data-a11y-contrast] {
+  --ink: #000000;
+  --slate: #2b2e28;
+  --line: rgba(0, 0, 0, 0.55);
+  --line-strong: rgba(0, 0, 0, 0.8);
+  --accent: #5e1506;
+  --panel: #ffffff;
+  --surface: #ffffff;
+  --band: #f2f1ec;
+  --raised: #ffffff;
+}
+
+:root[data-theme='dark'][data-a11y-contrast] {
+  --ink: #ffffff;
+  --slate: #e6e4de;
+  --line: rgba(255, 255, 255, 0.6);
+  --line-strong: rgba(255, 255, 255, 0.85);
+  --accent: #ff9b78;
+  --panel: #000000;
+  --surface: #000000;
+  --band: #0b0c09;
+  --raised: #0b0c09;
+}
+
+/* Highlight links.
+   Scoped to links inside content. The nav, the footer and anything already
+   carrying a button treatment are excluded - underlining those makes the page
+   harder to read, not easier, which is the opposite of the request. */
+:root[data-a11y-links] main a:not(.btn) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  font-weight: 600;
+}
+
+/* Text spacing.
+   Line height and paragraph spacing only. No letter-spacing: it pulls Hebrew
+   glyphs apart in a way that hurts readability rather than helping it, which is
+   why WCAG 1.4.12 sets a word-spacing target and this does not chase it. */
+:root[data-a11y-spacing] p,
+:root[data-a11y-spacing] li,
+:root[data-a11y-spacing] .lead {
+  line-height: 2 !important;
+  word-spacing: 0.16em;
+}
+
+:root[data-a11y-spacing] p + p {
+  margin-top: 1.5em;
 }
 
 /*

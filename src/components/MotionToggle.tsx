@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Pause, Play } from 'lucide-react'
 
-export const MOTION_KEY = 'propel-motion'
+import { MOTION_KEY } from '@/lib/clientPrefs'
 
 /**
  * Stops the automatic motion on the page.

@@ -58,7 +58,9 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
 
         {contactBlock && (
           <section className="card p-6 sm:p-7">
-            <h2 className="mb-4 text-[1.1875rem] font-bold text-brand-ink">{contactBlock.heading}</h2>
+            <h2 className="mb-4 text-[1.1875rem] font-bold text-brand-ink">
+              {contactBlock.heading}
+            </h2>
             <ul className="space-y-2">
               {contactBlock.lines.map((line) => (
                 <li key={line} className="text-[1rem] leading-[1.7] text-brand-slate">

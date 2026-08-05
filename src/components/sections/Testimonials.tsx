@@ -21,7 +21,10 @@ export default function Testimonials({ lang, dict }: Props) {
     <section aria-labelledby="testimonials-heading" className="section">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center lg:mb-16">
-          <h2 id="testimonials-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
+          <h2
+            id="testimonials-heading"
+            className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]"
+          >
             {dict.section_title}
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">

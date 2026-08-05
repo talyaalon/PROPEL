@@ -37,7 +37,9 @@ export default function Contact({ lang, dict }: Props) {
                 <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
                   <MessageCircle className="h-5 w-5 text-green-600" aria-hidden="true" />
                 </span>
-                <span className="text-[0.875rem] font-medium text-brand-ink">{dict.or_whatsapp}</span>
+                <span className="text-[0.875rem] font-medium text-brand-ink">
+                  {dict.or_whatsapp}
+                </span>
               </a>
 
               {siteConfig.phoneDisplay && (

@@ -223,7 +223,9 @@ export default async function ProjectPage({ params }: Props) {
         <div className="mx-auto max-w-7xl">
           <div className="card p-8 sm:p-12">
             <h2 className="font-display">{t.cta_title}</h2>
-            <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-ink">{t.cta_body}</p>
+            <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-ink">
+              {t.cta_body}
+            </p>
             <a
               href={getWhatsAppURL(
                 `${dict.portfolio.whatsapp_prefix} "${project.title}" ${dict.portfolio.whatsapp_suffix}`,

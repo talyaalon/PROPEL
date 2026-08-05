@@ -321,5 +321,17 @@
       "automation": "Automation",
       "ecommerce": "E-commerce"
     }
+  },
+  "a11y_menu": {
+    "title": "Accessibility",
+    "open": "Open the accessibility menu",
+    "close": "Close the accessibility menu",
+    "text_size": "Text size",
+    "contrast": "High contrast",
+    "links": "Highlight links",
+    "spacing": "Increased line spacing",
+    "motion": "Pause animations",
+    "reset": "Reset",
+    "statement": "Accessibility statement"
   }
 }
