@@ -73,7 +73,7 @@ export default async function Page({ params }: Props) {
         <Testimonials lang={lang} dict={dict.testimonials} />
       </Reveal>
       <Reveal>
-        <About lang={lang} dict={dict.about} />
+        <About dict={dict.about} />
       </Reveal>
       <Reveal>
         <Faq dict={dict.faq} />

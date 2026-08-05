@@ -16,7 +16,7 @@ export default function Contact({ lang, dict }: Props) {
   return (
     <section id="contact" aria-labelledby="contact-heading" className="section">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+        <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
           {/* ── Intro + direct channels ─────────────────────────── */}
           <div>
             <h2 id="contact-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">

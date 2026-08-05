@@ -445,6 +445,33 @@ html {
 }
 
 /*
+ * ── Paused motion ─────────────────────────────────────────────────────────────
+ * The Level A mechanism required by WCAG 2.2.2, set by MotionToggle. Deliberately
+ * the same rules as the reduced-motion block below, keyed to an attribute
+ * instead of a media query - a system preference is not a control on the page,
+ * so it cannot satisfy the criterion on its own.
+ *
+ * Doing it here rather than in React means ProjectScreens needs no knowledge of
+ * it, and `!important` on the attribute beats the `is-playing` class.
+ */
+:root[data-motion='paused'] .screen,
+:root[data-motion='paused'] .screen:hover,
+:root[data-motion='paused'] .card:hover .screen,
+:root[data-motion='paused'] .card:focus-within .screen,
+:root[data-motion='paused'] .screen.is-playing {
+  background-position: center top !important;
+  transition: none !important;
+}
+
+:root[data-motion='paused'] *,
+:root[data-motion='paused'] *::before,
+:root[data-motion='paused'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/*
  * ── Reduced motion ────────────────────────────────────────────────
  * A 17-second auto-scrolling panel is precisely what this preference exists
  * for. With it enabled the screens hold on the top of the page instead.

@@ -14,6 +14,7 @@ type PortfolioDict = {
   cta_body: string
   cta_button: string
   cta_whatsapp: string
+  private_project: string
 }
 
 type Props = {

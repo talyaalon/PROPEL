@@ -67,7 +67,7 @@ export default function BlogGrid({ lang, dict, articles, topics }: Props) {
                 )}
               </div>
 
-              <h3 className="mb-3">{article.title[lang]}</h3>
+              <h2 className="mb-3">{article.title[lang]}</h2>
 
               <p className="mb-6 flex-1 text-[14px] leading-relaxed text-brand-slate">
                 {article.excerpt[lang]}

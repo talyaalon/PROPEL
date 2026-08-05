@@ -32,6 +32,24 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
 
+  // On touch there is no hover, so the scroll is driven by visibility instead.
+  const [playing, setPlaying] = useState(false)
+
+  /*
+   * One observer drives both, and `playing` follows the viewport instead of
+   * latching.
+   *
+   * It used to be two effects: the first disconnected on the first
+   * intersection, and the second set `playing` true with no path back to
+   * false. On touch - where `is-playing` is the only driver, because there is
+   * no hover - that meant the 17s scroll ran exactly once per page load and
+   * then froze at `center bottom`. A visitor who scrolled to the contact form
+   * and back up found three dead crops of the clients' page footers.
+   *
+   * `visible` still latches, deliberately: it gates a multi-megabyte
+   * background image, and unloading one because the card left the viewport
+   * would only make it reload.
+   */
   useEffect(() => {
     const element = ref.current
     if (!element) return
@@ -41,29 +59,37 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
       return
     }
 
-    const observer = new IntersectionObserver(
+    const mayAnimate =
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+      window.matchMedia('(hover: none)').matches
+
+    /*
+     * Two observers, because they need different roots. `intersectionRatio` is
+     * measured against the *expanded* root, so a single observer carrying the
+     * 600px prefetch margin would report the card as on screen while it is
+     * still 600px below the fold - which is how the transition used to be ~6%
+     * through before the visitor ever saw it.
+     */
+    const loader = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
         setVisible(true)
-        observer.disconnect()
+        loader.disconnect()
       },
       // Start fetching a screen ahead of the scroll so the frame is rarely
       // caught empty, without loading all five up front.
       { rootMargin: '600px 0px' },
     )
 
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
+    const player = new IntersectionObserver(([entry]) => setPlaying(entry.isIntersecting))
 
-  // On touch there is no hover, so the scroll is driven by visibility instead.
-  const [playing, setPlaying] = useState(false)
-  useEffect(() => {
-    if (!visible) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (!window.matchMedia('(hover: none)').matches) return
-    setPlaying(true)
-  }, [visible])
+    loader.observe(element)
+    if (mayAnimate) player.observe(element)
+    return () => {
+      loader.disconnect()
+      player.disconnect()
+    }
+  }, [])
 
   const shot = (src?: string) =>
     visible && src ? ({ ['--shot']: `url(${src})` } as React.CSSProperties) : undefined

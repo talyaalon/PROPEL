@@ -8,6 +8,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import Image from 'next/image'
 import Logo from '@/components/Logo'
 import ThemeToggle from '@/components/ThemeToggle'
+import MotionToggle from '@/components/MotionToggle'
 import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
 
 type NavDict = {
@@ -27,6 +28,14 @@ type A11yDict = {
   primary_nav: string
   home: string
   toggle_theme: string
+  toggle_motion: string
+  switch_language: string
+}
+
+type NavLinkProps = {
+  href: string
+  className: string
+  children: React.ReactNode
 }
 
 type Props = {
@@ -59,9 +68,27 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
 
   /*
    * There was a `scrolled` state here, updated by a scroll listener on every
-   * page of the site, and consumed as `` — both branches
+   * page of the site, and consumed as `` - both branches
    * empty. A listener and a re-render for nothing.
    */
+
+  /*
+   * `navLinks` mixes same-page anchors with real routes. Rendering all of them
+   * as a plain <a> meant /blog re-downloaded, re-parsed and re-hydrated the
+   * whole bundle on every visit - a white flash on a phone, and the mechanism
+   * behind the sticky WhatsApp button losing its reference to #contact for the
+   * rest of the session.
+   */
+  const NavLink = ({ href, className, children }: NavLinkProps) =>
+    href.includes('#') ? (
+      <a href={href} onClick={() => setIsOpen(false)} className={className}>
+        {children}
+      </a>
+    ) : (
+      <Link href={href} onClick={() => setIsOpen(false)} className={className}>
+        {children}
+      </Link>
+    )
 
   /*
    * Drawer side effects: Escape to close, background scroll lock, focus moved
@@ -90,6 +117,16 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     const trigger = triggerRef.current
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
+    /*
+     * Everything outside the drawer goes inert. Without it, tabbing out of the
+     * open drawer landed on a link below the fold that the scroll lock made
+     * unreachable - the user could neither see it nor scroll to it. `inert`
+     * removes those nodes from the tab order and the accessibility tree at
+     * once, which is both the focus trap and the screen-reader fix.
+     */
+    const outside = [document.getElementById('main'), document.querySelector('footer')]
+    outside.forEach((node) => node?.setAttribute('inert', ''))
     document.addEventListener('keydown', handleKeyDown)
     window.addEventListener('resize', handleResize, { passive: true })
 
@@ -97,6 +134,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
 
     return () => {
       document.body.style.overflow = previousOverflow
+      outside.forEach((node) => node?.removeAttribute('inert'))
       document.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('resize', handleResize)
       // Without this the closing drawer unmounts the focused node and focus
@@ -140,23 +178,33 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
           {/* Desktop nav links */}
           <div className="hidden items-center gap-9 md:flex">
             {navLinks.map((link) => (
-              <a
+              <NavLink
                 key={link.href}
                 href={link.href}
                 className="group relative text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-ink transition-transform duration-300 ease-smooth group-hover:scale-x-100" />
-              </a>
+                {/* Logical `start-0` and `origin-*` keyed off the locale: the
+                    underline used to grow left-to-right in Hebrew too, so it
+                    ran away from the word instead of under it. */}
+                <span
+                  className={`absolute -bottom-0.5 start-0 h-px w-full scale-x-0 bg-brand-ink transition-transform duration-300 ease-smooth group-hover:scale-x-100 ${
+                    isRtl ? 'underline-rtl' : 'underline-ltr'
+                  }`}
+                />
+              </NavLink>
             ))}
           </div>
 
           {/* Desktop actions */}
           <div className="hidden items-center gap-5 md:flex">
+            <MotionToggle label={a11y.toggle_motion} />
             <ThemeToggle label={a11y.toggle_theme} />
             <Link
               href={altHref}
               hrefLang={altLang}
+              lang={altLang}
+              aria-label={a11y.switch_language}
               className="text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             >
               {dict.toggle_lang}
@@ -192,26 +240,36 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
         <div
           id="mobile-menu"
           ref={drawerRef}
-          className={`animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 sm:px-6 md:hidden ${
-            isRtl ? 'text-right' : 'text-left'
-          }`}
+          role="dialog"
+          aria-modal="true"
+          aria-label={a11y.primary_nav}
+          className="animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 text-start sm:px-6 md:hidden"
         >
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <a
+              <NavLink
                 key={link.href}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
+                className="px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
               >
                 {link.label}
-              </a>
+              </NavLink>
             ))}
 
             <div className="mt-3 space-y-2 border-t border-brand-line pt-4">
+              {/* The only theme control used to live in the `md:flex` row, so
+                  below 768px dark mode was unreachable - and nothing falls back
+                  to `prefers-color-scheme`, so a phone in dark mode got the
+                  light site with no way out. */}
+              <div className="flex gap-2 px-4 py-1">
+                <MotionToggle label={a11y.toggle_motion} />
+                <ThemeToggle label={a11y.toggle_theme} />
+              </div>
               <Link
                 href={altHref}
                 hrefLang={altLang}
+                lang={altLang}
+                aria-label={a11y.switch_language}
                 onClick={() => setIsOpen(false)}
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-slate transition-colors duration-200 hover:text-brand-ink"
               >

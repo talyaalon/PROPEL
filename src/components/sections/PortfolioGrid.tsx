@@ -18,6 +18,7 @@ type PortfolioDict = {
   cta_body: string
   cta_button: string
   cta_whatsapp: string
+  private_project: string
 }
 
 type Props = {
@@ -67,13 +68,26 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
           return (
             <article key={project.slug} className={cardBase}>
               {/* Device previews - the site scrolls inside the frames on hover,
-                  or on entering the viewport where there is no hover. */}
+                  or on entering the viewport where there is no hover.
+
+                  Only where there is something to show. Air Manage and BOM sit
+                  behind a login, so they have no capture, and the frame used to
+                  render as an empty 330px box with a 2px ink border - two blank
+                  screens in the section that exists to prove the work. */}
               <div className="relative bg-brand-surface px-4 pb-4 pt-6">
-                <ProjectScreens
-                  desktop={project.screens?.desktop}
-                  mobile={project.screens?.mobile}
-                  title={`${project.title} - ${dict.categories[project.category]}`}
-                />
+                {project.screens ? (
+                  <ProjectScreens
+                    desktop={project.screens.desktop}
+                    mobile={project.screens.mobile}
+                    title={`${project.title} - ${dict.categories[project.category]}`}
+                  />
+                ) : (
+                  <div className="flex min-h-[120px] items-center justify-center border border-brand-line bg-brand-panel px-6 py-8">
+                    <span className="text-center text-[13px] leading-relaxed text-brand-slate">
+                      {dict.private_project}
+                    </span>
+                  </div>
+                )}
 
                 {/* Category chip */}
                 <span className="absolute start-4 top-4 z-10 border border-brand-line bg-brand-panel px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em] text-brand-ink">
@@ -140,7 +154,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
          * stretching the last row to hide it, the cell carries the invitation
          * that the whole section is building towards. Six items, two full rows.
          */}
-        <article className="flex flex-col justify-center border border-brand-accent/40 bg-brand-panel p-8 text-center">
+        <article className="flex flex-col items-center justify-start self-start border border-brand-accent bg-brand-panel p-8 text-center">
           <h3 className="text-brand-accent">{dict.cta_title}</h3>
           <p className="mt-3 text-[14px] leading-relaxed text-brand-slate">{dict.cta_body}</p>
           <a

@@ -196,7 +196,7 @@ export default function ContactForm({ lang, dict }: Props) {
             aria-invalid={invalidField === 'message' || undefined}
             aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
@@ -249,7 +249,7 @@ function Label({
     <label htmlFor={htmlFor} className="mb-1.5 block text-[13px] font-medium text-brand-ink">
       {text}
       {required && (
-        <span className="text-red-600" aria-hidden="true">
+        <span className="text-brand-accent" aria-hidden="true">
           {' '}
           *
         </span>
@@ -296,7 +296,7 @@ function Field({
         defaultValue={defaultValue}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? 'contact-error' : undefined}
-        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
+        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )

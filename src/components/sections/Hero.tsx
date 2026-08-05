@@ -81,9 +81,7 @@ export default function Hero({ lang, dict }: Props) {
                 </a>
                 <a
                   href="#services"
-                  className={`flex items-center gap-2 text-[15px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink ${
-                    isRtl ? 'flex-row-reverse' : ''
-                  }`}
+                  className="flex items-center gap-2 text-[15px] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.cta_secondary}
                   <ChevronDown className="h-4 w-4" />

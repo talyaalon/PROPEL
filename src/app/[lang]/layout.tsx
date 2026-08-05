@@ -84,12 +84,23 @@ type Props = {
   params: Promise<{ lang: string }>
 }
 
+/*
+ * The colour under the browser chrome.
+ *
+ * These two hexes were `brand.mist` and `brand.char` from the palette before
+ * last, and neither exists in globals.css any more. The page paints `#F6F5F1`
+ * in both cases, so a phone in dark mode showed a near-black address bar
+ * directly above a cream page.
+ *
+ * Keyed to nothing, because the theme here is not keyed to the system
+ * preference - it is `data-theme` on <html>, set by ThemeToggle from
+ * localStorage, and there is no `prefers-color-scheme` block in the stylesheet.
+ * Declaring `light dark` while only ever painting light is the mismatch that
+ * produced the seam. `--header` is the value actually under the chrome.
+ */
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F4F5F7' },
-    { media: '(prefers-color-scheme: dark)', color: '#1F2124' },
-  ],
-  colorScheme: 'light dark',
+  themeColor: '#E9E7E1',
+  colorScheme: 'light',
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

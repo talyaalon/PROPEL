@@ -31,12 +31,16 @@ export default function Logo({ tagline, className = '' }: Props) {
 
   return (
     <span className={`inline-flex flex-col ${tagline ? 'gap-1.5' : ''} ${className}`}>
+      {/* The mark stands in for the O, so the text nodes alone read as
+          "PR PEL". One label over the lockup restores the company name. */}
       <span
+        aria-label="PROPEL"
+        role="img"
         className={`font-display inline-flex items-center gap-[0.02em] font-black leading-none tracking-[-0.02em] ${colour}`}
       >
-        PR
+        <span aria-hidden="true">PR</span>
         <ArrowMark />
-        PEL
+        <span aria-hidden="true">PEL</span>
       </span>
 
       {tagline && (

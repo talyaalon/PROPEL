@@ -18,7 +18,7 @@ type FaqDict = {
  */
 export default function Faq({ dict }: { dict: FaqDict }) {
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="section">
+    <section id="faq" aria-labelledby="faq-heading" className="section section--band">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 text-center lg:mb-14">
           <h2 id="faq-heading" className="text-brand-ink lg:text-[44px] lg:leading-[1.15]">
@@ -29,7 +29,7 @@ export default function Faq({ dict }: { dict: FaqDict }) {
           </p>
         </div>
 
-        <div className="divide-y divide-brand-line overflow-hidden border border-brand-line bg-brand-panel">
+        <div className="divide-y divide-brand-line border border-brand-line bg-brand-panel">
           {dict.items.map((item) => (
             <details key={item.question} className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-5 p-6 text-start transition-colors duration-200 hover:bg-brand-surface sm:p-7 [&::-webkit-details-marker]:hidden">

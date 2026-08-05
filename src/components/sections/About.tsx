@@ -1,6 +1,5 @@
 import { Target, Zap, Shield, MessageCircle, type LucideIcon } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
-import type { Locale } from '@/lib/i18n'
 
 type Value = {
   icon: string
@@ -18,7 +17,6 @@ type AboutDict = {
 }
 
 type Props = {
-  lang: Locale
   dict: AboutDict
 }
 
@@ -28,16 +26,17 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
 }
 
-export default function About({ lang, dict }: Props) {
-  const isRtl = lang === 'he'
-
+export default function About({ dict }: Props) {
   return (
     <section id="about" aria-labelledby="about-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* ── Text column ───────────────────────────────────── */}
-          {/* RTL: text reads right-to-left so it sits in the second visual column */}
-          <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
+          {/* ── Text column ─────────────────────────────────────
+              No order override. `order` is already direction-aware inside an
+              RTL grid, so the ternary that used to be here reversed a reversal
+              and left About as the only section on the page that did not
+              mirror in Hebrew. Source order alone is correct. */}
+          <div className="flex flex-col gap-7">
             {/* Eyebrow - full-strength steel; at 60% opacity this failed WCAG AA on white */}
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.section_subtitle}
@@ -71,7 +70,7 @@ export default function About({ lang, dict }: Props) {
           </div>
 
           {/* ── Values column ─────────────────────────────────── */}
-          <div className={`flex flex-col gap-4 ${isRtl ? 'lg:order-1' : 'lg:order-2'}`}>
+          <div className="flex flex-col gap-4">
             {dict.values.map((value) => {
               const Icon: LucideIcon = iconMap[value.icon] ?? Target
 

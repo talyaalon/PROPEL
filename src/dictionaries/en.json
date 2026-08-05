@@ -9,7 +9,9 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu",
     "primary_nav": "Primary navigation",
-    "home": "PROPEL - home"
+    "home": "PROPEL - home",
+    "toggle_motion": "Pause animations on this page",
+    "switch_language": "מעבר לעברית"
   },
   "nav": {
     "services": "Services",
@@ -127,7 +129,8 @@
         "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
         "analytics": "whatsapp:service-migration"
       }
-    ]
+    ],
+    "eyebrow": "Services"
   },
   "portfolio": {
     "section_title": "Selected Work",
@@ -159,7 +162,8 @@
     "cta_title": "The next one could be yours",
     "cta_body": "Tell me what is slowing you down - a site, a manual process, systems that do not talk to each other - and I will come back with something concrete.",
     "cta_button": "Talk on WhatsApp",
-    "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project."
+    "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project.",
+    "private_project": "Private project - the system sits behind a login"
   },
   "process": {
     "section_title": "How it works",

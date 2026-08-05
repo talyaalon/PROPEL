@@ -3,6 +3,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import FeaturedServiceCard, { type ServiceItem } from './FeaturedServiceCard'
 
 type ServicesDict = {
+  eyebrow: string
   section_title: string
   section_subtitle: string
   cta_label: string
@@ -32,7 +33,7 @@ export default function Services({ dict }: Props) {
       <div className="mx-auto max-w-7xl">
         {/* Section header */}
         <div className="mb-9 lg:mb-16">
-          <p className="eyebrow mb-6">Services</p>
+          <p className="eyebrow mb-6">{dict.eyebrow}</p>
           <h2 id="services-heading" className="max-w-3xl">
             {dict.section_title}
           </h2>
@@ -42,7 +43,7 @@ export default function Services({ dict }: Props) {
         </div>
 
         {/* Standard services */}
-        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-3">
           {standard.map((service) => {
             const Icon = serviceIcons[service.icon] ?? Monitor
 
@@ -97,7 +98,7 @@ export default function Services({ dict }: Props) {
                 >
                   {dict.cta_label}
                   <span
-                    className="transition-transform duration-500 ease-smooth group-hover/cta:translate-x-1 rtl:-scale-x-100"
+                    className="transition-transform duration-500 ease-smooth group-hover/cta:translate-x-1 rtl:-scale-x-100 rtl:group-hover/cta:-translate-x-1"
                     aria-hidden="true"
                   >
                     →

@@ -64,5 +64,8 @@ export const themeInitScript = `
   if (localStorage.getItem('${THEME_KEY}') === 'dark') {
     document.documentElement.dataset.theme = 'dark';
   }
+  if (localStorage.getItem('propel-motion') === 'paused') {
+    document.documentElement.dataset.motion = 'paused';
+  }
 }catch(e){}})();
 `.trim()
