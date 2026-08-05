@@ -31,7 +31,7 @@ export default function Portfolio({ lang, dict }: Props) {
           <h2 id="portfolio-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-muted sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>

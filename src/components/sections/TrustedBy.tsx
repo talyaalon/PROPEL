@@ -9,9 +9,9 @@ export default function TrustedBy({ label }: { label: string }) {
   if (clients.length === 0) return null
 
   return (
-    <section aria-label={label} className="border-y border-brand-ink/15 bg-brand-deep">
+    <section aria-label={label} className="border-y border-brand-line bg-brand-panel">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <p className="mb-8 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-muted">
+        <p className="mb-8 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
           {label}
         </p>
 

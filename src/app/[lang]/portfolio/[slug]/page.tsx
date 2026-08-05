@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: Props) {
   const hasNext = published.length > 1
 
   return (
-    <div className="bg-brand-void">
+    <div className="bg-brand-surface">
       <JsonLd schema={caseStudySchema(project, lang)} />
       <JsonLd
         schema={breadcrumbSchema([
@@ -89,7 +89,7 @@ export default async function ProjectPage({ params }: Props) {
       />
 
       {/* ── Header ────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-b border-brand-ink/15 bg-brand-deep text-brand-ink">
+      <section className="relative overflow-hidden border-b border-brand-line bg-brand-panel text-brand-ink">
         {project.thumbnail?.src && (
           <div className="absolute inset-0">
             <Image
@@ -106,7 +106,7 @@ export default async function ProjectPage({ params }: Props) {
         <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-20">
           <Link
             href={`/${lang}#portfolio`}
-            className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-brand-muted transition-colors hover:text-brand-ink"
+            className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-brand-slate transition-colors hover:text-brand-ink"
           >
             <BackArrow className="h-4 w-4" aria-hidden="true" />
             {t.back}
@@ -119,7 +119,7 @@ export default async function ProjectPage({ params }: Props) {
             <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
               {project.client && (
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-muted">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.client}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink">{project.client[lang]}</dd>
@@ -127,7 +127,7 @@ export default async function ProjectPage({ params }: Props) {
               )}
               {project.year && (
                 <div>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-muted">
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.year}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink" dir="ltr">
@@ -143,7 +143,7 @@ export default async function ProjectPage({ params }: Props) {
               {project.techStack.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-brand-ink/20 bg-brand-ink/10 px-3 py-1 text-xs font-semibold text-brand-lead backdrop-blur-sm"
+                  className="rounded-full border border-brand-line bg-brand-line px-3 py-1 text-xs font-semibold text-brand-ink backdrop-blur-sm"
                 >
                   {tag}
                 </span>
@@ -155,12 +155,12 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* ── Results strip ─────────────────────────────────────────────────── */}
       {project.results && project.results.length > 0 && (
-        <section className="border-b border-brand-ink/15 bg-brand-deep" aria-label={t.results}>
+        <section className="border-b border-brand-line bg-brand-panel" aria-label={t.results}>
           <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-12">
             {project.results.map((result) => (
               <div key={result.label[lang]}>
                 <p className="num text-[40px] leading-none lg:text-[48px]">{result.metric}</p>
-                <p className="mt-2 text-[14px] leading-snug text-brand-muted">
+                <p className="mt-2 text-[14px] leading-snug text-brand-slate">
                   {result.label[lang]}
                 </p>
               </div>
@@ -204,16 +204,16 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* ── Gallery ───────────────────────────────────────────────────────── */}
       {project.gallery && project.gallery.length > 0 && (
-        <section className="border-t border-brand-ink/15 bg-brand-deep px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section className="border-t border-brand-line bg-brand-panel px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-7xl">
-            <h2 className="mb-8 text-xs font-bold uppercase tracking-[0.2em] text-brand-muted">
+            <h2 className="mb-8 text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">
               {t.screenshots}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {project.gallery.map((image) => (
                 <div
                   key={image.src}
-                  className="overflow-hidden border border-brand-ink/15 bg-brand-void transition-shadow "
+                  className="overflow-hidden border border-brand-line bg-brand-surface transition-shadow "
                 >
                   <div className="relative aspect-[10/7] w-full">
                     <Image
@@ -232,13 +232,11 @@ export default async function ProjectPage({ params }: Props) {
       )}
 
       {/* ── Closing CTA + next project ────────────────────────────────────── */}
-      <section className="border-t border-brand-ink/15 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+      <section className="border-t border-brand-line px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-7xl">
           <div className="card p-8 sm:p-12">
             <h2 className="font-display">{t.cta_title}</h2>
-            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-brand-lead">
-              {t.cta_body}
-            </p>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-brand-ink">{t.cta_body}</p>
             <a
               href={getWhatsAppURL(
                 `${dict.portfolio.whatsapp_prefix} "${project.title}" ${dict.portfolio.whatsapp_suffix}`,
@@ -246,7 +244,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics={`whatsapp:case-study-${project.slug}`}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-void px-8 py-4 text-[15px] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
+              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[15px] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
             >
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
               {t.cta_label}
@@ -259,7 +257,7 @@ export default async function ProjectPage({ params }: Props) {
               className="card group mt-8 flex items-center justify-between gap-4 p-6 sm:p-7"
             >
               <span>
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-muted">
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                   {t.next_project}
                 </span>
                 <span className="mt-1.5 block text-[18px] font-bold text-brand-ink">
@@ -267,7 +265,7 @@ export default async function ProjectPage({ params }: Props) {
                 </span>
               </span>
               <span
-                className="text-brand-muted transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                className="text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
                 aria-hidden="true"
               >
                 {isRtl ? '←' : '→'}
@@ -285,7 +283,7 @@ function Block({ title, body }: { title: string; body: string }) {
     <div>
       <div className="mb-4 flex items-center gap-3">
         <span className="block h-px w-8 bg-brand-accent" aria-hidden="true" />
-        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-muted">{title}</h2>
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">{title}</h2>
       </div>
       <p className="text-lg leading-relaxed text-brand-ink">{body}</p>
     </div>

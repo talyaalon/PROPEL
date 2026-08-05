@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
+import ProjectScreens from '@/components/ProjectScreens'
 import { MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
@@ -24,10 +24,10 @@ type Props = {
 }
 
 const cardBase =
-  'group flex flex-col overflow-hidden border border-brand-ink/15 bg-brand-deep transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
+  'group flex flex-col overflow-hidden border border-brand-line bg-brand-panel transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
 
 const tagBase =
-  'rounded-full border border-brand-ink/15 bg-brand-void px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-brand-muted'
+  'rounded-full border border-brand-line bg-brand-surface px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-brand-slate'
 
 export default function PortfolioGrid({ lang, dict, projects, categories }: Props) {
   const [active, setActive] = useState<ProjectCategory | 'all'>('all')
@@ -62,27 +62,17 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
           return (
             <article key={project.slug} className={cardBase}>
-              {/* Thumbnail */}
-              <div className="relative h-48 w-full overflow-hidden bg-brand-void sm:h-52">
-                {project.thumbnail?.src ? (
-                  <Image
-                    src={project.thumbnail.src}
-                    alt={project.thumbnail.alt[lang]}
-                    fill
-                    className="object-cover transition-transform duration-700 ease-smooth group-hover:scale-[1.04]"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  />
-                ) : (
-                  <span
-                    className="absolute bottom-3 end-4 select-none font-display text-[80px] font-black leading-none text-black/[0.05]"
-                    aria-hidden="true"
-                  >
-                    {project.title.charAt(0)}
-                  </span>
-                )}
+              {/* Device previews — the site scrolls inside the frames on hover,
+                  or on entering the viewport where there is no hover. */}
+              <div className="relative bg-brand-surface px-4 pb-4 pt-6">
+                <ProjectScreens
+                  desktop={project.screens?.desktop}
+                  mobile={project.screens?.mobile}
+                  title={`${project.title} — ${dict.categories[project.category]}`}
+                />
 
                 {/* Category chip */}
-                <span className="absolute start-4 top-4 rounded-full border border-brand-ink/15 bg-brand-deep/90 px-3 py-1 text-[11px] font-semibold tracking-wide text-brand-ink backdrop-blur-sm">
+                <span className="absolute start-4 top-4 z-10 border border-brand-line bg-brand-panel px-3 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em] text-brand-ink">
                   {dict.categories[project.category]}
                 </span>
               </div>
@@ -91,15 +81,15 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
               <div className="flex flex-1 flex-col p-6 sm:p-7">
                 <h3 className="mb-2 text-[16px] font-bold text-brand-ink">{project.title}</h3>
 
-                <p className="mb-5 flex-1 text-[14px] leading-relaxed text-brand-muted">
+                <p className="mb-5 flex-1 text-[14px] leading-relaxed text-brand-slate">
                   {project.summary[lang]}
                 </p>
 
                 {/* Headline result — the single most persuasive thing on the card */}
                 {headline && (
-                  <div className="mb-5 flex items-baseline gap-2 border-t border-brand-ink/15 pt-4">
+                  <div className="mb-5 flex items-baseline gap-2 border-t border-brand-line pt-4">
                     <span className="num text-[26px] leading-none">{headline.metric}</span>
-                    <span className="text-[12px] leading-snug text-brand-muted">
+                    <span className="text-[12px] leading-snug text-brand-slate">
                       {headline.label[lang]}
                     </span>
                   </div>
@@ -118,7 +108,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                 <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
                   <Link
                     href={`/${lang}/portfolio/${project.slug}`}
-                    className="text-[13px] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-muted hover:underline"
+                    className="text-[13px] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
                   >
                     {dict.view_project}
                     <span className="sr-only"> — {project.title}</span>
@@ -128,7 +118,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     target="_blank"
                     rel="noopener noreferrer"
                     data-analytics={`whatsapp:project-${project.slug}`}
-                    className="flex items-center gap-1.5 text-[13px] text-brand-muted transition-colors duration-200 hover:text-brand-ink"
+                    className="flex items-center gap-1.5 text-[13px] text-brand-slate transition-colors duration-200 hover:text-brand-ink"
                   >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
                     WhatsApp
@@ -160,8 +150,8 @@ function FilterChip({
       aria-pressed={isActive}
       className={`rounded-full border px-4 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 ${
         isActive
-          ? 'border-brand-accent bg-brand-accent text-brand-deep'
-          : 'border-brand-ink/15 bg-brand-deep text-brand-muted hover:border-brand-muted hover:text-brand-ink'
+          ? 'border-brand-accent bg-brand-accent text-brand-surface'
+          : 'border-brand-line bg-brand-panel text-brand-slate hover:border-brand-slate hover:text-brand-ink'
       }`}
     >
       {label}

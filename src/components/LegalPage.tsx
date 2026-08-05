@@ -20,7 +20,7 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <h1 className="text-brand-ink">{doc.title}</h1>
 
-      <p className="mt-3 text-[13px] text-brand-muted">
+      <p className="mt-3 text-[13px] text-brand-slate">
         {doc.updatedLabel}: <time dateTime={siteConfig.legalUpdated}>{formattedDate}</time>
       </p>
 
@@ -32,7 +32,7 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
             <h2 className="mb-4 text-[19px] font-bold text-brand-ink">{section.heading}</h2>
 
             {section.paragraphs?.map((paragraph) => (
-              <p key={paragraph} className="mb-3 text-[16px] leading-[1.8] text-brand-muted">
+              <p key={paragraph} className="mb-3 text-[16px] leading-[1.8] text-brand-slate">
                 {paragraph}
               </p>
             ))}
@@ -42,10 +42,10 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
                 {section.list.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-3 text-[16px] leading-[1.7] text-brand-muted"
+                    className="flex items-start gap-3 text-[16px] leading-[1.7] text-brand-slate"
                   >
                     <span
-                      className="mt-2.5 h-1 w-1 flex-shrink-0 rounded-full bg-brand-muted"
+                      className="mt-2.5 h-1 w-1 flex-shrink-0 rounded-full bg-brand-slate"
                       aria-hidden="true"
                     />
                     {item}
@@ -61,7 +61,7 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
             <h2 className="mb-4 text-[19px] font-bold text-brand-ink">{contactBlock.heading}</h2>
             <ul className="space-y-2">
               {contactBlock.lines.map((line) => (
-                <li key={line} className="text-[16px] leading-[1.7] text-brand-muted">
+                <li key={line} className="text-[16px] leading-[1.7] text-brand-slate">
                   {line}
                 </li>
               ))}

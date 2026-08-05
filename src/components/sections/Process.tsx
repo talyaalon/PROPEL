@@ -22,7 +22,7 @@ export default function Process({ dict }: { dict: ProcessDict }) {
           <h2 id="process-heading" className="text-brand-ink lg:text-[52px] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-muted sm:text-[17px]">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -37,11 +37,11 @@ export default function Process({ dict }: { dict: ProcessDict }) {
 
               <h3 className="mt-5 text-[17px] font-bold text-brand-ink">{step.title}</h3>
 
-              <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-muted">
+              <p className="mt-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-slate">
                 {step.duration}
               </p>
 
-              <p className="mt-4 text-[14px] leading-relaxed text-brand-muted">
+              <p className="mt-4 text-[14px] leading-relaxed text-brand-slate">
                 {step.description}
               </p>
             </li>

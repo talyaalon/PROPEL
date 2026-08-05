@@ -4,7 +4,8 @@
     "description": "We build fast websites and automations that take manual work off your team, for small and mid-sized businesses. Scoping, development and launch on timelines you can plan around."
   },
   "a11y": {
-    "skip_to_content": "Skip to main content"
+    "skip_to_content": "Skip to main content",
+    "toggle_theme": "Toggle colour theme"
   },
   "nav": {
     "services": "Services",
@@ -13,10 +14,10 @@
     "about": "About",
     "cta": "Let's Talk",
     "toggle_lang": "HE",
-    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
+    "blog": "Blog"
   },
   "hero": {
-    "badge": "Available for new projects",
     "h1_pre": "We speed up",
     "h1_focus": "what slows you down",
     "h1_post": "",
@@ -24,7 +25,8 @@
     "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
     "cta_note": "A 20-minute scoping call. No commitment.",
-    "whatsapp_message": "Hi PROPEL, let's talk about a new project."
+    "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
+    "brand_tagline": "Speed up what slows you down"
   },
   "trusted_by": "Businesses working with us",
   "services": {
@@ -287,6 +289,23 @@
     "accessibility": "Accessibility Statement",
     "privacy": "Privacy Policy",
     "copyright": "All rights reserved © PROPEL",
-    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
+    "nav_blog": "Blog"
+  },
+  "blog": {
+    "eyebrow": "Resources",
+    "title": "Resources and articles",
+    "subtitle": "Sources we go back to ourselves — performance, organic search, accessibility and building things properly. Our own writing will appear here.",
+    "meta_title": "Resources and articles on web development and SEO",
+    "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development — selected by PROPEL.",
+    "all_label": "All",
+    "read_more": "Read more",
+    "external_note": "External link, opens in a new tab",
+    "topics": {
+      "web": "Build & performance",
+      "seo": "Organic search",
+      "automation": "Automation",
+      "ecommerce": "E-commerce"
+    }
   }
 }

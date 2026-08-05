@@ -3,40 +3,58 @@
 @tailwind utilities;
 
 /*
- * ── Theme ─────────────────────────────────────────────────────────────────────
- * Dark is the default. The original cream palette is still fully available by
- * putting data-theme="light" on <html> — nothing was deleted, only demoted.
+ * ── Themes ────────────────────────────────────────────────────────────────────
+ * Light is the default; dark is opt-in via data-theme="dark" on <html>, set by
+ * ThemeToggle and applied before first paint by the inline script in the layout.
  *
- * Anything that must flip between themes reads a variable. The accent is
- * deliberately constant in both: it is the brand, not a surface.
+ * Every colour a component uses resolves through one of these variables, which
+ * is what lets a single set of utility classes serve both themes.
+ *
+ * Surfaces and type are sampled from the printed logo — warm paper and a
+ * near-black with a green cast, plus the silver of the arrow mark.
+ *
+ * The accent carries two values because one red cannot serve both surfaces.
+ * The brand red #7A1C09 reaches 9.6:1 on the light background and 1.5:1 on the
+ * dark one — unreadable — so dark mode uses the same hue lightened to 5.1:1.
  */
 :root {
-  --surface: #090316;
-  --surface-deep: #050210;
-  --panel: rgba(8, 9, 11, 0.9);
-  --text: #fff8ef;
-  --text-lead: #ded2ec;
-  --text-muted: #aaa0ba;
-  --line: rgba(255, 248, 239, 0.15);
-  --line-strong: rgba(255, 248, 239, 0.28);
-  --grid-line: rgba(255, 248, 239, 0.035);
-  --selection-bg: #c8ff3d;
-  --selection-fg: #0b1200;
+  /* Sampled from the logo: warm paper, not the cool grey it replaced. */
+  --surface: #f6f5f1;
+  --header: #e9e7e1;
+  --paper: url('/paper.webp');
+  --raised: #fbfaf7;
+  --panel: #faf9f6;
+  --ink: #1f221c;
+  --slate: #6a6d64;
+  --silver: #9ea29b;
+  --line: rgba(31, 34, 28, 0.14);
+  --line-strong: rgba(31, 34, 28, 0.3);
+  --accent: #7a1c09;
+  --accent-soft: rgba(122, 28, 9, 0.55);
+  --on-accent: #f7f6f2;
+  --selection-bg: #7a1c09;
+  --selection-fg: #f7f6f2;
 }
 
-:root[data-theme='light'] {
-  --surface: #f9f7f2;
-  --surface-deep: #efece4;
-  --panel: rgba(255, 255, 255, 0.92);
-  --text: #14121a;
-  --text-lead: #3d3748;
-  /* Darkened against the cream surface: #AAA0BA on #F9F7F2 is only 2.4:1. */
-  --text-muted: #5c5470;
-  --line: rgba(20, 18, 26, 0.16);
-  --line-strong: rgba(20, 18, 26, 0.3);
-  --grid-line: rgba(20, 18, 26, 0.045);
-  --selection-bg: #14121a;
-  --selection-fg: #f9f7f2;
+:root[data-theme='dark'] {
+  /* The same warmth carried into the dark surfaces, so the logo sits on a
+     related colour rather than a neutral grey. */
+  --surface: #1c1e19;
+  --header: #171915;
+  --paper: none;
+  --raised: #24271f;
+  --panel: #24271f;
+  --ink: #f1efea;
+  --slate: #a6a99f;
+  --silver: #b8bcb4;
+  --line: rgba(241, 239, 234, 0.14);
+  --line-strong: rgba(241, 239, 234, 0.3);
+  /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
+  --accent: #e0714d;
+  --accent-soft: rgba(224, 113, 77, 0.55);
+  --on-accent: #1c1e19;
+  --selection-bg: #e0714d;
+  --selection-fg: #1c1e19;
 }
 
 html {
@@ -55,14 +73,8 @@ html {
 @layer base {
   body {
     @apply font-body antialiased;
-    color: var(--text);
+    color: var(--ink);
     background-color: var(--surface);
-    /* Technical grid. Applied to the page rather than a wrapper so it survives
-       every section background. */
-    background-image:
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-      linear-gradient(var(--grid-line) 1px, transparent 1px);
-    background-size: 72px 72px;
     font-size: 16px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -76,18 +88,23 @@ html {
   }
 
   /*
-   * Headings.
+   * Headings carry the accent.
    *
    * `tracking-normal` throughout, deliberately: negative letter-spacing pulls
    * Hebrew glyphs into each other in a way it does not in Latin. Tracking is
-   * applied only to Latin-only elements — buttons, tags, eyebrows, nav — and
-   * never to running text in either language.
+   * applied only to Latin-only elements — buttons, tags, eyebrows, nav.
    */
   h1,
-  h2,
-  h3 {
+  h2 {
     @apply font-display font-bold uppercase tracking-normal;
-    color: var(--text);
+    color: var(--accent);
+  }
+
+  h3 {
+    @apply font-display font-bold tracking-normal;
+    color: var(--ink);
+    font-size: 21px;
+    line-height: 1.25;
   }
 
   h1 {
@@ -100,12 +117,6 @@ html {
     line-height: 1.04;
   }
 
-  h3 {
-    font-size: 21px;
-    line-height: 1.25;
-    text-transform: none;
-  }
-
   ::selection {
     background-color: var(--selection-bg);
     color: var(--selection-fg);
@@ -113,7 +124,7 @@ html {
 
   /* Keyboard users only */
   :focus-visible {
-    outline: 2px solid theme('colors.brand.accent');
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
 }
@@ -129,23 +140,22 @@ html {
   .lead {
     font-size: 19px;
     line-height: 1.7;
-    color: var(--text-lead);
+    color: var(--ink);
   }
 
   /* Running body copy */
   .body-text {
     font-size: 16px;
     line-height: 1.75;
-    color: var(--text-muted);
+    color: var(--slate);
   }
 
   /* ── Eyebrow ──────────────────────────────────────────────────────────────
-     Small accent label with a rule running off its leading edge. Positioned
-     with logical properties, so the rule sits to the right of the label in
-     Hebrew and to the left in English from a single declaration. */
+     Positioned with logical properties, so the rule sits to the right of the
+     label in Hebrew and to the left in English from one declaration. */
   .eyebrow {
     @apply relative inline-flex items-center font-display text-[14px] font-semibold uppercase tracking-[.18em];
-    color: theme('colors.brand.accent');
+    color: var(--accent);
     padding-inline-start: 72px;
   }
 
@@ -156,7 +166,7 @@ html {
     top: 50%;
     width: 56px;
     height: 2px;
-    background-color: theme('colors.brand.accent');
+    background-color: var(--accent);
     transform: translateY(-50%);
   }
 
@@ -175,17 +185,13 @@ html {
     bottom: 0;
     height: 2px;
     width: 0;
-    background: linear-gradient(
-      90deg,
-      theme('colors.brand.accent'),
-      theme('colors.brand.accentDeep')
-    );
+    background: var(--accent);
     transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .card:hover,
   .card:focus-within {
-    border-color: rgb(200 255 61 / 0.55);
+    border-color: var(--accent-soft);
     transform: translateY(-4px);
   }
 
@@ -198,14 +204,15 @@ html {
   .btn {
     @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
-    background: theme('colors.brand.accent');
-    color: #0b1200;
-    border: 1px solid theme('colors.brand.accent');
+    background: var(--accent);
+    color: var(--on-accent);
+    border: 1px solid var(--accent);
   }
 
   .btn:hover {
-    background: #ffffff;
-    border-color: #ffffff;
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--surface);
     transform: translateY(-2px);
   }
 
@@ -213,27 +220,117 @@ html {
     @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[14px] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
     background: transparent;
-    color: var(--text);
-    border: 1px solid var(--line);
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
   }
 
   .btn-ghost:hover {
-    border-color: theme('colors.brand.accent');
-    color: theme('colors.brand.accent');
+    border-color: var(--accent);
+    color: var(--accent);
     transform: translateY(-2px);
   }
 
   /* ── Tag ──────────────────────────────────────────────────────────────── */
   .tag {
     @apply inline-flex items-center px-2.5 py-1 font-display text-[11px] font-semibold uppercase tracking-[.06em];
-    color: var(--text-lead);
+    color: var(--slate);
     border: 1px solid var(--line);
+  }
+
+  /* ── Header band ──────────────────────────────────────────────────────────
+     The navigation and hero sit on the supplied paper artwork itself — the
+     whole file, uncropped and untiled. An earlier attempt cut a region out of
+     the logo and mirrored it into a repeating tile; the reflection produced a
+     visible symmetry, so this uses the real thing instead.
+
+     `cover` and no repeat mean there is never a seam. The nav and the hero each
+     paint it from `center top`, so the texture lines up across the border
+     between them. */
+  .header-band {
+    background-color: #e9e7e1;
+    background-image: var(--paper);
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+  }
+
+  /* Serif tagline, echoing the lockup on the printed logo. */
+  .tagline {
+    @apply font-serif;
+    color: var(--ink);
+    letter-spacing: 0;
   }
 
   /* ── Figure ───────────────────────────────────────────────────────────── */
   .num {
     @apply font-display font-bold;
-    color: theme('colors.brand.accent');
+    color: var(--accent);
+  }
+
+  /* ── Device screens ───────────────────────────────────────────────────────
+     A container whose background is a full-page screenshot. Moving the
+     background from top to bottom over 17s reads as the site scrolling inside
+     the frame. `background-position` is transitioned rather than the
+     `background` shorthand — the shorthand includes background-image, which the
+     browser cannot interpolate.
+
+     The scroll starts on hover at desktop, and on entering the viewport at
+     touch sizes where hover never fires. `--shot` is only set once the wrapper
+     is near the viewport, because these images are ~5000px tall and eager
+     loading them all would cost several megabytes on first paint. */
+  .screens {
+    @apply flex flex-wrap items-center justify-center;
+  }
+
+  .screen {
+    background-image: var(--shot);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: var(--raised);
+    border: 2px solid var(--ink);
+    transition: background-position 17s linear;
+    cursor: pointer;
+  }
+
+  .screen:hover,
+  .screen.is-playing {
+    background-position: center bottom;
+  }
+
+  .screen--desktop {
+    width: 65%;
+    min-height: 27vh;
+  }
+
+  .screen--phone {
+    width: 30%;
+    min-height: 42vh;
+    /* Logical property, not margin-left: in Hebrew the overlap has to fall on
+       the other side or the phone detaches from the monitor. */
+    margin-inline-start: -7px;
+    z-index: 1;
+  }
+
+  @media (max-width: 1024px) {
+    .screen--desktop {
+      min-height: 25vh;
+    }
+    .screen--phone {
+      min-height: 35vh;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .screen--desktop {
+      width: 100%;
+      min-height: 140px;
+    }
+    .screen--phone {
+      width: 100%;
+      min-height: 250px;
+      margin-inline-start: 0;
+    }
   }
 }
 
@@ -275,18 +372,24 @@ html {
 
 /*
  * ── Reduced motion ────────────────────────────────────────────────
- * Vestibular disorders make fades and the pulsing availability dot genuinely
- * unpleasant. Honour the OS-level preference everywhere at once.
+ * A 17-second auto-scrolling panel is precisely what this preference exists
+ * for. With it enabled the screens hold on the top of the page instead.
  */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  /* Not merely instant — never hidden in the first place */
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .screen,
+  .screen:hover,
+  .screen.is-playing {
+    background-position: center top !important;
+    transition: none !important;
   }
 
   *,

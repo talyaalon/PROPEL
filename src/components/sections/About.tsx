@@ -39,7 +39,7 @@ export default function About({ lang, dict }: Props) {
           {/* RTL: text reads right-to-left so it sits in the second visual column */}
           <div className={`flex flex-col gap-7 ${isRtl ? 'lg:order-2' : 'lg:order-1'}`}>
             {/* Eyebrow — full-strength steel; at 60% opacity this failed WCAG AA on white */}
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-muted">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.section_subtitle}
             </p>
 
@@ -51,7 +51,7 @@ export default function About({ lang, dict }: Props) {
             {/* Body paragraphs */}
             <div className="flex flex-col gap-5">
               {dict.paragraphs.map((paragraph, i) => (
-                <p key={i} className="text-[16px] leading-[1.8] text-brand-muted">
+                <p key={i} className="text-[16px] leading-[1.8] text-brand-slate">
                   {paragraph}
                 </p>
               ))}
@@ -78,17 +78,17 @@ export default function About({ lang, dict }: Props) {
               return (
                 <div
                   key={value.title}
-                  className="flex items-start gap-5 border border-brand-ink/15 bg-brand-void p-6 transition-all duration-500 ease-smooth hover:-translate-y-1  sm:gap-6"
+                  className="flex items-start gap-5 border border-brand-line bg-brand-surface p-6 transition-all duration-500 ease-smooth hover:-translate-y-1  sm:gap-6"
                 >
                   {/* Icon box */}
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-brand-deep ">
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Icon className="h-5 w-5 text-brand-ink" />
                   </div>
 
                   {/* Text */}
                   <div className="min-w-0">
                     <h3 className="mb-1.5 text-[15px] font-bold text-brand-ink">{value.title}</h3>
-                    <p className="text-[13px] leading-relaxed text-brand-muted">
+                    <p className="text-[13px] leading-relaxed text-brand-slate">
                       {value.description}
                     </p>
                   </div>

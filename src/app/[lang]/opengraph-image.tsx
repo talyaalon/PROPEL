@@ -38,7 +38,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: '#090316',
+        backgroundColor: '#F4F5F7',
         padding: '80px',
       }}
     >
@@ -49,18 +49,18 @@ export default async function Image({ params }: { params: Promise<{ lang: string
             width: 72,
             height: 72,
             borderRadius: 16,
-            backgroundColor: '#C8FF3D',
+            backgroundColor: '#8E1B1B',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#0B1200',
+            color: '#FFFFFF',
             fontSize: 44,
             fontWeight: 900,
           }}
         >
           P
         </div>
-        <div style={{ fontSize: 40, fontWeight: 800, color: '#FFF8EF', letterSpacing: -1 }}>
+        <div style={{ fontSize: 40, fontWeight: 800, color: '#14161A', letterSpacing: -1 }}>
           PROPEL
         </div>
       </div>
@@ -71,7 +71,7 @@ export default async function Image({ params }: { params: Promise<{ lang: string
           style={{
             fontSize: 82,
             fontWeight: 800,
-            color: '#FFF8EF',
+            color: '#14161A',
             letterSpacing: -3,
             lineHeight: 1.05,
             maxWidth: 900,
@@ -79,11 +79,11 @@ export default async function Image({ params }: { params: Promise<{ lang: string
         >
           We speed up what slows you down
         </div>
-        <div style={{ fontSize: 34, color: '#AAA0BA' }}>{tagline}</div>
+        <div style={{ fontSize: 34, color: '#5B6270' }}>{tagline}</div>
       </div>
 
       {/* Rule */}
-      <div style={{ display: 'flex', height: 6, width: 160, backgroundColor: '#C8FF3D' }} />
+      <div style={{ display: 'flex', height: 6, width: 160, backgroundColor: '#8E1B1B' }} />
     </div>,
     size,
   )

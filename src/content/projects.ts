@@ -61,6 +61,11 @@ export type Project = {
   solution?: Bilingual
   /** Measurable outcomes. The most persuasive part of the page. */
   results?: ProjectResult[]
+  /**
+   * Full-page screenshots driving the scrolling screen previews. Both are
+   * ~5000px tall; see public/projects/README.md for how to capture them.
+   */
+  screens?: { desktop: string; mobile: string }
   thumbnail?: ProjectImage
   gallery?: ProjectImage[]
   /** Featured projects sort first on the homepage grid. */
@@ -74,6 +79,10 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: 'jcafe-kosher',
+    screens: {
+      desktop: '/projects/jcafe-kosher/desktop.webp',
+      mobile: '/projects/jcafe-kosher/mobile.webp',
+    },
     title: 'J-Cafe — The Kosher Place',
     category: 'ecommerce',
     summary: {
@@ -85,11 +94,15 @@ export const projects: Project[] = [
       { metric: '2', label: { he: 'שפות ממשק', en: 'interface languages' } },
     ],
     techStack: ['Next.js', 'Supabase', 'ODOO', 'Stripe', 'Vercel', 'Playwright'],
-    liveUrl: 'https://jcafekosher.com',
+    liveUrl: 'https://www.jcafekosher.com/en/s/bangkok',
     featured: true,
   },
   {
     slug: 'hagorer2',
+    screens: {
+      desktop: '/projects/hagorer2/desktop.webp',
+      mobile: '/projects/hagorer2/mobile.webp',
+    },
     title: 'הגורר 2',
     category: 'web',
     summary: {
@@ -106,6 +119,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'cnafim-lauf',
+    screens: {
+      desktop: '/projects/cnafim-lauf/desktop.webp',
+      mobile: '/projects/cnafim-lauf/mobile.webp',
+    },
     title: 'כנפיים לעוף',
     category: 'web',
     summary: {
@@ -122,22 +139,30 @@ export const projects: Project[] = [
   },
   {
     slug: 'bom-recipes',
+    screens: {
+      desktop: '/projects/bom-recipes/desktop.webp',
+      mobile: '/projects/bom-recipes/mobile.webp',
+    },
     title: 'BOM & Recipes',
     category: 'automation',
     summary: {
-      he: 'מערכת עצי מוצר ותמחור מתכונים, עם ייבוא נתונים ישירות מקבצי Excel קיימים.',
-      en: 'A bill-of-materials and recipe costing system that imports data straight from existing Excel files.',
+      he: 'ניהול עצי מוצר ומתכונים עם תמחור אוטומטי — מחיר עלות, ריטייל וסיטונאי — וייבוא ישיר מקבצי Excel קיימים.',
+      en: 'Bill-of-materials and recipe management with automatic costing — cost, retail and wholesale pricing — importing straight from existing Excel files.',
     },
     techStack: ['React', 'Vercel', 'Neon', 'Supabase', 'openpyxl'],
     liveUrl: 'https://bom-recipes.vercel.app',
   },
   {
     slug: 'air-manage',
+    screens: {
+      desktop: '/projects/air-manage/desktop.webp',
+      mobile: '/projects/air-manage/mobile.webp',
+    },
     title: 'Air Manage',
     category: 'automation',
     summary: {
-      he: 'פלטפורמה לניהול תחזוקה ונכסים, בשימוש יומיומי בארגון.',
-      en: 'A maintenance and asset management platform, in daily use inside an organisation.',
+      he: 'אפליקציית ניהול משימות לצוותי תחזוקה, אחזקה ושירותי ניקיון — הקצאה, מעקב וסגירת קריאות. בשימוש יומיומי בארגון.',
+      en: 'Task management for maintenance, upkeep and cleaning teams — assignment, tracking and closing work orders. In daily use inside an organisation.',
     },
     techStack: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
     liveUrl: 'https://air-manage-app.netlify.app',

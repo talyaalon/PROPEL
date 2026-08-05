@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, MessageCircle } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import Image from 'next/image'
 import Logo from '@/components/Logo'
+import ThemeToggle from '@/components/ThemeToggle'
 import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
 
 type NavDict = {
   services: string
+  blog: string
   process: string
   portfolio: string
   about: string
@@ -21,11 +24,15 @@ type NavDict = {
 type Props = {
   lang: Locale
   dict: NavDict
+  /** Accessible name for the light/dark switch. */
+  themeLabel: string
+  /** Resolved on the server; null when no artwork has been added. */
+  logoSrc: string | null
   /** The portfolio anchor is omitted when nothing is published, so the link never dangles. */
   hasProjects: boolean
 }
 
-export default function Navigation({ lang, dict, hasProjects }: Props) {
+export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSrc }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
@@ -40,6 +47,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
     { label: dict.process, href: `/${lang}#process` },
     ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}#portfolio` }] : []),
     { label: dict.about, href: `/${lang}#about` },
+    { label: dict.blog, href: `/${lang}/blog` },
   ]
 
   useEffect(() => {
@@ -75,7 +83,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
     >
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
-        className="relative h-[68px] overflow-hidden border-b border-brand-ink/15 bg-brand-void/95 backdrop-blur-xl sm:h-[76px]"
+        className="header-band relative h-[68px] overflow-hidden border-b border-brand-line backdrop-blur-xl sm:h-[76px]"
         aria-label="Primary navigation"
       >
         <div
@@ -86,7 +94,18 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
         <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL — home">
-            <Logo className="text-[26px] sm:text-[28px]" />
+            {logoSrc ? (
+              <Image
+                src={logoSrc}
+                alt="PROPEL"
+                width={1200}
+                height={377}
+                priority
+                className="h-9 w-auto sm:h-10"
+              />
+            ) : (
+              <Logo className="text-[26px] sm:text-[28px]" />
+            )}
           </Link>
 
           {/* Desktop nav links */}
@@ -95,7 +114,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
               <a
                 key={link.href}
                 href={link.href}
-                className="group relative text-[13px] font-medium tracking-wide text-brand-muted transition-colors duration-300 hover:text-brand-ink"
+                className="group relative text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
                 <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-brand-ink transition-transform duration-300 ease-smooth group-hover:scale-x-100" />
@@ -105,10 +124,11 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
 
           {/* Desktop actions */}
           <div className="hidden items-center gap-5 md:flex">
+            <ThemeToggle label={themeLabel} />
             <Link
               href={altHref}
               hrefLang={altLang}
-              className="text-[13px] font-medium tracking-wide text-brand-muted transition-colors duration-300 hover:text-brand-ink"
+              className="text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             >
               {dict.toggle_lang}
             </Link>
@@ -127,7 +147,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
           {/* Mobile hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="rounded-xl p-2 text-brand-ink transition-colors duration-200 hover:bg-brand-ink/10 md:hidden"
+            className="rounded-xl p-2 text-brand-ink transition-colors duration-200 hover:bg-brand-line md:hidden"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -142,7 +162,7 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
         <div
           id="mobile-menu"
           ref={drawerRef}
-          className={`animate-slide-down border-b border-brand-ink/15 bg-brand-void px-4 pb-6 pt-3 sm:px-6 md:hidden ${
+          className={`animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 sm:px-6 md:hidden ${
             isRtl ? 'text-right' : 'text-left'
           }`}
         >
@@ -152,18 +172,18 @@ export default function Navigation({ lang, dict, hasProjects }: Props) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="rounded-xl px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-ink/10"
+                className="rounded-xl px-4 py-3 text-[15px] font-medium text-brand-ink transition-colors duration-200 hover:bg-brand-line"
               >
                 {link.label}
               </a>
             ))}
 
-            <div className="mt-3 space-y-2 border-t border-brand-ink/15 pt-4">
+            <div className="mt-3 space-y-2 border-t border-brand-line pt-4">
               <Link
                 href={altHref}
                 hrefLang={altLang}
                 onClick={() => setIsOpen(false)}
-                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-muted transition-colors duration-200 hover:text-brand-ink"
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-slate transition-colors duration-200 hover:text-brand-ink"
               >
                 {dict.toggle_lang}
               </Link>

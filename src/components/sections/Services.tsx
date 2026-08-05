@@ -36,7 +36,7 @@ export default function Services({ dict }: Props) {
           <h2 id="services-heading" className="max-w-3xl">
             {dict.section_title}
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-[1.75] text-brand-muted sm:text-[17px]">
+          <p className="mt-5 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[17px]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -48,13 +48,13 @@ export default function Services({ dict }: Props) {
 
             return (
               <div key={service.id} className="card flex flex-col">
-                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center border border-brand-ink/15">
+                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center border border-brand-line">
                   <Icon className="h-5 w-5 text-brand-accent" />
                 </div>
 
                 <h3 className="mb-3">{service.title}</h3>
 
-                <p className="mb-6 text-[14px] leading-relaxed text-brand-muted">
+                <p className="mb-6 text-[14px] leading-relaxed text-brand-slate">
                   {service.description}
                 </p>
 
@@ -63,7 +63,7 @@ export default function Services({ dict }: Props) {
                   {service.outcomes.map((outcome) => (
                     <li
                       key={outcome}
-                      className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-lead"
+                      className="flex items-start gap-2.5 text-[13px] leading-snug text-brand-ink"
                     >
                       <Check
                         className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-brand-accent"
@@ -76,7 +76,7 @@ export default function Services({ dict }: Props) {
 
                 {/* Tech stack — demoted to a footnote, where it belongs */}
                 <div className="mb-6">
-                  <p className="mb-2 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-muted">
+                  <p className="mb-2 font-display text-[10px] font-semibold uppercase tracking-[.18em] text-brand-slate">
                     {dict.stack_label}
                   </p>
                   <div className="flex flex-wrap gap-1.5">

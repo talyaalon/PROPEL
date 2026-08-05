@@ -44,9 +44,9 @@ export default function ScrollProgress() {
         className="h-full w-full origin-left ltr:origin-left rtl:origin-right"
         style={{
           transform: `scaleX(${progress})`,
-          // Single-hue, matching the brand accent. The token lives in
-          // tailwind.config.ts; these are the resolved values.
-          background: 'linear-gradient(90deg, #C8FF3D, #A6E01F)',
+          // Reads the theme accent so the bar follows light/dark. The token lives in
+          // globals.css.
+          background: 'var(--accent)',
         }}
       />
     </div>
