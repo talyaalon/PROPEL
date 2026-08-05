@@ -1,12 +1,30 @@
 'use client'
 
-import { useActionState, useEffect, useRef } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, MessageCircle } from 'lucide-react'
-import { submitContact, type ContactState } from '@/actions/contact'
+import { normalise, validate, type ContactField, type ContactValues } from '@/lib/contactValidation'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
+
+/**
+ * The contact form, submitting to Netlify Forms.
+ *
+ * It used to be a React Server Action calling Resend. Netlify captures
+ * submissions itself and emails them on, which removes the third-party account,
+ * the API key and the whole class of "the key is missing so the enquiry went to
+ * a log file" failure - and it keeps every submission in the Netlify dashboard,
+ * so a notification email that bounces is not a lost lead.
+ *
+ * The cost is that Netlify's form detection runs over static files at deploy
+ * time and cannot see anything React renders. So the browser posts to
+ * `public/__forms.html`, which exists purely to be detected, and the field
+ * names there have to match the ones below exactly.
+ *
+ * Validation therefore runs here rather than on a server. A bot posting
+ * directly at the endpoint bypasses it; Netlify's spam filter and the honeypot
+ * are what handle that, not this component.
+ */
 
 export type ContactDict = {
   name_label: string
@@ -27,7 +45,6 @@ export type ContactDict = {
   required_error: string
   email_error: string
   contact_error: string
-  rate_error: string
   privacy_note: string
   privacy_link: string
   or_whatsapp: string
@@ -39,17 +56,22 @@ type Props = {
   dict: ContactDict
 }
 
-const initialState: ContactState = { status: 'idle' }
+type Status =
+  | { kind: 'idle' }
+  | { kind: 'sending' }
+  | { kind: 'success' }
+  | { kind: 'error'; reason: 'required' | 'email' | 'contact' | 'send'; field?: ContactField }
 
 export default function ContactForm({ lang, dict }: Props) {
-  const [state, formAction] = useActionState(submitContact, initialState)
+  const [state, setState] = useState<Status>({ kind: 'idle' })
+  // Held in state rather than read back off the DOM, so a failed submit
+  // re-renders with everything the visitor typed still in place.
+  const [values, setValues] = useState<Partial<ContactValues>>({})
   const errorRef = useRef<HTMLParagraphElement>(null)
   const successRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  // Everything the visitor typed, echoed back by the action. Without this a
-  // single validation error emptied the entire form.
-  const values = state.status === 'error' ? state.values : undefined
-  const invalidField = state.status === 'error' ? state.field : undefined
+  const invalidField = state.kind === 'error' ? state.field : undefined
 
   /*
    * Both outcomes replace or precede content without moving focus, so neither
@@ -57,11 +79,64 @@ export default function ContactForm({ lang, dict }: Props) {
    * is what makes the result perceivable rather than merely visible.
    */
   useEffect(() => {
-    if (state.status === 'error') errorRef.current?.focus()
-    if (state.status === 'success') successRef.current?.focus()
+    if (state.kind === 'error') errorRef.current?.focus()
+    if (state.kind === 'success') successRef.current?.focus()
   }, [state])
 
-  if (state.status === 'success') {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const data = new FormData(form)
+
+    // A real person never fills a field they cannot see. Silently succeed, so
+    // the bot gets no signal that it was caught.
+    if (data.get('company_website')) {
+      setState({ kind: 'success' })
+      return
+    }
+
+    const raw = Object.fromEntries([...data.entries()].map(([k, v]) => [k, String(v)]))
+    const clean = normalise(raw)
+    setValues(clean)
+
+    const problem = validate(clean)
+    if (problem) {
+      setState({ kind: 'error', reason: problem.reason, field: problem.field })
+      return
+    }
+
+    setState({ kind: 'sending' })
+    try {
+      const body = new URLSearchParams({
+        'form-name': 'contact',
+        ...clean,
+        // Tells the notification which side of the site the enquiry came from.
+        locale: lang,
+      })
+
+      /*
+       * This always fails with 405 under `next start` locally, and that is not
+       * a bug to chase: nothing is listening for a POST to a static file. On
+       * Netlify the edge intercepts the request before it reaches the file,
+       * stores the submission and sends the notification. The only place to
+       * verify the success path is a real deploy.
+       */
+      const response = await fetch('/__forms.html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      })
+
+      if (!response.ok) throw new Error(`Netlify Forms returned ${response.status}`)
+      setState({ kind: 'success' })
+      form.reset()
+    } catch (error) {
+      console.error('[PROPEL contact] submission failed:', error)
+      setState({ kind: 'error', reason: 'send' })
+    }
+  }
+
+  if (state.kind === 'success') {
     return (
       <div
         ref={successRef}
@@ -90,18 +165,26 @@ export default function ContactForm({ lang, dict }: Props) {
   }
 
   const errorMessage =
-    state.status === 'error'
+    state.kind === 'error'
       ? {
           required: dict.required_error,
           email: dict.email_error,
           contact: dict.contact_error,
           send: dict.error,
-          rate: dict.rate_error,
         }[state.reason]
       : null
 
   return (
-    <form action={formAction} className="card p-6 sm:p-8" noValidate>
+    <form
+      ref={formRef}
+      name="contact"
+      method="POST"
+      data-netlify="true"
+      onSubmit={onSubmit}
+      className="card p-6 sm:p-8"
+      noValidate
+    >
+      <input type="hidden" name="form-name" value="contact" />
       {errorMessage && (
         <p
           ref={errorRef}
@@ -201,7 +284,7 @@ export default function ContactForm({ lang, dict }: Props) {
         </div>
       </div>
 
-      <SubmitButton dict={dict} />
+      <SubmitButton dict={dict} pending={state.kind === 'sending'} />
 
       <p className="mt-4 text-[0.75rem] leading-relaxed text-brand-slate">
         {dict.privacy_note}{' '}
@@ -219,9 +302,7 @@ export default function ContactForm({ lang, dict }: Props) {
 
 // ── Pieces ────────────────────────────────────────────────────────────────────
 
-function SubmitButton({ dict }: { dict: ContactDict }) {
-  const { pending } = useFormStatus()
-
+function SubmitButton({ dict, pending }: { dict: ContactDict; pending: boolean }) {
   return (
     <button
       type="submit"

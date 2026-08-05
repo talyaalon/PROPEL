@@ -55,9 +55,6 @@ export const siteConfig = {
   /** Public contact address, shown in the footer. */
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
 
-  /** Where the contact form delivers. Server-side only. */
-  inboxEmail: process.env.CONTACT_INBOX_EMAIL ?? '',
-
   /** Registered business name + number, shown in the footer for B2B credibility. */
   legalName: process.env.NEXT_PUBLIC_LEGAL_NAME ?? '',
   businessId: process.env.NEXT_PUBLIC_BUSINESS_ID ?? '',
@@ -117,20 +114,6 @@ export function assertProductionConfig(): void {
     problems.push(
       'NEXT_PUBLIC_SITE_URL is still the placeholder - canonical URLs, hreflang and OG tags point at a domain you do not own.',
     )
-  }
-
-  /*
-   * Without both of these the contact action falls back to console.warn: the
-   * visitor sees the success panel and the enquiry is never delivered. A silent
-   * lead leak is worse than a failed build, so it is checked here too.
-   */
-  if (!process.env.RESEND_API_KEY) {
-    problems.push(
-      'RESEND_API_KEY is not set - contact form submissions are written to the server log instead of being sent.',
-    )
-  }
-  if (!siteConfig.inboxEmail) {
-    problems.push('CONTACT_INBOX_EMAIL is not set - the contact form has nowhere to deliver.')
   }
 
   /*
