@@ -37,6 +37,29 @@ expect to exist. `file.tsx:41` and the line itself, or a measured number and
 the command that produced it. If you could not verify it, either drop it or
 label it `UNVERIFIED` and say precisely what would settle it.
 
+**A class in the source is not a class in the build.** Tailwind drops a utility
+it cannot generate, with no error and no warning. The colour tokens here are
+bare `var(--x)` with no `<alpha-value>` placeholder, so *every* opacity
+modifier on them compiles to nothing: `border-brand-accent/40` and
+`placeholder:text-brand-slate/60` both shipped, both did nothing, and both
+elements fell through to a hardcoded preflight grey that looks deliberate and
+does not flip with the theme. One measured 12.2:1 where every sibling measured
+1.26:1; the other put placeholder text at 2.33:1.
+
+Before reporting what a class does - or concluding an element is styled as
+written - check it exists: `npm run audit -- css <the-class>`.
+
+**Check whether a fix became the defect.** The empty grid cell in the portfolio
+was a 420px hole; the card added to fill it stretched to 662px around 178px of
+content and became a 483px hole. When reviewing a recent change, measure the
+thing it claims to have fixed rather than accepting the commit message.
+
+**Say when the working tree differs from the build.** Other agents and the main
+session edit files while you audit. If a file you are reporting on has
+uncommitted changes, `git diff` it and say whether they change your finding -
+a fix already in the tree but not in the build is not a finding, and a fix that
+makes something worse is the most valuable thing you can report.
+
 **Do not re-report what is already fixed.** Before you begin:
 
 ```
@@ -47,14 +70,47 @@ git log main..HEAD          # the bodies say exactly what changed and why
 The commit bodies are written to be read. A finding that a commit body already
 describes as fixed is noise.
 
+**Use the shared harness.** `npm run audit` measures gaps, contrast, tab order
+and heading outlines, with the traps below already handled:
+
+```
+npm run audit -- gaps            dead space between sections, page length
+npm run audit -- contrast        every text role, both themes
+npm run audit -- tab             the real tab order, with visibility flags
+npm run audit -- headings        outline per page, flagging skipped levels
+npm run audit -- css <class>     did this Tailwind utility actually compile?
+```
+
+Options: `--origin`, `--locale he|en`, `--theme light|dark`.
+
+Read `scripts/audit.mjs` before writing your own version of any of this. Three
+reviewers independently rewrote the gap measurement and got three different
+numbers for the same boundary; that is why it lives in one place now. Extend it
+if it is missing something - a permanent improvement beats a temp script.
+
 **Measure on the built site, not the dev server.** Dev serves unminified CSS
 and no static optimisation, so spacing and performance numbers taken there are
 not the numbers users get.
 
 ```
 npm run build
-npm run start -- -p 4321
+npm run start -- -p 4455
 ```
+
+**Confirm the CSS actually loaded before trusting a single number.** A stale
+server left holding the port serves HTML whose asset hashes no longer resolve,
+and the page renders unstyled. It does not error - it produces numbers that
+look excellent and mean the opposite: gaps collapse to ~16px, the page shortens
+by a third, and every contrast pair reads exactly 21:1 because it is black on
+white. Two runs were wasted on this. Check first:
+
+```
+CSS=$(curl -s $ORIGIN/he | grep -o '_next/static/css/[a-z0-9]*\.css' | head -1)
+curl -s -o /dev/null -w '%{http_code}\n' "$ORIGIN/$CSS"    # must be 200
+```
+
+If contrast comes back 21:1 in *both* themes, stop - that is impossible, and
+you are measuring an unstyled page.
 
 Then drive it with `playwright-core`, which is already installed, against the
 Chromium already on the machine - do not download a browser:

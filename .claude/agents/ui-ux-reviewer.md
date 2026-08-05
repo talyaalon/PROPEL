@@ -18,21 +18,20 @@ their thing, and do they know what to do next?
 
 ## Where to look
 
-**Rhythm and density.** Measure real gaps, not padding values. Section boxes
-touch, so their rects tell you nothing - measure from the last painted pixel of
-one section's content to the first painted pixel of the next:
+**Rhythm and density.** `npm run audit -- gaps` measures the painted edges at
+375, 768 and 1440 and reports page length in screens. Use it rather than
+writing your own - it already handles the two traps that produced wrong numbers
+before they were understood:
 
-```js
-const last = [...prev.querySelectorAll('*')].reduce((m, el) => Math.max(m, el.getBoundingClientRect().bottom), -Infinity)
-const first = [...cur.querySelectorAll('*')].reduce((m, el) => Math.min(m, el.getBoundingClientRect().top), Infinity)
-```
+  - A descendant of an `overflow: hidden` ancestor still reports its full rect
+    even though the browser never paints past the clip. The closed FAQ answers
+    extend ~130px below their container, which made one boundary measure as a
+    large negative that looked like a layout catastrophe and was nothing.
+  - `position: fixed` elements report viewport coordinates unrelated to their
+    place in the flow, producing negatives in the thousands.
 
-Exclude elements that are `position: fixed` or parked off-screen; they produce
-huge negative gaps that are measurement artifacts, not layout.
-
-Report page length in screens (`scrollHeight / viewport.height`) at 375, 768
-and 1440. A number in screens is something the owner can feel; a number in
-pixels is not.
+Report page length in screens, not pixels. A number in screens is something the
+owner can feel.
 
 **Holes that are not padding.** A grid whose item count does not divide by its
 column count. `items-center` on a two-column grid with unequal columns, which

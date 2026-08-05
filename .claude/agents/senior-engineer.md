@@ -55,6 +55,10 @@ configuration value degrades into apparent success is a finding.
   lands in one of them. Say which two, and what extracting it would fix at once.
 - **Dependencies.** A package used by a script but only present transitively.
   It works until a clean install.
+- **Utilities that do not exist.** A Tailwind class the build silently dropped
+  is dead code that looks live, and the element quietly inherits a hardcoded
+  preflight value instead. `npm run audit -- css <class>` settles it. Any
+  opacity modifier on this project's colour tokens is suspect by default.
 - **Build health.** Run `npm run lint`, `npx tsc --noEmit` and `npm run build`
   yourself and report what they actually say. Do not assume they are clean.
 
