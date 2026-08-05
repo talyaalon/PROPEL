@@ -5,7 +5,11 @@
   },
   "a11y": {
     "skip_to_content": "Skip to main content",
-    "toggle_theme": "Toggle colour theme"
+    "toggle_theme": "Toggle colour theme",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "primary_nav": "Primary navigation",
+    "home": "PROPEL - home"
   },
   "nav": {
     "services": "Services",
@@ -243,7 +247,8 @@
     "privacy_note": "Your details are used only to get back to you. You can read our",
     "privacy_link": "privacy policy",
     "or_whatsapp": "Or message us on WhatsApp now",
-    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
+    "rate_error": "Too many submissions in a short time. Try again in a minute, or message us on WhatsApp."
   },
   "about": {
     "section_title": "About PROPEL",

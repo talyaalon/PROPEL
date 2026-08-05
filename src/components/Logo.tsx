@@ -14,17 +14,20 @@
  */
 
 type Props = {
-  /** `dark` renders on the dark footer panel. */
-  tone?: 'light' | 'dark'
   /** Serif line beneath the wordmark, as on the printed lockup. */
   tagline?: string
   className?: string
 }
 
-export default function Logo({ tone = 'light', tagline, className = '' }: Props) {
-  // Charcoal on paper, paper on charcoal. The mark is never the accent — that
-  // is how the printed logo reads, and it keeps the red for calls to action.
-  const colour = tone === 'dark' ? 'text-brand-surface' : 'text-brand-ink'
+/*
+ * There used to be a `tone` prop here that rendered the wordmark in `--surface`
+ * — the page background colour. Its only use was the footer, where it produced
+ * 1.04:1 in light and 1.11:1 in dark: an invisible logo in both themes. It was
+ * a leftover from the earlier dark-footer design. `--ink` is correct on every
+ * surface the mark actually appears on.
+ */
+export default function Logo({ tagline, className = '' }: Props) {
+  const colour = 'text-brand-ink'
 
   return (
     <span className={`inline-flex flex-col ${tagline ? 'gap-1.5' : ''} ${className}`}>

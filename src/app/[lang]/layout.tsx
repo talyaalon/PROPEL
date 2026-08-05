@@ -169,7 +169,7 @@ export default async function RootLayout({ children, params }: Props) {
           lang={lang}
           dict={dict.nav}
           hasProjects={hasProjects}
-          themeLabel={dict.a11y.toggle_theme}
+          a11y={dict.a11y}
           logoSrc={getLogoSrc(lang)}
         />
         <main id="main">{children}</main>

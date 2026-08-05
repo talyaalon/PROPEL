@@ -93,6 +93,20 @@ export function assertProductionConfig(): void {
     )
   }
 
+  /*
+   * Without both of these the contact action falls back to console.warn: the
+   * visitor sees the success panel and the enquiry is never delivered. A silent
+   * lead leak is worse than a failed build, so it is checked here too.
+   */
+  if (!process.env.RESEND_API_KEY) {
+    problems.push(
+      'RESEND_API_KEY is not set - contact form submissions are written to the server log instead of being sent.',
+    )
+  }
+  if (!siteConfig.inboxEmail) {
+    problems.push('CONTACT_INBOX_EMAIL is not set - the contact form has nowhere to deliver.')
+  }
+
   if (problems.length === 0) return
 
   const message = `[PROPEL config]\n  - ${problems.join('\n  - ')}`

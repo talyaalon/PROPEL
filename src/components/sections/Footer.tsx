@@ -52,7 +52,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
         <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Logo tone="dark" tagline={dict.tagline} className="text-[26px]" />
+            <Logo tagline={dict.tagline} className="text-[26px]" />
             {(siteConfig.legalName || siteConfig.businessId) && (
               <p className="mt-4 text-[12px] leading-relaxed text-brand-slate">
                 {siteConfig.legalName}

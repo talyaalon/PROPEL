@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 import Link from 'next/link'
 import { CheckCircle2, MessageCircle } from 'lucide-react'
@@ -27,6 +27,7 @@ export type ContactDict = {
   required_error: string
   email_error: string
   contact_error: string
+  rate_error: string
   privacy_note: string
   privacy_link: string
   or_whatsapp: string
@@ -42,10 +43,33 @@ const initialState: ContactState = { status: 'idle' }
 
 export default function ContactForm({ lang, dict }: Props) {
   const [state, formAction] = useActionState(submitContact, initialState)
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  const successRef = useRef<HTMLDivElement>(null)
+
+  // Everything the visitor typed, echoed back by the action. Without this a
+  // single validation error emptied the entire form.
+  const values = state.status === 'error' ? state.values : undefined
+  const invalidField = state.status === 'error' ? state.field : undefined
+
+  /*
+   * Both outcomes replace or precede content without moving focus, so neither
+   * is announced and the reading position is lost. Sending focus to the message
+   * is what makes the result perceivable rather than merely visible.
+   */
+  useEffect(() => {
+    if (state.status === 'error') errorRef.current?.focus()
+    if (state.status === 'success') successRef.current?.focus()
+  }, [state])
 
   if (state.status === 'success') {
     return (
-      <div className="card p-8 text-center sm:p-12">
+      <div
+        ref={successRef}
+        role="status"
+        aria-live="polite"
+        tabIndex={-1}
+        className="card p-8 text-center outline-none sm:p-12"
+      >
         <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
         <h3 className="mt-5 text-[20px] font-bold text-brand-ink">{dict.success_title}</h3>
         <p className="mx-auto mt-3 max-w-sm text-[15px] leading-[1.75] text-brand-slate">
@@ -72,6 +96,7 @@ export default function ContactForm({ lang, dict }: Props) {
           email: dict.email_error,
           contact: dict.contact_error,
           send: dict.error,
+          rate: dict.rate_error,
         }[state.reason]
       : null
 
@@ -79,8 +104,11 @@ export default function ContactForm({ lang, dict }: Props) {
     <form action={formAction} className="card p-6 sm:p-8" noValidate>
       {errorMessage && (
         <p
+          ref={errorRef}
+          id="contact-error"
           role="alert"
-          className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] text-red-800"
+          tabIndex={-1}
+          className="mb-6 border border-brand-accent bg-brand-accent/10 px-4 py-3 text-[14px] text-brand-accent outline-none"
         >
           {errorMessage}
         </p>
@@ -99,13 +127,23 @@ export default function ContactForm({ lang, dict }: Props) {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field id="name" name="name" label={dict.name_label} required autoComplete="name" />
+        <Field
+          id="name"
+          name="name"
+          label={dict.name_label}
+          required
+          autoComplete="name"
+          defaultValue={values?.name}
+          invalid={invalidField === 'name'}
+        />
         <Field
           id="business"
           name="business"
           label={dict.business_label}
           hint={dict.optional}
           autoComplete="organization"
+          defaultValue={values?.business}
+          invalid={invalidField === 'business'}
         />
         <Field
           id="phone"
@@ -114,6 +152,8 @@ export default function ContactForm({ lang, dict }: Props) {
           label={dict.phone_label}
           autoComplete="tel"
           dir="ltr"
+          defaultValue={values?.phone}
+          invalid={invalidField === 'phone'}
         />
         <Field
           id="email"
@@ -122,6 +162,8 @@ export default function ContactForm({ lang, dict }: Props) {
           label={dict.email_label}
           autoComplete="email"
           dir="ltr"
+          defaultValue={values?.email}
+          invalid={invalidField === 'email'}
         />
 
         <div className="sm:col-span-2">
@@ -129,7 +171,7 @@ export default function ContactForm({ lang, dict }: Props) {
           <select
             id="budget"
             name="budget"
-            defaultValue=""
+            defaultValue={values?.budget ?? ''}
             className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
@@ -150,6 +192,9 @@ export default function ContactForm({ lang, dict }: Props) {
             name="message"
             rows={5}
             required
+            defaultValue={values?.message}
+            aria-invalid={invalidField === 'message' || undefined}
+            aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
             className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
           />
@@ -223,6 +268,8 @@ function Field({
   hint,
   autoComplete,
   dir,
+  defaultValue,
+  invalid,
 }: {
   id: string
   name: string
@@ -232,6 +279,9 @@ function Field({
   hint?: string
   autoComplete?: string
   dir?: 'ltr' | 'rtl'
+  defaultValue?: string
+  /** Marks this control as the one the error message refers to. */
+  invalid?: boolean
 }) {
   return (
     <div>
@@ -243,6 +293,9 @@ function Field({
         required={required}
         autoComplete={autoComplete}
         dir={dir}
+        defaultValue={defaultValue}
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? 'contact-error' : undefined}
         className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[15px] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate/60 focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>

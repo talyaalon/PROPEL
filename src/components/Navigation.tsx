@@ -21,22 +21,29 @@ type NavDict = {
   whatsapp_message: string
 }
 
+type A11yDict = {
+  open_menu: string
+  close_menu: string
+  primary_nav: string
+  home: string
+  toggle_theme: string
+}
+
 type Props = {
   lang: Locale
   dict: NavDict
-  /** Accessible name for the light/dark switch. */
-  themeLabel: string
+  a11y: A11yDict
   /** Resolved on the server; null when no artwork has been added. */
   logoSrc: string | null
   /** The portfolio anchor is omitted when nothing is published, so the link never dangles. */
   hasProjects: boolean
 }
 
-export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSrc }: Props) {
+export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: Props) {
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const drawerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
 
   const altLang = getAltLocale(lang)
   const altHref = swapLocaleInPath(pathname, altLang)
@@ -50,13 +57,22 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSr
     { label: dict.blog, href: `/${lang}/blog` },
   ]
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  /*
+   * There was a `scrolled` state here, updated by a scroll listener on every
+   * page of the site, and consumed as `` — both branches
+   * empty. A listener and a re-render for nothing.
+   */
 
-  // Close the drawer on Escape and lock background scroll while it is open.
+  /*
+   * Drawer side effects: Escape to close, background scroll lock, focus moved
+   * in on open and returned to the trigger on close.
+   *
+   * The resize guard is not cosmetic. The drawer and its close button are both
+   * `md:hidden`; opening the drawer on a phone and then rotating to landscape
+   * used to leave `isOpen` true with no way to reach the toggle, so this
+   * cleanup never ran and `body { overflow: hidden }` persisted — the page
+   * stayed unscrollable until a reload.
+   */
   useEffect(() => {
     if (!isOpen) return
 
@@ -64,27 +80,37 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSr
       if (event.key === 'Escape') setIsOpen(false)
     }
 
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsOpen(false)
+    }
+
+    // Captured now rather than read in the cleanup: the toggle is the same node
+    // for the life of the component, and reading `.current` later trips the
+    // exhaustive-deps rule for a hazard that does not apply here.
+    const trigger = triggerRef.current
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     document.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('resize', handleResize, { passive: true })
 
-    // Move focus into the drawer so keyboard users are not left behind the trigger
     drawerRef.current?.querySelector<HTMLElement>('a')?.focus()
 
     return () => {
       document.body.style.overflow = previousOverflow
       document.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('resize', handleResize)
+      // Without this the closing drawer unmounts the focused node and focus
+      // falls to <body>, restarting the keyboard user at the top of the page.
+      trigger?.focus()
     }
   }, [isOpen])
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-500 ease-smooth ${scrolled ? '' : ''}`}
-    >
+    <header className={`sticky top-0 z-50 transition-all duration-500 ease-smooth `}>
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
         className="header-band relative h-[68px] overflow-hidden border-b border-brand-line backdrop-blur-xl sm:h-[76px]"
-        aria-label="Primary navigation"
+        aria-label={a11y.primary_nav}
       >
         <div
           className="bg-grain pointer-events-none absolute inset-0 select-none opacity-[0.028]"
@@ -93,7 +119,7 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSr
 
         <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
-          <Link href={`/${lang}`} className="flex-shrink-0" aria-label="PROPEL - home">
+          <Link href={`/${lang}`} className="flex-shrink-0" aria-label={a11y.home}>
             {logoSrc ? (
               <Image
                 src={logoSrc}
@@ -124,7 +150,7 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSr
 
           {/* Desktop actions */}
           <div className="hidden items-center gap-5 md:flex">
-            <ThemeToggle label={themeLabel} />
+            <ThemeToggle label={a11y.toggle_theme} />
             <Link
               href={altHref}
               hrefLang={altLang}
@@ -146,9 +172,10 @@ export default function Navigation({ lang, dict, hasProjects, themeLabel, logoSr
 
           {/* Mobile hamburger */}
           <button
+            ref={triggerRef}
             onClick={() => setIsOpen(!isOpen)}
             className="rounded-xl p-2 text-brand-ink transition-colors duration-200 hover:bg-brand-line md:hidden"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isOpen ? a11y.close_menu : a11y.open_menu}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
           >

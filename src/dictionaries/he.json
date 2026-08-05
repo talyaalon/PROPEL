@@ -5,7 +5,11 @@
   },
   "a11y": {
     "skip_to_content": "דילוג לתוכן הראשי",
-    "toggle_theme": "החלפת מצב תצוגה"
+    "toggle_theme": "החלפת מצב תצוגה",
+    "open_menu": "פתיחת תפריט",
+    "close_menu": "סגירת תפריט",
+    "primary_nav": "ניווט ראשי",
+    "home": "PROPEL - לדף הבית"
   },
   "nav": {
     "services": "שירותים",
@@ -243,7 +247,8 @@
     "privacy_note": "הפרטים משמשים רק כדי לחזור אליכם. אפשר לקרוא את",
     "privacy_link": "מדיניות הפרטיות",
     "or_whatsapp": "או שוחחו איתנו עכשיו בוואטסאפ",
-    "whatsapp_message": "היי PROPEL, אני רוצה ליצור קשר."
+    "whatsapp_message": "היי PROPEL, אני רוצה ליצור קשר.",
+    "rate_error": "נשלחו יותר מדי פניות בזמן קצר. נסו שוב בעוד דקה, או כתבו לנו בוואטסאפ."
   },
   "about": {
     "section_title": "אודות PROPEL",

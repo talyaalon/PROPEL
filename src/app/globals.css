@@ -247,7 +247,10 @@ html {
      paint it from `center top`, so the texture lines up across the border
      between them. */
   .header-band {
-    background-color: #e9e7e1;
+    /* Reads the token, which flips with the theme. This was hardcoded to the
+       light paper colour, so in dark mode the nav, the drawer and the whole
+       hero rendered cream-on-cream — the h1 measured 1.08:1. */
+    background-color: var(--header);
     background-image: var(--paper);
     background-repeat: no-repeat;
     background-position: center top;
