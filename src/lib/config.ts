@@ -107,6 +107,35 @@ export function assertProductionConfig(): void {
     problems.push('CONTACT_INBOX_EMAIL is not set - the contact form has nowhere to deliver.')
   }
 
+  /*
+   * A visitor who does not use WhatsApp currently has one route to this
+   * business, and it is the form at 91% scroll depth. Sixteen of the
+   * seventeen calls to action on the homepage are the same wa.me link.
+   */
+  if (!siteConfig.phoneDisplay) {
+    problems.push(
+      'NEXT_PUBLIC_PHONE_DISPLAY is not set - there is no phone number anywhere on the site, and the business schema has no telephone.',
+    )
+  }
+  if (!siteConfig.email) {
+    problems.push(
+      'NEXT_PUBLIC_CONTACT_EMAIL is not set - there is no email address anywhere on the site, and the business schema has no email.',
+    )
+  }
+
+  /*
+   * The accessibility statement renders its coordinator block only when one of
+   * these exists, so with all of them empty the site publishes a statement
+   * claiming AA conformance and naming nobody. The Israeli regulations require
+   * a named person and a way to reach them; a statement without one is worse
+   * than no statement.
+   */
+  if (!siteConfig.a11yContactName && !siteConfig.phoneDisplay && !siteConfig.email) {
+    problems.push(
+      'No accessibility coordinator is reachable - set NEXT_PUBLIC_A11Y_CONTACT_NAME (and a phone or email). The statement publishes without one.',
+    )
+  }
+
   if (problems.length === 0) return
 
   const message = `[PROPEL config]\n  - ${problems.join('\n  - ')}`

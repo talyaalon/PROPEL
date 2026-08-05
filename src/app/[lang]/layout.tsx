@@ -156,6 +156,17 @@ export default async function RootLayout({ children, params }: Props) {
       className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable} ${frankRuhl.variable}`}
     >
       <head>
+        {/*
+          The paper texture is the LCP element on every page - it fills the
+          header band, so it is the largest thing painted above the fold. It was
+          being discovered by the CSS parser rather than the preload scanner,
+          which put it 362ms behind two logo preloads that are not the LCP: on
+          throttled 4G it started at 567ms and finished at 1,925ms, for a
+          measured LCP of 2.84s at 1440. Declaring it here moves the request to
+          the front of the queue.
+        */}
+        <link rel="preload" as="image" href="/paper.webp" fetchPriority="high" />
+
         {/* Applies the stored theme before the browser paints. A client
             component cannot run this early, so without it a returning dark-mode
             visitor sees a flash of the light page on every navigation. */}

@@ -6,6 +6,7 @@ import { ExternalLink, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
+import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
@@ -32,27 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
 
-  const description = project.summary[lang]
-  const url = `${siteConfig.url}/${lang}/portfolio/${project.slug}`
-
-  return {
+  return pageMetadata({
+    lang,
+    path: `portfolio/${project.slug}`,
     title: project.title,
-    description,
-    alternates: {
-      canonical: url,
-      languages: {
-        he: `${siteConfig.url}/he/portfolio/${project.slug}`,
-        en: `${siteConfig.url}/en/portfolio/${project.slug}`,
-        'x-default': `${siteConfig.url}/he/portfolio/${project.slug}`,
-      },
-    },
-    openGraph: {
-      type: 'article',
-      title: `${project.title} | PROPEL`,
-      description,
-      url,
-    },
-  }
+    description: project.summary[lang],
+    type: 'article',
+  })
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────

@@ -203,6 +203,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
             <Link
               href={altHref}
               hrefLang={altLang}
+              prefetch={false}
               lang={altLang}
               aria-label={a11y.switch_language}
               className="text-[13px] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
@@ -268,6 +269,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               <Link
                 href={altHref}
                 hrefLang={altLang}
+                prefetch={false}
                 lang={altLang}
                 aria-label={a11y.switch_language}
                 onClick={() => setIsOpen(false)}
