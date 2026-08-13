@@ -206,7 +206,10 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={dict.open}
+        // The label has to follow the state, or it announces "Open the
+        // accessibility menu, button, expanded" - which describes the
+        // opposite of what pressing it will do.
+        aria-label={open ? dict.close : dict.open}
         aria-expanded={open}
         // Only while the panel exists - `aria-controls` pointing at nothing is
         // worse than absent, and `aria-expanded` already carries the state.
@@ -275,7 +278,9 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
               onChange={(value) => update({ text: Number(value) })}
               options={TEXT_STEPS.map((step) => ({
                 value: String(step),
-                label: step === 100 ? 'A' : `${step}%`,
+                // Announced as its value, not as a letter. "A, radio button, 1 of 6"
+                // says nothing about what selecting it does.
+                label: `${step}%`,
               }))}
               // Three across, two rows, below the width where six 44px targets fit.
               className="grid grid-cols-3 gap-1 sm:grid-cols-6"

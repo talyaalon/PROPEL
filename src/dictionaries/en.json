@@ -171,7 +171,8 @@
     "index_title": "Sites and systems we built for businesses in Israel",
     "index_subtitle": "Five projects, each with the problem it was built to solve and what actually changed.",
     "index_meta_title": "Work - sites and systems we built",
-    "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel."
+    "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel.",
+    "stack_label": "Tech stack"
   },
   "process": {
     "section_title": "How it works - from brief to build to launch",
@@ -263,7 +264,13 @@
     "privacy_note": "Your details are used only to get back to you. You can read our",
     "privacy_link": "privacy policy",
     "or_whatsapp": "Or message us on WhatsApp now",
-    "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
+    "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
+    "next_title": "What happens after you send",
+    "next_steps": [
+      "We reply within one business day, on the channel you chose.",
+      "A short call - what is stuck, what already exists, what you want to happen.",
+      "A written proposal with scope, timeline and price. No obligation."
+    ]
   },
   "about": {
     "section_title": "Building websites for small businesses in Israel",

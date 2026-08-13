@@ -75,11 +75,24 @@ export default function ContactForm({ lang, dict }: Props) {
 
   /*
    * Both outcomes replace or precede content without moving focus, so neither
-   * is announced and the reading position is lost. Sending focus to the message
-   * is what makes the result perceivable rather than merely visible.
+   * is announced and the reading position is lost. Moving focus is what makes
+   * the result perceivable rather than merely visible.
+   *
+   * On an error, focus goes to the field that has to change - not to the
+   * message about it. The message is a `role="alert"`, so it is announced
+   * wherever focus is; landing on the banner meant hearing "please provide a
+   * name, a way to reach you and a short description" and then having to hunt
+   * for which of the three was actually wrong. The field is the answer to that
+   * question, and it is `aria-describedby` the banner, so the visitor gets
+   * both.
+   *
+   * The send failure has no field to blame, so it keeps the banner.
    */
   useEffect(() => {
-    if (state.kind === 'error') errorRef.current?.focus()
+    if (state.kind === 'error') {
+      const field = state.field && document.getElementById(state.field)
+      ;(field ?? errorRef.current)?.focus()
+    }
     if (state.kind === 'success') successRef.current?.focus()
   }, [state])
 
@@ -145,7 +158,7 @@ export default function ContactForm({ lang, dict }: Props) {
         tabIndex={-1}
         className="card p-8 text-center outline-none sm:p-12"
       >
-        <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
+        <CheckCircle2 className="mx-auto h-12 w-12 text-brand-success" aria-hidden="true" />
         <h3 className="mt-5 text-[1.25rem] font-bold text-brand-ink">{dict.success_title}</h3>
         <p className="mx-auto mt-3 max-w-sm text-[0.9375rem] leading-[1.75] text-brand-slate">
           {dict.success_body}
@@ -209,7 +222,7 @@ export default function ContactForm({ lang, dict }: Props) {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2 [&>*]:min-w-0">
         <Field
           id="name"
           name="name"

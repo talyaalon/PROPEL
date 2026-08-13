@@ -284,7 +284,13 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
           id="mobile-menu"
           ref={drawerRef}
           role="dialog"
-          aria-modal="true"
+          /*
+           * No `aria-modal`. The header is deliberately not inert - the
+           * close button is the hamburger and lives outside this element -
+           * so claiming modality would tell a screen-reader user that the
+           * one control that closes the drawer does not exist. The rest of
+           * the page is inert, which is what actually constrains focus.
+           */
           aria-label={a11y.primary_nav}
           className="animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 text-start sm:px-6 md:hidden"
         >

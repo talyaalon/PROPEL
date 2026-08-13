@@ -95,6 +95,8 @@ const config: Config = {
           /* Form controls only. `--line` is too faint to identify an input
              (1.4.11 wants 3:1) but correct everywhere else. */
           field: 'var(--field-border)',
+          success: 'var(--success)',
+          successSoft: 'var(--success-soft)',
           silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',

@@ -39,7 +39,13 @@ export default function Hero({ lang, dict }: Props) {
             to its left, and in English the two swap without a second rule.
           */}
           {/* ── Text column ───────────────────────────────────── */}
-          <div className="flex flex-col gap-6 lg:gap-8">
+          {/* `min-w-0`: a grid item defaults to `min-width: auto`, so the
+              column grows to its widest unbreakable word instead of
+              letting `overflow-wrap` break it. At 320px and 200% text the
+              English H1 pushed this column to 348px inside a 288px
+              container - 44px of horizontal scroll on the one page that
+              still had any. */}
+          <div className="flex min-w-0 flex-col gap-6 lg:gap-8">
             {/* H1 */}
             {/* No per-locale font class here. `font-dm-sans` and `font-assistant`
                 were left over from the previous type system — dm-sans no longer
@@ -50,7 +56,11 @@ export default function Hero({ lang, dict }: Props) {
               {dict.h1_pre}
               {dict.h1_pre ? ' ' : ''}
               {/* Animated underline on focus word */}
-              <span className="relative inline-block">
+              {/* `max-w-full`: an inline-block sizes to its content, so at 320px
+                  with 200% text this span held "Websites and automation" on one
+                  348px line inside a 288px column - the last 44px of horizontal
+                  scroll anywhere on the site. */}
+              <span className="relative inline-block max-w-full">
                 <span className="relative z-10">{dict.h1_focus}</span>
                 <span
                   className={`absolute bottom-1 start-0 h-[3px] w-full rounded-full bg-brand-line animate-underline-grow ${

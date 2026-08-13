@@ -41,6 +41,10 @@
      alpha measured 1.32:1 - the field fill is 1.04:1 against its card, so
      the border was carrying all of it and carrying none of it. */
   --field-border: #8a8d84;
+  /* WhatsApp green and the form success mark. Meaning, not decoration, so
+     it earns a token - and so it flips with the theme like everything else. */
+  --success: #1a7f45;
+  --success-soft: rgba(26, 127, 69, 0.12);
   --accent: #7a1c09;
   --accent-soft: rgba(122, 28, 9, 0.55);
   --on-accent: #f7f6f2;
@@ -67,6 +71,8 @@
   --line: rgba(241, 239, 234, 0.14);
   --line-strong: rgba(241, 239, 234, 0.3);
   --field-border: #6f736a;
+  --success: #4ac47e;
+  --success-soft: rgba(74, 196, 126, 0.16);
   /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
   --accent: #e0714d;
   --accent-soft: rgba(224, 113, 77, 0.55);
@@ -358,7 +364,14 @@ html {
      is near the viewport, because these images are ~5000px tall and eager
      loading them all would cost several megabytes on first paint. */
   .screens {
-    @apply flex flex-wrap items-center justify-center;
+    @apply flex min-w-0 flex-wrap items-center justify-center;
+  }
+
+  /* Flex items default to `min-width: auto` and these carry a background
+     image, so the frame refused to shrink below its own intrinsic width and
+     set a floor on the whole card at 320px with large text. */
+  .screen {
+    min-width: 0;
   }
 
   .screen {

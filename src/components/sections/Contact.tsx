@@ -9,6 +9,8 @@ type Props = {
   dict: ContactDict & {
     section_title: string
     section_subtitle: string
+    next_title: string
+    next_steps: string[]
   }
 }
 
@@ -34,8 +36,8 @@ export default function Contact({ lang, dict }: Props) {
                 data-analytics="whatsapp:contact-section"
                 className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
               >
-                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
-                  <MessageCircle className="h-5 w-5 text-green-600" aria-hidden="true" />
+                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-successSoft">
+                  <MessageCircle className="h-5 w-5 text-brand-success" aria-hidden="true" />
                 </span>
                 <span className="text-[0.875rem] font-medium text-brand-ink">
                   {dict.or_whatsapp}
@@ -69,6 +71,26 @@ export default function Contact({ lang, dict }: Props) {
                   </span>
                 </a>
               )}
+            </div>
+
+            <div className="mt-10 border-t border-brand-line pt-8">
+              <h3 className="text-[1rem]">{dict.next_title}</h3>
+              <ol className="mt-4 space-y-3">
+                {dict.next_steps.map((step, i) => (
+                  <li
+                    key={step}
+                    className="flex gap-3 text-[0.875rem] leading-relaxed text-brand-slate"
+                  >
+                    <span
+                      className="num flex-shrink-0 text-[0.875rem] leading-relaxed"
+                      aria-hidden="true"
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
 

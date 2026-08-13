@@ -120,8 +120,8 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               data-analytics="whatsapp:footer"
               className="flex items-center gap-4 border border-brand-line bg-brand-panel p-5 transition-all duration-500 ease-smooth hover:border-brand-line hover:bg-brand-line hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
             >
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/10">
-                <MessageCircle className="h-5 w-5 text-green-400" />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-successSoft">
+                <MessageCircle className="h-5 w-5 text-brand-success" />
               </div>
               <span className="text-[0.8125rem] font-medium text-brand-ink">
                 {dict.whatsapp_cta}

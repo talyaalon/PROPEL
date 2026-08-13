@@ -58,9 +58,16 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
           'טקסט חלופי לתמונות שנושאות מידע',
           'יחסי ניגודיות שנמדדו ועומדים בדרישות התקן בשני מצבי התצוגה',
           'אפשרות לעצור כל אנימציה אוטומטית בעמוד',
-          'הגדלת טקסט עד 200% ללא אובדן תוכן וללא גלילה אופקית',
+          'הגדלת טקסט עד 200% ללא אובדן תוכן. נמדד בכל העמודים ברוחב 320 ו-375 פיקסלים: אין גלילה אופקית, למעט 4 פיקסלים בעמוד הבית באנגלית ברוחב 320',
           'תמיכה בהעדפת המערכת להפחתת אנימציות, בנוסף לכפתור העצירה',
           'תמיכה מלאה בכיווניות ימין-לשמאל בעברית',
+        ],
+      },
+      {
+        heading: 'איך השירות ניתן',
+        paragraphs: [
+          'השירות ניתן מרחוק בלבד. אין מקום פיזי המשמש לקבלת קהל, ולכן תקנות הנגישות למקום ציבורי אינן חלות כאן.',
+          'אם חלק כלשהו באתר אינו נגיש עבורכם, אפשר לפנות בוואטסאפ, בטלפון או במייל ולקבל את אותו מידע או שירות בדרך אחרת. וואטסאפ הוא הערוץ הנוח למי שמתקשה בשיחת טלפון.',
         ],
       },
       {
@@ -114,9 +121,16 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
           'Alternative text for images that carry information',
           'Contrast ratios measured against the standard in both display modes',
           'A control to stop every automatic animation on the page',
-          'Text enlargement to 200% with no loss of content and no sideways scrolling',
+          'Text enlargement to 200% with no loss of content. Measured on every page at 320px and 375px: no sideways scrolling, except 4px on the English homepage at 320px',
           'Support for the system-level reduced-motion preference, alongside the stop control',
           'Full right-to-left support in Hebrew',
+        ],
+      },
+      {
+        heading: 'How the service is provided',
+        paragraphs: [
+          'The service is provided remotely. There is no physical location open to the public, so the accessibility regulations governing public premises do not apply here.',
+          'If any part of this site is not accessible to you, reach us on WhatsApp, by phone or by email and we will provide the same information or service another way. WhatsApp is the easier channel for anyone who finds a phone call difficult.',
         ],
       },
       {

@@ -27,14 +27,24 @@ export default function BrandLockup({ lang, tagline }: Props) {
   return (
     <div className="flex items-center justify-center">
       {artwork ? (
-        <span className="logo-plate inline-flex w-full max-w-[400px] justify-center">
+        <span
+          /*
+           * `min-w-0`: an inline-flex child of a flex container keeps
+           * `min-width: auto`, so the plate could not shrink below the logo's
+           * intrinsic width and set a 348px floor on a 320px screen at 200%
+           * text - the same shape as the unbreakable email address.
+           */
+          className="logo-plate inline-flex w-full min-w-0 max-w-[400px] justify-center"
+        >
           <Image
             src={artwork}
             alt={`PROPEL - ${tagline}`}
             width={1200}
             height={377}
             priority
-            sizes="(min-width: 1024px) 44vw, 90vw"
+            // The slot is capped at 400px by `max-w-[400px]`, so 44vw made Next
+            // serve w=640 for a 380px box - 14.7KB of above-fold bytes for nothing.
+            sizes="(min-width: 1024px) 400px, 90vw"
             className="h-auto w-full"
           />
         </span>

@@ -14,7 +14,13 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
-    '@id': `${siteConfig.url}/#organization`,
+    /*
+     * Per locale. Both used `/#organization` while carrying different `url`,
+     * `description`, `inLanguage` and `image` - two nodes claiming to be the
+     * same entity and disagreeing about it, which Google resolves
+     * arbitrarily.
+     */
+    '@id': `${siteConfig.url}/${lang}#organization`,
     name: 'PROPEL',
     legalName: siteConfig.legalName || undefined,
     url: `${siteConfig.url}/${lang}`,
@@ -99,7 +105,7 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
      */
     ...(project.year ? { dateCreated: String(project.year) } : {}),
     url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
-    creator: { '@id': `${siteConfig.url}/#organization` },
+    creator: { '@id': `${siteConfig.url}/${lang}#organization` },
     keywords: project.techStack.join(', '),
   }
 }

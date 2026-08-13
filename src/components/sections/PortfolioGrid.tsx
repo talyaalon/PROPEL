@@ -19,6 +19,7 @@ type PortfolioDict = {
   cta_body: string
   cta_button: string
   cta_whatsapp: string
+  stack_label: string
   filter_label: string
   filter_status: string
   filter_status_one: string
@@ -66,13 +67,19 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
         />
       )}
 
-      <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {visible.map((project) => {
           const waMessage = `${dict.whatsapp_prefix} "${projectTitle(project, lang)}" ${dict.whatsapp_suffix}`
           const headline = project.results?.[0]
 
           return (
-            <article key={project.slug} className={cardBase}>
+            <article
+              key={project.slug}
+              // Without a name, an element list gives "article, article,
+              // article" and the cards cannot be navigated to.
+              aria-labelledby={`project-${project.slug}`}
+              className={cardBase}
+            >
               {/* Device previews - the site scrolls inside the frames on hover,
                   or on entering the viewport where there is no hover.
 
@@ -113,8 +120,11 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
               </div>
 
               {/* Content */}
-              <div className="flex flex-1 flex-col p-6 sm:p-7">
-                <h3 className="mb-2 text-[1rem] font-bold text-brand-ink">
+              <div className="flex min-w-0 flex-1 flex-col p-6 sm:p-7">
+                <h3
+                  id={`project-${project.slug}`}
+                  className="mb-2 break-words text-[1rem] font-bold text-brand-ink"
+                >
                   {projectTitle(project, lang)}
                 </h3>
 
@@ -133,13 +143,16 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                 )}
 
                 {project.techStack.length > 0 && (
-                  <div className="mb-5 flex flex-wrap gap-1.5">
+                  /* A list, not a div of spans - otherwise it is announced as
+                     "Next.js React TypeScript Tailwind" in one breath with no
+                     boundary between the items. */
+                  <ul aria-label={dict.stack_label} className="mb-5 flex flex-wrap gap-1.5">
                     {project.techStack.map((tag) => (
-                      <span key={tag} className={tagBase}>
+                      <li key={tag} className={tagBase}>
                         {tag}
-                      </span>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
 
                 <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">

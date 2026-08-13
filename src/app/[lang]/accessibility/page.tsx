@@ -48,7 +48,20 @@ export default async function AccessibilityPage({ params }: Props) {
       doc={accessibilityStatement[lang]}
       contactBlock={
         lines.length > 0
-          ? { heading: isHe ? 'פרטי רכז הנגישות' : 'Accessibility coordinator', lines }
+          ? {
+              /*
+               * "Accessibility enquiries", not "Accessibility coordinator".
+               *
+               * The Israeli regulations require a service provider to appoint a
+               * named coordinator above a headcount threshold; a one-person
+               * agency is below it. The heading said a coordinator existed and
+               * then listed a phone number and an email under no name, which is
+               * a claim the site cannot support. This says what is actually
+               * true: here is where accessibility enquiries go.
+               */
+              heading: isHe ? 'פניות בנושא נגישות' : 'Accessibility enquiries',
+              lines,
+            }
           : undefined
       }
     />
