@@ -92,6 +92,9 @@ const config: Config = {
           ink: 'var(--ink)',
           slate: 'var(--slate)',
           line: 'var(--line)',
+          /* Form controls only. `--line` is too faint to identify an input
+             (1.4.11 wants 3:1) but correct everywhere else. */
+          field: 'var(--field-border)',
           silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',

@@ -12,7 +12,15 @@
 // uses them — a dead WhatsApp link is worse than a failed build.
 
 const PLACEHOLDER_PHONE = '972501234567'
-const PLACEHOLDER_DOMAIN = 'https://propel.co.il'
+/*
+ * Deliberately unbuyable. This used to be `https://propel.co.il` - which is the
+ * domain the business went on to actually register, so setting the real value
+ * would have made `usesPlaceholderDomain` true and failed the production build
+ * with an error insisting the domain was still a placeholder. `.invalid` is
+ * reserved by RFC 2606 and can never resolve, so no real value can collide
+ * with it.
+ */
+const PLACEHOLDER_DOMAIN = 'https://REPLACE-ME.invalid'
 
 /**
  * An Israeli number in the form a machine dials, from the form a person reads.

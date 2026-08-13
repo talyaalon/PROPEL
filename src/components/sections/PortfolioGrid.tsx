@@ -33,7 +33,7 @@ type Props = {
 }
 
 const cardBase =
-  'group flex min-w-0 flex-col overflow-hidden border border-brand-line bg-brand-panel transition-all duration-500 ease-smooth hover:-translate-y-2  focus-within:-translate-y-2 focus-within:'
+  'group flex min-w-0 flex-col overflow-hidden border border-brand-line bg-brand-panel transition-all duration-500 ease-smooth hover:-translate-y-2 focus-within:-translate-y-2'
 
 const tagBase =
   'rounded-full border border-brand-line bg-brand-surface px-2.5 py-0.5 text-[0.6875rem] font-medium tracking-wide text-brand-slate'

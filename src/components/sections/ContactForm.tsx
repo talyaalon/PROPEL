@@ -255,7 +255,7 @@ export default function ContactForm({ lang, dict }: Props) {
             id="budget"
             name="budget"
             defaultValue={values?.budget ?? ''}
-            className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -279,7 +279,7 @@ export default function ContactForm({ lang, dict }: Props) {
             aria-invalid={invalidField === 'message' || undefined}
             aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full resize-y rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
@@ -377,7 +377,7 @@ function Field({
         defaultValue={defaultValue}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? 'contact-error' : undefined}
-        className="w-full rounded-xl border border-brand-line bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+        className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )

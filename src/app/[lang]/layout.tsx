@@ -35,7 +35,10 @@ assertProductionConfig()
 
 const chakraPetch = Chakra_Petch({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  // 400 removed: measured `status: unloaded` on production in both locales
+  // after a full scroll. Headings use 600 and 700; nothing uses 400, and a
+  // `rel=preload` fetched its 9.8KB on every page anyway.
+  weight: ['600', '700'],
   variable: '--font-chakra',
   display: 'swap',
 })
@@ -49,7 +52,9 @@ const chakraPetch = Chakra_Petch({
  */
 const heebo = Heebo({
   subsets: ['hebrew'],
-  weight: ['400', '700'],
+  // Same measurement, same result - 12.0KB of Hebrew 400 that never
+  // rendered a glyph. Headings fall through to 700.
+  weight: ['700'],
   variable: '--font-heebo',
   display: 'swap',
 })

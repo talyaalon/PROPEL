@@ -37,6 +37,10 @@
   --silver: #9ea29b;
   --line: rgba(31, 34, 28, 0.14);
   --line-strong: rgba(31, 34, 28, 0.3);
+  /* Form controls need 3:1 to be identifiable (1.4.11). `--line` at 0.14
+     alpha measured 1.32:1 - the field fill is 1.04:1 against its card, so
+     the border was carrying all of it and carrying none of it. */
+  --field-border: #8a8d84;
   --accent: #7a1c09;
   --accent-soft: rgba(122, 28, 9, 0.55);
   --on-accent: #f7f6f2;
@@ -62,6 +66,7 @@
   --silver: #b8bcb4;
   --line: rgba(241, 239, 234, 0.14);
   --line-strong: rgba(241, 239, 234, 0.3);
+  --field-border: #6f736a;
   /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
   --accent: #e0714d;
   --accent-soft: rgba(224, 113, 77, 0.55);
@@ -304,6 +309,9 @@ html {
      paint it from `center top`, so the texture lines up across the border
      between them. */
   .header-band {
+    /* No `overflow: hidden`. The paper texture uses `background-size: cover`,
+       which needs no clipping, and the clip was destroying heading text that
+       outgrew the band at large text sizes rather than letting it reflow. */
     /* Reads the token, which flips with the theme. This was hardcoded to the
        light paper colour, so in dark mode the nav, the drawer and the whole
        hero rendered cream-on-cream — the h1 measured 1.08:1. */

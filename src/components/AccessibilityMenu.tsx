@@ -161,7 +161,12 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
       )
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
+      // Focus first, close second. Returning focus from the cleanup cannot
+      // work - by then the panel is unmounted and activeElement is <body>.
+      if (event.key === 'Escape') {
+        trigger?.focus()
+        setOpen(false)
+      }
     }
 
     const onPointerDown = (event: MouseEvent) => {
@@ -184,10 +189,14 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('mousedown', onPointerDown)
-      // Only if the panel still holds focus. Closing because the visitor
-      // clicked a nav link used to drag focus down to the corner trigger, so
-      // the next page began with focus in the bottom corner.
-      if (panel.contains(document.activeElement)) trigger?.focus()
+      /*
+       * Deliberately does nothing here. Escape and the close button both move
+       * focus themselves, before unmounting. The remaining close path is the
+       * click-outside handler, and there the visitor has already put focus
+       * somewhere of their own choosing - dragging it back to the corner
+       * trigger is what used to make a nav-link click start the next page with
+       * focus in the bottom corner.
+       */
     }
   }, [open])
 
@@ -231,7 +240,10 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
             <h2 className="text-[0.9375rem] font-bold text-brand-ink">{dict.title}</h2>
             <button
               type="button"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                triggerRef.current?.focus()
+                setOpen(false)
+              }}
               aria-label={dict.close}
               className="text-brand-slate transition-colors duration-200 hover:text-brand-accent"
             >
@@ -265,7 +277,8 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
                 value: String(step),
                 label: step === 100 ? 'A' : `${step}%`,
               }))}
-              className="grid grid-cols-6 gap-1"
+              // Three across, two rows, below the width where six 44px targets fit.
+              className="grid grid-cols-3 gap-1 sm:grid-cols-6"
             />
           </div>
 
@@ -308,6 +321,9 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
             </button>
             <Link
               href={statementHref}
+              // Closes without returning focus, unlike the X - the visitor is
+              // navigating away, and pulling focus back to the corner trigger
+              // would start the next page in the bottom corner.
               onClick={() => setOpen(false)}
               className="text-[0.75rem] text-brand-slate underline underline-offset-2 transition-colors duration-200 hover:text-brand-accent"
             >

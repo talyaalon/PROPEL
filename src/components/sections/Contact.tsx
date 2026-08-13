@@ -58,14 +58,14 @@ export default function Contact({ lang, dict }: Props) {
 
               {siteConfig.email && (
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href={`mailto:$<span className="break-all">{siteConfig.email}</span>`}
                   className="flex items-center gap-4 border border-brand-line bg-brand-surface p-4 transition-all duration-300 hover:-translate-y-0.5 "
                 >
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-panel ">
                     <Mail className="h-4 w-4 text-brand-ink" aria-hidden="true" />
                   </span>
                   <span className="text-[0.875rem] font-medium text-brand-ink" dir="ltr">
-                    {siteConfig.email}
+                    <span className="break-all">{siteConfig.email}</span>
                   </span>
                 </a>
               )}

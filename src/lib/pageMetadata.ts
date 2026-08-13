@@ -36,6 +36,14 @@ export function pageMetadata({
   const suffix = path ? `/${path}` : ''
   const url = `${siteConfig.url}/${lang}${suffix}`
 
+  /*
+   * The homepage's own title already opens with the brand, so appending it
+   * unconditionally produced "PROPEL | בניית אתרים ואוטומציה לעסקים | PROPEL"
+   * on the one URL most likely to be pasted into a chat. Case studies and blog
+   * posts were unaffected, which is why it survived.
+   */
+  const social = title.includes('PROPEL') ? title : `${title} | PROPEL`
+
   return {
     title,
     description,
@@ -50,7 +58,7 @@ export function pageMetadata({
     openGraph: {
       type,
       siteName: 'PROPEL',
-      title: `${title} | PROPEL`,
+      title: social,
       description,
       url,
       locale: lang === 'he' ? 'he_IL' : 'en_US',
@@ -74,7 +82,7 @@ export function pageMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | PROPEL`,
+      title: social,
       description,
       images: [`${siteConfig.url}/${lang}/opengraph-image`],
     },
