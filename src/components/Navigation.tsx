@@ -3,8 +3,9 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, MessageCircle } from 'lucide-react'
+import { Menu, X, MessageCircle, Phone } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import { siteConfig } from '@/lib/config'
 import Image from 'next/image'
 import Logo from '@/components/Logo'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -228,6 +229,29 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
             >
               {dict.toggle_lang}
             </Link>
+            {/*
+              The phone number, in the header.
+
+              Measured on production: fifteen of the seventeen calls to action
+              on the homepage were the same wa.me link, and the *first* phone
+              number appeared at 83% scroll depth. A visitor who does not use
+              WhatsApp - a B2B buyer, anyone on a desktop without WhatsApp Web -
+              had one route to this business and it was eleven screens down.
+
+              `dir="ltr"` because a phone number is a Latin-digit sequence and
+              would otherwise reorder in the Hebrew header.
+            */}
+            {siteConfig.phoneDisplay && (
+              <a
+                href={`tel:${siteConfig.phoneDial}`}
+                dir="ltr"
+                data-analytics="phone:nav"
+                className="hidden items-center gap-2 text-[0.8125rem] font-semibold tracking-wide text-brand-ink transition-colors duration-300 hover:text-brand-accent lg:flex"
+              >
+                <Phone className="h-4 w-4 text-brand-accent" aria-hidden="true" />
+                {siteConfig.phoneDisplay}
+              </a>
+            )}
             <a
               href={getWhatsAppURL(dict.whatsapp_message)}
               target="_blank"

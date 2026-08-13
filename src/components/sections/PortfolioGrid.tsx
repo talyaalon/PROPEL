@@ -7,7 +7,7 @@ import FilterChips from '@/components/FilterChips'
 import { MessageCircle, Lock } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
-import type { Project, ProjectCategory } from '@/content/projects'
+import { projectTitle, type Project, type ProjectCategory } from '@/content/projects'
 
 type PortfolioDict = {
   view_project: string
@@ -68,7 +68,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
       <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {visible.map((project) => {
-          const waMessage = `${dict.whatsapp_prefix} "${project.title}" ${dict.whatsapp_suffix}`
+          const waMessage = `${dict.whatsapp_prefix} "${projectTitle(project, lang)}" ${dict.whatsapp_suffix}`
           const headline = project.results?.[0]
 
           return (
@@ -85,7 +85,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   <ProjectScreens
                     desktop={project.screens.desktop}
                     mobile={project.screens.mobile}
-                    title={`${project.title} - ${dict.categories[project.category]}`}
+                    title={`${projectTitle(project, lang)} - ${dict.categories[project.category]}`}
                   />
                 ) : (
                   /*
@@ -114,7 +114,9 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
               {/* Content */}
               <div className="flex flex-1 flex-col p-6 sm:p-7">
-                <h3 className="mb-2 text-[1rem] font-bold text-brand-ink">{project.title}</h3>
+                <h3 className="mb-2 text-[1rem] font-bold text-brand-ink">
+                  {projectTitle(project, lang)}
+                </h3>
 
                 <p className="mb-5 flex-1 text-[0.875rem] leading-relaxed text-brand-slate">
                   {project.summary[lang]}
@@ -146,7 +148,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     className="text-[0.8125rem] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
                   >
                     {dict.view_project}
-                    <span className="sr-only"> - {project.title}</span>
+                    <span className="sr-only"> - {projectTitle(project, lang)}</span>
                   </Link>
                   <a
                     href={getWhatsAppURL(waMessage)}
@@ -157,7 +159,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
                     WhatsApp
-                    <span className="sr-only"> - {project.title}</span>
+                    <span className="sr-only"> - {projectTitle(project, lang)}</span>
                   </a>
                 </div>
               </div>

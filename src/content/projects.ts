@@ -45,8 +45,18 @@ export type ProjectImage = {
 
 export type Project = {
   slug: string
-  /** Brand name — intentionally not translated. */
+  /**
+   * Brand name.
+   *
+   * Latin brands are the same in both locales and stay a plain string. A
+   * Hebrew brand is not readable to an English reader, and two of the five
+   * were rendering as Hebrew script on `/en` - including in the `<title>` of
+   * their own case study, so two of five English case studies had no English
+   * text in the SERP at all. `titleEn` transliterates those, with the trade in
+   * parentheses so the name still says what the business does.
+   */
   title: string
+  titleEn?: string
   category: ProjectCategory
   /** One line for the portfolio card. */
   summary: Bilingual
@@ -107,6 +117,7 @@ export const projects: Project[] = [
       mobile: '/projects/hagorer2/mobile.webp',
     },
     title: 'הגורר 2',
+    titleEn: 'HaGorer 2 (Towing & Recovery)',
     category: 'web',
     summary: {
       he: 'אתר גרירה וחילוץ בן 22 עמודים, בנוי לקידום אורגני ונגיש לפי ת"י 5568.',
@@ -127,6 +138,7 @@ export const projects: Project[] = [
       mobile: '/projects/cnafim-lauf/mobile.webp',
     },
     title: 'כנפיים לעוף',
+    titleEn: 'Knafayim LaOuf (Therapy Practice)',
     category: 'web',
     summary: {
       he: 'אתר מכון טיפול והכשרה בן 24 עמודים, עם עמוד ייעודי לכל מתודה - CBT, NLP, EMR והוראה מתקנת.',
@@ -170,6 +182,11 @@ export const projects: Project[] = [
 const showDrafts = !isProductionDeploy()
 
 /** Published projects, featured first. */
+/** The brand name for a locale - `titleEn` where one exists, otherwise the name. */
+export function projectTitle(project: Project, lang: Locale): string {
+  return lang === 'en' && project.titleEn ? project.titleEn : project.title
+}
+
 export function getProjects(): Project[] {
   return projects
     .filter((project) => showDrafts || !project.draft)

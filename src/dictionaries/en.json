@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "PROPEL | Web Development & Business Automation",
+    "title": "Business website design and automation | PROPEL",
     "description": "We build fast websites and automations that take manual work off your team, for small and mid-sized businesses. Scoping, development and launch on timelines you can plan around."
   },
   "a11y": {
@@ -36,7 +36,7 @@
   },
   "trusted_by": "Businesses working with us",
   "services": {
-    "section_title": "What We Do",
+    "section_title": "Services: business websites, automation and organic growth",
     "section_subtitle": "Three disciplines, one goal - your business doing less work for the same result",
     "cta_label": "Talk to us",
     "stack_label": "Built with",
@@ -44,7 +44,7 @@
       {
         "id": "webdev",
         "icon": "Monitor",
-        "title": "Web Development",
+        "title": "Business website design",
         "description": "A site that loads instantly, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
         "outcomes": [
           "Sub-second loads, even on mobile data",
@@ -133,7 +133,7 @@
     "eyebrow": "Services"
   },
   "portfolio": {
-    "section_title": "Selected Work",
+    "section_title": "Sites and systems we built for clients in Israel",
     "section_subtitle": "What we built, and what it actually changed",
     "view_project": "Read the case study",
     "all_label": "All",
@@ -166,10 +166,15 @@
     "private_project": "Private project - the system sits behind a login",
     "filter_label": "Filter work by category",
     "filter_status": "{n} projects shown",
-    "filter_status_one": "1 project shown"
+    "filter_status_one": "1 project shown",
+    "eyebrow": "Work",
+    "index_title": "Sites and systems we built for businesses in Israel",
+    "index_subtitle": "Five projects, each with the problem it was built to solve and what actually changed.",
+    "index_meta_title": "Work - sites and systems we built",
+    "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel."
   },
   "process": {
-    "section_title": "How it works",
+    "section_title": "How it works - from brief to build to launch",
     "section_subtitle": "No surprises and no \"we'll get back to you\" that never does. Here is exactly what happens once you get in touch",
     "steps": [
       {
@@ -199,7 +204,7 @@
     "section_subtitle": "Real people, real businesses"
   },
   "faq": {
-    "section_title": "Questions people ask before starting",
+    "section_title": "What a business website costs and how long it takes",
     "section_subtitle": "Straight answers, no runaround",
     "items": [
       {
@@ -261,7 +266,7 @@
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch."
   },
   "about": {
-    "section_title": "About PROPEL",
+    "section_title": "Building websites for small businesses in Israel",
     "section_subtitle": "Who's behind this",
     "paragraphs": [
       "PROPEL was founded on one simple belief: small and mid-sized businesses deserve the same standard of digital execution large corporations get - without corporate pricing and without corporate timelines.",

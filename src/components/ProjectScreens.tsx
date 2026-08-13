@@ -78,7 +78,10 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
       },
       // Start fetching a screen ahead of the scroll so the frame is rarely
       // caught empty, without loading all five up front.
-      { rootMargin: '600px 0px' },
+      // 1200px, not 600. At 375 a 600px margin is under one screen ahead, so the
+      // request often started after the card was already visible - and an
+      // unloaded frame is a bordered white rectangle in the proof section.
+      { rootMargin: '1200px 0px' },
     )
 
     const player = new IntersectionObserver(([entry]) => setPlaying(entry.isIntersecting))

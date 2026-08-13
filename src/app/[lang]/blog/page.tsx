@@ -4,7 +4,7 @@ import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getArticles, getUsedTopics } from '@/content/articles'
-import { getProjects } from '@/content/projects'
+import { getProjects, projectTitle } from '@/content/projects'
 import BlogGrid from '@/components/sections/BlogGrid'
 
 type Props = {
@@ -55,7 +55,11 @@ export default async function BlogPage({ params }: Props) {
           projects={getProjects()
             .filter((project) => project.screens)
             .slice(0, 3)
-            .map(({ slug, title, summary }) => ({ slug, title, summary }))}
+            .map((project) => ({
+              slug: project.slug,
+              title: projectTitle(project, lang),
+              summary: project.summary,
+            }))}
         />
       </div>
     </section>

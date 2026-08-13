@@ -43,9 +43,22 @@ const TARGETS = [
   { slug: 'jcafe-kosher', url: 'https://www.jcafekosher.com/en/s/bangkok' },
 ]
 
+/*
+ * `capture` is the viewport the site is photographed at; `store` is the width
+ * the file is written at.
+ *
+ * The desktop frame renders about 380px wide inside a card, so a 1566px file
+ * was four times the resolution any screen asks for - 290KB for hagorer2
+ * alone, arriving after the card was already on screen and leaving a blank
+ * ink-bordered rectangle where the proof was supposed to be. 900px is still
+ * 2.4x the rendered width, which covers a DPR2 display with headroom.
+ *
+ * The phone capture is already near its rendered size, so it is only
+ * re-encoded, not resized.
+ */
 const VIEWS = [
-  { name: 'desktop', width: 1566, height: 900 },
-  { name: 'mobile', width: 370, height: 800 },
+  { name: 'desktop', width: 1566, height: 900, store: 900, quality: 60 },
+  { name: 'mobile', width: 370, height: 800, store: null, quality: 55 },
 ]
 
 const MAX_HEIGHT = 6000
@@ -95,8 +108,9 @@ async function capture(page, target, view) {
   const meta = await sharp(buffer).metadata()
   let image = sharp(buffer)
   if ((meta.height ?? 0) > MAX_HEIGHT) image = image.extract({ left: 0, top: 0, width: meta.width, height: MAX_HEIGHT })
+  if (view.store) image = image.resize({ width: view.store })
 
-  await image.webp({ quality: 72 }).toFile(out)
+  await image.webp({ quality: view.quality, effort: 6 }).toFile(out)
   const final = await sharp(out).metadata()
   return `${view.name.padEnd(7)} ${final.width}x${final.height}  ${Math.round((final.size ?? 0) / 1024)}KB`
 }

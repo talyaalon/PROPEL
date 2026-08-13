@@ -10,7 +10,8 @@ import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
-import { getProjects, getProjectBySlug } from '@/content/projects'
+import ProjectScreens from '@/components/ProjectScreens'
+import { getProjects, getProjectBySlug, projectTitle } from '@/content/projects'
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata({
     lang,
     path: `portfolio/${project.slug}`,
-    title: project.title,
+    title: projectTitle(project, lang),
     description: project.summary[lang],
     type: 'article',
   })
@@ -67,9 +68,9 @@ export default async function ProjectPage({ params }: Props) {
       <JsonLd
         schema={breadcrumbSchema([
           { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
-          { name: dict.nav.portfolio, url: `${siteConfig.url}/${lang}#portfolio` },
+          { name: dict.nav.portfolio, url: `${siteConfig.url}/${lang}/portfolio` },
           {
-            name: project.title,
+            name: projectTitle(project, lang),
             url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
           },
         ])}
@@ -92,14 +93,14 @@ export default async function ProjectPage({ params }: Props) {
 
         <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-20">
           <Link
-            href={`/${lang}#portfolio`}
+            href={`/${lang}/portfolio`}
             className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-brand-slate transition-colors hover:text-brand-ink"
           >
             <BackArrow className="h-4 w-4" aria-hidden="true" />
             {t.back}
           </Link>
 
-          <h1 className="mb-6 font-display leading-none">{project.title}</h1>
+          <h1 className="mb-6 font-display leading-none">{projectTitle(project, lang)}</h1>
 
           {/* Client / year - omitted entirely when unknown rather than shown blank */}
           {(project.client || project.year) && (
@@ -152,6 +153,27 @@ export default async function ProjectPage({ params }: Props) {
                 </p>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── The work itself ───────────────────────────────────────────────
+          The card that links here shows the client's site scrolling inside a
+          monitor and a phone. Clicking through landed on a page with no image
+          at all - the journey went from the best asset on the site to the
+          emptiest one. The captures already exist and are already deployed;
+          they were simply never rendered on this route. */}
+      {project.screens && (
+        <section
+          className="border-t border-brand-line bg-brand-surface px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+          aria-label={t.screenshots}
+        >
+          <div className="mx-auto max-w-5xl">
+            <ProjectScreens
+              desktop={project.screens.desktop}
+              mobile={project.screens.mobile}
+              title={projectTitle(project, lang)}
+            />
           </div>
         </section>
       )}
@@ -228,7 +250,7 @@ export default async function ProjectPage({ params }: Props) {
             </p>
             <a
               href={getWhatsAppURL(
-                `${dict.portfolio.whatsapp_prefix} "${project.title}" ${dict.portfolio.whatsapp_suffix}`,
+                `${dict.portfolio.whatsapp_prefix} "${projectTitle(project, lang)}" ${dict.portfolio.whatsapp_suffix}`,
               )}
               target="_blank"
               rel="noopener noreferrer"
@@ -250,7 +272,7 @@ export default async function ProjectPage({ params }: Props) {
                   {t.next_project}
                 </span>
                 <span className="mt-1.5 block text-[1.125rem] font-bold text-brand-ink">
-                  {next.title}
+                  {projectTitle(next, lang)}
                 </span>
               </span>
               {/* An icon rather than the literal glyph - see Services.tsx.
