@@ -96,14 +96,23 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
 
           const className = 'card flex flex-col'
 
-          // External resources leave the site, so they are plain anchors with
-          // the security rel and an out-arrow; our own posts route internally.
+          /*
+           * External resources leave the site, so they are plain anchors with
+           * the security rel and an out-arrow; our own posts route internally.
+           *
+           * `nofollow` on top of that. These six point at web.dev, Google,
+           * NN/g, gov.il, Next.js and schema.org - six of the highest-authority
+           * domains on the web - from a page that is a curated reading list
+           * rather than commentary. Passing link equity to them earns nothing
+           * and costs what little this site has. The links stay: they are
+           * genuinely useful, and that is the point of the page.
+           */
           return external ? (
             <a
               key={article.externalUrl}
               href={href}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               data-analytics={`article:${article.source}`}
               className={className}
             >
