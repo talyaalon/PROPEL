@@ -127,7 +127,8 @@
         ],
         "cta_label": "Free fit check",
         "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
-        "analytics": "whatsapp:service-migration"
+        "analytics": "whatsapp:service-migration",
+        "read_more": "More about this service"
       }
     ],
     "eyebrow": "Services"
@@ -351,5 +352,15 @@
     "motion": "Pause animations",
     "reset": "Reset",
     "statement": "Accessibility statement"
+  },
+  "migration": {
+    "meta_title": "Migrating a WordPress or Base44 site to clean code you own",
+    "meta_description": "We rebuild WordPress and Base44 sites in clean code - same design or better, no plugins, no platform subscription, and everything registered in your name.",
+    "h1": "Migration to clean code you own",
+    "intro": "If your site is slow, held together by twenty plugins, or the developer who built it has disappeared - this is the service that gets you out.",
+    "outcomes_title": "What you get",
+    "ownership_title": "Who owns the code and the domain",
+    "proof_title": "Two projects that are exactly this",
+    "proof_body": "Both of these were rebuilt in clean code. You can open them and look."
   }
 }

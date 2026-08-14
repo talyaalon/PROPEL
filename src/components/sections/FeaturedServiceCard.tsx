@@ -1,4 +1,5 @@
-import { Monitor, Code2, Check, type LucideIcon } from 'lucide-react'
+import { Monitor, Code2, Check, type LucideIcon, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 
 export type ServiceItem = {
@@ -16,6 +17,8 @@ export type ServiceItem = {
   /** Heading above the outcomes column. Only used by the featured card. */
   features_label?: string
   cta_label?: string
+  /** Only the featured card links to a page of its own. */
+  read_more?: string
   /** Overrides the derived analytics location when the id alone is not descriptive. */
   analytics?: string
 }
@@ -28,6 +31,8 @@ const iconMap: Record<string, LucideIcon> = {
 type Props = {
   service: ServiceItem
   stackLabel: string
+  /** Where the card's own page lives, when it has one. */
+  href?: string
 }
 
 /**
@@ -38,7 +43,7 @@ type Props = {
  * eight items would make a standard card twice the height of its neighbours,
  * while here they sit two-up and the row stays balanced.
  */
-export default function FeaturedServiceCard({ service, stackLabel }: Props) {
+export default function FeaturedServiceCard({ service, stackLabel, href }: Props) {
   const Icon = iconMap[service.icon] ?? Code2
 
   return (
@@ -109,6 +114,18 @@ export default function FeaturedServiceCard({ service, stackLabel }: Props) {
           >
             {service.cta_label}
           </a>
+
+          {/* Without this the service page has one inbound link - the sitemap -
+              and no route to it from the site at all. */}
+          {href && (
+            <Link
+              href={href}
+              className="mt-3 inline-flex items-center gap-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+            >
+              {service.read_more}
+              <ArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />
+            </Link>
+          )}
         </div>
       </div>
     </div>

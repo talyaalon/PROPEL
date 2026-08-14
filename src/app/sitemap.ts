@@ -23,7 +23,14 @@ import { getProjects } from '@/content/projects'
  * from `src/lib/pageMetadata.ts` for every route.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ['', '/portfolio', '/blog', '/accessibility', '/privacy']
+  const staticPaths = [
+    '',
+    '/portfolio',
+    '/services/migration',
+    '/blog',
+    '/accessibility',
+    '/privacy',
+  ]
   const projectPaths = getProjects().map((project) => `/portfolio/${project.slug}`)
   const allPaths = [...staticPaths, ...projectPaths]
 

@@ -1,5 +1,6 @@
 import { Monitor, Zap, TrendingUp, Code2, Check, ArrowRight, type LucideIcon } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import type { Locale } from '@/lib/i18n'
 import FeaturedServiceCard, { type ServiceItem } from './FeaturedServiceCard'
 
 type ServicesDict = {
@@ -12,6 +13,7 @@ type ServicesDict = {
 }
 
 type Props = {
+  lang: Locale
   dict: ServicesDict
 }
 
@@ -22,7 +24,7 @@ export const serviceIcons: Record<string, LucideIcon> = {
   Code2,
 }
 
-export default function Services({ dict }: Props) {
+export default function Services({ lang, dict }: Props) {
   // A featured service gets its own full-width card below the grid rather than
   // competing for a column with the standard three.
   const standard = dict.items.filter((item) => !item.featured)
@@ -116,7 +118,12 @@ export default function Services({ dict }: Props) {
 
         {/* Featured service - spans the full grid width beneath the standard three */}
         {featured.map((service) => (
-          <FeaturedServiceCard key={service.id} service={service} stackLabel={dict.stack_label} />
+          <FeaturedServiceCard
+            key={service.id}
+            service={service}
+            stackLabel={dict.stack_label}
+            href={service.id === 'migration' ? `/${lang}/services/migration` : undefined}
+          />
         ))}
       </div>
     </section>

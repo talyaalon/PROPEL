@@ -61,7 +61,7 @@ export default async function Page({ params }: Props) {
       <TrustedBy label={dict.trusted_by} />
 
       <Reveal>
-        <Services dict={dict.services} />
+        <Services lang={lang} dict={dict.services} />
       </Reveal>
       <Reveal>
         <Process dict={dict.process} />
