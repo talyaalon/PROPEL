@@ -101,8 +101,26 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
 
   return (
     <div ref={ref} className="screens" role="img" aria-label={title}>
-      <div className={`screen screen--phone${state}`} style={shot(mobile)} aria-hidden="true" />
-      <div className={`screen screen--desktop${state}`} style={shot(desktop)} aria-hidden="true" />
+      {/*
+        The phone is a device wrapping the glass, not a bordered rectangle with
+        a picture in it - so the capture scrolls *inside* it. The body and the
+        island are decorative and carry no DOM cost beyond this one wrapper;
+        `aria-hidden` is on the frame, so the whole assembly is announced once
+        by the `role="img"` above and never as parts.
+      */}
+      <div className="phone" aria-hidden="true">
+        <span className="phone__island" />
+        <div className={`screen screen--phone${state}`} style={shot(mobile)} />
+      </div>
+
+      <div className="browser" aria-hidden="true">
+        <div className="browser__bar">
+          <span className="browser__dot" />
+          <span className="browser__dot" />
+          <span className="browser__dot" />
+        </div>
+        <div className={`screen screen--desktop${state}`} style={shot(desktop)} />
+      </div>
     </div>
   )
 }

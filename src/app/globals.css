@@ -385,35 +385,147 @@ html {
     cursor: pointer;
   }
 
-  /* Hovering the frame or anywhere on the card it sits in starts the scroll —
-     the whole card is the affordance, not just the image. */
+  /* Hovering the frame or anywhere on the card it sits in starts the scroll -
+     the whole card is the affordance, not just the image.
+
+     `.device-host` is the second half of that. The portfolio articles build
+     their own surface rather than using `.card`, so `.card:hover` never
+     matched them and the promise in this comment was only ever true on paper.
+     Any container that wants to drive its devices carries the class. */
   .screen:hover,
   .card:hover .screen,
   .card:focus-within .screen,
+  .device-host:hover .screen,
+  .device-host:focus-within .screen,
   .screen.is-playing {
     background-position: center bottom;
   }
 
+  /* ── The monitor ──────────────────────────────────────────────────────────
+     The phone became a device, and a bordered rectangle next to a device reads
+     as a screenshot that has not been finished. This is the same idea applied
+     to its neighbour: a browser rather than a picture of one.
+
+     `.browser` is the chrome and `.screen--desktop` is the viewport inside it,
+     so the capture scrolls within the window exactly as the phone's does. */
+  .browser {
+    width: 62%;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--ink);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.35),
+      0 14px 32px -14px rgba(0, 0, 0, 0.4);
+  }
+
+  /* The title bar, and the three dots in it. One gradient, no extra DOM. */
+  .browser__bar {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-inline-start: 8px;
+    background: #2b2e27;
+  }
+
+  .browser__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #5a5e53;
+  }
+
   .screen--desktop {
-    width: 65%;
+    width: 100%;
     min-height: 27vh;
+    border: none;
+    border-radius: 0;
+  }
+
+  /* ── The phone ────────────────────────────────────────────────────────────
+     A device, not a bordered rectangle.
+
+     `.phone` is the aluminium body and `.screen--phone` is the glass inside
+     it, so the capture scrolls within the device rather than the device being
+     the capture. The body needs real corner radius, which the project's
+     `borderRadius` scale collapses to 0 - so these are written here rather
+     than as utilities, deliberately and in one place.
+
+     Proportions are an iPhone's: a 9:19.5 screen, a body about 12px wider than
+     the glass on each side, and the corner of the glass concentric with the
+     corner of the body (outer radius minus bezel), which is what stops it
+     looking like a rounded rectangle with a picture in it. */
+  .phone {
+    position: relative;
+    width: 32%;
+    flex-shrink: 0;
+    padding: 10px;
+    border-radius: 34px;
+    background: linear-gradient(160deg, #3b3f38 0%, #14160f 40%, #2b2e27 100%);
+    /* Logical property, not margin-left: in Hebrew the overlap has to fall on
+       the other side or the phone detaches from the monitor. */
+    margin-inline-start: -22px;
+    z-index: 1;
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.55),
+      0 18px 40px -12px rgba(0, 0, 0, 0.45);
+  }
+
+  /* The two side buttons. Purely decorative and purely CSS - no extra DOM,
+     nothing for a screen reader to meet. */
+  .phone::before,
+  .phone::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: -2px;
+    width: 2px;
+    border-radius: 2px;
+    background: #4a4e45;
+  }
+
+  .phone::before {
+    top: 24%;
+    height: 7%;
+  }
+
+  .phone::after {
+    top: 34%;
+    height: 11%;
   }
 
   .screen--phone {
-    width: 30%;
-    min-height: 42vh;
-    /* Logical property, not margin-left: in Hebrew the overlap has to fall on
-       the other side or the phone detaches from the monitor. */
-    margin-inline-start: -7px;
-    z-index: 1;
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    min-height: 0;
+    border: none;
+    border-radius: 24px;
+  }
+
+  /* The dynamic island, over the glass. `.screens` sets the stacking context;
+     this sits above the scrolling background and below nothing. */
+  .phone__island {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28%;
+    max-width: 78px;
+    height: 14px;
+    border-radius: 999px;
+    background: #0b0d08;
+    z-index: 2;
   }
 
   @media (max-width: 1024px) {
     .screen--desktop {
       min-height: 25vh;
     }
-    .screen--phone {
-      min-height: 35vh;
+    .browser {
+      width: 58%;
+    }
+    .phone {
+      width: 36%;
     }
   }
 
@@ -421,13 +533,12 @@ html {
     /* The desktop capture is 1566px wide; at 343px it is a grey smear that
        costs 140px of height plus a gap. The phone capture is near 1:1 here
        and is the more useful of the two on a phone, so it carries the card
-       alone. */
-    .screen--desktop {
+       alone - centred, at a width that still reads as a device. */
+    .browser {
       display: none;
     }
-    .screen--phone {
-      width: 100%;
-      min-height: 210px;
+    .phone {
+      width: min(190px, 62%);
       margin-inline-start: 0;
     }
   }
