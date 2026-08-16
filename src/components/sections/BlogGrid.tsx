@@ -68,7 +68,7 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
               <div className="mb-4 flex items-center justify-between gap-3">
                 <span className="tag">{dict.topics[article.topic]}</span>
                 {external && (
-                  <span className="font-display text-[0.6875rem] uppercase tracking-[.06em] text-brand-slate">
+                  <span className="font-display text-[0.75rem] uppercase tracking-[.06em] text-brand-slate">
                     {article.source}
                   </span>
                 )}
@@ -81,7 +81,7 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
               </p>
 
               <div className="mt-auto flex items-center justify-between gap-3 border-t border-brand-line pt-4">
-                <span className="inline-flex items-center gap-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent">
+                <span className="inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent">
                   {dict.read_more}
                   {external && (
                     <ArrowUpRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />
@@ -139,7 +139,7 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
           <h2 id="blog-work" className="text-brand-ink lg:text-[1.75rem]">
             {dict.related_title}
           </h2>
-          <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-slate">
+          <p className="mt-3 max-w-xl text-[1rem] leading-relaxed text-brand-slate">
             {dict.related_body}
           </p>
 
@@ -148,14 +148,14 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
               <li key={project.slug}>
                 <Link
                   href={`/${lang}/portfolio/${project.slug}`}
-                  className="group flex items-baseline gap-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 hover:text-brand-accent"
+                  className="group flex items-baseline gap-3 text-[1rem] text-brand-ink transition-colors duration-200 hover:text-brand-accent"
                 >
                   <ArrowUpRight
                     className="h-4 w-4 flex-shrink-0 -rotate-90 text-brand-accent rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span className="font-semibold">{project.title}</span>
-                  <span className="text-[0.8125rem] text-brand-slate">{project.summary[lang]}</span>
+                  <span className="text-[0.875rem] text-brand-slate">{project.summary[lang]}</span>
                 </Link>
               </li>
             ))}

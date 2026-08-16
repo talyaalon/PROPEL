@@ -159,8 +159,8 @@ export default function ContactForm({ lang, dict }: Props) {
         className="card p-8 text-center outline-none sm:p-12"
       >
         <CheckCircle2 className="mx-auto h-12 w-12 text-brand-success" aria-hidden="true" />
-        <h3 className="mt-5 text-[1.25rem] font-bold text-brand-ink">{dict.success_title}</h3>
-        <p className="mx-auto mt-3 max-w-sm text-[0.9375rem] leading-[1.75] text-brand-slate">
+        <h3 className="mt-5 text-[1.1875rem] font-bold text-brand-ink">{dict.success_title}</h3>
+        <p className="mx-auto mt-3 max-w-sm text-[1rem] leading-[1.75] text-brand-slate">
           {dict.success_body}
         </p>
         <a
@@ -268,7 +268,7 @@ export default function ContactForm({ lang, dict }: Props) {
             id="budget"
             name="budget"
             defaultValue={values?.budget ?? ''}
-            className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[1rem] text-brand-ink transition-colors duration-200 focus:border-brand-ink focus:bg-brand-panel"
           >
             <option value="" disabled>
               {dict.budget_placeholder}
@@ -292,7 +292,7 @@ export default function ContactForm({ lang, dict }: Props) {
             aria-invalid={invalidField === 'message' || undefined}
             aria-describedby={invalidField === 'message' ? 'contact-error' : undefined}
             placeholder={dict.message_placeholder}
-            className="w-full resize-y rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+            className="w-full resize-y rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[1rem] leading-relaxed text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
           />
         </div>
       </div>
@@ -340,7 +340,7 @@ function Label({
   hint?: string
 }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1.5 block text-[0.8125rem] font-medium text-brand-ink">
+    <label htmlFor={htmlFor} className="mb-1.5 block text-[0.875rem] font-medium text-brand-ink">
       {text}
       {required && (
         <span className="text-brand-accent" aria-hidden="true">
@@ -390,7 +390,7 @@ function Field({
         defaultValue={defaultValue}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? 'contact-error' : undefined}
-        className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[0.9375rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
+        className="w-full rounded-xl border border-brand-field bg-brand-surface px-4 py-3 text-[1rem] text-brand-ink transition-colors duration-200 placeholder:text-brand-slate focus:border-brand-ink focus:bg-brand-panel"
       />
     </div>
   )

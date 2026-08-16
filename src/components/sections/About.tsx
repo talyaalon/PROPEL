@@ -37,7 +37,7 @@ export default function About({ dict }: Props) {
               RTL grid, so the ternary that used to be here reversed a reversal
               and left About as the only section on the page that did not
               mirror in Hebrew. Source order alone is correct. */}
-          <div className="flex flex-col gap-7">
+          <div className="flex min-w-0 flex-col gap-7">
             {/* The shared `.eyebrow`, not a hand-rolled one. This section had
                 its own approximation - different size, different tracking, no
                 accent rule - which is part of why the page read as one section
@@ -50,7 +50,7 @@ export default function About({ dict }: Props) {
             </h2>
 
             {/* Body paragraphs */}
-            <div className="flex flex-col gap-5">
+            <div className="flex min-w-0 flex-col gap-5">
               {dict.paragraphs.map((paragraph, i) => (
                 <p key={i} className="text-[1rem] leading-[1.8] text-brand-slate">
                   {paragraph}
@@ -72,7 +72,7 @@ export default function About({ dict }: Props) {
           </div>
 
           {/* ── Values column ─────────────────────────────────── */}
-          <div className="flex flex-col gap-4">
+          <div className="flex min-w-0 flex-col gap-4">
             {dict.values.map((value) => {
               const Icon: LucideIcon = iconMap[value.icon] ?? Target
 
@@ -88,10 +88,8 @@ export default function About({ dict }: Props) {
 
                   {/* Text */}
                   <div className="min-w-0">
-                    <h3 className="mb-1.5 text-[0.9375rem] font-bold text-brand-ink">
-                      {value.title}
-                    </h3>
-                    <p className="text-[0.8125rem] leading-relaxed text-brand-slate">
+                    <h3 className="mb-1.5 text-[1rem] font-bold text-brand-ink">{value.title}</h3>
+                    <p className="text-[0.875rem] leading-relaxed text-brand-slate">
                       {value.description}
                     </p>
                   </div>

@@ -105,7 +105,7 @@ export default async function MigrationPage({ params }: Props) {
           </ul>
 
           <div className="mt-10">
-            <p className="mb-3 font-display text-[0.625rem] font-semibold uppercase tracking-[.18em] text-brand-slate">
+            <p className="mb-3 font-display text-[0.75rem] font-semibold uppercase tracking-[.18em] text-brand-slate">
               {dict.services.stack_label}
             </p>
             <ul aria-label={dict.services.stack_label} className="flex flex-wrap gap-1.5">

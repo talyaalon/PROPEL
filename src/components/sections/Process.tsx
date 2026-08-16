@@ -24,7 +24,7 @@ export default function Process({ dict }: { dict: ProcessDict }) {
           <h2 id="process-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
+          <p className="mx-auto mt-4 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[1.1875rem]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function Process({ dict }: { dict: ProcessDict }) {
                 {String(index + 1).padStart(2, '0')}
               </span>
 
-              <h3 className="mt-5 text-[1.0625rem] font-bold text-brand-ink">{step.title}</h3>
+              <h3 className="mt-5 text-[1.1875rem] font-bold text-brand-ink">{step.title}</h3>
 
               <p className="mt-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
                 {step.duration}

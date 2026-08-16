@@ -48,7 +48,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
   ]
 
   return (
-    <footer className="bg-brand-panel px-4 py-16 text-brand-ink sm:px-6 lg:px-8 lg:py-24">
+    <footer className="section--invert px-4 py-16 text-brand-ink sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
           {/* Brand column */}
@@ -65,7 +65,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Quick links */}
           <div>
-            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.links_title}
             </h2>
             <ul className="space-y-3.5">
@@ -73,7 +73,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                 <li key={link.href}>
                   <NavLink
                     href={link.href}
-                    className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                    className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                   >
                     {link.label}
                   </NavLink>
@@ -84,14 +84,14 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Legal */}
           <div>
-            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.legal_title}
             </h2>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href={`/${lang}/accessibility`}
-                  className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.accessibility}
                 </Link>
@@ -99,7 +99,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               <li>
                 <Link
                   href={`/${lang}/privacy`}
-                  className="text-[0.8125rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.privacy}
                 </Link>
@@ -109,7 +109,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
 
           {/* Contact */}
           <div>
-            <h2 className="mb-5 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+            <h2 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.contact_title}
             </h2>
 
@@ -123,7 +123,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-successSoft">
                 <MessageCircle className="h-5 w-5 text-brand-success" />
               </div>
-              <span className="text-[0.8125rem] font-medium text-brand-ink">
+              <span className="text-[0.875rem] font-medium text-brand-ink">
                 {dict.whatsapp_cta}
               </span>
             </a>
@@ -135,7 +135,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                   <li>
                     <a
                       href={`tel:${siteConfig.phoneDial}`}
-                      className="flex items-center gap-3 text-[0.8125rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                      className="flex items-center gap-3 text-[0.875rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                       <span className="sr-only">{dict.phone_label}: </span>
@@ -147,7 +147,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                   <li>
                     <a
                       href={`mailto:$<span className="break-all">{siteConfig.email}</span>`}
-                      className="flex items-center gap-3 text-[0.8125rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                      className="flex items-center gap-3 text-[0.875rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
                       <span className="sr-only">{dict.email_label}: </span>
@@ -168,7 +168,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
           <LocaleSwitch
             lang={lang}
             label={altLangLabel}
-            className="text-[0.6875rem] font-semibold tracking-[0.15em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+            className="text-[0.75rem] font-semibold tracking-[0.15em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
           />
         </div>
       </div>

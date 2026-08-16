@@ -107,7 +107,7 @@ export default async function ProjectPage({ params }: Props) {
             <dl className="mb-8 flex flex-wrap gap-x-10 gap-y-4 text-sm">
               {project.client && (
                 <div>
-                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                  <dt className="text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.client}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink">{project.client[lang]}</dd>
@@ -115,7 +115,7 @@ export default async function ProjectPage({ params }: Props) {
               )}
               {project.year && (
                 <div>
-                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                  <dt className="text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                     {t.year}
                   </dt>
                   <dd className="mt-1 font-medium text-brand-ink" dir="ltr">
@@ -245,9 +245,7 @@ export default async function ProjectPage({ params }: Props) {
         <div className="mx-auto max-w-7xl">
           <div className="card p-8 sm:p-12">
             <h2 className="font-display">{t.cta_title}</h2>
-            <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-ink">
-              {t.cta_body}
-            </p>
+            <p className="mt-3 max-w-xl text-[1rem] leading-relaxed text-brand-ink">{t.cta_body}</p>
             <a
               href={getWhatsAppURL(
                 `${dict.portfolio.whatsapp_prefix} "${projectTitle(project, lang)}" ${dict.portfolio.whatsapp_suffix}`,
@@ -255,7 +253,7 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics={`whatsapp:case-study-${project.slug}`}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[0.9375rem] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
+              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[1rem] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
             >
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
               {t.cta_label}
@@ -268,7 +266,7 @@ export default async function ProjectPage({ params }: Props) {
               className="card group mt-8 flex items-center justify-between gap-4 p-6 sm:p-7"
             >
               <span>
-                <span className="block text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                <span className="block text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
                   {t.next_project}
                 </span>
                 <span className="mt-1.5 block text-[1.125rem] font-bold text-brand-ink">

@@ -26,7 +26,7 @@ export default function Contact({ lang, dict }: Props) {
             <h2 id="contact-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
               {dict.section_title}
             </h2>
-            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
+            <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[1.1875rem]">
               {dict.section_subtitle}
             </p>
 

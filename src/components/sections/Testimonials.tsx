@@ -27,7 +27,7 @@ export default function Testimonials({ lang, dict }: Props) {
           >
             {dict.section_title}
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.0625rem]">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-[1.75] text-brand-slate sm:text-[1.1875rem]">
             {dict.section_subtitle}
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function Testimonials({ lang, dict }: Props) {
                   <span className="block text-[0.875rem] font-bold text-brand-ink">
                     {testimonial.name}
                   </span>
-                  <span className="block text-[0.8125rem] text-brand-slate">
+                  <span className="block text-[0.875rem] text-brand-slate">
                     {testimonial.role[lang]}
                   </span>
                 </span>

@@ -11,7 +11,7 @@ export default function TrustedBy({ label }: { label: string }) {
   return (
     <section aria-label={label} className="border-y border-brand-line bg-brand-panel">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
-        <p className="mb-8 text-center text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+        <p className="mb-8 text-center text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
           {label}
         </p>
 

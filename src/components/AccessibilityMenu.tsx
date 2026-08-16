@@ -240,7 +240,7 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
           className="absolute bottom-0 end-14 max-h-[70vh] w-[min(304px,calc(100vw-80px))] overflow-y-auto border border-brand-line bg-brand-panel p-5 shadow-lg"
         >
           <div className="mb-4 flex items-center justify-between gap-4">
-            <h2 className="text-[0.9375rem] font-bold text-brand-ink">{dict.title}</h2>
+            <h2 className="text-[1rem] font-bold text-brand-ink">{dict.title}</h2>
             <button
               type="button"
               onClick={() => {
@@ -258,7 +258,7 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
           <div className="mb-4">
             <p
               id="a11y-text-label"
-              className="mb-2 flex items-center gap-2 text-[0.8125rem] font-semibold text-brand-ink"
+              className="mb-2 flex items-center gap-2 text-[0.875rem] font-semibold text-brand-ink"
             >
               <Type className="h-4 w-4 text-brand-accent" aria-hidden="true" />
               {dict.text_size}
@@ -359,7 +359,7 @@ function Switch({
       type="button"
       onClick={onChange}
       aria-pressed={on}
-      className={`flex items-center justify-between gap-3 border px-3 py-2 text-[0.8125rem] transition-colors duration-200 ${
+      className={`flex items-center justify-between gap-3 border px-3 py-2 text-[0.875rem] transition-colors duration-200 ${
         on
           ? 'border-brand-accent text-brand-accent'
           : 'border-transparent text-brand-slate hover:border-brand-line hover:text-brand-ink'

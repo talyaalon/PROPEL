@@ -20,11 +20,11 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
       <h1 className="text-brand-ink">{doc.title}</h1>
 
-      <p className="mt-3 text-[0.8125rem] text-brand-slate">
+      <p className="mt-3 text-[0.875rem] text-brand-slate">
         {doc.updatedLabel}: <time dateTime={siteConfig.legalUpdated}>{formattedDate}</time>
       </p>
 
-      <p className="mt-8 text-[1.0625rem] leading-[1.8] text-brand-ink">{doc.intro}</p>
+      <p className="mt-8 text-[1.1875rem] leading-[1.8] text-brand-ink">{doc.intro}</p>
 
       <div className="mt-12 space-y-10">
         {doc.sections.map((section) => (

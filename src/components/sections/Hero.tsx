@@ -31,7 +31,11 @@ export default function Hero({ lang, dict }: Props) {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        {/* `items-center` split the height difference between the columns into
+              equal empty bands above and below the shorter one - 108px each side
+              in Hebrew, 194px in English. Top-aligned, the lockup sits with the
+              headline instead of floating in the middle of a hole. */}
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
           {/*
             No order override on either column.
             Source order alone gives the right result in both directions: the
@@ -99,7 +103,7 @@ export default function Hero({ lang, dict }: Props) {
                 </a>
                 <a
                   href="#services"
-                  className="flex items-center gap-2 text-[0.9375rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  className="flex items-center gap-2 text-[1rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                 >
                   {dict.cta_secondary}
                   <ChevronDown className="h-4 w-4" />
@@ -107,7 +111,7 @@ export default function Hero({ lang, dict }: Props) {
               </div>
 
               {/* Risk reversal - removes the "what am I signing up for" hesitation */}
-              <p className="text-[0.8125rem] text-brand-slate/90">{dict.cta_note}</p>
+              <p className="text-[0.875rem] text-brand-slate/90">{dict.cta_note}</p>
             </div>
           </div>
 
