@@ -59,9 +59,24 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
       return
     }
 
+    /*
+     * `(hover: none)` alone was too narrow a gate.
+     *
+     * It is true on a phone and false everywhere else, which sounds right -
+     * hover drives the desktop. But a desktop window dragged down to phone
+     * width still reports `hover: hover`, so at that size nothing auto-played
+     * and nothing was hovering either: the frames just sat there. Same for a
+     * touchscreen laptop, which reports both.
+     *
+     * `(pointer: coarse)` is the more accurate question - is the primary input
+     * a finger - and the width check covers the resized-window case, where
+     * there is no room for hover to be discoverable anyway.
+     */
     const mayAnimate =
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-      window.matchMedia('(hover: none)').matches
+      (window.matchMedia('(pointer: coarse)').matches ||
+        window.matchMedia('(hover: none)').matches ||
+        window.matchMedia('(max-width: 767px)').matches)
 
     /*
      * Two observers, because they need different roots. `intersectionRatio` is
