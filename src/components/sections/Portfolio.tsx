@@ -15,6 +15,7 @@ type PortfolioDict = {
   cta_button: string
   cta_whatsapp: string
   stack_label: string
+  eyebrow: string
   filter_label: string
   filter_status: string
   filter_status_one: string
@@ -36,7 +37,8 @@ export default function Portfolio({ lang, dict }: Props) {
   return (
     <section id="portfolio" aria-labelledby="portfolio-heading" className="section">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center lg:mb-14">
+        <div className="mb-8 flex flex-col items-center text-center lg:mb-14">
+          <p className="eyebrow mb-6">{dict.eyebrow}</p>
           <h2 id="portfolio-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>

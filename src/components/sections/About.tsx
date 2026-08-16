@@ -8,6 +8,7 @@ type Value = {
 }
 
 type AboutDict = {
+  eyebrow: string
   section_title: string
   section_subtitle: string
   paragraphs: string[]
@@ -37,10 +38,11 @@ export default function About({ dict }: Props) {
               and left About as the only section on the page that did not
               mirror in Hebrew. Source order alone is correct. */}
           <div className="flex flex-col gap-7">
-            {/* Eyebrow - full-strength steel; at 60% opacity this failed WCAG AA on white */}
-            <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
-              {dict.section_subtitle}
-            </p>
+            {/* The shared `.eyebrow`, not a hand-rolled one. This section had
+                its own approximation - different size, different tracking, no
+                accent rule - which is part of why the page read as one section
+                that was designed and five that were assembled. */}
+            <p className="eyebrow mb-1">{dict.eyebrow}</p>
 
             {/* Heading */}
             <h2 id="about-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">

@@ -217,6 +217,57 @@ html {
     }
   }
 
+  /* ── The inverted section ─────────────────────────────────────────────────
+     One section on the opposite ground, to cut the page into three acts.
+
+     Measured before this: the brightest surface on the page and the darkest
+     were 1.185:1 apart, and three off-whites accounted for 87.5% of every
+     pixel. The band alternation was already implemented and correct - and
+     invisible, because `--surface` and `--band` differ by 1.084:1. The
+     structure was there; the value distance was not.
+
+     Nothing inside needs touching. Every component already resolves its colour
+     through these variables, so the cards, the numerals, the borders and the
+     accent all flip for free. This is the whole reason the token discipline
+     was worth building, and it had never been cashed in.
+
+     The dark theme swaps back, so the inverted section is always the opposite
+     of whatever the visitor chose - not always dark. */
+  .section--invert {
+    --surface: #1c1e19;
+    --band: #161813;
+    --panel: #24271f;
+    --raised: #24271f;
+    --ink: #f1efea;
+    --slate: #a6a99f;
+    --line: rgba(241, 239, 234, 0.14);
+    --line-strong: rgba(241, 239, 234, 0.3);
+    --field-border: #6f736a;
+    --accent: #e0714d;
+    --accent-soft: rgba(224, 113, 77, 0.55);
+    --accent-wash: rgba(224, 113, 77, 0.22);
+    --on-accent: #1c1e19;
+    background-color: var(--surface);
+    border-top: none;
+    border-bottom: none;
+  }
+
+  :root[data-theme='dark'] .section--invert {
+    --surface: #f6f5f1;
+    --band: #eeece5;
+    --panel: #faf9f6;
+    --raised: #fbfaf7;
+    --ink: #1f221c;
+    --slate: #5f6259;
+    --line: rgba(31, 34, 28, 0.14);
+    --line-strong: rgba(31, 34, 28, 0.3);
+    --field-border: #8a8d84;
+    --accent: #7a1c09;
+    --accent-soft: rgba(122, 28, 9, 0.55);
+    --accent-wash: rgba(122, 28, 9, 0.16);
+    --on-accent: #f7f6f2;
+  }
+
   /* Alternating band.
 
      Six sections ran on one uninterrupted colour, so a large gap read as "the

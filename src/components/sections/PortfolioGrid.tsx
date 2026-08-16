@@ -20,6 +20,7 @@ type PortfolioDict = {
   cta_button: string
   cta_whatsapp: string
   stack_label: string
+  eyebrow: string
   filter_label: string
   filter_status: string
   filter_status_one: string
@@ -121,6 +122,24 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
 
               {/* Content */}
               <div className="flex min-w-0 flex-1 flex-col p-6 sm:p-7">
+                {/*
+                  The number leads.
+                  
+                  It was 26px, below the summary and above the tech tags -
+                  third in a card whose entire job is proof. First, and at
+                  56px, it is the thing the eye lands on. Latin digits render
+                  in Chakra Petch even on the Hebrew page, so this is also the
+                  one place the technical letterforms show on /he.
+                */}
+                {headline && (
+                  <div className="mb-3 flex items-baseline gap-2">
+                    <span className="num text-[3.5rem] leading-[0.85]">{headline.metric}</span>
+                    <span className="text-[0.75rem] leading-snug text-brand-slate">
+                      {headline.label[lang]}
+                    </span>
+                  </div>
+                )}
+
                 <h3
                   id={`project-${project.slug}`}
                   className="mb-2 break-words text-[1rem] font-bold text-brand-ink"
@@ -131,16 +150,6 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                 <p className="mb-5 flex-1 text-[0.875rem] leading-relaxed text-brand-slate">
                   {project.summary[lang]}
                 </p>
-
-                {/* Headline result - the single most persuasive thing on the card */}
-                {headline && (
-                  <div className="mb-5 flex items-baseline gap-2 border-t border-brand-line pt-4">
-                    <span className="num text-[1.625rem] leading-none">{headline.metric}</span>
-                    <span className="text-[0.75rem] leading-snug text-brand-slate">
-                      {headline.label[lang]}
-                    </span>
-                  </div>
-                )}
 
                 {project.techStack.length > 0 && (
                   /* A list, not a div of spans - otherwise it is announced as

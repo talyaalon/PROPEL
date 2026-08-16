@@ -7,6 +7,7 @@ import ContactForm, { type ContactDict } from './ContactForm'
 type Props = {
   lang: Locale
   dict: ContactDict & {
+    eyebrow: string
     section_title: string
     section_subtitle: string
     next_title: string
@@ -21,6 +22,7 @@ export default function Contact({ lang, dict }: Props) {
         <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
           {/* ── Intro + direct channels ─────────────────────────── */}
           <div>
+            <p className="eyebrow mb-6">{dict.eyebrow}</p>
             <h2 id="contact-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
               {dict.section_title}
             </h2>

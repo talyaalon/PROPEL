@@ -6,6 +6,7 @@ type FaqItem = {
 }
 
 type FaqDict = {
+  eyebrow: string
   section_title: string
   section_subtitle: string
   items: FaqItem[]
@@ -20,7 +21,8 @@ export default function Faq({ dict }: { dict: FaqDict }) {
   return (
     <section id="faq" aria-labelledby="faq-heading" className="section">
       <div className="mx-auto max-w-3xl">
-        <div className="mb-8 text-center lg:mb-14">
+        <div className="mb-8 flex flex-col items-center text-center lg:mb-14">
+          <p className="eyebrow mb-6">{dict.eyebrow}</p>
           <h2 id="faq-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
             {dict.section_title}
           </h2>

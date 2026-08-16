@@ -199,11 +199,13 @@
         "duration": "30 days included",
         "description": "We deploy, test and stay with you. The first month of fixes and adjustments is included in the price."
       }
-    ]
+    ],
+    "eyebrow": "Process"
   },
   "testimonials": {
     "section_title": "What clients say",
-    "section_subtitle": "Real people, real businesses"
+    "section_subtitle": "Real people, real businesses",
+    "eyebrow": "Clients"
   },
   "faq": {
     "section_title": "What a business website costs and how long it takes",
@@ -233,7 +235,8 @@
         "question": "What if we're not happy?",
         "answer": "We stay with it until it works. Working in stages is exactly why - you see output as we go, rather than discovering at the end that we went the wrong way."
       }
-    ]
+    ],
+    "eyebrow": "Questions"
   },
   "contact": {
     "section_title": "Let's talk",
@@ -271,7 +274,8 @@
       "We reply within one business day, on the channel you chose.",
       "A short call - what is stuck, what already exists, what you want to happen.",
       "A written proposal with scope, timeline and price. No obligation."
-    ]
+    ],
+    "eyebrow": "Contact"
   },
   "about": {
     "section_title": "Building websites for small businesses in Israel",
@@ -298,7 +302,8 @@
       }
     ],
     "cta_label": "Let's Work Together",
-    "whatsapp_message": "Hi PROPEL, let's talk about working together."
+    "whatsapp_message": "Hi PROPEL, let's talk about working together.",
+    "eyebrow": "About"
   },
   "footer": {
     "tagline": "We speed up what slows you down",

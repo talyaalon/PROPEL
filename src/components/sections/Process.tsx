@@ -5,6 +5,7 @@ type ProcessStep = {
 }
 
 type ProcessDict = {
+  eyebrow: string
   section_title: string
   section_subtitle: string
   steps: ProcessStep[]
@@ -16,9 +17,10 @@ type ProcessDict = {
  */
 export default function Process({ dict }: { dict: ProcessDict }) {
   return (
-    <section id="process" aria-labelledby="process-heading" className="section section--band">
+    <section id="process" aria-labelledby="process-heading" className="section section--invert">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-14 text-center lg:mb-20">
+        <div className="mb-14 flex flex-col items-center text-center lg:mb-20">
+          <p className="eyebrow mb-6">{dict.eyebrow}</p>
           <h2 id="process-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>
@@ -31,7 +33,11 @@ export default function Process({ dict }: { dict: ProcessDict }) {
           {dict.steps.map((step, index) => (
             <li key={step.title} className="card flex flex-col">
               {/* Step number */}
-              <span className="num text-[2.625rem] leading-none opacity-30" aria-hidden="true">
+              {/* Full accent at 4.5rem. It was 42px at 30% opacity - the
+                  biggest type on the page outside the headings, and the only
+                  display gesture in the design, turned down until it read as a
+                  watermark. */}
+              <span className="num text-[4.5rem] leading-[0.85]" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
 
