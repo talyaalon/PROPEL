@@ -63,13 +63,22 @@ const heebo = Heebo({
 // single line, well below the critical path.
 const frankRuhl = Frank_Ruhl_Libre({
   subsets: ['hebrew', 'latin'],
-  // One weight. `.tagline` applies no weight of its own, so 500 was downloaded
-  // and never used - and this family already costs the most bytes per word on
-  // the site.
-  weight: ['400'],
+  /*
+   * 400 for the tagline, 700 for headings.
+   *
+   * Chakra Petch carries no Hebrew, so on the default locale every heading
+   * fell through to Heebo 700 - the most common face in Israeli web design,
+   * paired with Assistant, which is the most common pairing. The site's entire
+   * typographic identity existed only on /en.
+   *
+   * Frank Ruhl Libre was already here, already subset for Hebrew, and earning
+   * its bytes with 23 glyphs at 10.4px in the footer. A bold Hebrew serif at
+   * 66px against Chakra Petch's Latin numerals is the printed logo's own
+   * pairing, and almost nobody in this market uses it.
+   */
+  weight: ['400', '700'],
   variable: '--font-frank',
   display: 'swap',
-  preload: false,
 })
 
 const assistant = Assistant({

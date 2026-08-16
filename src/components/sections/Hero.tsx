@@ -62,8 +62,16 @@ export default function Hero({ lang, dict }: Props) {
                   scroll anywhere on the site. */}
               <span className="relative inline-block max-w-full">
                 <span className="relative z-10">{dict.h1_focus}</span>
+                {/*
+                  The one emphasis gesture in the hero, and it was a 14%-alpha
+                  hairline - measured `rgba(31,34,28,0.14)` at 3px, which reads
+                  as an accidental rule rather than as a mark. Full accent, and
+                  thick enough to be a marker stroke behind the word rather
+                  than a line under it. The RTL `transform-origin` was already
+                  correct.
+                */}
                 <span
-                  className={`absolute bottom-1 start-0 h-[3px] w-full rounded-full bg-brand-line animate-underline-grow ${
+                  className={`absolute -bottom-0.5 start-0 -z-10 h-[0.35em] w-full bg-brand-accentWash animate-underline-grow ${
                     isRtl ? 'underline-rtl' : 'underline-ltr'
                   }`}
                 />

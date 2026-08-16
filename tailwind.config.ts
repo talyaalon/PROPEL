@@ -100,6 +100,7 @@ const config: Config = {
           silver: 'var(--silver)',
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',
+          accentWash: 'var(--accent-wash)',
           /* Readable on the accent - the accent's own foreground, not the page's. */
           onAccent: 'var(--on-accent)',
           band: 'var(--band)',
@@ -127,6 +128,14 @@ const config: Config = {
          * chosen for.
          */
         display: ['Chakra Petch', 'var(--font-heebo)', 'var(--font-chakra)', 'sans-serif'],
+        /*
+         * Headings only. Same mechanism as `display`, one family further on:
+         * Chakra Petch takes the Latin and the digits, and Hebrew - which it
+         * has no glyphs for - falls through to Frank Ruhl Libre instead of
+         * Heebo. Buttons, tags and eyebrows keep `display`, so the technical
+         * letterforms still carry the small Latin type.
+         */
+        heading: ['Chakra Petch', 'var(--font-frank)', 'var(--font-chakra)', 'serif'],
         body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
         /* Echoes the serif tagline on the printed logo. Frank Ruhl Libre is one
            of the few quality Hebrew serifs on Google Fonts, so one family

@@ -47,6 +47,10 @@
   --success-soft: rgba(26, 127, 69, 0.12);
   --accent: #7a1c09;
   --accent-soft: rgba(122, 28, 9, 0.55);
+  /* A wash to sit behind text, not a border colour. Opacity modifiers on
+     the bare `var(--accent)` compile to nothing, so anything translucent
+     has to be its own token. */
+  --accent-wash: rgba(122, 28, 9, 0.16);
   --on-accent: #f7f6f2;
   --selection-bg: #7a1c09;
   --selection-fg: #f7f6f2;
@@ -76,6 +80,7 @@
   /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
   --accent: #e0714d;
   --accent-soft: rgba(224, 113, 77, 0.55);
+  --accent-wash: rgba(224, 113, 77, 0.22);
   --on-accent: #1c1e19;
   --selection-bg: #e0714d;
   --selection-fg: #1c1e19;
@@ -128,7 +133,7 @@ html {
    */
   h1,
   h2 {
-    @apply font-display font-bold uppercase tracking-normal;
+    @apply font-heading font-bold uppercase tracking-normal;
     color: var(--accent);
   }
 
@@ -381,7 +386,8 @@ html {
     background-repeat: no-repeat;
     background-color: var(--raised);
     border: 2px solid var(--ink);
-    transition: background-position 17s linear;
+    /* The resting transition, which is also the one used on the way back. */
+    transition: background-position 400ms ease-out;
     cursor: pointer;
   }
 
@@ -395,25 +401,29 @@ html {
    * page scrolling, which is the whole point of the effect.
    */
   @media (pointer: coarse), (max-width: 767px) {
-    .screen {
+    .screen.is-playing {
       transition-duration: 9s;
     }
   }
 
-  /* Hovering the frame or anywhere on the card it sits in starts the scroll -
-     the whole card is the affordance, not just the image.
+  /* The scroll runs while the pointer is on the device - the phone or the
+     monitor, bezel included - and stops when it leaves.
 
-     `.device-host` is the second half of that. The portfolio articles build
-     their own surface rather than using `.card`, so `.card:hover` never
-     matched them and the promise in this comment was only ever true on paper.
-     Any container that wants to drive its devices carries the class. */
-  .screen:hover,
-  .card:hover .screen,
-  .card:focus-within .screen,
-  .device-host:hover .screen,
-  .device-host:focus-within .screen,
+     Scoped to the device rather than to the whole card on purpose. A card-wide
+     trigger meant moving the cursor anywhere near the text set both screens
+     going, which is motion the visitor did not ask for and could not aim at.
+
+     The return is fast. The long duration lives on the hover state, so leaving
+     it inherits the 400ms below and the capture snaps back to the top instead
+     of rewinding for another seventeen seconds. */
+  .phone:hover .screen--phone,
+  .phone:focus-within .screen--phone,
+  .browser:hover .screen--desktop,
+  .browser:focus-within .screen--desktop,
   .screen.is-playing {
     background-position: center bottom;
+    transition-duration: 17s;
+    transition-timing-function: linear;
   }
 
   /* ── The monitor ──────────────────────────────────────────────────────────
@@ -475,8 +485,11 @@ html {
     position: relative;
     width: 32%;
     flex-shrink: 0;
-    padding: 10px;
-    border-radius: 34px;
+    /* Thinner. 10px of bezel on a 121px device is a case, not a phone - real
+       ones are a few millimetres. The radii come down with it so the glass
+       stays concentric with the body. */
+    padding: 4px;
+    border-radius: 22px;
     background: linear-gradient(160deg, #3b3f38 0%, #14160f 40%, #2b2e27 100%);
     /* Logical property, not margin-left: in Hebrew the overlap has to fall on
        the other side or the phone detaches from the monitor. */
@@ -514,14 +527,14 @@ html {
     aspect-ratio: 9 / 19.5;
     min-height: 0;
     border: none;
-    border-radius: 24px;
+    border-radius: 18px;
   }
 
   /* The dynamic island, over the glass. `.screens` sets the stacking context;
      this sits above the scrolling background and below nothing. */
   .phone__island {
     position: absolute;
-    top: 20px;
+    top: 12px;
     left: 50%;
     transform: translateX(-50%);
     width: 28%;
