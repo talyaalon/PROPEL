@@ -6,12 +6,28 @@
  * See `.env.example` for the full list.
  */
 
-// ── Placeholder sentinels ─────────────────────────────────────────────────────
-// These are the values the project shipped with before real details existed.
-// `assertProductionConfig()` refuses to build a production deploy that still
-// uses them — a dead WhatsApp link is worse than a failed build.
+// ── The business's public contact details ─────────────────────────────────────
+//
+// Committed, not left to the environment. These are `NEXT_PUBLIC_*` values: they
+// are inlined into the client bundle at build time and printed on every page of
+// a public website, so there is no secret here to protect. Keeping them in a
+// dashboard bought nothing and cost three rounds of the site serving a phone
+// number the owner had already replaced twice - because the code was right, the
+// deploy was stale, and nothing in the repo could tell the difference.
+//
+// The environment still wins where it is set, so a preview deploy or a fork can
+// override any of them. But an unset variable now yields the real value rather
+// than an empty string.
+//
+// The one number in two forms: `053-715-4945` is what a reader sees, and
+// `972537154945` is the same number as wa.me needs it - digits only, country
+// code, no leading zero. They must never drift apart; a business with two
+// numbers is what breaks a Google Business Profile.
 
-const PLACEHOLDER_PHONE = '972501234567'
+const PHONE_DISPLAY = '053-715-4945'
+const WHATSAPP_PHONE = '972537154945'
+const CONTACT_EMAIL = 'shlomoisrael435@gmail.com'
+
 /*
  * Deliberately unbuyable. This used to be `https://propel.co.il` - which is the
  * domain the business went on to actually register, so setting the real value
@@ -25,11 +41,11 @@ const PLACEHOLDER_DOMAIN = 'https://REPLACE-ME.invalid'
 /**
  * An Israeli number in the form a machine dials, from the form a person reads.
  *
- *   050-515-4143  ->  +972505154143
+ *   053-715-4945  ->  +972537154945
  *
  * The page shows the local form, because that is what an Israeli visitor
  * recognises. `tel:` and schema.org's `telephone` both want the international
- * one: a bare `0505154143` is ambiguous to anything outside the country, and
+ * one: a bare `0537154945` is ambiguous to anything outside the country, and
  * Google treats an un-dialable `telephone` as no telephone at all.
  *
  * Anything already in international form is passed through, so a number written
@@ -49,19 +65,17 @@ export const siteConfig = {
   /** Canonical origin, no trailing slash. Used for canonical URLs, hreflang, sitemap, OG. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? PLACEHOLDER_DOMAIN).replace(/\/$/, ''),
 
-  /** International format, digits only — e.g. 972501234567. Used for every wa.me deep link. */
-  whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? PLACEHOLDER_PHONE,
+  /** International format, digits only. Used for every wa.me deep link. */
+  whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE || WHATSAPP_PHONE,
 
   /** As printed on the page - the local form an Israeli visitor recognises. */
-  phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? '',
+  phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY || PHONE_DISPLAY,
 
   /** The same number in the form `tel:` and schema.org want. */
-  phoneDial: process.env.NEXT_PUBLIC_PHONE_DISPLAY
-    ? toInternational(process.env.NEXT_PUBLIC_PHONE_DISPLAY)
-    : '',
+  phoneDial: toInternational(process.env.NEXT_PUBLIC_PHONE_DISPLAY || PHONE_DISPLAY),
 
   /** Public contact address, shown in the footer. */
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || CONTACT_EMAIL,
 
   /** Registered business name + number, shown in the footer for B2B credibility. */
   legalName: process.env.NEXT_PUBLIC_LEGAL_NAME ?? '',
@@ -102,8 +116,14 @@ export function isProductionDeploy(): boolean {
 
 // ── Guards ────────────────────────────────────────────────────────────────────
 
-/** True when a value is still the shipped-with-the-template placeholder. */
-export const usesPlaceholderPhone = siteConfig.whatsappPhone === PLACEHOLDER_PHONE
+/**
+ * True when the domain is still the sentinel.
+ *
+ * The phone and email guards that used to live here are gone, not relaxed: the
+ * values are committed above, so an unset variable can no longer produce an
+ * empty phone or a placeholder WhatsApp link. A guard that cannot fire is worse
+ * than no guard - it reads as protection.
+ */
 export const usesPlaceholderDomain = siteConfig.url === PLACEHOLDER_DOMAIN
 
 /**
@@ -113,11 +133,6 @@ export const usesPlaceholderDomain = siteConfig.url === PLACEHOLDER_DOMAIN
 export function assertProductionConfig(): void {
   const problems: string[] = []
 
-  if (usesPlaceholderPhone) {
-    problems.push(
-      'NEXT_PUBLIC_WHATSAPP_PHONE is still the placeholder - every CTA on the site is a dead link.',
-    )
-  }
   if (usesPlaceholderDomain) {
     problems.push(
       'NEXT_PUBLIC_SITE_URL is still the placeholder - canonical URLs, hreflang and OG tags point at a domain you do not own.',
@@ -125,33 +140,17 @@ export function assertProductionConfig(): void {
   }
 
   /*
-   * A visitor who does not use WhatsApp currently has one route to this
-   * business, and it is the form at 91% scroll depth. Sixteen of the
-   * seventeen calls to action on the homepage are the same wa.me link.
+   * No guard on the accessibility coordinator, deliberately.
+   *
+   * There was one, and it was right when the statement's heading read
+   * "Accessibility coordinator" over a phone number and an email with no name
+   * under it. The heading is "Accessibility enquiries" now, which is what the
+   * block actually is - and the Israeli regulations require a *named*
+   * coordinator only above a headcount threshold a one-person agency is below.
+   *
+   * So there is nothing left to fail the build over. A name is still worth
+   * adding; it is no longer a defect that one is missing.
    */
-  if (!siteConfig.phoneDisplay) {
-    problems.push(
-      'NEXT_PUBLIC_PHONE_DISPLAY is not set - there is no phone number anywhere on the site, and the business schema has no telephone.',
-    )
-  }
-  if (!siteConfig.email) {
-    problems.push(
-      'NEXT_PUBLIC_CONTACT_EMAIL is not set - there is no email address anywhere on the site, and the business schema has no email.',
-    )
-  }
-
-  /*
-   * The accessibility statement renders its coordinator block only when one of
-   * these exists, so with all of them empty the site publishes a statement
-   * claiming AA conformance and naming nobody. The Israeli regulations require
-   * a named person and a way to reach them; a statement without one is worse
-   * than no statement.
-   */
-  if (!siteConfig.a11yContactName && !siteConfig.phoneDisplay && !siteConfig.email) {
-    problems.push(
-      'No accessibility coordinator is reachable - set NEXT_PUBLIC_A11Y_CONTACT_NAME (and a phone or email). The statement publishes without one.',
-    )
-  }
 
   if (problems.length === 0) return
 

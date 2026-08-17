@@ -146,7 +146,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
                 {siteConfig.email && (
                   <li>
                     <a
-                      href={`mailto:$<span className="break-all">{siteConfig.email}</span>`}
+                      href={`mailto:${siteConfig.email}`}
                       className="flex items-center gap-3 text-[0.875rem] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
                     >
                       <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
