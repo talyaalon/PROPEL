@@ -6,26 +6,37 @@
  * See `.env.example` for the full list.
  */
 
-// ── The business's public contact details ─────────────────────────────────────
+// ── The business's phone number ───────────────────────────────────────────────
 //
-// Committed, not left to the environment. These are `NEXT_PUBLIC_*` values: they
-// are inlined into the client bundle at build time and printed on every page of
-// a public website, so there is no secret here to protect. Keeping them in a
-// dashboard bought nothing and cost three rounds of the site serving a phone
-// number the owner had already replaced twice - because the code was right, the
-// deploy was stale, and nothing in the repo could tell the difference.
+// **One raw value. Every other form is derived from it below.**
 //
-// The environment still wins where it is set, so a preview deploy or a fork can
-// override any of them. But an unset variable now yields the real value rather
-// than an empty string.
+// This is the whole fix for a bug that reached production: the site served
+// `050-515-4143` on every `tel:` link and `+972537154945` on every WhatsApp
+// link. Whoever tapped "call" and whoever tapped WhatsApp reached different
+// numbers. On a site whose entire pitch is that we fix broken processes, that
+// is the worst contradiction available.
 //
-// The one number in two forms: `053-715-4945` is what a reader sees, and
-// `972537154945` is the same number as wa.me needs it - digits only, country
-// code, no leading zero. They must never drift apart; a business with two
-// numbers is what breaks a Google Business Profile.
+// The cause was structural, not a typo. Display and WhatsApp were two separate
+// environment variables, so nothing anywhere could notice they had drifted
+// apart - and `NEXT_PUBLIC_PHONE_DISPLAY` in the deploy dashboard was stale.
+//
+// So the number is committed, and the environment can no longer override it.
+// That is deliberate and it is the point:
+//
+//   - It is a `NEXT_PUBLIC_*` value. It is inlined into the client bundle and
+//     printed on every page of a public website. There is no secret to protect
+//     and nothing was ever bought by keeping it in a dashboard.
+//   - A dashboard is not version-controlled, not reviewed, and not visible from
+//     the code. The repo said the right number for three deploys while the live
+//     site said the wrong one, and nothing in the repo could tell.
+//   - An override is only useful if someone should be able to change the phone
+//     number without a commit. Nobody should.
+//
+// To change the number: edit the line below. That is the entire procedure, and
+// `scripts/check-contact.mjs` fails the build if any other Israeli mobile
+// number reaches the rendered output.
 
-const PHONE_DISPLAY = '053-715-4945'
-const WHATSAPP_PHONE = '972537154945'
+const PHONE_RAW = '053-715-4945'
 const CONTACT_EMAIL = 'shlomoisrael435@gmail.com'
 
 /*
@@ -59,20 +70,38 @@ export function toInternational(local: string): string {
   return digits
 }
 
+/**
+ * The same number as wa.me wants it: digits only, country code, no `+`.
+ *
+ *   053-715-4945  ->  972537154945
+ *
+ * Derived from `toInternational` rather than written out, so the WhatsApp link
+ * and the `tel:` link cannot describe different numbers. That drift is the
+ * exact defect this module now exists to prevent.
+ */
+export function toWhatsApp(local: string): string {
+  return toInternational(local).replace(/\D/g, '')
+}
+
 // ── Values ────────────────────────────────────────────────────────────────────
 
 export const siteConfig = {
   /** Canonical origin, no trailing slash. Used for canonical URLs, hreflang, sitemap, OG. */
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? PLACEHOLDER_DOMAIN).replace(/\/$/, ''),
 
-  /** International format, digits only. Used for every wa.me deep link. */
-  whatsappPhone: process.env.NEXT_PUBLIC_WHATSAPP_PHONE || WHATSAPP_PHONE,
+  /*
+   * The three phone forms, all derived from `PHONE_RAW`. No environment
+   * variable is read here on purpose - see the note above the constant.
+   */
 
   /** As printed on the page - the local form an Israeli visitor recognises. */
-  phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY || PHONE_DISPLAY,
+  phoneDisplay: PHONE_RAW,
 
-  /** The same number in the form `tel:` and schema.org want. */
-  phoneDial: toInternational(process.env.NEXT_PUBLIC_PHONE_DISPLAY || PHONE_DISPLAY),
+  /** The same number as `tel:` and schema.org's `telephone` want it. */
+  phoneDial: toInternational(PHONE_RAW),
+
+  /** The same number as wa.me wants it. Used for every WhatsApp deep link. */
+  whatsappPhone: toWhatsApp(PHONE_RAW),
 
   /** Public contact address, shown in the footer. */
   email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || CONTACT_EMAIL,

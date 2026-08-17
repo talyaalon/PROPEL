@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "postbuild": "node scripts/check-contact.mjs",
     "start": "next start",
     "lint": "next lint",
+    "check:contact": "node scripts/check-contact.mjs",
     "shots": "node scripts/capture-screens.mjs",
     "audit": "node scripts/audit.mjs"
   },
