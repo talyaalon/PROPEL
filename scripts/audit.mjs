@@ -48,7 +48,8 @@ const VIEWPORTS = [
 
 function findBrowser() {
   const found = BROWSERS.find((p) => p && existsSync(p))
-  if (!found) throw new Error('No Chromium found. Install Chrome, or npx playwright install chromium')
+  if (!found)
+    throw new Error('No Chromium found. Install Chrome, or npx playwright install chromium')
   return found
 }
 
@@ -94,7 +95,7 @@ async function settle(page) {
       `The page rendered without CSS (${styled.sheets} stylesheet(s), .section has no padding).\n` +
         'A stale server is almost certainly holding the port and serving asset hashes\n' +
         'from a previous build. Kill it and re-run `npm run start` before measuring:\n' +
-        "  Get-NetTCPConnection -LocalPort 4455 -State Listen | %{ Stop-Process -Id $_.OwningProcess -Force }",
+        '  Get-NetTCPConnection -LocalPort 4455 -State Listen | %{ Stop-Process -Id $_.OwningProcess -Force }',
     )
   }
 
@@ -187,7 +188,8 @@ async function gaps(browser) {
     console.log(
       `\n${vp.name}  ${result.height}px = ${(result.height / vp.height).toFixed(1)} screens   total ${total}px`,
     )
-    for (const g of result.out) console.log(`        ${String(g.gap).padStart(5)}px  before ${g.id}`)
+    for (const g of result.out)
+      console.log(`        ${String(g.gap).padStart(5)}px  before ${g.id}`)
     await page.close()
   }
 }
@@ -343,7 +345,8 @@ async function headings(browser) {
     const problems = []
     let previous = 0
     for (const h of found) {
-      if (previous && h.level > previous + 1) problems.push(`h${previous} -> h${h.level} at "${h.text}"`)
+      if (previous && h.level > previous + 1)
+        problems.push(`h${previous} -> h${h.level} at "${h.text}"`)
       previous = h.level
     }
     const h1s = found.filter((h) => h.level === 1).length
@@ -380,17 +383,58 @@ function css(needle) {
     console.log('No built CSS found. Run `npm run build` first.')
     return
   }
-  const escaped = needle.replace(/[/]/g, '\\\\/').replace(/[.*+?^${}()|[\]]/g, '\\$&')
+  /*
+   * Two escaping passes, and missing the first one made this check worthless.
+   *
+   * Tailwind writes a literal backslash before every character that is not
+   * valid in a bare CSS identifier, so the class `text-[0.875rem]` is emitted
+   * as the selector `.text-\[0\.875rem\]`. The old version escaped the needle
+   * for the *regex* only, and then searched for a literal `[` in a file that
+   * contains `\[`. Nothing matched.
+   *
+   * The result was a check that answered "DID NOT COMPILE" for every arbitrary
+   * value and every variant prefix in the project - `text-[0.875rem]`,
+   * `opacity-[0.028]`, `leading-[1.06]`, `max-h-[70vh]`, `hover:text-brand-accent`
+   * are all present in the built CSS and all reported as missing. Only plain
+   * classes like `text-brand-ink` ever answered correctly.
+   *
+   * That is worse than having no check. It invites someone to "fix" working
+   * code, and it buries the real hits - `bg-brand-accent/10` genuinely does
+   * compile to nothing - in a wall of false ones.
+   *
+   *   1. CSS-escape, the way Tailwind does when it writes the selector.
+   *   2. Regex-escape the result, backslashes included.
+   */
+  const cssEscaped = needle.replace(/[^a-zA-Z0-9_-]/g, (ch) => '\\' + ch)
+  const forRegex = cssEscaped.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  // `(?![\w-])` stops `text-brand-ink` matching `.text-brand-inky`. A variant
+  // class is followed by its pseudo (`.hover\:x:hover`), which the guard allows.
+  const pattern = new RegExp(`\\.${forRegex}(?![\\w-])[^{]*\\{[^}]*\\}`, 'g')
+
   let hits = 0
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.css'))) {
     const body = readFileSync(join(dir, file), 'utf8')
-    const matches = body.match(new RegExp(`\\.${escaped}[^{]*\\{[^}]*\\}`, 'g'))
+    const matches = body.match(pattern)
     if (matches) {
       hits += matches.length
       matches.slice(0, 3).forEach((m) => console.log(`  ${file}: ${m.slice(0, 110)}`))
     }
   }
-  console.log(hits ? `\n  "${needle}" compiled - ${hits} rule(s)` : `\n  "${needle}" DID NOT COMPILE - it is doing nothing`)
+
+  if (hits) {
+    console.log(`\n  "${needle}" compiled - ${hits} rule(s)`)
+    return
+  }
+
+  console.log(`\n  "${needle}" DID NOT COMPILE - it is doing nothing`)
+  if (/\/\d/.test(needle)) {
+    console.log(
+      `  Likely cause: the brand colour tokens are bare \`var(--x)\` with no\n` +
+        `  \`<alpha-value>\` channel, so every opacity modifier on them compiles to\n` +
+        `  nothing. A translucent value needs its own token.`,
+    )
+  }
 }
 
 // ── Run ──────────────────────────────────────────────────────────────────────
