@@ -3,7 +3,7 @@ import { MessageCircle, ChevronDown } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
-import { getProjects, projectTitle } from '@/content/projects'
+import { getProjects, projectTitle, publishedResults } from '@/content/projects'
 import ProjectScreens from '@/components/ProjectScreens'
 
 /**
@@ -65,6 +65,8 @@ export default function Hero({ lang, dict }: Props) {
     .flatMap((p) => p.results ?? [])
     .filter((r) => /^\d+$/.test(r.metric) && (r.label.he === 'עמודים' || r.label.en === 'pages'))
     .reduce((sum, r) => sum + Number(r.metric), 0)
+
+  const heroMetric = showcase ? publishedResults(showcase)[0] : undefined
 
   const stats = [
     { value: String(projects.length), label: dict.stat_projects },
@@ -169,9 +171,12 @@ export default function Hero({ lang, dict }: Props) {
                 className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[0.875rem] text-brand-slate transition-colors duration-200 hover:text-brand-accent"
               >
                 <span className="font-semibold text-brand-ink">{projectTitle(showcase, lang)}</span>
-                {showcase.results?.[0] && (
+                {/* The first *published* metric. Reading `results[0]` directly
+                    would print `TODO(metric)` under the hero the moment a
+                    project's first metric is one we are still waiting on. */}
+                {heroMetric && (
                   <span>
-                    · {showcase.results[0].metric} {showcase.results[0].label[lang]}
+                    · {heroMetric.metric} {heroMetric.label[lang]}
                   </span>
                 )}
               </Link>
