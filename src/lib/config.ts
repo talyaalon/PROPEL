@@ -37,7 +37,6 @@
 // number reaches the rendered output.
 
 const PHONE_RAW = '053-715-4945'
-const CONTACT_EMAIL = 'shlomoisrael435@gmail.com'
 
 /*
  * Deliberately unbuyable. This used to be `https://propel.co.il` - which is the
@@ -103,8 +102,19 @@ export const siteConfig = {
   /** The same number as wa.me wants it. Used for every WhatsApp deep link. */
   whatsappPhone: toWhatsApp(PHONE_RAW),
 
-  /** Public contact address, shown in the footer. */
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || CONTACT_EMAIL,
+  /*
+   * Public contact address. Environment-only, and with no fallback on purpose.
+   *
+   * Unlike the phone, this address does not exist yet - `hello@propel.co.il`
+   * needs MX records and a mailbox before it can receive anything. A committed
+   * default would print an address that bounces, and a bounced enquiry is worse
+   * than no address at all: the sender believes they made contact.
+   *
+   * Every consumer already guards on truthiness, so while this is unset the
+   * email row simply does not render and the visitor is offered WhatsApp, the
+   * phone and the form instead. Set it once the mailbox answers.
+   */
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? '',
 
   /** Registered business name + number, shown in the footer for B2B credibility. */
   legalName: process.env.NEXT_PUBLIC_LEGAL_NAME ?? '',
