@@ -1,0 +1,416 @@
+
+##### he/  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 A      בואו נדבר                                        https://wa.me/972537154945?t 
+    6 A      053-715-4945                                     tel:+972537154945            
+    7 A      גלו את השירותים                                  #services                    
+    8 A      J-Cafe - The Kosher Place· 6 סניפים פעילים       /he/portfolio/jcafe-kosher   
+    9 A      שוחח איתנו                                       https://wa.me/972537154945?t 
+   10 A      שוחח איתנו                                       https://wa.me/972537154945?t 
+   11 A      שוחח איתנו                                       https://wa.me/972537154945?t 
+   12 A      בדיקת התאמה חינם                                 https://wa.me/972537154945?t 
+   13 A      קראו עוד על השירות                               /he/services/migration       
+   14 BUTTON הכל                                                                           
+   15 A      לקריאת המקרה - J-Cafe - The Kosher Place         /he/portfolio/jcafe-kosher   
+   16 A      WhatsApp - J-Cafe - The Kosher Place             https://wa.me/972537154945?t 
+   17 A      לקריאת המקרה - הגורר 2                           /he/portfolio/hagorer2       
+   18 A      WhatsApp - הגורר 2                               https://wa.me/972537154945?t 
+   19 A      לקריאת המקרה - כנפיים לעוף                       /he/portfolio/cnafim-lauf    
+   20 A      WhatsApp - כנפיים לעוף                           https://wa.me/972537154945?t 
+   21 A      לקריאת המקרה - BOM & Recipes                     /he/portfolio/bom-recipes    
+   22 A      WhatsApp - BOM & Recipes                         https://wa.me/972537154945?t 
+   23 A      לקריאת המקרה - Air Manage                        /he/portfolio/air-manage     
+   24 A      WhatsApp - Air Manage                            https://wa.me/972537154945?t 
+   25 A      נדבר בוואטסאפ                                    https://wa.me/972537154945?t 
+   26 A      בואו נעבוד יחד                                   https://wa.me/972537154945?t 
+   27 SUMMARY כמה עולה אתר?                                                                 
+   28 SUMMARY כמה זמן זה לוקח?                                                              
+   29 SUMMARY של מי הקוד והדומיין?                                                          
+   30 SUMMARY מה קורה אחרי שהאתר עולה?                                                      
+   31 SUMMARY אתם עובדים גם עם עסקים קטנים מאוד?                                            
+   32 SUMMARY ומה אם לא נהיה מרוצים?                                                        
+   33 A      או שוחחו איתנו עכשיו בוואטסאפ                    https://wa.me/972537154945?t 
+   34 A      053-715-4945                                     tel:+972537154945            
+   35 A      shlomoisrael435@gmail.com                        mailto:shlomoisrael435@gmail 
+   36 INPUT                                                                                NO-NAME
+   37 INPUT                                                                                NO-NAME
+   38 INPUT                                                                                NO-NAME
+   39 INPUT                                                                                NO-NAME
+   40 SELECT בחרו טווחעדיין לא יודעעד 10,000 ₪10,000-25,000                                
+   41 TEXTAREA                                                                               NO-NAME
+   42 BUTTON שליחה                                                                         
+   43 A      מדיניות הפרטיות                                  /he/privacy                  
+   44 A      שירותים                                          /he#services                 
+   45 A      תהליך                                            /he#process                  
+   46 A      עבודות                                           /he#portfolio                
+   47 A      אודות                                            /he#about                    
+   48 A      בלוג                                             /he/blog                     
+   49 A      שאלות נפוצות                                     /he#faq                      
+   50 A      צרו קשר                                          /he#contact                  
+   51 A      הצהרת נגישות                                     /he/accessibility            
+   52 A      מדיניות פרטיות                                   /he/privacy                  
+   53 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   54 A      טלפון: 053-715-4945                              tel:+972537154945            
+   55 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   56 A      EN                                               /en                          
+   -- focus left to body/document at step 57
+
+##### he/portfolio  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 BUTTON הכל                                                                           
+    6 A      לקריאת המקרה - J-Cafe - The Kosher Place         /he/portfolio/jcafe-kosher   
+    7 A      WhatsApp - J-Cafe - The Kosher Place             https://wa.me/972537154945?t 
+    8 A      לקריאת המקרה - הגורר 2                           /he/portfolio/hagorer2       
+    9 A      WhatsApp - הגורר 2                               https://wa.me/972537154945?t 
+   10 A      לקריאת המקרה - כנפיים לעוף                       /he/portfolio/cnafim-lauf    
+   11 A      WhatsApp - כנפיים לעוף                           https://wa.me/972537154945?t 
+   12 A      לקריאת המקרה - BOM & Recipes                     /he/portfolio/bom-recipes    
+   13 A      WhatsApp - BOM & Recipes                         https://wa.me/972537154945?t 
+   14 A      לקריאת המקרה - Air Manage                        /he/portfolio/air-manage     
+   15 A      WhatsApp - Air Manage                            https://wa.me/972537154945?t 
+   16 A      נדבר בוואטסאפ                                    https://wa.me/972537154945?t 
+   17 A      שירותים                                          /he#services                 
+   18 A      תהליך                                            /he#process                  
+   19 A      עבודות                                           /he#portfolio                
+   20 A      אודות                                            /he#about                    
+   21 A      בלוג                                             /he/blog                     
+   22 A      שאלות נפוצות                                     /he#faq                      
+   23 A      צרו קשר                                          /he#contact                  
+   24 A      הצהרת נגישות                                     /he/accessibility            
+   25 A      מדיניות פרטיות                                   /he/privacy                  
+   26 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   27 A      טלפון: 053-715-4945                              tel:+972537154945            
+   28 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   29 A      EN                                               /en/portfolio                
+   -- focus left to body/document at step 30
+
+##### he/portfolio/jcafe-kosher  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 A      חזרה לעבודות                                     /he/portfolio                
+    6 A      לאתר החי                                         https://www.jcafekosher.com/ 
+    7 A      בואו נדבר                                        https://wa.me/972537154945?t 
+    8 A      הפרויקט הבאהגורר 2                               /he/portfolio/hagorer2       
+    9 A      שירותים                                          /he#services                 
+   10 A      תהליך                                            /he#process                  
+   11 A      עבודות                                           /he#portfolio                
+   12 A      אודות                                            /he#about                    
+   13 A      בלוג                                             /he/blog                     
+   14 A      שאלות נפוצות                                     /he#faq                      
+   15 A      צרו קשר                                          /he#contact                  
+   16 A      הצהרת נגישות                                     /he/accessibility            
+   17 A      מדיניות פרטיות                                   /he/privacy                  
+   18 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   19 A      טלפון: 053-715-4945                              tel:+972537154945            
+   20 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   21 A      EN                                               /en/portfolio/jcafe-kosher   
+   -- focus left to body/document at step 22
+
+##### he/services/migration  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 A      בדיקת התאמה חינם                                 https://wa.me/972537154945?t 
+    6 A      הגורר 2אתר גרירה וחילוץ בן 22 עמודים, בנוי לקי   /he/portfolio/hagorer2       
+    7 A      כנפיים לעוףאתר מכון טיפול והכשרה בן 24 עמודים,   /he/portfolio/cnafim-lauf    
+    8 A      שירותים                                          /he#services                 
+    9 A      תהליך                                            /he#process                  
+   10 A      עבודות                                           /he#portfolio                
+   11 A      אודות                                            /he#about                    
+   12 A      בלוג                                             /he/blog                     
+   13 A      שאלות נפוצות                                     /he#faq                      
+   14 A      צרו קשר                                          /he#contact                  
+   15 A      הצהרת נגישות                                     /he/accessibility            
+   16 A      מדיניות פרטיות                                   /he/privacy                  
+   17 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   18 A      טלפון: 053-715-4945                              tel:+972537154945            
+   19 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   20 A      EN                                               /en/services/migration       
+   -- focus left to body/document at step 21
+
+##### he/blog  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 BUTTON הכל                                                                           
+    6 A      קישור חיצוני, נפתח בלשונית חדשהבנייה וביצועיםw   https://web.dev/articles/vit 
+    7 A      קישור חיצוני, נפתח בלשונית חדשהקידום אורגניGoo   https://developers.google.co 
+    8 A      קישור חיצוני, נפתח בלשונית חדשהבנייה וביצועיםN   https://www.nngroup.com/arti 
+    9 A      קישור חיצוני, נפתח בלשונית חדשהבנייה וביצועיםg   https://www.gov.il/he/pages/ 
+   10 A      קישור חיצוני, נפתח בלשונית חדשהבנייה וביצועיםN   https://nextjs.org/docs/app/ 
+   11 A      קישור חיצוני, נפתח בלשונית חדשהקידום אורגניSch   https://schema.org/LocalBusi 
+   12 A      J-Cafe - The Kosher Placeמסחר אונליין דו-לשוני   /he/portfolio/jcafe-kosher   
+   13 A      הגורר 2אתר גרירה וחילוץ בן 22 עמודים, בנוי לקי   /he/portfolio/hagorer2       
+   14 A      כנפיים לעוףאתר מכון טיפול והכשרה בן 24 עמודים,   /he/portfolio/cnafim-lauf    
+   15 A      שירותים                                          /he#services                 
+   16 A      תהליך                                            /he#process                  
+   17 A      עבודות                                           /he#portfolio                
+   18 A      אודות                                            /he#about                    
+   19 A      בלוג                                             /he/blog                     
+   20 A      שאלות נפוצות                                     /he#faq                      
+   21 A      צרו קשר                                          /he#contact                  
+   22 A      הצהרת נגישות                                     /he/accessibility            
+   23 A      מדיניות פרטיות                                   /he/privacy                  
+   24 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   25 A      טלפון: 053-715-4945                              tel:+972537154945            
+   26 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   27 A      EN                                               /en/blog                     
+   -- focus left to body/document at step 28
+
+##### he/accessibility  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 A      שירותים                                          /he#services                 
+    6 A      תהליך                                            /he#process                  
+    7 A      עבודות                                           /he#portfolio                
+    8 A      אודות                                            /he#about                    
+    9 A      בלוג                                             /he/blog                     
+   10 A      שאלות נפוצות                                     /he#faq                      
+   11 A      צרו קשר                                          /he#contact                  
+   12 A      הצהרת נגישות                                     /he/accessibility            
+   13 A      מדיניות פרטיות                                   /he/privacy                  
+   14 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   15 A      טלפון: 053-715-4945                              tel:+972537154945            
+   16 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   17 A      EN                                               /en/accessibility            
+   -- focus left to body/document at step 18
+
+##### he/privacy  @375
+    1 A      דילוג לתוכן הראשי                                #main                        
+    2 BUTTON פתיחת תפריט נגישות                                                            
+    3 A      PROPEL - לדף הבית                                /he                          
+    4 BUTTON פתיחת תפריט                                                                   
+    5 A      שירותים                                          /he#services                 
+    6 A      תהליך                                            /he#process                  
+    7 A      עבודות                                           /he#portfolio                
+    8 A      אודות                                            /he#about                    
+    9 A      בלוג                                             /he/blog                     
+   10 A      שאלות נפוצות                                     /he#faq                      
+   11 A      צרו קשר                                          /he#contact                  
+   12 A      הצהרת נגישות                                     /he/accessibility            
+   13 A      מדיניות פרטיות                                   /he/privacy                  
+   14 A      שוחח איתנו בוואטסאפ                              https://wa.me/972537154945?t 
+   15 A      טלפון: 053-715-4945                              tel:+972537154945            
+   16 A      אימייל: shlomoisrael435@gmail.com                mailto:shlomoisrael435@gmail 
+   17 A      EN                                               /en/privacy                  
+   -- focus left to body/document at step 18
+
+##### en/  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 A      Let's Talk                                       https://wa.me/972537154945?t 
+    6 A      053-715-4945                                     tel:+972537154945            
+    7 A      Explore Services                                 #services                    
+    8 A      J-Cafe - The Kosher Place· 6 active branches     /en/portfolio/jcafe-kosher   
+    9 A      Talk to us                                       https://wa.me/972537154945?t 
+   10 A      Talk to us                                       https://wa.me/972537154945?t 
+   11 A      Talk to us                                       https://wa.me/972537154945?t 
+   12 A      Free fit check                                   https://wa.me/972537154945?t 
+   13 A      More about this service                          /en/services/migration       
+   14 BUTTON All                                                                           
+   15 A      Read the case study - J-Cafe - The Kosher Plac   /en/portfolio/jcafe-kosher   
+   16 A      WhatsApp - J-Cafe - The Kosher Place             https://wa.me/972537154945?t 
+   17 A      Read the case study - HaGorer 2 (Towing & Reco   /en/portfolio/hagorer2       
+   18 A      WhatsApp - HaGorer 2 (Towing & Recovery)         https://wa.me/972537154945?t 
+   19 A      Read the case study - Knafayim LaOuf (Therapy    /en/portfolio/cnafim-lauf    
+   20 A      WhatsApp - Knafayim LaOuf (Therapy Practice)     https://wa.me/972537154945?t 
+   21 A      Read the case study - BOM & Recipes              /en/portfolio/bom-recipes    
+   22 A      WhatsApp - BOM & Recipes                         https://wa.me/972537154945?t 
+   23 A      Read the case study - Air Manage                 /en/portfolio/air-manage     
+   24 A      WhatsApp - Air Manage                            https://wa.me/972537154945?t 
+   25 A      Talk on WhatsApp                                 https://wa.me/972537154945?t 
+   26 A      Let's Work Together                              https://wa.me/972537154945?t 
+   27 SUMMARY What does a website cost?                                                     
+   28 SUMMARY How long does it take?                                                        
+   29 SUMMARY Who owns the code and the domain?                                             
+   30 SUMMARY What happens after launch?                                                    
+   31 SUMMARY Do you work with very small businesses?                                       
+   32 SUMMARY What if we're not happy?                                                      
+   33 A      Or message us on WhatsApp now                    https://wa.me/972537154945?t 
+   34 A      053-715-4945                                     tel:+972537154945            
+   35 A      shlomoisrael435@gmail.com                        mailto:shlomoisrael435@gmail 
+   36 INPUT                                                                                NO-NAME
+   37 INPUT                                                                                NO-NAME
+   38 INPUT                                                                                NO-NAME
+   39 INPUT                                                                                NO-NAME
+   40 SELECT Choose a rangeNot sure yetUp to ₪10,000₪10,000                                
+   41 TEXTAREA                                                                               NO-NAME
+   42 BUTTON Send                                                                          
+   43 A      privacy policy                                   /en/privacy                  
+   44 A      Services                                         /en#services                 
+   45 A      Process                                          /en#process                  
+   46 A      Work                                             /en#portfolio                
+   47 A      About                                            /en#about                    
+   48 A      Blog                                             /en/blog                     
+   49 A      FAQ                                              /en#faq                      
+   50 A      Contact                                          /en#contact                  
+   51 A      Accessibility Statement                          /en/accessibility            
+   52 A      Privacy Policy                                   /en/privacy                  
+   53 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   54 A      Phone: 053-715-4945                              tel:+972537154945            
+   55 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   56 A      HE                                               /he                          
+   -- focus left to body/document at step 57
+
+##### en/portfolio  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 BUTTON All                                                                           
+    6 A      Read the case study - J-Cafe - The Kosher Plac   /en/portfolio/jcafe-kosher   
+    7 A      WhatsApp - J-Cafe - The Kosher Place             https://wa.me/972537154945?t 
+    8 A      Read the case study - HaGorer 2 (Towing & Reco   /en/portfolio/hagorer2       
+    9 A      WhatsApp - HaGorer 2 (Towing & Recovery)         https://wa.me/972537154945?t 
+   10 A      Read the case study - Knafayim LaOuf (Therapy    /en/portfolio/cnafim-lauf    
+   11 A      WhatsApp - Knafayim LaOuf (Therapy Practice)     https://wa.me/972537154945?t 
+   12 A      Read the case study - BOM & Recipes              /en/portfolio/bom-recipes    
+   13 A      WhatsApp - BOM & Recipes                         https://wa.me/972537154945?t 
+   14 A      Read the case study - Air Manage                 /en/portfolio/air-manage     
+   15 A      WhatsApp - Air Manage                            https://wa.me/972537154945?t 
+   16 A      Talk on WhatsApp                                 https://wa.me/972537154945?t 
+   17 A      Services                                         /en#services                 
+   18 A      Process                                          /en#process                  
+   19 A      Work                                             /en#portfolio                
+   20 A      About                                            /en#about                    
+   21 A      Blog                                             /en/blog                     
+   22 A      FAQ                                              /en#faq                      
+   23 A      Contact                                          /en#contact                  
+   24 A      Accessibility Statement                          /en/accessibility            
+   25 A      Privacy Policy                                   /en/privacy                  
+   26 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   27 A      Phone: 053-715-4945                              tel:+972537154945            
+   28 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   29 A      HE                                               /he/portfolio                
+   -- focus left to body/document at step 30
+
+##### en/portfolio/jcafe-kosher  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 A      Back to work                                     /en/portfolio                
+    6 A      Visit live site                                  https://www.jcafekosher.com/ 
+    7 A      Let's talk                                       https://wa.me/972537154945?t 
+    8 A      Next projectHaGorer 2 (Towing & Recovery)        /en/portfolio/hagorer2       
+    9 A      Services                                         /en#services                 
+   10 A      Process                                          /en#process                  
+   11 A      Work                                             /en#portfolio                
+   12 A      About                                            /en#about                    
+   13 A      Blog                                             /en/blog                     
+   14 A      FAQ                                              /en#faq                      
+   15 A      Contact                                          /en#contact                  
+   16 A      Accessibility Statement                          /en/accessibility            
+   17 A      Privacy Policy                                   /en/privacy                  
+   18 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   19 A      Phone: 053-715-4945                              tel:+972537154945            
+   20 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   21 A      HE                                               /he/portfolio/jcafe-kosher   
+   -- focus left to body/document at step 22
+
+##### en/services/migration  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 A      Free fit check                                   https://wa.me/972537154945?t 
+    6 A      HaGorer 2 (Towing & Recovery)A 22-page towing    /en/portfolio/hagorer2       
+    7 A      Knafayim LaOuf (Therapy Practice)A 24-page sit   /en/portfolio/cnafim-lauf    
+    8 A      Services                                         /en#services                 
+    9 A      Process                                          /en#process                  
+   10 A      Work                                             /en#portfolio                
+   11 A      About                                            /en#about                    
+   12 A      Blog                                             /en/blog                     
+   13 A      FAQ                                              /en#faq                      
+   14 A      Contact                                          /en#contact                  
+   15 A      Accessibility Statement                          /en/accessibility            
+   16 A      Privacy Policy                                   /en/privacy                  
+   17 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   18 A      Phone: 053-715-4945                              tel:+972537154945            
+   19 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   20 A      HE                                               /he/services/migration       
+   -- focus left to body/document at step 21
+
+##### en/blog  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 BUTTON All                                                                           
+    6 A      External link, opens in a new tabBuild & perfo   https://web.dev/articles/vit 
+    7 A      External link, opens in a new tabOrganic searc   https://developers.google.co 
+    8 A      External link, opens in a new tabBuild & perfo   https://www.nngroup.com/arti 
+    9 A      External link, opens in a new tabBuild & perfo   https://www.gov.il/he/pages/ 
+   10 A      External link, opens in a new tabBuild & perfo   https://nextjs.org/docs/app/ 
+   11 A      External link, opens in a new tabOrganic searc   https://schema.org/LocalBusi 
+   12 A      J-Cafe - The Kosher PlaceBilingual online orde   /en/portfolio/jcafe-kosher   
+   13 A      HaGorer 2 (Towing & Recovery)A 22-page towing    /en/portfolio/hagorer2       
+   14 A      Knafayim LaOuf (Therapy Practice)A 24-page sit   /en/portfolio/cnafim-lauf    
+   15 A      Services                                         /en#services                 
+   16 A      Process                                          /en#process                  
+   17 A      Work                                             /en#portfolio                
+   18 A      About                                            /en#about                    
+   19 A      Blog                                             /en/blog                     
+   20 A      FAQ                                              /en#faq                      
+   21 A      Contact                                          /en#contact                  
+   22 A      Accessibility Statement                          /en/accessibility            
+   23 A      Privacy Policy                                   /en/privacy                  
+   24 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   25 A      Phone: 053-715-4945                              tel:+972537154945            
+   26 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   27 A      HE                                               /he/blog                     
+   -- focus left to body/document at step 28
+
+##### en/accessibility  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 A      Services                                         /en#services                 
+    6 A      Process                                          /en#process                  
+    7 A      Work                                             /en#portfolio                
+    8 A      About                                            /en#about                    
+    9 A      Blog                                             /en/blog                     
+   10 A      FAQ                                              /en#faq                      
+   11 A      Contact                                          /en#contact                  
+   12 A      Accessibility Statement                          /en/accessibility            
+   13 A      Privacy Policy                                   /en/privacy                  
+   14 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   15 A      Phone: 053-715-4945                              tel:+972537154945            
+   16 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   17 A      HE                                               /he/accessibility            
+   -- focus left to body/document at step 18
+
+##### en/privacy  @375
+    1 A      Skip to main content                             #main                        
+    2 BUTTON Open the accessibility menu                                                   
+    3 A      PROPEL - home                                    /en                          
+    4 BUTTON Open menu                                                                     
+    5 A      Services                                         /en#services                 
+    6 A      Process                                          /en#process                  
+    7 A      Work                                             /en#portfolio                
+    8 A      About                                            /en#about                    
+    9 A      Blog                                             /en/blog                     
+   10 A      FAQ                                              /en#faq                      
+   11 A      Contact                                          /en#contact                  
+   12 A      Accessibility Statement                          /en/accessibility            
+   13 A      Privacy Policy                                   /en/privacy                  
+   14 A      Chat with us on WhatsApp                         https://wa.me/972537154945?t 
+   15 A      Phone: 053-715-4945                              tel:+972537154945            
+   16 A      Email: shlomoisrael435@gmail.com                 mailto:shlomoisrael435@gmail 
+   17 A      HE                                               /he/privacy                  
+   -- focus left to body/document at step 18
