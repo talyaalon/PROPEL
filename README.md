@@ -18,18 +18,28 @@ npm run dev                    # http://localhost:3000 → redirects to /he
 | Locales | `he` (default) and `en`. `src/middleware.ts` redirects `/` to a locale using `Accept-Language`. **The middleware must stay inside `src/`** — with the app under `src/app`, Next silently ignores it at the project root. |
 | Content | Plain TypeScript under `src/content`. Translated UI strings live in `src/dictionaries/{he,en}.json`; both files must keep the same shape. |
 | Styling | Tailwind. Brand tokens are in `tailwind.config.ts`. |
-| Contact form | A server action (`src/actions/contact.ts`) that posts to Resend's REST API. No SDK dependency. |
+| Contact form | Posts to Netlify Forms. `public/__forms.html` is the detection file; its field names must match `ContactForm` exactly. The Resend server action it replaced is gone. |
 
 ## Configuration
 
-Everything externally visible comes from the environment through
-`src/lib/config.ts`. See `.env.example` for the full list.
+Externally visible values live in `src/lib/config.ts`. See `.env.example` for
+what is still environment-driven.
 
-Two values are required, and a **production** deploy will refuse to build
-without them — a dead WhatsApp link is worse than a failed deploy:
+**The phone number is not.** It is committed as `PHONE_RAW`, and the displayed,
+dialled and WhatsApp forms are all derived from it. To change the number, edit
+that line — that is the whole procedure.
+
+It used to be two environment variables, `NEXT_PUBLIC_PHONE_DISPLAY` and
+`NEXT_PUBLIC_WHATSAPP_PHONE`, and they drifted: the live site spent three
+deploys dialling one number and messaging another. Both are now ignored by the
+code. `npm run check:contact` runs after every build and fails if any other
+Israeli mobile number reaches the output.
+
+One value is required, and a **production** deploy will refuse to build without
+it, because canonical URLs and OG tags would otherwise point at a domain we do
+not own:
 
 - `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_WHATSAPP_PHONE`
 
 Local builds and deploy previews only warn, so development is never blocked.
 "Production" is detected per host (`CONTEXT` on Netlify, `VERCEL_ENV` on Vercel,
