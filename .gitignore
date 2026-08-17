@@ -42,3 +42,10 @@ next-env.d.ts
 # encode how this codebase is meant to be audited - and are tracked.
 .claude/settings.json
 .claude/settings.local.json
+
+# Scratch directories the review agents write measurement scripts into. They are
+# working files for one audit run, not part of the project.
+.a11y-tmp/
+.audit-tmp/
+scripts/tmp/
+scripts/.*.tmp.mjs
