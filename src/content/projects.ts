@@ -16,9 +16,9 @@
  *  every one of those is marked `PENDING` rather than guessed.
  *
  *  Search this file for `PENDING` to get the exact list of questions to ask
- *  each client. Nothing marked that way renders anywhere - see
- *  `publishedResults` and `publishedChanged` - so the pages are honest while
- *  the answers are outstanding, and each number appears the moment it is real.
+ *  each client. Nothing marked that way leaves this module - `getProjects`
+ *  strips it, see `withoutPending` - so the pages are honest while the answers
+ *  are outstanding, and each number appears the moment it is real.
  *
  *  Page counts and branch counts are verified facts about the build, and true,
  *  but they are not what closes a deal. What does is "cut quote preparation
@@ -48,14 +48,15 @@ export type ProjectCategory = (typeof projectCategories)[number]
  * client for is itself worth keeping - and keeping it here, next to the ones we
  * do have, is the only place it will not be forgotten.
  *
- * Nothing carrying this ever renders. `publishedResults` and `publishedChanged`
- * filter it out, so an unanswered metric cannot reach a page as an empty block,
- * a dash, or the literal string `TODO(metric)`.
+ * Nothing carrying this ever leaves the module: `getProjects` strips it, so an
+ * unanswered metric cannot reach a page as an empty block, a dash, or the
+ * literal string - and cannot be serialised into a client bundle either, which
+ * is where it actually escaped the first time.
  */
-export const PENDING = 'TODO(metric)'
+const PENDING = 'TODO(metric)'
 
 /** True for any value still waiting on a real number from the client. */
-export function isPending(value: string): boolean {
+function isPending(value: string): boolean {
   return value.includes(PENDING)
 }
 
@@ -118,7 +119,7 @@ export type Project = {
    *
    * Separate from `results` on purpose. `results` is a number in a block you
    * take in at a glance; this is the sentence that says what the number means.
-   * Any line still carrying `PENDING` is filtered out before render.
+   * Any line still carrying `PENDING` is removed by `getProjects`.
    */
   changed?: Bilingual[]
   /** Measurable outcomes. The most persuasive part of the page. */
@@ -141,7 +142,12 @@ export type Project = {
 
 // ── Content ───────────────────────────────────────────────────────────────────
 
-export const projects: Project[] = [
+/*
+ * Not exported. `getProjects()` is the only way to read this, which is what
+ * makes "no `PENDING` value ever leaves this module" an invariant rather than a
+ * convention - see `withoutPending`.
+ */
+const projects: Project[] = [
   {
     slug: 'jcafe-kosher',
     screens: {
@@ -331,9 +337,40 @@ export function projectTitle(project: Project, lang: Locale): string {
   return lang === 'en' && project.titleEn ? project.titleEn : project.title
 }
 
+/**
+ * A project with every `PENDING` value removed.
+ *
+ * Applied in `getProjects`, so the marker never leaves this module.
+ *
+ * Filtering at render time was not enough, and the build proved it: the
+ * portfolio grid is a client component, so the projects it receives are
+ * serialised into the RSC payload and the client bundle whole. `TODO(metric)`
+ * appeared in nine build artefacts - the homepage, both portfolio pages and a
+ * JS chunk - as data that was correctly never displayed but was still shipped
+ * to every visitor and visible in view-source.
+ *
+ * The list of numbers still to ask each client for belongs in this file, which
+ * is where it is. It does not belong in the browser.
+ */
+function withoutPending(project: Project): Project {
+  const results = (project.results ?? []).filter((result) => !isPending(result.metric))
+  const changed = (project.changed ?? []).filter(
+    (line) => !isPending(line.he) && !isPending(line.en),
+  )
+
+  return {
+    ...project,
+    // Dropped entirely when empty, so `results?.length` stays a meaningful
+    // test and no consumer has to distinguish "none" from "all pending".
+    ...(results.length > 0 ? { results } : { results: undefined }),
+    ...(changed.length > 0 ? { changed } : { changed: undefined }),
+  }
+}
+
 export function getProjects(): Project[] {
   return projects
     .filter((project) => showDrafts || !project.draft)
+    .map(withoutPending)
     .sort((a, b) => {
       if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1
       return (b.year ?? 0) - (a.year ?? 0)
@@ -345,20 +382,15 @@ export function getProjectBySlug(slug: string): Project | undefined {
 }
 
 /**
- * A project's metrics, minus the ones we are still waiting on.
+ * A project's outcome lines in one locale.
  *
- * Every consumer must go through this rather than reading `results` directly.
- * A `PENDING` metric reaching a page would render as an empty stat block or as
- * the literal text `TODO(metric)` - and an empty block is worse than no block,
- * because it reads as a number the client could not produce.
+ * No filtering here: `getProjects` has already removed every `PENDING` line.
+ * There is deliberately only one place that strips them - a second filter at
+ * render time reads as the safety net and is not one, because it cannot cover
+ * serialisation, which is where the marker actually escaped.
  */
-export function publishedResults(project: Project): ProjectResult[] {
-  return (project.results ?? []).filter((result) => !isPending(result.metric))
-}
-
-/** A project's outcome lines, minus the ones still waiting on a number. */
-export function publishedChanged(project: Project, lang: Locale): string[] {
-  return (project.changed ?? []).map((line) => line[lang]).filter((line) => !isPending(line))
+export function changedLines(project: Project, lang: Locale): string[] {
+  return (project.changed ?? []).map((line) => line[lang])
 }
 
 export function getProjectSlugs(): string[] {

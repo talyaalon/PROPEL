@@ -7,12 +7,7 @@ import FilterChips from '@/components/FilterChips'
 import { MessageCircle, Lock } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
-import {
-  projectTitle,
-  publishedResults,
-  type Project,
-  type ProjectCategory,
-} from '@/content/projects'
+import { projectTitle, type Project, type ProjectCategory } from '@/content/projects'
 
 type PortfolioDict = {
   view_project: string
@@ -76,9 +71,11 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {visible.map((project) => {
           const waMessage = `${dict.whatsapp_prefix} "${projectTitle(project, lang)}" ${dict.whatsapp_suffix}`
-          // `publishedResults`, not `results` - a metric we are still waiting on
-          // would otherwise headline the card as the literal `TODO(metric)`.
-          const headline = publishedResults(project)[0]
+          // Safe to read directly: `getProjects` strips every pending metric
+          // before a project reaches here. Filtering again in this component
+          // would ship the predicate - and the string `TODO(metric)` with it -
+          // into the client bundle, which is exactly how it leaked before.
+          const headline = project.results?.[0]
 
           return (
             <article

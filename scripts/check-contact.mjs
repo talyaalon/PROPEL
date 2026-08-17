@@ -1,6 +1,7 @@
 /**
- * Fails the build if a phone number that is not the business's reaches the
- * rendered output.
+ * Fails the build on anything that must not reach a browser: a phone number
+ * that is not the business's, or a placeholder marker for content we do not
+ * have yet.
  *
  * This exists because the wrong number shipped. For three deploys the site
  * served `050-515-4143` on every `tel:` link and `+972537154945` on every
@@ -48,10 +49,27 @@ const national = canonicalDigits.replace(/^0/, '') // 537154945
  */
 const PHONE_PATTERN = /(?:\+?972[-\s.]?|0)5\d(?:[-\s.]?\d){7}/g
 
-const ROOTS = ['.next/server/app', '.next/static', 'public']
-const EXTENSIONS = new Set(['.html', '.js', '.json', '.rsc', '.txt', '.xml'])
+/*
+ * Only what actually reaches a browser.
+ *
+ * `.next/server/app` holds two different kinds of thing. The prerendered
+ * `.html`, `.rsc`, `.txt` and `.xml` files are the response a visitor gets and
+ * must be clean. The `.js` files beside them are compiled server handlers that
+ * never leave the machine - and they legitimately contain every fallback and
+ * sentinel in the source, including `REPLACE-ME.invalid`. Scanning those would
+ * fail the build on a string that is doing its job, which is how a check earns
+ * the reputation that gets it deleted.
+ *
+ * `.next/static` and `public` are served verbatim, so everything there counts.
+ */
+const OUTPUT_EXTENSIONS = new Set(['.html', '.rsc', '.txt', '.xml', '.json'])
+const ROOTS = [
+  { dir: '.next/server/app', extensions: OUTPUT_EXTENSIONS },
+  { dir: '.next/static', extensions: null }, // null = every file
+  { dir: 'public', extensions: null },
+]
 
-function walk(dir) {
+function walk(dir, extensions) {
   let files = []
   let entries
   try {
@@ -61,15 +79,18 @@ function walk(dir) {
   }
   for (const entry of entries) {
     const full = join(dir, entry)
-    if (statSync(full).isDirectory()) files = files.concat(walk(full))
-    else if (EXTENSIONS.has(extname(full))) files.push(full)
+    if (statSync(full).isDirectory()) files = files.concat(walk(full, extensions))
+    else if (!extensions || extensions.has(extname(full))) files.push(full)
   }
   return files
 }
 
+/** Every file a visitor could receive, scanned once. */
+const outputFiles = ROOTS.flatMap((root) => walk(root.dir, root.extensions))
+
 const offenders = new Map() // normalised number -> Set of files
 
-for (const file of ROOTS.flatMap(walk)) {
+for (const file of outputFiles) {
   const text = readFileSync(file, 'utf8')
   for (const match of text.match(PHONE_PATTERN) ?? []) {
     const digits = match.replace(/\D/g, '')
@@ -80,6 +101,44 @@ for (const file of ROOTS.flatMap(walk)) {
     if (!offenders.has(normalised)) offenders.set(normalised, new Set())
     offenders.get(normalised).add(file)
   }
+}
+
+/*
+ * Placeholder markers that must never reach a browser.
+ *
+ * `TODO(metric)` marks a number we have not been given yet. Filtering it at
+ * render time was not enough: the portfolio grid is a client component, so the
+ * projects handed to it are serialised into the RSC payload and the client
+ * bundle whole. The marker turned up in nine build artefacts as data that was
+ * correctly never displayed but was still shipped and visible in view-source.
+ * `getProjects` strips it now, and this makes sure it stays stripped.
+ */
+const PLACEHOLDER_MARKERS = ['TODO(metric)', 'TODO(i18n)', 'REPLACE-ME.invalid']
+const placeholderHits = new Map()
+
+for (const file of outputFiles) {
+  const text = readFileSync(file, 'utf8')
+  for (const marker of PLACEHOLDER_MARKERS) {
+    if (!text.includes(marker)) continue
+    if (!placeholderHits.has(marker)) placeholderHits.set(marker, new Set())
+    placeholderHits.get(marker).add(file)
+  }
+}
+
+if (placeholderHits.size > 0) {
+  console.error(`\n[contact] A placeholder marker reached the build.\n`)
+  for (const [marker, files] of placeholderHits) {
+    console.error(`  ${marker}  in ${files.size} file(s):`)
+    for (const file of [...files].slice(0, 5)) console.error(`      ${file}`)
+    if (files.size > 5) console.error(`      ... and ${files.size - 5} more`)
+  }
+  console.error(
+    `\n  These mark content we do not have yet and must never ship. Note that` +
+      `\n  not rendering one is not enough - data passed to a client component` +
+      `\n  is serialised into the page whether it is displayed or not. Strip it` +
+      `\n  in the content module instead, the way \`getProjects\` does.\n`,
+  )
+  process.exit(1)
 }
 
 if (offenders.size > 0) {
@@ -100,4 +159,6 @@ if (offenders.size > 0) {
   process.exit(1)
 }
 
-console.log(`[contact] ok - ${rawMatch[1]} is the only phone number in the build`)
+console.log(
+  `[contact] ok - ${rawMatch[1]} is the only phone number in the build, no placeholders leaked`,
+)

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ExternalLink, ArrowRight, ArrowLeft, MessageCircle } from 'lucide-react'
+import { ExternalLink, ArrowRight, ArrowLeft, MessageCircle, Check } from 'lucide-react'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
@@ -11,7 +11,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import ProjectScreens from '@/components/ProjectScreens'
-import { getProjects, getProjectBySlug, projectTitle } from '@/content/projects'
+import { getProjects, getProjectBySlug, projectTitle, changedLines } from '@/content/projects'
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>
@@ -57,6 +57,10 @@ export default async function ProjectPage({ params }: Props) {
   const isRtl = lang === 'he'
   const BackArrow = isRtl ? ArrowRight : ArrowLeft
 
+  // Both already stripped of pending values by `getProjects`.
+  const metrics = project.results ?? []
+  const changed = changedLines(project, lang)
+
   const published = getProjects()
   const index = published.findIndex((p) => p.slug === project.slug)
   const next = published[(index + 1) % published.length]
@@ -100,7 +104,24 @@ export default async function ProjectPage({ params }: Props) {
             {t.back}
           </Link>
 
-          <h1 className="mb-6 font-display leading-none">{projectTitle(project, lang)}</h1>
+          {/*
+            The brand name is the eyebrow and the problem is the `h1`.
+
+            It was the other way round, over a row of technology chips, and
+            that ordering sells to the wrong reader: `Next.js, Supabase, ODOO,
+            Stripe` means something to a developer and nothing to the business
+            owner we want as a client. What they recognise is their own problem
+            stated back to them.
+
+            The name stays visible here rather than living only in the
+            `<title>` - a case study that never names the client reads as one we
+            are not allowed to talk about.
+          */}
+          <p className="eyebrow mb-4">{projectTitle(project, lang)}</p>
+
+          <h1 className="mb-6 font-display leading-[1.08]">
+            {project.headline?.[lang] ?? projectTitle(project, lang)}
+          </h1>
 
           {/* Client / year - omitted entirely when unknown rather than shown blank */}
           {(project.client || project.year) && (
@@ -126,26 +147,21 @@ export default async function ProjectPage({ params }: Props) {
             </dl>
           )}
 
-          {project.techStack.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-brand-line bg-brand-line px-3 py-1 text-xs font-semibold text-brand-ink backdrop-blur-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* The technology chips used to sit here, directly under the brand
+              name. They are the last block before the CTA now - they still
+              matter to a reader who knows what they mean, they are simply not
+              the first thing a business owner meets. */}
         </div>
       </section>
 
       {/* ── Results strip ─────────────────────────────────────────────────── */}
-      {project.results && project.results.length > 0 && (
+      {/* `publishedResults`, so a metric we have not been given yet cannot
+          render as an empty block. An empty stat block is worse than none: it
+          reads as a number the client could not produce. */}
+      {metrics.length > 0 && (
         <section className="border-b border-brand-line bg-brand-panel" aria-label={t.results}>
           <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8 lg:py-12">
-            {project.results.map((result) => (
+            {metrics.map((result) => (
               <div key={result.label[lang]}>
                 <p className="num text-[2.5rem] leading-none lg:text-[3rem]">{result.metric}</p>
                 <p className="mt-2 text-[0.875rem] leading-snug text-brand-slate">
@@ -178,19 +194,41 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* ── Challenge / Solution ──────────────────────────────────────────── */}
-      {/* Falls back to the summary while the full narrative is still being written,
- so a published project never renders an empty page. */}
+      {/* ── What was stuck / what we built / what changed ──────────────────
+          The narrative, in the order a buyer reads it: their problem, our
+          answer, the difference. Falls back to the summary while a project's
+          narrative is still unwritten, so a published project is never an
+          empty page. */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         {project.challenge || project.solution ? (
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-            {project.challenge && <Block title={t.challenge} body={project.challenge[lang]} />}
-            {project.solution && <Block title={t.solution} body={project.solution[lang]} />}
+            {project.challenge && <Block title={t.stuck} body={project.challenge[lang]} />}
+            {project.solution && <Block title={t.built} body={project.solution[lang]} />}
           </div>
         ) : (
           <p className="max-w-2xl text-lg leading-relaxed text-brand-ink">
             {project.summary[lang]}
           </p>
+        )}
+
+        {/* Only the outcome lines that carry a real number. Every line for
+            these three is still `PENDING`, so this renders for nobody yet and
+            appears per project as each client answers. */}
+        {changed.length > 0 && (
+          <div className="mt-14 lg:mt-20">
+            <SectionLabel>{t.changed}</SectionLabel>
+            <ul className="mt-6 grid max-w-3xl gap-3">
+              {changed.map((line) => (
+                <li key={line} className="flex items-start gap-3 text-lg leading-relaxed">
+                  <Check
+                    className="mt-1.5 h-4 w-4 flex-shrink-0 text-brand-accent"
+                    aria-hidden="true"
+                  />
+                  <span className="text-brand-ink">{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {project.liveUrl && (
@@ -210,6 +248,30 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         )}
       </section>
+
+      {/* ── The stack ─────────────────────────────────────────────────────
+          Last block before the CTA. It was the first thing under the project
+          name, which put `Next.js, Supabase, ODOO, Stripe` in front of a
+          reader who does not know what any of it is. It has not been removed -
+          a technical reader evaluating us wants exactly this - it is simply
+          after the part that says what the work was for. */}
+      {project.techStack.length > 0 && (
+        <section
+          className="border-t border-brand-line bg-brand-panel px-4 py-12 sm:px-6 lg:px-8"
+          aria-labelledby="case-stack"
+        >
+          <div className="mx-auto max-w-7xl">
+            <SectionLabel id="case-stack">{t.stack}</SectionLabel>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {project.techStack.map((tag) => (
+                <li key={tag} className="tag">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* ── Gallery ───────────────────────────────────────────────────────── */}
       {project.gallery && project.gallery.length > 0 && (
@@ -288,14 +350,36 @@ export default async function ProjectPage({ params }: Props) {
   )
 }
 
+/**
+ * The rule-and-label heading used by every block on this page.
+ *
+ * Extracted so "what was stuck", "what changed" and the stack cannot drift
+ * apart in weight, tracking or colour - three near-identical headings written
+ * out three times is how that happens.
+ */
+function SectionLabel({ children, id }: { children: React.ReactNode; id?: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="block h-px w-8 bg-brand-accent" aria-hidden="true" />
+      <h2 id={id} className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">
+        {children}
+      </h2>
+    </div>
+  )
+}
+
 function Block({ title, body }: { title: string; body: string }) {
   return (
     <div>
-      <div className="mb-4 flex items-center gap-3">
-        <span className="block h-px w-8 bg-brand-accent" aria-hidden="true" />
-        <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">{title}</h2>
-      </div>
-      <p className="text-lg leading-relaxed text-brand-ink">{body}</p>
+      <SectionLabel>{title}</SectionLabel>
+      {/*
+        `whitespace-pre-line`, because the narrative fields carry paragraph
+        breaks as `
+
+`. Without it both paragraphs collapse into one wall of
+        text - the second paragraph of every `solution` is a distinct point.
+      */}
+      <p className="mt-4 whitespace-pre-line text-lg leading-relaxed text-brand-ink">{body}</p>
     </div>
   )
 }

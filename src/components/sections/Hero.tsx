@@ -3,7 +3,7 @@ import { MessageCircle, ChevronDown } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
-import { getProjects, projectTitle, publishedResults } from '@/content/projects'
+import { getProjects, projectTitle } from '@/content/projects'
 import ProjectScreens from '@/components/ProjectScreens'
 
 /**
@@ -66,7 +66,8 @@ export default function Hero({ lang, dict }: Props) {
     .filter((r) => /^\d+$/.test(r.metric) && (r.label.he === 'עמודים' || r.label.en === 'pages'))
     .reduce((sum, r) => sum + Number(r.metric), 0)
 
-  const heroMetric = showcase ? publishedResults(showcase)[0] : undefined
+  // Already stripped of pending values by `getProjects`.
+  const heroMetric = showcase?.results?.[0]
 
   const stats = [
     { value: String(projects.length), label: dict.stat_projects },
