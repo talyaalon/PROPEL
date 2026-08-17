@@ -161,8 +161,17 @@ html {
     overflow-wrap: break-word;
   }
 
+  /*
+   * The ceiling is the hero's whole job. At 4.125rem the H1 was 66px against
+   * H2s at 52 - a ratio of 1.27, which is not a headline dominating a page,
+   * it is the same voice one notch louder. 5.75rem takes it to 92px and the
+   * ratio to 1.77.
+   *
+   * The floor does not move. It is what keeps 200% text on a 320px screen
+   * from scrolling sideways, and it was measured to get there.
+   */
   h1 {
-    font-size: clamp(1.75rem, 5.6vw, 4.125rem);
+    font-size: clamp(1.75rem, 6.4vw, 5.75rem);
     line-height: 0.98;
   }
 

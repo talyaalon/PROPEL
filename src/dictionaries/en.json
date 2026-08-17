@@ -24,15 +24,19 @@
     "blog": "Blog"
   },
   "hero": {
-    "h1_pre": "",
-    "h1_focus": "Websites and automation",
-    "h1_post": "for growing businesses",
-    "subtitle": "Websites and automations for small and mid-sized businesses. Built fast, loading fast, and taking the manual work that eats your day off your plate.",
+    "h1_pre": "Every manual process",
+    "h1_focus": "is time you never get back",
+    "h1_post": "",
+    "subtitle": "We build business websites and automated systems that replace the paper, the pen and the spreadsheet - and give you the hours back.",
     "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
     "cta_note": "A 20-minute scoping call. No commitment.",
     "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
-    "brand_tagline": "Speed up what slows you down"
+    "eyebrow": "Automation for business",
+    "proof_label": "For example",
+    "stat_projects": "live projects",
+    "stat_pages": "pages built",
+    "stat_fields": "fields"
   },
   "trusted_by": "Businesses working with us",
   "services": {
