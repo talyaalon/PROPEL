@@ -6,7 +6,7 @@ no database.
 
 ```bash
 npm install
-cp .env.example .env.local     # fill in at least the two REQUIRED values
+cp .env.example .env.local     # NEXT_PUBLIC_SITE_URL is the only required one
 npm run dev                    # http://localhost:3000 → redirects to /he
 ```
 
@@ -80,7 +80,13 @@ Connect the GitHub repository in the Netlify UI rather than uploading builds, so
 every push deploys and pull requests get previews. Set the environment variables
 in the Netlify project settings — `.env.local` is gitignored and never deployed.
 
-Current project: `propel-agency` (Netlify team `talyaalon`).
+Current project: `subtle-begonia-d730cc`, deploying from `main` on
+`shlomo435/propel`. Live at https://propel.co.il.
+
+The repository moved. Netlify installs its GitHub App at the repository level and
+that needs **admin**, which we do not have on `talyaalon/PROPEL` - push access is
+not enough. `shlomo435/propel` is the deploy source; both remotes are kept in
+sync by pushing to each.
 
 ### The contributor gate
 
@@ -106,8 +112,11 @@ Netlify → Members → Git Contributors, or builds will stop.
 - The logo is HTML text in Raleway (`src/components/Logo.tsx`), not an image. An
   SVG loaded through `<img>` cannot reach the page's webfonts. If you swap in a
   designed logo, change that one component.
-- Tailwind opacity modifiers only exist on the theme scale (multiples of 5).
-  `border-white/8` generates nothing at all — use `/10` or `/[0.08]`.
+- **Tailwind opacity modifiers do not work on brand tokens at all.** The colour
+  tokens are bare `var(--x)` with no `<alpha-value>` channel, so `bg-brand-ink/40`
+  compiles to nothing — silently, with no error and no warning. This has shipped
+  three separate times. A translucent value needs its own token. Check any
+  suspicious class with `npm run audit -- css <class>`.
 
 ## Scripts
 
@@ -116,4 +125,17 @@ npm run dev     # dev server
 npm run build   # production build
 npm run start   # serve the production build
 npm run lint
+
+npm run check:contact   # fails if a phone number that is not ours is in the build
+                        # (runs automatically as postbuild)
+
+npm run audit -- gaps      # vertical rhythm and dead space, both locales
+npm run audit -- contrast  # WCAG AA on every text role, both themes
+npm run audit -- tab       # keyboard order and focus visibility
+npm run audit -- headings  # heading outline per route
+npm run audit -- css <cls> # whether a Tailwind class compiles to anything
 ```
+
+The audit harness drives a real browser against a production build and refuses
+to run against an unstyled page — measuring a page whose CSS failed to load
+produces numbers that look excellent and mean the opposite.
