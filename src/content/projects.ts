@@ -115,6 +115,12 @@ export type Project = {
   /** What we built. */
   solution?: Bilingual
   /**
+   * The process we built, step by step, for the flow diagram on the case
+   * study. Every step is taken from the approved narrative - it names a
+   * screen or an action that exists. No step is invented for the drawing.
+   */
+  flow?: { label: Bilingual; meta?: Bilingual }[]
+  /**
    * What changed afterwards — one line per outcome.
    *
    * Separate from `results` on purpose. `results` is a number in a block you
@@ -176,6 +182,40 @@ const projects: Project[] = [
       // TODO(i18n)
       en: 'A bilingual storefront with secure checkout, and an operations layer above it: a picker screen in each branch showing what to assemble right now, and a kitchen display that receives the order directly — with nobody reading it out loud. Everything syncs both ways with ODOO, so stock and prices stay a single source of truth.\n\nOn top of that, an automated test suite runs the ordering path on every update, so no code change can break a customer’s ability to order and pay. In commerce, that is the difference between a bug and a lost day of sales.',
     },
+    flow: [
+      {
+        label: { he: 'הזמנה באתר', en: 'Order placed on the site' },
+        meta: {
+          he: 'חנות דו-לשונית, תשלום מאובטח',
+          en: 'Bilingual storefront, secure checkout',
+        },
+      },
+      {
+        label: { he: 'סנכרון מלאי ותמחור', en: 'Stock and pricing sync' },
+        meta: {
+          he: 'דו-כיווני מול ODOO - מקור אמת אחד',
+          en: 'Two-way with ODOO - one source of truth',
+        },
+      },
+      {
+        label: { he: 'מסך מלקט בסניף', en: 'Picker screen at the branch' },
+        meta: { he: 'מה להרכיב עכשיו, לפי סניף', en: 'What to assemble now, per branch' },
+      },
+      {
+        label: { he: 'מסך מטבח (KDS)', en: 'Kitchen display (KDS)' },
+        meta: {
+          he: 'ההזמנה מגיעה ישר - אף אחד לא מקריא אותה בקול',
+          en: 'The order arrives directly - nobody reads it out loud',
+        },
+      },
+      {
+        label: { he: 'בדיקות אוטומטיות על כל עדכון', en: 'Automated tests on every update' },
+        meta: {
+          he: 'מסלול ההזמנה נבדק לפני שכל שינוי קוד עולה',
+          en: 'The ordering path is verified before any code change ships',
+        },
+      },
+    ],
     changed: [
       {
         he: `זמן מרגע הזמנה עד שהיא על מסך המטבח: ${PENDING}`,
@@ -258,6 +298,32 @@ const projects: Project[] = [
       // TODO(i18n)
       en: 'A bill-of-materials system with nested recipes, where a price change to one raw material cascades automatically to every product containing it — including products built from other products. Three pricing tiers are derived at once: cost, retail and wholesale, from margins the client sets.\n\nAnd instead of retyping everything, direct import from the existing Excel files. That was a condition, not a feature: a system demanding data entry from scratch starts against resistance, while one that reads what already exists starts on day one.',
     },
+    flow: [
+      {
+        label: { he: 'ייבוא מקבצי האקסל הקיימים', en: 'Import from the existing Excel files' },
+        meta: {
+          he: 'תנאי, לא פיצ׳ר - המערכת מתחילה ממה שכבר יש',
+          en: 'A condition, not a feature - the system starts from what exists',
+        },
+      },
+      {
+        label: { he: 'עדכון מחיר של חומר גלם', en: 'A raw material price changes' },
+      },
+      {
+        label: { he: 'גלגול אוטומטי בעץ המוצר', en: 'Automatic cascade through the BOM' },
+        meta: {
+          he: 'כולל מוצרים שמורכבים ממוצרים אחרים',
+          en: 'Including products built from other products',
+        },
+      },
+      {
+        label: { he: 'שלוש רמות מחיר נגזרות יחד', en: 'Three price tiers derived at once' },
+        meta: {
+          he: 'עלות, קמעונאי וסיטונאי - לפי מרווחים שהלקוח קובע',
+          en: 'Cost, retail and wholesale - from margins the client sets',
+        },
+      },
+    ],
     changed: [
       { he: `זמן לעדכון מחירים מלא: ${PENDING}`, en: `Time for a full repricing: ${PENDING}` },
       {
@@ -302,6 +368,26 @@ const projects: Project[] = [
       // TODO(i18n)
       en: 'An application managing the full life cycle of a work order: assignment to the right crew member, real-time tracking against what is happening in the field, and a documented close that stays in the history. The manager sees one picture of every open call instead of chasing updates.\n\nIt is in daily use inside the organisation — not a pilot and not a demo. That is the real test of an internal system: that people choose to use it when nobody is watching.',
     },
+    flow: [
+      { label: { he: 'קריאת שירות נפתחת', en: 'A work order is opened' } },
+      {
+        label: { he: 'הקצאה לאיש הצוות הנכון', en: 'Assigned to the right crew member' },
+      },
+      {
+        label: { he: 'מעקב במצב אמת', en: 'Tracked in real time' },
+        meta: {
+          he: 'המנהל רואה תמונה אחת של כל הקריאות הפתוחות',
+          en: 'The manager sees one picture of every open call',
+        },
+      },
+      {
+        label: { he: 'סגירה מתועדת', en: 'A documented close' },
+        meta: {
+          he: 'נשארת בהיסטוריה - עבודה רשומה היא עבודה שנמדדת',
+          en: 'Stays in the history - recorded work is measurable work',
+        },
+      },
+    ],
     changed: [
       {
         he: `זמן ממוצע לסגירת קריאה: ${PENDING}`,

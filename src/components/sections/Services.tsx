@@ -35,7 +35,12 @@ export default function Services({ lang, dict }: Props) {
       <div className="mx-auto max-w-7xl">
         {/* Section header */}
         <div className="mb-9 lg:mb-16">
-          <p className="eyebrow mb-6">{dict.eyebrow}</p>
+          <p className="eyebrow mb-6">
+            <span className="clause" aria-hidden="true">
+              01
+            </span>
+            {dict.eyebrow}
+          </p>
           <h2 id="services-heading" className="max-w-3xl">
             {dict.section_title}
           </h2>

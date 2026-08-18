@@ -69,7 +69,12 @@ export default async function MigrationPage({ params }: Props) {
     <>
       <section className="section" aria-labelledby="migration-heading">
         <div className="mx-auto max-w-3xl">
-          <p className="eyebrow mb-6">{service.badge}</p>
+          <p className="eyebrow mb-6">
+            <span className="clause" aria-hidden="true">
+              01
+            </span>
+            {service.badge}
+          </p>
           <h1 id="migration-heading">{dict.migration.h1}</h1>
           <p className="lead mt-6">{dict.migration.intro}</p>
           <p className="body-text mt-5">{service.description}</p>

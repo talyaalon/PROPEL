@@ -17,10 +17,19 @@ type ProcessDict = {
  */
 export default function Process({ dict }: { dict: ProcessDict }) {
   return (
-    <section id="process" aria-labelledby="process-heading" className="section section--invert">
+    <section
+      id="process"
+      aria-labelledby="process-heading"
+      className="section section--invert draft-marks"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 flex flex-col items-center text-center lg:mb-20">
-          <p className="eyebrow mb-6">{dict.eyebrow}</p>
+          <p className="eyebrow mb-6">
+            <span className="clause" aria-hidden="true">
+              02
+            </span>
+            {dict.eyebrow}
+          </p>
           <h2 id="process-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">
             {dict.section_title}
           </h2>

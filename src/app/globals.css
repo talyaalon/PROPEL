@@ -52,6 +52,11 @@
      3.49:1 - an AA failure the first proposed fix would have shipped. 0.07
      keeps the text at >=4.5:1 on every surface it can sit on. */
   --accent-faint: rgba(122, 28, 9, 0.07);
+  /* The drawing hairlines. `--draft-line` draws leader lines, connectors and
+     crop marks - decoration that separates nothing, so it may sit below 3:1.
+     `--draft-grid` is the band sections' graph-paper grid, fainter still. */
+  --draft-line: rgba(31, 34, 28, 0.22);
+  --draft-grid: rgba(31, 34, 28, 0.05);
   /* A wash to sit behind text, not a border colour. Opacity modifiers on
      the bare `var(--accent)` compile to nothing, so anything translucent
      has to be its own token. */
@@ -88,6 +93,8 @@
   --accent-faint: rgba(224, 113, 77, 0.08);
   --accent-wash: rgba(224, 113, 77, 0.22);
   --on-accent: #1c1e19;
+  --draft-line: rgba(241, 239, 234, 0.24);
+  --draft-grid: rgba(241, 239, 234, 0.055);
   --selection-bg: #e0714d;
   --selection-fg: #1c1e19;
 }
@@ -292,6 +299,8 @@ html {
     --accent-faint: rgba(224, 113, 77, 0.08);
     --accent-wash: rgba(224, 113, 77, 0.22);
     --on-accent: #1c1e19;
+    --draft-line: rgba(241, 239, 234, 0.24);
+    --draft-grid: rgba(241, 239, 234, 0.055);
     /* The one pair the original list missed: the footer's WhatsApp chip sits
        in this scope, and without these it drew the light theme's dark green
        on a dark surface. */
@@ -317,6 +326,8 @@ html {
     --accent-faint: rgba(122, 28, 9, 0.07);
     --accent-wash: rgba(122, 28, 9, 0.16);
     --on-accent: #f7f6f2;
+    --draft-line: rgba(31, 34, 28, 0.22);
+    --draft-grid: rgba(31, 34, 28, 0.05);
     --success: #1a7f45;
     --success-soft: rgba(26, 127, 69, 0.12);
   }
@@ -332,6 +343,13 @@ html {
     background-color: var(--band);
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
+    /* The graph-paper grid that makes a band read as a drawing sheet. Two
+       hairline gradients; --draft-grid is faint enough to sit under text
+       without costing contrast (the backdrop shift is ~1 RGB step). */
+    background-image:
+      linear-gradient(var(--draft-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--draft-grid) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 
   /* Opening paragraph under a heading */
@@ -350,6 +368,205 @@ html {
     font-size: 1rem;
     line-height: 1.75;
     color: var(--slate);
+  }
+
+  /* ── The blueprint vocabulary ──────────────────────────────────────────────
+     Seven elements, defined in docs/design-language.md, and no eighth. Every
+     decorative piece here is aria-hidden at the call site or a pseudo -
+     silent to a reader. Every VALUE any of them carries must be true and
+     checkable; a made-up number on a measurement mark is a lie drawn as
+     precision. */
+
+  /* 1 · Clause number, printed inside the eyebrow: `01 · שירותים`. */
+  .clause {
+    @apply font-display font-bold;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .clause::after {
+    content: '·';
+    color: var(--slate);
+    margin-inline: 0.6em;
+    font-weight: 400;
+  }
+
+  /* 3 · Margin annotation - a vertical mono label in the section gutter.
+     Display-gated to wide screens: a phone has no margins to annotate.
+     `--slate`, never `--draft-line`: it is text and holds 4.5:1. */
+  .draft-annotation {
+    display: none;
+  }
+
+  @media (min-width: 1280px) {
+    .draft-annotation {
+      @apply font-display font-semibold uppercase;
+      display: block;
+      position: absolute;
+      top: 96px;
+      inset-inline-end: 18px;
+      writing-mode: vertical-rl;
+      font-size: 0.6875rem;
+      letter-spacing: 0.22em;
+      color: var(--slate);
+      pointer-events: none;
+    }
+  }
+
+  /* 2 · Leader line - the hairline that joins a callout label to the thing
+     it names. Markup: label text, then <span class="draft-callout__line">
+     (aria-hidden). The accent tick marks the far end. */
+  .draft-callout {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .draft-callout__line {
+    flex: 1;
+    min-width: 32px;
+    height: 9px;
+    border-block-end: 1px solid var(--draft-line);
+    position: relative;
+  }
+
+  .draft-callout__line::after {
+    content: '';
+    position: absolute;
+    inset-inline-end: 0;
+    bottom: -2.5px;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+  }
+
+  /* 4 · Registration marks - one pair of corners per section, and only on
+     sections that change surface. Pure pseudos: zero DOM, zero reading cost. */
+  .draft-marks {
+    position: relative;
+  }
+
+  .draft-marks::before,
+  .draft-marks::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    border: 0 solid var(--draft-line);
+  }
+
+  .draft-marks::before {
+    top: 12px;
+    inset-inline-start: 12px;
+    border-block-start-width: 1px;
+    border-inline-start-width: 1px;
+  }
+
+  .draft-marks::after {
+    bottom: 12px;
+    inset-inline-end: 12px;
+    border-block-end-width: 1px;
+    border-inline-end-width: 1px;
+  }
+
+  /* 7 · Spec table - field/value rows in place of chip rows. The th is a
+     row header, so it is real semantics, not styling. */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .spec-table th {
+    @apply font-display font-semibold uppercase;
+    text-align: start;
+    vertical-align: top;
+    letter-spacing: 0.14em;
+    font-size: 0.6875rem;
+    color: var(--slate);
+    padding-block: 12px;
+    padding-inline-end: 24px;
+    /* `anywhere`, not just no-nowrap: "TECHNOLOGIES" is a single unbreakable
+       word, ~210px at 320px/200% text, and a word that cannot wrap sets the
+       column's min-content no matter what width says - the same trap as every
+       other instance, in table form. `anywhere` is the only value that
+       actually lowers min-content. Ugly mid-word breaks appear only where
+       the alternative was scrolling the whole page sideways. */
+    overflow-wrap: anywhere;
+    width: 1%;
+  }
+
+  .spec-table td {
+    padding-block: 12px;
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .spec-table tr + tr th,
+  .spec-table tr + tr td {
+    border-block-start: 1px solid var(--line);
+  }
+
+  /* 6 · Flow diagram - the client's real process as a numbered spine.
+     Vertical on purpose: a downward sequence needs no arrowheads and no
+     RTL mirroring, and it reads identically in both locales. The <ol> is
+     the content; only the spine and the squares are drawing. */
+  .flow {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .flow::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    inset-inline-start: 14px;
+    width: 1px;
+    background: var(--draft-line);
+  }
+
+  .flow__node {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .flow__index {
+    @apply font-display font-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 29px;
+    height: 29px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    font-size: 0.8125rem;
+    color: var(--accent);
+    border: 1px solid var(--ink);
+    /* Covers the spine as it passes behind. */
+    background: var(--panel);
+    position: relative;
+    z-index: 1;
+  }
+
+  .flow__label {
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .flow__meta {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--slate);
+    line-height: 1.6;
+    margin-top: 2px;
   }
 
   /* ── Eyebrow ──────────────────────────────────────────────────────────────

@@ -42,7 +42,12 @@ export default function About({ dict }: Props) {
                 its own approximation - different size, different tracking, no
                 accent rule - which is part of why the page read as one section
                 that was designed and five that were assembled. */}
-            <p className="eyebrow mb-1">{dict.eyebrow}</p>
+            <p className="eyebrow mb-1">
+              <span className="clause" aria-hidden="true">
+                04
+              </span>
+              {dict.eyebrow}
+            </p>
 
             {/* Heading */}
             <h2 id="about-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">

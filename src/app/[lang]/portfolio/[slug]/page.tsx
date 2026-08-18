@@ -11,6 +11,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import ProjectScreens from '@/components/ProjectScreens'
+import FlowDiagram from '@/components/FlowDiagram'
 import { getProjects, getProjectBySlug, projectTitle, changedLines } from '@/content/projects'
 
 type Props = {
@@ -60,6 +61,23 @@ export default async function ProjectPage({ params }: Props) {
   // Both already stripped of pending values by `getProjects`.
   const metrics = project.results ?? []
   const changed = changedLines(project, lang)
+
+  /*
+   * Clause numbers for the blueprint language (docs/design-language.md #1).
+   * Computed from the blocks this project actually renders, so a project
+   * without a flow does not skip a number - the document stays continuous.
+   */
+  const clause = (() => {
+    let n = 0
+    return () => String(++n).padStart(2, '0')
+  })()
+  const clauses = {
+    stuck: project.challenge ? clause() : '',
+    built: project.solution ? clause() : '',
+    flow: project.flow?.length ? clause() : '',
+    changed: changed.length > 0 ? clause() : '',
+    stack: project.techStack.length > 0 ? clause() : '',
+  }
 
   const published = getProjects()
   const index = published.findIndex((p) => p.slug === project.slug)
@@ -202,8 +220,12 @@ export default async function ProjectPage({ params }: Props) {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         {project.challenge || project.solution ? (
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-            {project.challenge && <Block title={t.stuck} body={project.challenge[lang]} />}
-            {project.solution && <Block title={t.built} body={project.solution[lang]} />}
+            {project.challenge && (
+              <Block clause={clauses.stuck} title={t.stuck} body={project.challenge[lang]} />
+            )}
+            {project.solution && (
+              <Block clause={clauses.built} title={t.built} body={project.solution[lang]} />
+            )}
           </div>
         ) : (
           <p className="max-w-2xl text-lg leading-relaxed text-brand-ink">
@@ -211,12 +233,25 @@ export default async function ProjectPage({ params }: Props) {
           </p>
         )}
 
+        {/* The process we built, drawn from the approved narrative - every
+            node names a screen or an action that exists. This is the block a
+            template cannot fake, which is the whole argument of the design
+            language. */}
+        {project.flow && project.flow.length > 0 && (
+          <div className="mt-14 lg:mt-20">
+            <SectionLabel clause={clauses.flow}>{t.flow_title}</SectionLabel>
+            <div className="mt-8 max-w-2xl">
+              <FlowDiagram steps={project.flow} lang={lang} ariaLabel={t.flow_title} />
+            </div>
+          </div>
+        )}
+
         {/* Only the outcome lines that carry a real number. Every line for
             these three is still `PENDING`, so this renders for nobody yet and
             appears per project as each client answers. */}
         {changed.length > 0 && (
           <div className="mt-14 lg:mt-20">
-            <SectionLabel>{t.changed}</SectionLabel>
+            <SectionLabel clause={clauses.changed}>{t.changed}</SectionLabel>
             <ul className="mt-6 grid max-w-3xl gap-3">
               {changed.map((line) => (
                 <li key={line} className="flex items-start gap-3 text-lg leading-relaxed">
@@ -261,14 +296,33 @@ export default async function ProjectPage({ params }: Props) {
           aria-labelledby="case-stack"
         >
           <div className="mx-auto max-w-7xl">
-            <SectionLabel id="case-stack">{t.stack}</SectionLabel>
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {project.techStack.map((tag) => (
-                <li key={tag} className="tag">
-                  {tag}
-                </li>
-              ))}
-            </ul>
+            <SectionLabel clause={clauses.stack} id="case-stack">
+              {t.stack}
+            </SectionLabel>
+            {/* A spec table, not a chip row (blueprint element 7). The row
+                headers are real semantics - a reader gets "field: value". */}
+            <table className="spec-table mt-6 max-w-2xl">
+              <tbody>
+                <tr>
+                  <th scope="row">{t.spec_field}</th>
+                  <td>{dict.portfolio.categories[project.category]}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{t.stack}</th>
+                  <td dir="ltr" className="text-start">
+                    {project.techStack.join(' · ')}
+                  </td>
+                </tr>
+                {project.year && (
+                  <tr>
+                    <th scope="row">{t.year}</th>
+                    <td dir="ltr" className="text-start">
+                      {project.year}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </section>
       )}
@@ -357,21 +411,42 @@ export default async function ProjectPage({ params }: Props) {
  * apart in weight, tracking or colour - three near-identical headings written
  * out three times is how that happens.
  */
-function SectionLabel({ children, id }: { children: React.ReactNode; id?: string }) {
+function SectionLabel({
+  children,
+  clause,
+  id,
+}: {
+  children: React.ReactNode
+  clause?: string
+  id?: string
+}) {
   return (
     <div className="flex items-center gap-3">
       <span className="block h-px w-8 bg-brand-accent" aria-hidden="true" />
-      <h2 id={id} className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">
+      {/* min-w-0: the h2 is a flex item, and "TECHNOLOGIES" at 200% text is
+          one unbreakable word - without shrink permission it pushed the page
+          12px sideways at 320px. Seventh instance of the min-width:auto trap. */}
+      <h2
+        id={id}
+        className="min-w-0 break-words text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+      >
+        {/* The clause number is document furniture - read aloud it is only
+            noise before the heading, so it is hidden from AT. */}
+        {clause && (
+          <span className="clause" aria-hidden="true">
+            {clause}
+          </span>
+        )}
         {children}
       </h2>
     </div>
   )
 }
 
-function Block({ title, body }: { title: string; body: string }) {
+function Block({ clause, title, body }: { clause?: string; title: string; body: string }) {
   return (
     <div>
-      <SectionLabel>{title}</SectionLabel>
+      <SectionLabel clause={clause}>{title}</SectionLabel>
       {/*
         `whitespace-pre-line`, because the narrative fields carry paragraph
         breaks as `

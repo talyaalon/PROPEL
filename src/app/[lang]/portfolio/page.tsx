@@ -50,7 +50,12 @@ export default async function PortfolioIndex({ params }: Props) {
     <section className="section" aria-labelledby="portfolio-index-heading">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 lg:mb-14">
-          <p className="eyebrow mb-6">{dict.portfolio.eyebrow}</p>
+          <p className="eyebrow mb-6">
+            <span className="clause" aria-hidden="true">
+              01
+            </span>
+            {dict.portfolio.eyebrow}
+          </p>
           <h1 id="portfolio-index-heading" className="max-w-3xl">
             {dict.portfolio.index_title}
           </h1>

@@ -52,7 +52,7 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
   ]
 
   return (
-    <footer className="section--invert px-4 py-16 text-brand-ink sm:px-6 lg:px-8 lg:py-24">
+    <footer className="section--invert draft-marks px-4 py-16 text-brand-ink sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
           {/* Brand column */}

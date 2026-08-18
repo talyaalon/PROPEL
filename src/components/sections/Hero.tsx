@@ -80,6 +80,13 @@ export default function Hero({ lang, dict }: Props) {
         aria-hidden="true"
       />
 
+      {/* Margin annotation (blueprint element 3, xl+ only). Everything in it
+          is checkable: the domain from config, the eyebrow the page itself
+          carries. Decoration to a reader - hidden from AT. */}
+      <span className="draft-annotation" aria-hidden="true">
+        {new URL(siteConfig.url).hostname} — {dict.eyebrow}
+      </span>
+
       <div className="relative mx-auto max-w-7xl">
         {/*
           No order override on either column. Source order alone is correct in
@@ -175,19 +182,27 @@ export default function Hero({ lang, dict }: Props) {
               {/* Names the work, so the frames are evidence rather than
                   decoration. Linked, because a visitor who is interested in
                   what they just watched should be able to go and read it. */}
+              {/* The caption is a leader-line callout (blueprint element 2):
+                  the label, a hairline, and an accent tick pointing at the
+                  device it names. The line is decoration; the link is real. */}
               <Link
                 href={`/${lang}/portfolio/${showcase.slug}`}
-                className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[0.875rem] text-brand-slate transition-colors duration-200 hover:text-brand-accent"
+                className="draft-callout text-[0.875rem] text-brand-slate transition-colors duration-200 hover:text-brand-accent"
               >
-                <span className="font-semibold text-brand-ink">{projectTitle(showcase, lang)}</span>
-                {/* The first *published* metric. Reading `results[0]` directly
+                <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span className="font-semibold text-brand-ink">
+                    {projectTitle(showcase, lang)}
+                  </span>
+                  {/* The first *published* metric. Reading `results[0]` directly
                     would print `TODO(metric)` under the hero the moment a
                     project's first metric is one we are still waiting on. */}
-                {heroMetric && (
-                  <span>
-                    · {heroMetric.metric} {heroMetric.label[lang]}
-                  </span>
-                )}
+                  {heroMetric && (
+                    <span>
+                      · {heroMetric.metric} {heroMetric.label[lang]}
+                    </span>
+                  )}
+                </span>
+                <span className="draft-callout__line" aria-hidden="true" />
               </Link>
             </div>
           )}
