@@ -332,6 +332,9 @@
     "copyright": "All rights reserved © PROPEL",
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
     "nav_blog": "Blog",
+    "nav_automation": "Business automation",
+    "nav_management": "Management systems",
+    "nav_ecommerce": "Online stores",
     "nav_migration": "WordPress migration"
   },
   "blog": {

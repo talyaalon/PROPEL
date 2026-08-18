@@ -17,6 +17,9 @@ type FooterDict = {
   nav_about: string
   nav_blog: string
   nav_migration: string
+  nav_automation: string
+  nav_management: string
+  nav_ecommerce: string
   nav_faq: string
   nav_contact: string
   whatsapp_cta: string
@@ -48,8 +51,12 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
     ...(hasProjects ? [{ label: dict.nav_portfolio, href: `/${lang}#portfolio` }] : []),
     { label: dict.nav_about, href: `/${lang}#about` },
     { label: dict.nav_blog, href: `/${lang}/blog` },
-    // The only dedicated service page had exactly ONE inbound link site-wide
-    // (the homepage card). A page nothing links to is a page nothing ranks.
+    // Every dedicated service page gets a site-wide inbound link here. The
+    // migration page had exactly ONE before this - a page nothing links to
+    // is a page nothing ranks.
+    { label: dict.nav_automation, href: `/${lang}/services/automation` },
+    { label: dict.nav_management, href: `/${lang}/services/management-systems` },
+    { label: dict.nav_ecommerce, href: `/${lang}/services/ecommerce` },
     { label: dict.nav_migration, href: `/${lang}/services/migration` },
     { label: dict.nav_faq, href: `/${lang}#faq` },
     { label: dict.nav_contact, href: `/${lang}#contact` },

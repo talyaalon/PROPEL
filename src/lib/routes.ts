@@ -1,4 +1,5 @@
 import { getProjects } from '@/content/projects'
+import { getServiceSlugs } from '@/content/services'
 
 /**
  * Every path the site answers, after the locale prefix. THE list - the only
@@ -26,5 +27,9 @@ export const staticPaths = [
 ] as const
 
 export function sitePaths(): string[] {
-  return [...staticPaths, ...getProjects().map((project) => `/portfolio/${project.slug}`)]
+  return [
+    ...staticPaths,
+    ...getServiceSlugs().map((slug) => `/services/${slug}`),
+    ...getProjects().map((project) => `/portfolio/${project.slug}`),
+  ]
 }
