@@ -147,6 +147,10 @@ export const siteConfig = {
  */
 export function isProductionDeploy(): boolean {
   return (
+    // Inlined at build by next.config.ts - the only form the middleware's
+    // edge bundle can see. The runtime reads below keep local `npm run build`
+    // and other hosts working; on the edge they simply read undefined.
+    process.env.DEPLOY_CONTEXT === 'production' ||
     process.env.CONTEXT === 'production' ||
     process.env.VERCEL_ENV === 'production' ||
     process.env.PROPEL_PRODUCTION === '1'

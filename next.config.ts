@@ -17,6 +17,21 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+  /*
+   * The deploy context, frozen at BUILD time into every bundle - middleware
+   * included. `isProductionDeploy()` used to read process.env.CONTEXT at
+   * runtime, and on Netlify's edge runtime that variable does not exist: the
+   * middleware decided drafts were visible while the built pages knew they
+   * were not, let a draft article's URL through to a route that had not been
+   * prerendered, and the visitor got Next's bare 404 - no lang, no dir, no
+   * chrome. Found live, on the first draft ever deployed. Inlining makes the
+   * middleware, the sitemap and the pages agree by construction: they were
+   * all built in the same breath.
+   */
+  env: {
+    DEPLOY_CONTEXT: process.env.CONTEXT ?? process.env.VERCEL_ENV ?? '',
+  },
+
   images: {
     // AVIF first, WebP as the fallback — meaningfully smaller than JPEG/PNG
     // for the screenshot-heavy portfolio pages.
