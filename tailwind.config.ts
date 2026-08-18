@@ -97,9 +97,11 @@ const config: Config = {
           field: 'var(--field-border)',
           success: 'var(--success)',
           successSoft: 'var(--success-soft)',
-          silver: 'var(--silver)',
+          /* No `silver` alias: --silver itself is load-bearing (the logo's
+             arrow-disc gradient reads it) but no utility class ever did. */
           accent: 'var(--accent)',
           accentSoft: 'var(--accent-soft)',
+          accentFaint: 'var(--accent-faint)',
           accentWash: 'var(--accent-wash)',
           /* Readable on the accent - the accent's own foreground, not the page's. */
           onAccent: 'var(--on-accent)',

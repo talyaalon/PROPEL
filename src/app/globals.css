@@ -47,6 +47,11 @@
   --success-soft: rgba(26, 127, 69, 0.12);
   --accent: #7a1c09;
   --accent-soft: rgba(122, 28, 9, 0.55);
+  /* A whisper of the accent for the form's error banner. NOT --accent-wash:
+     the wash at 0.22 alpha under the dark theme's 14px error text measured
+     3.49:1 - an AA failure the first proposed fix would have shipped. 0.07
+     keeps the text at >=4.5:1 on every surface it can sit on. */
+  --accent-faint: rgba(122, 28, 9, 0.07);
   /* A wash to sit behind text, not a border colour. Opacity modifiers on
      the bare `var(--accent)` compile to nothing, so anything translucent
      has to be its own token. */
@@ -80,6 +85,7 @@
   /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
   --accent: #e0714d;
   --accent-soft: rgba(224, 113, 77, 0.55);
+  --accent-faint: rgba(224, 113, 77, 0.08);
   --accent-wash: rgba(224, 113, 77, 0.22);
   --on-accent: #1c1e19;
   --selection-bg: #e0714d;
@@ -170,8 +176,17 @@ html {
    * The floor does not move. It is what keeps 200% text on a 320px screen
    * from scrolling sideways, and it was measured to get there.
    */
+  /*
+   * `calc(rem + vw)` in the middle term, not bare vw. A pure-vw curve is deaf
+   * to the root font size, so the accessibility menu's 200% setting moved the
+   * desktop h1 by exactly nothing - the control's biggest visible promise,
+   * broken on the biggest text. The rem share lifts the curve with the root
+   * (8% at 1440/200%) while the vw share keeps it fluid; constants chosen so
+   * 100% rendering is identical at 1440 and at the floor widths, within 4px
+   * between. The floor still owns 320px at 200% - measured, no reflow.
+   */
   h1 {
-    font-size: clamp(1.75rem, 6.4vw, 5.75rem);
+    font-size: clamp(1.75rem, calc(0.4rem + 6vw), 5.75rem);
     line-height: 0.98;
   }
 
@@ -192,11 +207,11 @@ html {
    * cannot serve both.
    */
   :lang(en) h1 {
-    font-size: clamp(1.75rem, 6.4vw, 4.5rem);
+    font-size: clamp(1.75rem, calc(0.4rem + 6vw), 4.5rem);
   }
 
   h2 {
-    font-size: clamp(1.375rem, 3.6vw, 2.875rem);
+    font-size: clamp(1.375rem, calc(0.3rem + 3.3vw), 2.875rem);
     line-height: 1.04;
   }
 
@@ -274,8 +289,14 @@ html {
     --field-border: #6f736a;
     --accent: #e0714d;
     --accent-soft: rgba(224, 113, 77, 0.55);
+    --accent-faint: rgba(224, 113, 77, 0.08);
     --accent-wash: rgba(224, 113, 77, 0.22);
     --on-accent: #1c1e19;
+    /* The one pair the original list missed: the footer's WhatsApp chip sits
+       in this scope, and without these it drew the light theme's dark green
+       on a dark surface. */
+    --success: #4ac47e;
+    --success-soft: rgba(74, 196, 126, 0.16);
     background-color: var(--surface);
     border-top: none;
     border-bottom: none;
@@ -293,8 +314,11 @@ html {
     --field-border: #8a8d84;
     --accent: #7a1c09;
     --accent-soft: rgba(122, 28, 9, 0.55);
+    --accent-faint: rgba(122, 28, 9, 0.07);
     --accent-wash: rgba(122, 28, 9, 0.16);
     --on-accent: #f7f6f2;
+    --success: #1a7f45;
+    --success-soft: rgba(26, 127, 69, 0.12);
   }
 
   /* Alternating band.
@@ -315,6 +339,17 @@ html {
     font-size: 1.1875rem;
     line-height: 1.7;
     color: var(--ink);
+  }
+
+  /* Body copy one register below `.lead`. Twelve elements on the migration
+     page wore this class while nothing defined it - they silently inherited
+     the root style, which happened to look plausible, which is why nobody
+     noticed. The values are the ones the rest of the site uses for the same
+     role (the 404 body, the card captions). */
+  .body-text {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--slate);
   }
 
   /* ── Eyebrow ──────────────────────────────────────────────────────────────
@@ -479,9 +514,11 @@ html {
     background-repeat: no-repeat;
     background-color: var(--raised);
     border: 2px solid var(--ink);
-    /* The resting transition, which is also the one used on the way back. */
+    /* The resting transition, which is also the one used on the way back.
+       No cursor override: these frames are not links, and they were the only
+       eight elements on the page showing a hand over nothing clickable. The
+       hover-scroll is discoverable by moving, not promised by a cursor. */
     transition: background-position 400ms ease-out;
-    cursor: pointer;
   }
 
   /*
@@ -493,8 +530,13 @@ html {
    * technically moving, visibly still. 9s makes the same gesture read as a
    * page scrolling, which is the whole point of the effect.
    */
+  /* Doubled selector on purpose: this block sits ABOVE the 17s hover rule,
+     and `.screen.is-playing` ties with it - so the later 17s always won and
+     this rule was dead. On a phone the card is in view for two or three
+     seconds; at 17s that is ~15% travel, technically moving, visibly still.
+     `.screen.screen.is-playing` outranks the tie without moving the block. */
   @media (pointer: coarse), (max-width: 767px) {
-    .screen.is-playing {
+    .screen.screen.is-playing {
       transition-duration: 9s;
     }
   }
@@ -556,7 +598,10 @@ html {
 
   .screen--desktop {
     width: 100%;
-    min-height: 27vh;
+    /* Its own ratio, not the window's. `min-height: 27vh` made the monitor's
+       shape follow the browser height - a short window squashed it to a
+       letterbox while the phone beside it kept its 9:19.5. */
+    aspect-ratio: 16 / 10;
     border: none;
     border-radius: 0;
   }
@@ -585,8 +630,13 @@ html {
     border-radius: 22px;
     background: linear-gradient(160deg, #3b3f38 0%, #14160f 40%, #2b2e27 100%);
     /* Logical property, not margin-left: in Hebrew the overlap has to fall on
-       the other side or the phone detaches from the monitor. */
-    margin-inline-start: -22px;
+       the other side or the phone detaches from the monitor.
+
+       And on the END side, not the start. The phone is the FIRST flex item -
+       a start-side negative margin pulls it away from the centred line's
+       edge, which produced no overlap with the monitor and shifted the whole
+       assembly 11px off centre. The end side is where the monitor is. */
+    margin-inline-end: -22px;
     z-index: 1;
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.55),
@@ -639,9 +689,6 @@ html {
   }
 
   @media (max-width: 1024px) {
-    .screen--desktop {
-      min-height: 25vh;
-    }
     .browser {
       width: 58%;
     }
@@ -660,12 +707,51 @@ html {
     }
     .phone {
       width: min(190px, 62%);
-      margin-inline-start: 0;
+      /* Must reset the same side the margin now lives on, or the lone phone
+         (the monitor is display:none here) sits 11px off centre. */
+      margin-inline-end: 0;
     }
   }
 }
 
 @layer utilities {
+  /*
+   * The marker stroke behind the hero's focus phrase.
+   *
+   * As a background on the TEXT, not an absolutely positioned sibling. The
+   * absolute span was sized to the wrapper's bounding box, so the moment the
+   * phrase wrapped, the last line's stroke ran the full box width - 387px of
+   * accent past the final word. `box-decoration-break: clone` gives every
+   * wrapped line its own stroke, exactly as wide as its own text.
+   *
+   * The reveal animates `background-size` from 0 to full width; percentage
+   * background positions follow `direction`, so RTL grows from the right with
+   * no mirrored variant needed - which retires the underline-rtl/ltr pair
+   * this element used to require.
+   */
+  .marker-wash {
+    background-image: linear-gradient(var(--accent-wash), var(--accent-wash));
+    background-repeat: no-repeat;
+    background-position: 0 88%;
+    background-size: 0% 0.35em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    animation: marker-grow 700ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
+  }
+
+  @keyframes marker-grow {
+    to {
+      background-size: 100% 0.35em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marker-wash {
+      animation: none;
+      background-size: 100% 0.35em;
+    }
+  }
+
   /* Shared grain texture, carried over from the previous system. */
   .bg-grain {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");

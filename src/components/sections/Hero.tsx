@@ -33,7 +33,6 @@ type HeroDict = {
   cta_secondary: string
   cta_note: string
   whatsapp_message: string
-  proof_label: string
   stat_projects: string
   stat_pages: string
   stat_fields: string
@@ -45,7 +44,6 @@ type Props = {
 }
 
 export default function Hero({ lang, dict }: Props) {
-  const isRtl = lang === 'he'
   const projects = getProjects()
 
   /*
@@ -107,16 +105,11 @@ export default function Hero({ lang, dict }: Props) {
             <h1 className="animate-fade-up-delay leading-[1.06] text-brand-ink lg:leading-[1.02]">
               {dict.h1_pre}
               {dict.h1_pre ? ' ' : ''}
-              <span className="relative inline-block max-w-full">
-                <span className="relative z-10">{dict.h1_focus}</span>
-                {/* A marker stroke behind the phrase, not a rule under it. The
-                    RTL `transform-origin` comes from the utility. */}
-                <span
-                  className={`animate-underline-grow absolute -bottom-0.5 start-0 -z-10 h-[0.35em] w-full bg-brand-accentWash ${
-                    isRtl ? 'underline-rtl' : 'underline-ltr'
-                  }`}
-                />
-              </span>
+              {/* A marker stroke behind the phrase, painted per wrapped line.
+                  The previous absolute sibling was sized to the wrapper's
+                  bounding box, so when the phrase wrapped the stroke ran 387px
+                  past the last word. See `.marker-wash` in globals.css. */}
+              <span className="marker-wash">{dict.h1_focus}</span>
               {dict.h1_post ? ` ${dict.h1_post}` : ''}
             </h1>
 
@@ -206,13 +199,14 @@ export default function Hero({ lang, dict }: Props) {
           `projects.ts` at build time rather than typed into a dictionary.
         */}
         <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-brand-line pt-8 lg:mt-16 lg:gap-10">
+          {/* dt-then-dd is the valid and correctly-paired order; the visual
+              order (number above label) comes from flex-col-reverse. The old
+              markup wrapped a <p> in the div - outside the dl content model -
+              and carried every label twice, once sr-only and once aria-hidden. */}
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col gap-1">
-              <dt className="sr-only">{stat.label}</dt>
+            <div key={stat.label} className="flex flex-col-reverse gap-1">
+              <dt className="text-[0.875rem] text-brand-slate">{stat.label}</dt>
               <dd className="num text-[2.75rem] leading-none lg:text-[3.5rem]">{stat.value}</dd>
-              <p className="text-[0.875rem] text-brand-slate" aria-hidden="true">
-                {stat.label}
-              </p>
             </div>
           ))}
         </dl>

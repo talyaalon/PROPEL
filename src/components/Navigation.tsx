@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { Menu, X, MessageCircle, Phone } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
 import Image from 'next/image'
+import LocaleSwitch from '@/components/LocaleSwitch'
 import Logo from '@/components/Logo'
 import ThemeToggle from '@/components/ThemeToggle'
 import MotionToggle from '@/components/MotionToggle'
-import { getAltLocale, swapLocaleInPath, type Locale } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
 
 type NavDict = {
   services: string
@@ -76,13 +76,10 @@ export function NavLink({ href, className, onNavigate, children }: NavLinkProps)
 
 export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: Props) {
   const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname()
   const drawerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
 
-  const altLang = getAltLocale(lang)
-  const altHref = swapLocaleInPath(pathname, altLang)
   const isRtl = lang === 'he'
 
   const navLinks = [
@@ -124,6 +121,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     // for the life of the component, and reading `.current` later trips the
     // exhaustive-deps rule for a hazard that does not apply here.
     const trigger = triggerRef.current
+    const header = headerRef.current
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
@@ -157,7 +155,11 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
       window.removeEventListener('resize', handleResize)
       // Without this the closing drawer unmounts the focused node and focus
       // falls to <body>, restarting the keyboard user at the top of the page.
-      trigger?.focus()
+      // The trigger is display:none above 768px, and focusing a hidden element
+      // silently no-ops - so the resize-close case (the drawer closes because
+      // the viewport widened past the breakpoint) falls back to the first
+      // link in the header, which is the logo.
+      ;(trigger?.offsetParent ? trigger : header?.querySelector('a'))?.focus()
     }
   }, [isOpen])
 
@@ -219,21 +221,12 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
           <div className="hidden items-center gap-5 md:flex">
             <MotionToggle label={a11y.toggle_motion} />
             <ThemeToggle label={a11y.toggle_theme} />
-            <Link
-              href={altHref}
-              hrefLang={altLang}
-              prefetch={false}
-              lang={altLang}
-              // 2.5.3 Label in Name: the accessible name must contain the
-              // visible label. The name alone was the *other* language's
-              // phrase - visible "HE", name "מעבר לעברית", no shared word - so
-              // an English speech-input user saying "click HE" got nothing on
-              // all eight /en routes.
-              aria-label={`${dict.toggle_lang} - ${a11y.switch_language}`}
+            <LocaleSwitch
+              lang={lang}
+              label={dict.toggle_lang}
+              switchLabel={a11y.switch_language}
               className="text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
-            >
-              {dict.toggle_lang}
-            </Link>
+            />
             {/*
               The phone number, in the header.
 
@@ -320,22 +313,13 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 <MotionToggle label={a11y.toggle_motion} />
                 <ThemeToggle label={a11y.toggle_theme} />
               </div>
-              <Link
-                href={altHref}
-                hrefLang={altLang}
-                prefetch={false}
-                lang={altLang}
-                // 2.5.3 Label in Name: the accessible name must contain the
-                // visible label. The name alone was the *other* language's
-                // phrase - visible "HE", name "מעבר לעברית", no shared word - so
-                // an English speech-input user saying "click HE" got nothing on
-                // all eight /en routes.
-                aria-label={`${dict.toggle_lang} - ${a11y.switch_language}`}
+              <LocaleSwitch
+                lang={lang}
+                label={dict.toggle_lang}
+                switchLabel={a11y.switch_language}
                 onClick={() => setIsOpen(false)}
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-slate transition-colors duration-200 hover:text-brand-ink"
-              >
-                {dict.toggle_lang}
-              </Link>
+              />
               <a
                 href={getWhatsAppURL(dict.whatsapp_message)}
                 target="_blank"

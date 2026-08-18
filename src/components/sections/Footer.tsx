@@ -31,10 +31,14 @@ type FooterDict = {
 type Props = {
   lang: Locale
   dict: FooterDict
+  /** "Switch to English" / "מעבר לעברית" - the a11y dictionary's phrase,
+      threaded through so the footer switcher carries the same accessible
+      name as the header's. It had none at all. */
+  switchLabel: string
   hasProjects: boolean
 }
 
-export default function Footer({ lang, dict, hasProjects }: Props) {
+export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) {
   const altLangLabel = lang === 'he' ? 'EN' : 'HE'
 
   const navLinks = [
@@ -168,6 +172,7 @@ export default function Footer({ lang, dict, hasProjects }: Props) {
           <LocaleSwitch
             lang={lang}
             label={altLangLabel}
+            switchLabel={switchLabel}
             className="text-[0.75rem] font-semibold tracking-[0.15em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
           />
         </div>

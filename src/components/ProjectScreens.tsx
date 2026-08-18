@@ -86,11 +86,10 @@ export default function ProjectScreens({ desktop, mobile, title, eager = false }
      * a finger - and the width check covers the resized-window case, where
      * there is no room for hover to be discoverable anyway.
      */
-    const mayAnimate =
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-      (window.matchMedia('(pointer: coarse)').matches ||
-        window.matchMedia('(hover: none)').matches ||
-        window.matchMedia('(max-width: 767px)').matches)
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const coarse = window.matchMedia('(pointer: coarse)')
+    const hoverless = window.matchMedia('(hover: none)')
+    const narrow = window.matchMedia('(max-width: 767px)')
 
     /*
      * Two observers, because they need different roots. `intersectionRatio` is
@@ -115,13 +114,36 @@ export default function ProjectScreens({ desktop, mobile, title, eager = false }
 
     const player = new IntersectionObserver(([entry]) => setPlaying(entry.isIntersecting))
 
+    /*
+     * Re-decided on every environment change, not once at mount. The mount-only
+     * version answered the question for the size the page LOADED at: a window
+     * loaded wide and dragged below 768px never auto-played, and one loaded
+     * narrow kept auto-playing on desktop forever - the exact resize case the
+     * width clause exists for. `change` on the media queries is the browser
+     * telling us the answer changed; re-observing an observed element is a
+     * no-op, so `decide` is safe to run as often as it fires.
+     */
+    const decide = () => {
+      const mayAnimate = !reduce.matches && (coarse.matches || hoverless.matches || narrow.matches)
+      if (mayAnimate) {
+        player.observe(element)
+      } else {
+        player.unobserve(element)
+        setPlaying(false)
+      }
+    }
+
     // Eager frames already carry the image from the server render - only the
     // play/pause observer is wanted there.
     if (!eager) loader.observe(element)
-    if (mayAnimate) player.observe(element)
+    decide()
+
+    const lists = [reduce, coarse, hoverless, narrow]
+    lists.forEach((list) => list.addEventListener('change', decide))
     return () => {
       loader.disconnect()
       player.disconnect()
+      lists.forEach((list) => list.removeEventListener('change', decide))
     }
   }, [eager])
 

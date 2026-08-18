@@ -244,8 +244,21 @@ export default async function RootLayout({ children, params }: Props) {
           a11y={dict.a11y}
           logoSrc={getLogoSrc(lang)}
         />
-        <main id="main">{children}</main>
-        <Footer lang={lang} dict={dict.footer} hasProjects={hasProjects} />
+        {/* tabIndex={-1}: the skip link sets location.hash, but without a
+            tabindex the <main> is not focusable, so activeElement stayed on
+            <body> and the next Tab restarted from the top - the skip link
+            skipped nothing in Safari and only worked elsewhere by relying on
+            the sequential-focus starting point. Same pattern as the form's
+            success and error regions. */}
+        <main id="main" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
+        <Footer
+          lang={lang}
+          dict={dict.footer}
+          switchLabel={dict.a11y.switch_language}
+          hasProjects={hasProjects}
+        />
 
         <Analytics />
       </body>

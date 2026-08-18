@@ -204,7 +204,7 @@ export default function ContactForm({ lang, dict }: Props) {
           id="contact-error"
           role="alert"
           tabIndex={-1}
-          className="mb-6 border border-brand-accent bg-brand-accent/10 px-4 py-3 text-[0.875rem] text-brand-accent outline-none"
+          className="mb-6 border border-brand-accent bg-brand-accentFaint px-4 py-3 text-[0.875rem] text-brand-accent outline-none"
         >
           {errorMessage}
         </p>

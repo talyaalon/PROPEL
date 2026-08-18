@@ -199,7 +199,10 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
          * stretching the last row to hide it, the cell carries the invitation
          * that the whole section is building towards. Six items, two full rows.
          */}
-        <article className="flex flex-col items-center justify-start self-start border border-brand-accent bg-brand-panel p-8 text-center">
+        {/* justify-center + the default stretch, not self-start: the card is
+            ~156px of content in a ~500px row, and pinned to the top it left a
+            278px void below itself - the second defect this cell has produced. */}
+        <article className="flex flex-col items-center justify-center border border-brand-accent bg-brand-panel p-8 text-center">
           <h3 className="text-brand-accent">{dict.cta_title}</h3>
           <p className="mt-3 text-[0.875rem] leading-relaxed text-brand-slate">{dict.cta_body}</p>
           <a
