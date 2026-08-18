@@ -224,7 +224,12 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               hrefLang={altLang}
               prefetch={false}
               lang={altLang}
-              aria-label={a11y.switch_language}
+              // 2.5.3 Label in Name: the accessible name must contain the
+              // visible label. The name alone was the *other* language's
+              // phrase - visible "HE", name "מעבר לעברית", no shared word - so
+              // an English speech-input user saying "click HE" got nothing on
+              // all eight /en routes.
+              aria-label={`${dict.toggle_lang} - ${a11y.switch_language}`}
               className="text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             >
               {dict.toggle_lang}
@@ -320,7 +325,12 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 hrefLang={altLang}
                 prefetch={false}
                 lang={altLang}
-                aria-label={a11y.switch_language}
+                // 2.5.3 Label in Name: the accessible name must contain the
+                // visible label. The name alone was the *other* language's
+                // phrase - visible "HE", name "מעבר לעברית", no shared word - so
+                // an English speech-input user saying "click HE" got nothing on
+                // all eight /en routes.
+                aria-label={`${dict.toggle_lang} - ${a11y.switch_language}`}
                 onClick={() => setIsOpen(false)}
                 className="block rounded-xl px-4 py-2.5 text-sm font-medium text-brand-slate transition-colors duration-200 hover:text-brand-ink"
               >

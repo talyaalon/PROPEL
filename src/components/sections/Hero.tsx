@@ -89,7 +89,14 @@ export default function Hero({ lang, dict }: Props) {
           right with the work to their left, and in English the two swap
           without a second rule.
         */}
-        <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+        {/* `lg:items-start`, not `items-center`. The columns are unequal - the
+            text column is up to 372px taller in English - and centring the
+            short one printed a 186px empty band above AND below the device
+            frames at 1440. The same defect was fixed once before for the old
+            lockup (commit 8c81bfb); this is its regression, pinned this time
+            with a measurement. Below `lg` the grid is one column and
+            alignment does nothing. */}
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_1fr] lg:items-start lg:gap-14">
           {/* ── The words ─────────────────────────────────────── */}
           {/* `min-w-0`: a grid item defaults to `min-width: auto`, so the column
               would grow to its widest unbreakable word rather than letting
@@ -158,10 +165,18 @@ export default function Hero({ lang, dict }: Props) {
           {/* ── The work ──────────────────────────────────────── */}
           {showcase?.screens && (
             <div className="animate-fade-in flex min-w-0 flex-col gap-4">
+              {/* React 19 hoists these into <head>. Without them the captures
+                  started downloading only after hydration + observer - 4.4s of
+                  empty frames on throttled 4G, in the section whose whole job
+                  is showing the work. 20KB + 27KB, above the fold, worth
+                  fetching from byte one. */}
+              <link rel="preload" as="image" href={showcase.screens.mobile} />
+              <link rel="preload" as="image" href={showcase.screens.desktop} />
               <ProjectScreens
                 desktop={showcase.screens.desktop}
                 mobile={showcase.screens.mobile}
                 title={projectTitle(showcase, lang)}
+                eager
               />
 
               {/* Names the work, so the frames are evidence rather than

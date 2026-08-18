@@ -26,11 +26,25 @@ type Props = {
   mobile?: string
   /** Used only for the accessible description; the frames themselves are decorative. */
   title: string
+  /**
+   * Ship the capture in the server HTML instead of waiting for hydration.
+   *
+   * The deferred default is right for the five portfolio cards - megabytes of
+   * screenshots below the fold. It was wrong for the hero, whose entire
+   * premise is "the first screen shows the work": the capture was gated
+   * behind hydration + IntersectionObserver, so on a throttled phone the
+   * first screen showed two empty bordered boxes for ~4.4s, and with JS
+   * unavailable it showed them forever - under a `role="img"` announcing an
+   * image that was not there.
+   *
+   * Only the hero passes this. It is one 27KB image above the fold.
+   */
+  eager?: boolean
 }
 
-export default function ProjectScreens({ desktop, mobile, title }: Props) {
+export default function ProjectScreens({ desktop, mobile, title, eager = false }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(eager)
 
   // On touch there is no hover, so the scroll is driven by visibility instead.
   const [playing, setPlaying] = useState(false)
@@ -101,13 +115,15 @@ export default function ProjectScreens({ desktop, mobile, title }: Props) {
 
     const player = new IntersectionObserver(([entry]) => setPlaying(entry.isIntersecting))
 
-    loader.observe(element)
+    // Eager frames already carry the image from the server render - only the
+    // play/pause observer is wanted there.
+    if (!eager) loader.observe(element)
     if (mayAnimate) player.observe(element)
     return () => {
       loader.disconnect()
       player.disconnect()
     }
-  }, [])
+  }, [eager])
 
   const shot = (src?: string) =>
     visible && src ? ({ ['--shot']: `url(${src})` } as React.CSSProperties) : undefined

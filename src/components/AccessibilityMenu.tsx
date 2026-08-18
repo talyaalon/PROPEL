@@ -239,8 +239,18 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
            */
           className="absolute bottom-0 end-14 max-h-[70vh] w-[min(304px,calc(100vw-80px))] overflow-y-auto border border-brand-line bg-brand-panel p-5 shadow-lg"
         >
+          {/* `min-w-0 break-words` on the heading: a flex item defaults to
+              `min-width: auto`, and at 320px with this menu's own 200% text
+              setting the English "Accessibility" is one unbreakable 227px word
+              in a 198px row. It forced the panel to scroll sideways, and
+              focusing the close button on open then scrolled the panel 45px -
+              so it OPENED showing "00%" / "50%" as the first two size chips.
+              The recurring `min-width: auto` defect, in the accessibility
+              menu itself. */}
           <div className="mb-4 flex items-center justify-between gap-4">
-            <h2 className="text-[1rem] font-bold text-brand-ink">{dict.title}</h2>
+            <h2 className="min-w-0 break-words text-[1rem] font-bold text-brand-ink">
+              {dict.title}
+            </h2>
             <button
               type="button"
               onClick={() => {
@@ -319,7 +329,7 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1.5 text-[0.75rem] font-semibold text-brand-slate transition-colors duration-200 hover:text-brand-accent"
+              className="inline-flex min-w-0 items-center gap-1.5 text-[0.75rem] font-semibold text-brand-slate transition-colors duration-200 hover:text-brand-accent"
             >
               <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
               {dict.reset}
