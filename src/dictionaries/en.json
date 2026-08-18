@@ -55,12 +55,7 @@
           "Accessible by standard, without bolt-on widgets",
           "You own the code and the domain"
         ],
-        "stack": [
-          "Next.js",
-          "React",
-          "TypeScript",
-          "Tailwind"
-        ],
+        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
       },
       {
@@ -74,12 +69,7 @@
           "Your systems talk to each other instead of through you",
           "Alerts only for what actually needs you"
         ],
-        "stack": [
-          "n8n",
-          "Make",
-          "Zapier",
-          "API"
-        ],
+        "stack": ["n8n", "Make", "Zapier", "API"],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about automating my business."
       },
       {
@@ -93,12 +83,7 @@
           "Content aimed at buying intent, not raw traffic",
           "A monthly report with numbers, not promises"
         ],
-        "stack": [
-          "Search Console",
-          "GA4",
-          "Ahrefs",
-          "Schema.org"
-        ],
+        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about organic growth."
       },
       {
@@ -119,15 +104,7 @@
           "Content, forms and tracking (GA4/GTM) migrated one-to-one",
           "Readable, documented code - any developer can pick it up"
         ],
-        "stack": [
-          "Next.js",
-          "TypeScript",
-          "Tailwind",
-          "Git",
-          "Vercel",
-          "301 Redirects",
-          "GA4"
-        ],
+        "stack": ["Next.js", "TypeScript", "Tailwind", "Git", "Vercel", "301 Redirects", "GA4"],
         "cta_label": "Free fit check",
         "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
         "analytics": "whatsapp:service-migration",
@@ -345,6 +322,7 @@
     "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development - selected by PROPEL.",
     "all_label": "All",
     "read_more": "Read more",
+    "back_to_blog": "Back to blog",
     "external_note": "External link, opens in a new tab",
     "topics": {
       "web": "Build & performance",

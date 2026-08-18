@@ -146,7 +146,7 @@ export default async function ServicePage({ params }: Props) {
                 <li key={project.slug}>
                   <Link
                     href={`/${lang}/portfolio/${project.slug}`}
-                    className="card flex items-baseline gap-3 p-5"
+                    className="card flex flex-wrap items-baseline gap-3 p-5"
                   >
                     <ArrowUpRight
                       className="h-4 w-4 flex-shrink-0 -rotate-90 text-brand-accent rtl:-scale-x-100"

@@ -55,12 +55,7 @@
           "נגיש לפי ת\"י 5568, בלי תוספים חיצוניים",
           "אתם הבעלים של הקוד ושל הדומיין"
         ],
-        "stack": [
-          "Next.js",
-          "React",
-          "TypeScript",
-          "Tailwind"
-        ],
+        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
         "whatsapp_message": "היי PROPEL, אני מעוניין בבניית אתר."
       },
       {
@@ -74,12 +69,7 @@
           "מערכות מדברות ביניהן במקום דרככם",
           "התראות על מה שדורש התערבות, ורק על זה"
         ],
-        "stack": [
-          "n8n",
-          "Make",
-          "Zapier",
-          "API"
-        ],
+        "stack": ["n8n", "Make", "Zapier", "API"],
         "whatsapp_message": "היי PROPEL, אני מעוניין באוטומציה לעסק שלי."
       },
       {
@@ -93,12 +83,7 @@
           "תוכן שמכוון לכוונת רכישה, לא לתנועה סתם",
           "דוח חודשי עם מספרים, לא עם הבטחות"
         ],
-        "stack": [
-          "Search Console",
-          "GA4",
-          "Ahrefs",
-          "Schema.org"
-        ],
+        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
         "whatsapp_message": "היי PROPEL, אני מעוניין בקידום אורגני לעסק שלי."
       },
       {
@@ -119,15 +104,7 @@
           "מעבירים תכנים, טפסים ומדידה (GA4/GTM) אחד לאחד",
           "קוד קריא ומתועד - כל מפתח אחר יוכל להמשיך ממנו"
         ],
-        "stack": [
-          "Next.js",
-          "TypeScript",
-          "Tailwind",
-          "Git",
-          "Vercel",
-          "301 Redirects",
-          "GA4"
-        ],
+        "stack": ["Next.js", "TypeScript", "Tailwind", "Git", "Vercel", "301 Redirects", "GA4"],
         "cta_label": "בדיקת התאמה חינם",
         "whatsapp_message": "היי PROPEL, יש לי אתר שאני רוצה להעביר לקוד נקי.",
         "analytics": "whatsapp:service-migration",
@@ -345,6 +322,7 @@
     "meta_description": "אוסף מקורות מקצועיים על ביצועי אתרים, קידום אורגני, נגישות ופיתוח - נבחרו על ידי PROPEL.",
     "all_label": "הכל",
     "read_more": "קרא עוד",
+    "back_to_blog": "חזרה לבלוג",
     "external_note": "קישור חיצוני, נפתח בלשונית חדשה",
     "topics": {
       "web": "בנייה וביצועים",

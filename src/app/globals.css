@@ -606,7 +606,10 @@ html {
      Positioned with logical properties, so the rule sits to the right of the
      label in Hebrew and to the left in English from one declaration. */
   .eyebrow {
-    @apply relative inline-flex items-center font-display text-[0.875rem] font-semibold uppercase tracking-[.18em];
+    /* flex-wrap: an inline-flex row cannot wrap its items, and the long topic
+       labels ("Build & performance") overflowed the viewport at 320px/200%.
+       Wrapping only ever engages there - at normal sizes nothing changes. */
+    @apply relative inline-flex flex-wrap items-center font-display text-[0.875rem] font-semibold uppercase tracking-[.18em];
     color: var(--accent);
     padding-inline-start: 72px;
     /* The 72px indent is a fixed price paid before the first letter. On a

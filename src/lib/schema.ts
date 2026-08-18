@@ -100,6 +100,27 @@ export function serviceSchema(input: {
   }
 }
 
+/** An original article on the blog. */
+export function articleSchema(input: {
+  lang: Locale
+  slug: string
+  headline: string
+  description: string
+  datePublished: string
+}): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: input.headline,
+    description: input.description,
+    datePublished: input.datePublished,
+    inLanguage: input.lang,
+    url: `${siteConfig.url}/${input.lang}/blog/${input.slug}`,
+    author: { '@id': `${siteConfig.url}/#organization` },
+    publisher: { '@id': `${siteConfig.url}/#organization` },
+  }
+}
+
 /** An index page - the portfolio grid, the blog. */
 export function collectionPageSchema(input: {
   lang: Locale

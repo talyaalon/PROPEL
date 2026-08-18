@@ -1,5 +1,6 @@
 import { getProjects } from '@/content/projects'
 import { getServiceSlugs } from '@/content/services'
+import { getInternalArticles } from '@/content/articles'
 
 /**
  * Every path the site answers, after the locale prefix. THE list - the only
@@ -31,5 +32,9 @@ export function sitePaths(): string[] {
     ...staticPaths,
     ...getServiceSlugs().map((slug) => `/services/${slug}`),
     ...getProjects().map((project) => `/portfolio/${project.slug}`),
+    // Draft articles are filtered inside getInternalArticles, with the same
+    // production gate the pages use - so the sitemap, the middleware and the
+    // prerendered routes cannot disagree about whether an article exists.
+    ...getInternalArticles().map((article) => `/blog/${article.slug}`),
   ]
 }
