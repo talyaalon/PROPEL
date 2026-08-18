@@ -57,6 +57,13 @@ export default async function PortfolioIndex({ params }: Props) {
           <p className="lead mt-5 max-w-2xl">{dict.portfolio.index_subtitle}</p>
         </div>
 
+        {/* The cards are <h3> because on the homepage the grid sits under an
+            <h2> section heading. Here the only heading above them is the <h1>,
+            which made the outline skip a level on exactly this route - found
+            only when the headings audit was widened, because it never looked
+            at /portfolio. One hidden <h2> restores the outline without
+            renumbering a component that is correct where it lives. */}
+        <h2 className="sr-only">{dict.portfolio.index_title}</h2>
         <PortfolioGrid
           lang={lang}
           dict={dict.portfolio}

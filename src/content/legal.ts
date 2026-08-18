@@ -67,7 +67,12 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'איך השירות ניתן',
         paragraphs: [
           'השירות ניתן מרחוק בלבד. אין מקום פיזי המשמש לקבלת קהל, ולכן תקנות הנגישות למקום ציבורי אינן חלות כאן.',
-          'אם חלק כלשהו באתר אינו נגיש עבורכם, אפשר לפנות בוואטסאפ, בטלפון או במייל ולקבל את אותו מידע או שירות בדרך אחרת. וואטסאפ הוא הערוץ הנוח למי שמתקשה בשיחת טלפון.',
+          // 'או במייל' was deleted here on purpose, not lost: NEXT_PUBLIC_CONTACT_EMAIL
+          // is unset until hello@propel.co.il has a real mailbox, so no email address
+          // appears anywhere on the site - and a statement that names a channel a
+          // visitor cannot find is a statement that is false. Restore the two words
+          // when the mailbox answers.
+          'אם חלק כלשהו באתר אינו נגיש עבורכם, אפשר לפנות בוואטסאפ או בטלפון ולקבל את אותו מידע או שירות בדרך אחרת. וואטסאפ הוא הערוץ הנוח למי שמתקשה בשיחת טלפון.',
         ],
       },
       {
@@ -130,7 +135,8 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
         heading: 'How the service is provided',
         paragraphs: [
           'The service is provided remotely. There is no physical location open to the public, so the accessibility regulations governing public premises do not apply here.',
-          'If any part of this site is not accessible to you, reach us on WhatsApp, by phone or by email and we will provide the same information or service another way. WhatsApp is the easier channel for anyone who finds a phone call difficult.',
+          // 'or by email' deleted for the same reason as the Hebrew above.
+          'If any part of this site is not accessible to you, reach us on WhatsApp or by phone and we will provide the same information or service another way. WhatsApp is the easier channel for anyone who finds a phone call difficult.',
         ],
       },
       {

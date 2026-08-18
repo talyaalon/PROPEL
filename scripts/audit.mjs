@@ -328,7 +328,27 @@ async function tab(browser) {
 
 async function headings(browser) {
   console.log('\n=== heading outline ===')
-  const routes = [`/${LOCALE}`, `/${LOCALE}/blog`, `/${LOCALE}/privacy`, `/${LOCALE}/accessibility`]
+  /*
+   * Every route, not a sample. The h1 -> h3 skip on /portfolio lived for weeks
+   * because this list stopped at four routes - an audit that skips pages
+   * reports "clean" in exactly the places nobody looked. The project slugs are
+   * read from the build manifest so a new case study is audited by existing.
+   */
+  const slugs = existsSync('.next/prerender-manifest.json')
+    ? Object.keys(JSON.parse(readFileSync('.next/prerender-manifest.json', 'utf8')).routes)
+        .filter((r) => r.startsWith(`/${LOCALE}/portfolio/`))
+        .map((r) => r.replace(`/${LOCALE}`, ''))
+    : []
+  const routes = [
+    `/${LOCALE}`,
+    `/${LOCALE}/portfolio`,
+    ...slugs.map((s) => `/${LOCALE}${s}`),
+    `/${LOCALE}/services/migration`,
+    `/${LOCALE}/blog`,
+    `/${LOCALE}/privacy`,
+    `/${LOCALE}/accessibility`,
+    `/${LOCALE}/404`,
+  ]
 
   for (const route of routes) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
@@ -405,8 +425,23 @@ function css(needle) {
    *   1. CSS-escape, the way Tailwind does when it writes the selector.
    *   2. Regex-escape the result, backslashes included.
    */
-  const cssEscaped = needle.replace(/[^a-zA-Z0-9_-]/g, (ch) => '\\' + ch)
-  const forRegex = cssEscaped.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  /*
+   * Each special character can appear in the built file in TWO spellings.
+   * Tailwind writes the readable escape (`\,`), and cssnano then rewrites some
+   * of those to the hex form with a space terminator (`\2c `) - which is how
+   * `text-[length:min(6rem,20vw)]` sat in the stylesheet, verified working,
+   * and was still reported DID NOT COMPILE. A checker that has already
+   * produced two different false-negative classes gets the general fix, not a
+   * third special case: every escaped character matches either spelling.
+   */
+  const forRegex = [...needle]
+    .map((ch) => {
+      if (/[a-zA-Z0-9_-]/.test(ch)) return ch
+      const hex = ch.codePointAt(0).toString(16)
+      const literal = ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      return `\\\\(?:${hex} ?|${literal})`
+    })
+    .join('')
 
   // `(?![\w-])` stops `text-brand-ink` matching `.text-brand-inky`. A variant
   // class is followed by its pseudo (`.hover\:x:hover`), which the guard allows.

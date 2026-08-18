@@ -68,7 +68,20 @@ export default async function NotFoundCatchAll({ params }: Props) {
   return (
     <section className="section flex min-h-[60vh] items-center justify-center">
       <div className="mx-auto max-w-lg text-center">
-        <p className="num text-[6rem] leading-none sm:text-[8rem]" aria-hidden="true">
+        {/* `min(6rem, 20vw)`: 6rem doubles to 192px under the menu's 200% text
+            setting, and the "404" then measured 348px wide in a 320px viewport -
+            14px of sideways scroll on the one page whose predecessor was
+            deleted for accessibility failures. The vw term never wins at 100%
+            (20vw at 320 is 64px only where the rem term has already doubled),
+            so nothing changes visually except where it was broken. The global
+            heading clamp cannot cover this - `.num` on a <p> is outside it.
+            `length:` is not decoration: `min()` is ambiguous to Tailwind
+            (colour or size?), and without the hint the whole utility
+            compiles to nothing - silently. `npm run audit -- css` caught it. */}
+        <p
+          className="num text-[length:min(6rem,20vw)] leading-none sm:text-[length:min(8rem,25vw)]"
+          aria-hidden="true"
+        >
           404
         </p>
         <h1 className="mt-2 text-brand-ink">{copy.title}</h1>
