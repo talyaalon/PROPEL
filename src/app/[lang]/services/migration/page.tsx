@@ -6,6 +6,9 @@ import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { getProjects, projectTitle } from '@/content/projects'
+import { siteConfig } from '@/lib/config'
+import { serviceSchema, breadcrumbSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 
 /**
  * The migration service.
@@ -67,6 +70,24 @@ export default async function MigrationPage({ params }: Props) {
 
   return (
     <>
+      <JsonLd
+        schema={serviceSchema({
+          lang,
+          path: 'services/migration',
+          name: dict.migration.meta_title,
+          description: dict.migration.meta_description,
+        })}
+      />
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          {
+            name: dict.migration.h1,
+            url: `${siteConfig.url}/${lang}/services/migration`,
+          },
+        ])}
+      />
+
       <section className="section" aria-labelledby="migration-heading">
         <div className="mx-auto max-w-3xl">
           <p className="eyebrow mb-6">

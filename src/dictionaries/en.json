@@ -331,7 +331,8 @@
     "privacy": "Privacy Policy",
     "copyright": "All rights reserved © PROPEL",
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
-    "nav_blog": "Blog"
+    "nav_blog": "Blog",
+    "nav_migration": "WordPress migration"
   },
   "blog": {
     "eyebrow": "Resources",
@@ -367,7 +368,7 @@
     "statement": "Accessibility statement"
   },
   "migration": {
-    "meta_title": "Migrating a WordPress or Base44 site to clean code you own",
+    "meta_title": "WordPress & Base44 migration to code you own",
     "meta_description": "We rebuild WordPress and Base44 sites in clean code - same design or better, no plugins, no platform subscription, and everything registered in your name.",
     "h1": "Migration to clean code you own",
     "intro": "If your site is slow, held together by twenty plugins, or the developer who built it has disappeared - this is the service that gets you out.",

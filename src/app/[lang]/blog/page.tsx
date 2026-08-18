@@ -6,6 +6,8 @@ import { pageMetadata } from '@/lib/pageMetadata'
 import { getArticles, getUsedTopics } from '@/content/articles'
 import { getProjects, projectTitle } from '@/content/projects'
 import BlogGrid from '@/components/sections/BlogGrid'
+import { collectionPageSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 
 type Props = {
   params: Promise<{ lang: string }>
@@ -36,6 +38,14 @@ export default async function BlogPage({ params }: Props) {
 
   return (
     <section className="section" aria-labelledby="blog-heading">
+      <JsonLd
+        schema={collectionPageSchema({
+          lang,
+          path: 'blog',
+          name: dict.blog.meta_title,
+          description: dict.blog.meta_description,
+        })}
+      />
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 lg:mb-16">
           <p className="eyebrow mb-6">

@@ -35,10 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
 
+  // Brand name + work descriptor. A name-only title spends the SERP line on
+  // a brand nobody searches yet; the suffix says what the work was.
+  const suffix = project.titleTag?.[lang]
   return pageMetadata({
     lang,
     path: `portfolio/${project.slug}`,
-    title: projectTitle(project, lang),
+    title: suffix ? `${projectTitle(project, lang)} - ${suffix}` : projectTitle(project, lang),
     description: project.summary[lang],
     type: 'article',
   })

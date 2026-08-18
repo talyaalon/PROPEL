@@ -20,7 +20,9 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
      * same entity and disagreeing about it, which Google resolves
      * arbitrarily.
      */
-    '@id': `${siteConfig.url}/${lang}#organization`,
+    // Locale-INDEPENDENT id. `/he#organization` and `/en#organization` were
+    // two half-entities in the knowledge graph describing one business.
+    '@id': `${siteConfig.url}/#organization`,
     name: 'PROPEL',
     legalName: siteConfig.legalName || undefined,
     url: `${siteConfig.url}/${lang}`,
@@ -76,6 +78,46 @@ export function faqSchema(items: { question: string; answer: string }[]): Json {
   }
 }
 
+/**
+ * A service with its own page. The provider reference resolves to the
+ * organization entity the homepage defines - one graph, not fragments.
+ */
+export function serviceSchema(input: {
+  lang: Locale
+  path: string
+  name: string
+  description: string
+}): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: input.name,
+    description: input.description,
+    url: `${siteConfig.url}/${input.lang}/${input.path}`,
+    provider: { '@id': `${siteConfig.url}/#organization` },
+    areaServed: { '@type': 'Country', name: 'Israel' },
+    availableLanguage: ['he', 'en'],
+  }
+}
+
+/** An index page - the portfolio grid, the blog. */
+export function collectionPageSchema(input: {
+  lang: Locale
+  path: string
+  name: string
+  description: string
+}): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.name,
+    description: input.description,
+    url: `${siteConfig.url}/${input.lang}/${input.path}`,
+    isPartOf: { '@id': `${siteConfig.url}/#organization` },
+    inLanguage: input.lang,
+  }
+}
+
 export function breadcrumbSchema(items: { name: string; url: string }[]): Json {
   return {
     '@context': 'https://schema.org',
@@ -105,7 +147,7 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
      */
     ...(project.year ? { dateCreated: String(project.year) } : {}),
     url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
-    creator: { '@id': `${siteConfig.url}/${lang}#organization` },
+    creator: { '@id': `${siteConfig.url}/#organization` },
     keywords: project.techStack.join(', '),
   }
 }

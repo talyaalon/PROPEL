@@ -3,6 +3,8 @@ import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getProjects, getUsedCategories } from '@/content/projects'
+import { collectionPageSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 import PortfolioGrid from '@/components/sections/PortfolioGrid'
 
 /**
@@ -48,6 +50,14 @@ export default async function PortfolioIndex({ params }: Props) {
 
   return (
     <section className="section" aria-labelledby="portfolio-index-heading">
+      <JsonLd
+        schema={collectionPageSchema({
+          lang,
+          path: 'portfolio',
+          name: dict.portfolio.index_title,
+          description: dict.portfolio.index_subtitle,
+        })}
+      />
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 lg:mb-14">
           <p className="eyebrow mb-6">

@@ -103,6 +103,14 @@ export type Project = {
    * `<title>`, the card that linked here and the live-site button.
    */
   headline?: Bilingual
+  /**
+   * The work descriptor appended to the <title>: "הגורר 2 - אתר תדמית
+   * לשירותי גרירה | PROPEL". A brand-name-only title spends the strongest
+   * SERP line on a name nobody searches; this is the two-word answer to
+   * "what is this". An empty string for one locale skips the suffix there -
+   * the transliterated English names already carry the trade in parentheses.
+   */
+  titleTag?: Bilingual
   /** One line for the portfolio card. */
   summary: Bilingual
   techStack: string[]
@@ -156,6 +164,7 @@ export type Project = {
 const projects: Project[] = [
   {
     slug: 'jcafe-kosher',
+    titleTag: { he: 'חנות אונליין', en: 'online store' },
     screens: {
       desktop: '/projects/jcafe-kosher/desktop.webp',
       mobile: '/projects/jcafe-kosher/mobile.webp',
@@ -235,6 +244,7 @@ const projects: Project[] = [
   },
   {
     slug: 'hagorer2',
+    titleTag: { he: 'אתר תדמית לשירותי גרירה', en: '' },
     screens: {
       desktop: '/projects/hagorer2/desktop.webp',
       mobile: '/projects/hagorer2/mobile.webp',
@@ -256,6 +266,7 @@ const projects: Project[] = [
   },
   {
     slug: 'cnafim-lauf',
+    titleTag: { he: 'אתר תדמית למכון טיפול', en: '' },
     screens: {
       desktop: '/projects/cnafim-lauf/desktop.webp',
       mobile: '/projects/cnafim-lauf/mobile.webp',
@@ -277,6 +288,7 @@ const projects: Project[] = [
   },
   {
     slug: 'bom-recipes',
+    titleTag: { he: 'מערכת תמחור ועץ מוצר', en: 'costing & pricing system' },
     title: 'BOM & Recipes',
     category: 'automation',
     headline: {
@@ -347,6 +359,7 @@ const projects: Project[] = [
   },
   {
     slug: 'air-manage',
+    titleTag: { he: 'מערכת ניהול קריאות שירות', en: 'work-order management system' },
     title: 'Air Manage',
     category: 'automation',
     headline: {

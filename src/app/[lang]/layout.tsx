@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Script from 'next/script'
 import type { Metadata, Viewport } from 'next'
 import { Assistant, Chakra_Petch, Frank_Ruhl_Libre, Heebo } from 'next/font/google'
 import { notFound } from 'next/navigation'
@@ -203,7 +204,11 @@ export default async function RootLayout({ children, params }: Props) {
           measured LCP of 2.84s at 1440. Declaring it moves the request to the
           front of the queue.
         */}
-        <link rel="preload" as="image" href="/paper.webp" fetchPriority="high" />
+        {/* Default priority, not high: paper.webp is a decorative texture,
+            and at fetchPriority="high" it competed for first-window bandwidth
+            with the fonts and CSS that the (text) LCP actually needs. Still
+            preloaded, so the background does not pop in late. */}
+        <link rel="preload" as="image" href="/paper.webp" />
 
         {/* Applies the stored theme and accessibility preferences before the
             browser paints. A client component cannot run this early. */}
@@ -260,6 +265,24 @@ export default async function RootLayout({ children, params }: Props) {
           hasProjects={hasProjects}
         />
 
+        {/* GA4, only when the property exists. The click instrumentation
+            (Analytics.tsx forwarding every data-analytics click to gtag) has
+            been in place for weeks; this is the missing loader. Without the
+            env var nothing renders and nothing is requested. */}
+        {process.env.NEXT_PUBLIC_GA4_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA4_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${process.env.NEXT_PUBLIC_GA4_ID}');`}
+            </Script>
+          </>
+        )}
         <Analytics />
       </body>
     </html>

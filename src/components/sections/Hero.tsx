@@ -115,7 +115,12 @@ export default function Hero({ lang, dict }: Props) {
           <div className="flex min-w-0 flex-col gap-6 lg:gap-7">
             <p className="eyebrow animate-fade-up-delay">{dict.eyebrow}</p>
 
-            <h1 className="animate-fade-up-delay leading-[1.06] text-brand-ink lg:leading-[1.02]">
+            {/* No entry animation on the H1, deliberately: it is the likely
+                LCP element, and `fade-up ... 0.15s both` held it at opacity 0
+                for ~0.83s after styles applied - pure added LCP on the most
+                important text on the page. The eyebrow and subtitle keep the
+                motion; the headline is simply there. */}
+            <h1 className="leading-[1.06] text-brand-ink lg:leading-[1.02]">
               {dict.h1_pre}
               {dict.h1_pre ? ' ' : ''}
               {/* A marker stroke behind the phrase, painted per wrapped line.
@@ -177,7 +182,15 @@ export default function Hero({ lang, dict }: Props) {
                   is showing the work. 20KB + 27KB, above the fold, worth
                   fetching from byte one. */}
               <link rel="preload" as="image" href={showcase.screens.mobile} />
-              <link rel="preload" as="image" href={showcase.screens.desktop} />
+              {/* Below 768px the monitor frame is display:none, so its capture
+                  was preloaded bytes the page never painted - on every phone
+                  load. */}
+              <link
+                rel="preload"
+                as="image"
+                href={showcase.screens.desktop}
+                media="(min-width: 768px)"
+              />
               <ProjectScreens
                 desktop={showcase.screens.desktop}
                 mobile={showcase.screens.mobile}
