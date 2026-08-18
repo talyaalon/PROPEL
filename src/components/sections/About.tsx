@@ -18,6 +18,8 @@ type AboutDict = {
 }
 
 type Props = {
+  /** Section clause number, computed by the page. */
+  clause?: string
   dict: AboutDict
 }
 
@@ -27,7 +29,7 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
 }
 
-export default function About({ dict }: Props) {
+export default function About({ dict, clause }: Props) {
   return (
     <section id="about" aria-labelledby="about-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
@@ -43,9 +45,11 @@ export default function About({ dict }: Props) {
                 accent rule - which is part of why the page read as one section
                 that was designed and five that were assembled. */}
             <p className="eyebrow mb-1">
-              <span className="clause" aria-hidden="true">
-                04
-              </span>
+              {clause && (
+                <span className="clause" aria-hidden="true">
+                  {clause}
+                </span>
+              )}
               {dict.eyebrow}
             </p>
 

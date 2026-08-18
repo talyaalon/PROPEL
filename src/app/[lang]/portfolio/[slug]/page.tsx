@@ -182,7 +182,7 @@ export default async function ProjectPage({ params }: Props) {
             {metrics.map((result) => (
               <div key={result.label[lang]}>
                 <p className="num text-[2.5rem] leading-none lg:text-[3rem]">{result.metric}</p>
-                <p className="mt-2 text-[0.875rem] leading-snug text-brand-slate">
+                <p className="mt-2 font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
                   {result.label[lang]}
                 </p>
               </div>
@@ -241,7 +241,7 @@ export default async function ProjectPage({ params }: Props) {
           <div className="mt-14 lg:mt-20">
             <SectionLabel clause={clauses.flow}>{t.flow_title}</SectionLabel>
             <div className="mt-8 max-w-2xl">
-              <FlowDiagram steps={project.flow} lang={lang} ariaLabel={t.flow_title} />
+              <FlowDiagram steps={project.flow} lang={lang} />
             </div>
           </div>
         )}
@@ -309,15 +309,20 @@ export default async function ProjectPage({ params }: Props) {
                 </tr>
                 <tr>
                   <th scope="row">{t.stack}</th>
-                  <td dir="ltr" className="text-start">
-                    {project.techStack.join(' · ')}
+                  {/* dir on an inner span, not the cell: a dir="ltr" cell
+                      start-aligns LEFT inside an RTL table, stranding the
+                      value ~330px from its own row header. The span isolates
+                      the Latin list's internal order; the cell keeps the
+                      page's alignment. */}
+                  <td>
+                    <span dir="ltr">{project.techStack.join(' · ')}</span>
                   </td>
                 </tr>
                 {project.year && (
                   <tr>
                     <th scope="row">{t.year}</th>
-                    <td dir="ltr" className="text-start">
-                      {project.year}
+                    <td>
+                      <span dir="ltr">{project.year}</span>
                     </td>
                   </tr>
                 )}

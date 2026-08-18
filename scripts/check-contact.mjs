@@ -118,8 +118,11 @@ const placeholderHits = new Map()
 
 for (const file of outputFiles) {
   const text = readFileSync(file, 'utf8')
+  const lowered = text.toLowerCase()
   for (const marker of PLACEHOLDER_MARKERS) {
-    if (!text.includes(marker)) continue
+    // Case-insensitive: `new URL(...).hostname` lowercases its input, and the
+    // lowercased placeholder walked straight past an exact-case check.
+    if (!lowered.includes(marker.toLowerCase())) continue
     if (!placeholderHits.has(marker)) placeholderHits.set(marker, new Set())
     placeholderHits.get(marker).add(file)
   }

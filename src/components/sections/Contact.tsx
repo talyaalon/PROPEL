@@ -5,6 +5,8 @@ import type { Locale } from '@/lib/i18n'
 import ContactForm, { type ContactDict } from './ContactForm'
 
 type Props = {
+  /** Section clause number, computed by the page. */
+  clause?: string
   lang: Locale
   dict: ContactDict & {
     eyebrow: string
@@ -15,7 +17,7 @@ type Props = {
   }
 }
 
-export default function Contact({ lang, dict }: Props) {
+export default function Contact({ lang, dict, clause }: Props) {
   return (
     <section id="contact" aria-labelledby="contact-heading" className="section section--band">
       <div className="mx-auto max-w-7xl">
@@ -23,9 +25,11 @@ export default function Contact({ lang, dict }: Props) {
           {/* ── Intro + direct channels ─────────────────────────── */}
           <div>
             <p className="eyebrow mb-6">
-              <span className="clause" aria-hidden="true">
-                06
-              </span>
+              {clause && (
+                <span className="clause" aria-hidden="true">
+                  {clause}
+                </span>
+              )}
               {dict.eyebrow}
             </p>
             <h2 id="contact-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">

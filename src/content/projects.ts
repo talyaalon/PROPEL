@@ -383,8 +383,8 @@ const projects: Project[] = [
       {
         label: { he: 'סגירה מתועדת', en: 'A documented close' },
         meta: {
-          he: 'נשארת בהיסטוריה - עבודה רשומה היא עבודה שנמדדת',
-          en: 'Stays in the history - recorded work is measurable work',
+          he: 'נשארת בהיסטוריה',
+          en: 'Stays in the history',
         },
       },
     ],
@@ -443,6 +443,15 @@ function withoutPending(project: Project): Project {
   const changed = (project.changed ?? []).filter(
     (line) => !isPending(line.he) && !isPending(line.en),
   )
+  // Flow too - no node is pending today, but the invariant is "no PENDING
+  // value leaves this module", not "none of the fields we remembered".
+  const flow = (project.flow ?? []).filter(
+    (step) =>
+      !isPending(step.label.he) &&
+      !isPending(step.label.en) &&
+      !isPending(step.meta?.he ?? '') &&
+      !isPending(step.meta?.en ?? ''),
+  )
 
   return {
     ...project,
@@ -450,6 +459,7 @@ function withoutPending(project: Project): Project {
     // test and no consumer has to distinguish "none" from "all pending".
     ...(results.length > 0 ? { results } : { results: undefined }),
     ...(changed.length > 0 ? { changed } : { changed: undefined }),
+    ...(flow.length > 0 ? { flow } : { flow: undefined }),
   }
 }
 

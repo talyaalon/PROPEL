@@ -55,7 +55,10 @@
   /* The drawing hairlines. `--draft-line` draws leader lines, connectors and
      crop marks - decoration that separates nothing, so it may sit below 3:1.
      `--draft-grid` is the band sections' graph-paper grid, fainter still. */
-  --draft-line: rgba(31, 34, 28, 0.22);
+  /* 0.34, raised from 0.22: at 14px the registration marks measured 2.07:1
+     and were effectively invisible - decoration that cannot be seen is a DOM
+     cost with no return. Still decoration, still exempt from 3:1. */
+  --draft-line: rgba(31, 34, 28, 0.34);
   --draft-grid: rgba(31, 34, 28, 0.05);
   /* A wash to sit behind text, not a border colour. Opacity modifiers on
      the bare `var(--accent)` compile to nothing, so anything translucent
@@ -93,7 +96,7 @@
   --accent-faint: rgba(224, 113, 77, 0.08);
   --accent-wash: rgba(224, 113, 77, 0.22);
   --on-accent: #1c1e19;
-  --draft-line: rgba(241, 239, 234, 0.24);
+  --draft-line: rgba(241, 239, 234, 0.36);
   --draft-grid: rgba(241, 239, 234, 0.055);
   --selection-bg: #e0714d;
   --selection-fg: #1c1e19;
@@ -299,7 +302,7 @@ html {
     --accent-faint: rgba(224, 113, 77, 0.08);
     --accent-wash: rgba(224, 113, 77, 0.22);
     --on-accent: #1c1e19;
-    --draft-line: rgba(241, 239, 234, 0.24);
+    --draft-line: rgba(241, 239, 234, 0.36);
     --draft-grid: rgba(241, 239, 234, 0.055);
     /* The one pair the original list missed: the footer's WhatsApp chip sits
        in this scope, and without these it drew the light theme's dark green
@@ -326,7 +329,7 @@ html {
     --accent-faint: rgba(122, 28, 9, 0.07);
     --accent-wash: rgba(122, 28, 9, 0.16);
     --on-accent: #f7f6f2;
-    --draft-line: rgba(31, 34, 28, 0.22);
+    --draft-line: rgba(31, 34, 28, 0.34);
     --draft-grid: rgba(31, 34, 28, 0.05);
     --success: #1a7f45;
     --success-soft: rgba(26, 127, 69, 0.12);
@@ -392,25 +395,37 @@ html {
   }
 
   /* 3 · Margin annotation - a vertical mono label in the section gutter.
-     Display-gated to wide screens: a phone has no margins to annotate.
-     `--slate`, never `--draft-line`: it is text and holds 4.5:1. */
+
+     TWO boxes, and the split is the fix for a shipped defect: logical insets
+     resolve against the element's OWN writing mode, so `inset-inline-end` on
+     a `vertical-rl` element is a *vertical* inset - the annotation landed on
+     the start side, overrode its own `top`, and printed straight through the
+     H1 at 1280-1390px. The wrapper stays in the page's horizontal writing
+     mode and owns the position; only the inner span rotates.
+
+     1440px, not 1280: max-w-7xl leaves zero gutter at 1280, so that is
+     exactly where an annotation must not exist. `--slate`, never
+     `--draft-line`: it is text and holds 4.5:1. */
   .draft-annotation {
     display: none;
   }
 
-  @media (min-width: 1280px) {
+  @media (min-width: 1440px) {
     .draft-annotation {
-      @apply font-display font-semibold uppercase;
       display: block;
       position: absolute;
       top: 96px;
       inset-inline-end: 18px;
-      writing-mode: vertical-rl;
-      font-size: 0.6875rem;
-      letter-spacing: 0.22em;
-      color: var(--slate);
       pointer-events: none;
     }
+  }
+
+  .draft-annotation__text {
+    @apply font-display font-semibold uppercase;
+    writing-mode: vertical-rl;
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    color: var(--slate);
   }
 
   /* 2 · Leader line - the hairline that joins a callout label to the thing
@@ -487,14 +502,16 @@ html {
     color: var(--slate);
     padding-block: 12px;
     padding-inline-end: 24px;
-    /* `anywhere`, not just no-nowrap: "TECHNOLOGIES" is a single unbreakable
-       word, ~210px at 320px/200% text, and a word that cannot wrap sets the
-       column's min-content no matter what width says - the same trap as every
-       other instance, in table form. `anywhere` is the only value that
-       actually lowers min-content. Ugly mid-word breaks appear only where
-       the alternative was scrolling the whole page sideways. */
+    /* `anywhere` lowers min-content so "TECHNOLOGIES" - one unbreakable
+       word, ~210px at 320px/200% - cannot push the page sideways.
+
+       NO width on this cell, and that is a scar, not an omission: `width: 1%`
+       lived here for one commit, and combined with `anywhere` it clamped the
+       column to min-content - which `anywhere` had just lowered to a single
+       glyph. "Field" rendered as a five-line letter tower at every viewport,
+       in both locales. The 320px fix became the defect, again. Auto layout
+       alone sizes the header sanely and `anywhere` still guards the floor. */
     overflow-wrap: anywhere;
-    width: 1%;
   }
 
   .spec-table td {
@@ -514,20 +531,9 @@ html {
      RTL mirroring, and it reads identically in both locales. The <ol> is
      the content; only the spine and the squares are drawing. */
   .flow {
-    position: relative;
     display: flex;
     flex-direction: column;
     gap: 22px;
-  }
-
-  .flow::before {
-    content: '';
-    position: absolute;
-    top: 14px;
-    bottom: 14px;
-    inset-inline-start: 14px;
-    width: 1px;
-    background: var(--draft-line);
   }
 
   .flow__node {
@@ -537,20 +543,47 @@ html {
     gap: 16px;
   }
 
+  /*
+   * Per-node spine segments, not one container-spanning line. The single
+   * `.flow::before` was inset a fixed 14px from both ends of the container -
+   * at 320px with 200% text a five-step flow grew taller than that guess and
+   * the spine overshot the last node by 204px, a connector to a step that
+   * does not exist. Each segment now runs from its own node to the next, so
+   * the line ends where the process does, at every size.
+   *
+   * Geometry in em on purpose: the index square is 2.2em of its own 13px
+   * type, so under the menu's 200% text setting the square grows with its
+   * digit instead of clipping it - and 0.9em of the node's 1rem tracks the
+   * square's centre as both scale. The -22px reach is the flex gap, which is
+   * px by design (chrome does not scale with text).
+   */
+  .flow__node:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 0.9em;
+    bottom: -22px;
+    inset-inline-start: 0.9em;
+    width: 1px;
+    background: var(--draft-line);
+  }
+
   .flow__index {
     @apply font-display font-bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 29px;
-    height: 29px;
+    width: 2.2em;
+    height: 2.2em;
     flex-shrink: 0;
     align-self: flex-start;
     font-size: 0.8125rem;
     color: var(--accent);
     border: 1px solid var(--ink);
-    /* Covers the spine as it passes behind. */
-    background: var(--panel);
+    /* Covers the segment passing behind its lower half. The fill matches the
+       surface the diagram sits on - `--panel` here was one step lighter than
+       the case-study section's `--surface` and the squares read as pasted-on
+       tiles in dark theme. Overridable where the diagram sits on a card. */
+    background: var(--flow-node-fill, var(--surface));
     position: relative;
     z-index: 1;
   }

@@ -23,11 +23,13 @@ type PortfolioDict = {
 }
 
 type Props = {
+  /** Section clause number, computed by the page. */
+  clause?: string
   lang: Locale
   dict: PortfolioDict
 }
 
-export default function Portfolio({ lang, dict }: Props) {
+export default function Portfolio({ lang, dict, clause }: Props) {
   const projects = getProjects()
 
   // Nothing published yet — render nothing rather than an empty shell.
@@ -36,17 +38,22 @@ export default function Portfolio({ lang, dict }: Props) {
 
   return (
     <section id="portfolio" aria-labelledby="portfolio-heading" className="section relative">
-      {/* Derived counts, not typed ones - the same rule as the stat row. */}
+      {/* Document furniture, like the hero's: the clause and the section's
+          own eyebrow. The derived "5 · 3" that stood here was two numbers
+          with no referent - precision theatre, exactly what the design doc
+          forbids. */}
       <span className="draft-annotation" aria-hidden="true">
-        {projects.length} · {new Set(projects.map((p) => p.category)).size}
+        <span className="draft-annotation__text">03 — {dict.eyebrow}</span>
       </span>
 
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col items-center text-center lg:mb-14">
           <p className="eyebrow mb-6">
-            <span className="clause" aria-hidden="true">
-              03
-            </span>
+            {clause && (
+              <span className="clause" aria-hidden="true">
+                {clause}
+              </span>
+            )}
             {dict.eyebrow}
           </p>
           <h2 id="portfolio-heading" className="text-brand-ink lg:text-[3.25rem] lg:leading-[1.1]">

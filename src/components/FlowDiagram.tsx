@@ -26,17 +26,21 @@ export type FlowStep = {
 type Props = {
   steps: FlowStep[]
   lang: Locale
-  /** Names the figure for assistive tech; rendered as the block's heading by the caller. */
-  ariaLabel: string
 }
 
-export default function FlowDiagram({ steps, lang, ariaLabel }: Props) {
+/*
+ * No aria-label on the list, on purpose: every call site renders a heading
+ * directly above it, and a labelled list repeated the same words twice in a
+ * row for a screen reader. The heading names it; the list is just a list.
+ */
+export default function FlowDiagram({ steps, lang }: Props) {
   if (steps.length === 0) return null
 
   return (
-    <ol className="flow" aria-label={ariaLabel}>
+    <ol className="flow">
       {steps.map((step, index) => (
-        <li key={step.label[lang]} className="flow__node">
+        // Index in the key: two steps may legitimately share a short label.
+        <li key={`${index}-${step.label[lang]}`} className="flow__node">
           {/* The number is decoration - the <ol> already carries order. */}
           <span className="flow__index" aria-hidden="true">
             {index + 1}

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { MessageCircle, ChevronDown } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
-import { siteConfig } from '@/lib/config'
+import { siteConfig, usesPlaceholderDomain } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
 import { getProjects, projectTitle } from '@/content/projects'
 import ProjectScreens from '@/components/ProjectScreens'
@@ -83,9 +83,15 @@ export default function Hero({ lang, dict }: Props) {
       {/* Margin annotation (blueprint element 3, xl+ only). Everything in it
           is checkable: the domain from config, the eyebrow the page itself
           carries. Decoration to a reader - hidden from AT. */}
-      <span className="draft-annotation" aria-hidden="true">
-        {new URL(siteConfig.url).hostname} — {dict.eyebrow}
-      </span>
+      {/* Gated on the real domain: with no env the placeholder hostname
+          rendered as visible hero text in a dev build. */}
+      {!usesPlaceholderDomain && (
+        <span className="draft-annotation" aria-hidden="true">
+          <span className="draft-annotation__text">
+            {new URL(siteConfig.url).hostname} — {dict.eyebrow}
+          </span>
+        </span>
+      )}
 
       <div className="relative mx-auto max-w-7xl">
         {/*
@@ -220,7 +226,12 @@ export default function Hero({ lang, dict }: Props) {
               and carried every label twice, once sr-only and once aria-hidden. */}
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col-reverse gap-1">
-              <dt className="text-[0.875rem] text-brand-slate">{stat.label}</dt>
+              {/* The mono label voice (blueprint element 5) - these are the
+                  most measurement-like figures on the page and were the only
+                  ones still wearing body type. */}
+              <dt className="font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
+                {stat.label}
+              </dt>
               {/* Scaled with the viewport: at 44px against the h1's 28.9px floor,
                   the counted row - a supporting element - was 1.5x the page's own
                   headline on a phone. The h1 leads at every width now. */}

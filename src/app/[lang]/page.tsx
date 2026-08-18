@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
+import { getProjects } from '@/content/projects'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { professionalServiceSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
@@ -46,6 +47,30 @@ export default async function Page({ params }: Props) {
 
   const dict = await getDictionary(lang)
 
+  /*
+   * Clause numbers, computed where section visibility is known. They were
+   * hardcoded inside each component, which held only until a section could
+   * vanish: Portfolio hides itself when no project is published, and the
+   * document would have read 01, 02, 04 - a numbered document with a missing
+   * clause. Testimonials renders nothing today and is deliberately
+   * unnumbered; give it a number here the day it has content.
+   */
+  // The same condition Portfolio uses to hide itself.
+  const hasProjects = getProjects().length > 0
+
+  const clauses = (() => {
+    let n = 0
+    const next = () => String(++n).padStart(2, '0')
+    return {
+      services: next(),
+      process: next(),
+      portfolio: hasProjects ? next() : '',
+      about: next(),
+      faq: next(),
+      contact: next(),
+    }
+  })()
+
   return (
     <>
       <JsonLd schema={professionalServiceSchema(lang, dict.meta.description)} />
@@ -61,25 +86,25 @@ export default async function Page({ params }: Props) {
       <TrustedBy label={dict.trusted_by} />
 
       <Reveal>
-        <Services lang={lang} dict={dict.services} />
+        <Services lang={lang} dict={dict.services} clause={clauses.services} />
       </Reveal>
       <Reveal>
-        <Process dict={dict.process} />
+        <Process dict={dict.process} clause={clauses.process} />
       </Reveal>
       <Reveal>
-        <Portfolio lang={lang} dict={dict.portfolio} />
+        <Portfolio lang={lang} dict={dict.portfolio} clause={clauses.portfolio} />
       </Reveal>
       <Reveal>
         <Testimonials lang={lang} dict={dict.testimonials} />
       </Reveal>
       <Reveal>
-        <About dict={dict.about} />
+        <About dict={dict.about} clause={clauses.about} />
       </Reveal>
       <Reveal>
-        <Faq dict={dict.faq} />
+        <Faq dict={dict.faq} clause={clauses.faq} />
       </Reveal>
       <Reveal>
-        <Contact lang={lang} dict={dict.contact} />
+        <Contact lang={lang} dict={dict.contact} clause={clauses.contact} />
       </Reveal>
     </>
   )

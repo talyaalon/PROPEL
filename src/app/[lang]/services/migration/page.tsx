@@ -95,6 +95,9 @@ export default async function MigrationPage({ params }: Props) {
       <section className="section section--band" aria-labelledby="migration-outcomes">
         <div className="mx-auto max-w-3xl">
           <h2 id="migration-outcomes" className="text-brand-ink">
+            <span className="clause" aria-hidden="true">
+              02
+            </span>
             {dict.migration.outcomes_title}
           </h2>
           <ul className="mt-8 grid gap-x-8 gap-y-4 sm:grid-cols-2">
@@ -128,6 +131,9 @@ export default async function MigrationPage({ params }: Props) {
         <section className="section" aria-labelledby="migration-ownership">
           <div className="mx-auto max-w-3xl">
             <h2 id="migration-ownership" className="text-brand-ink">
+              <span className="clause" aria-hidden="true">
+                03
+              </span>
               {dict.migration.ownership_title}
             </h2>
             <p className="lead mt-6">{ownership.answer}</p>
@@ -139,6 +145,9 @@ export default async function MigrationPage({ params }: Props) {
         <section className="section section--band" aria-labelledby="migration-proof">
           <div className="mx-auto max-w-3xl">
             <h2 id="migration-proof" className="text-brand-ink">
+              <span className="clause" aria-hidden="true">
+                04
+              </span>
               {dict.migration.proof_title}
             </h2>
             <p className="body-text mt-4">{dict.migration.proof_body}</p>

@@ -13,6 +13,8 @@ type ServicesDict = {
 }
 
 type Props = {
+  /** Section clause number, computed by the page. */
+  clause?: string
   lang: Locale
   dict: ServicesDict
 }
@@ -24,7 +26,7 @@ export const serviceIcons: Record<string, LucideIcon> = {
   Code2,
 }
 
-export default function Services({ lang, dict }: Props) {
+export default function Services({ lang, dict, clause }: Props) {
   // A featured service gets its own full-width card below the grid rather than
   // competing for a column with the standard three.
   const standard = dict.items.filter((item) => !item.featured)
@@ -36,9 +38,11 @@ export default function Services({ lang, dict }: Props) {
         {/* Section header */}
         <div className="mb-9 lg:mb-16">
           <p className="eyebrow mb-6">
-            <span className="clause" aria-hidden="true">
-              01
-            </span>
+            {clause && (
+              <span className="clause" aria-hidden="true">
+                {clause}
+              </span>
+            )}
             {dict.eyebrow}
           </p>
           <h2 id="services-heading" className="max-w-3xl">

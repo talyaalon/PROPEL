@@ -17,15 +17,17 @@ type FaqDict = {
  * friendly and searchable by the browser's find-in-page, with no JavaScript.
  * The same content feeds the FAQPage structured data on the homepage.
  */
-export default function Faq({ dict }: { dict: FaqDict }) {
+export default function Faq({ dict, clause }: { dict: FaqDict; clause?: string }) {
   return (
     <section id="faq" aria-labelledby="faq-heading" className="section">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 flex flex-col items-center text-center lg:mb-14">
           <p className="eyebrow mb-6">
-            <span className="clause" aria-hidden="true">
-              05
-            </span>
+            {clause && (
+              <span className="clause" aria-hidden="true">
+                {clause}
+              </span>
+            )}
             {dict.eyebrow}
           </p>
           <h2 id="faq-heading" className="text-brand-ink lg:text-[2.75rem] lg:leading-[1.15]">
