@@ -206,7 +206,12 @@ export default function Hero({ lang, dict }: Props) {
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col-reverse gap-1">
               <dt className="text-[0.875rem] text-brand-slate">{stat.label}</dt>
-              <dd className="num text-[2.75rem] leading-none lg:text-[3.5rem]">{stat.value}</dd>
+              {/* Scaled with the viewport: at 44px against the h1's 28.9px floor,
+                  the counted row - a supporting element - was 1.5x the page's own
+                  headline on a phone. The h1 leads at every width now. */}
+              <dd className="num text-[1.625rem] leading-none sm:text-[2.75rem] lg:text-[3.5rem]">
+                {stat.value}
+              </dd>
             </div>
           ))}
         </dl>
