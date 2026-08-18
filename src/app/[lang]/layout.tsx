@@ -141,6 +141,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     description: dict.meta.description,
     applicationName: 'PROPEL',
+    /*
+     * Search Console ownership, from the environment. Set
+     * NEXT_PUBLIC_GSC_VERIFICATION to the `content` value of the HTML-tag
+     * method (the token alone, not the whole tag) and redeploy - the meta tag
+     * renders on every page, so verification works whichever URL Google
+     * lands on after the locale redirect. Unset, nothing renders. The token
+     * is not a secret: it is printed in the page source by design.
+     */
+    verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+      : undefined,
     openGraph: {
       type: 'website',
       siteName: 'PROPEL',
