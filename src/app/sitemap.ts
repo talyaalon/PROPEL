@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { locales } from '@/lib/i18n'
 import { siteConfig } from '@/lib/config'
-import { getProjects } from '@/content/projects'
+import { sitePaths } from '@/lib/routes'
 
 /**
  * Every page in both languages.
@@ -23,16 +23,8 @@ import { getProjects } from '@/content/projects'
  * from `src/lib/pageMetadata.ts` for every route.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = [
-    '',
-    '/portfolio',
-    '/services/migration',
-    '/blog',
-    '/accessibility',
-    '/privacy',
-  ]
-  const projectPaths = getProjects().map((project) => `/portfolio/${project.slug}`)
-  const allPaths = [...staticPaths, ...projectPaths]
+  // One list, shared with the middleware - see src/lib/routes.ts for why.
+  const allPaths = sitePaths()
 
   return allPaths.flatMap((path) =>
     locales.map((lang) => ({

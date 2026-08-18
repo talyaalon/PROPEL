@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 // Must live inside `src/` — Next only picks middleware up from the directory
 // that contains the `app` folder. At the project root it is silently ignored.
 import { locales, defaultLocale, type Locale } from './lib/i18n'
-import { getProjects } from './content/projects'
+import { sitePaths } from './lib/routes'
 
 function getLocaleFromPath(pathname: string): Locale | null {
   for (const locale of locales) {
@@ -34,20 +34,11 @@ function getPreferredLocale(request: NextRequest): Locale {
 /**
  * Every path the site actually answers, after the locale prefix.
  *
- * Built from the same source as the sitemap, so a new project or page cannot
- * be routed as a 404 by forgetting to add it here.
+ * `sitePaths()` IS the sitemap's list - one module, two consumers - so a page
+ * cannot be crawlable and 404 at the same time.
  */
 function knownPaths(): Set<string> {
-  const staticPaths = [
-    '',
-    '/portfolio',
-    '/services/migration',
-    '/blog',
-    '/accessibility',
-    '/privacy',
-  ]
-  const projectPaths = getProjects().map((project) => `/portfolio/${project.slug}`)
-  return new Set([...staticPaths, ...projectPaths])
+  return new Set(sitePaths())
 }
 
 export function middleware(request: NextRequest) {
