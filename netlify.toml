@@ -10,92 +10,70 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Long-cache the immutable build output. Everything under /_next/static is
-# content-hashed, so it can never go stale.
+# ─────────────────────────────────────────────────────────────────────────────
+# Caching
+# ─────────────────────────────────────────────────────────────────────────────
+
+# The build output is content-hashed, so it can never go stale.
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# NO 404 redirect rules here, and that is a finding rather than an omission.
+# Everything under public/ was served `max-age=0, must-revalidate` - Next's
+# default - so every repeat visitor re-downloaded the paper texture and all
+# five project captures. These are content, not build output, so they carry no
+# hash: a year of caching would strand a replacement that nobody thought to
+# rename.
+#
+# A day, plus a week of stale-while-revalidate. The swr is the part that
+# matters: inside that week the visitor gets the cached bytes immediately and
+# the browser refreshes in the background, so a replaced image is live on the
+# next navigation rather than after a 24h wait. Strictly better than the bare
+# max-age on both axes - faster repeat visits AND a shorter staleness window.
+#
+# Lighthouse still flags this: its cache audit reads max-age alone and wants a
+# year. It is measuring the wrong thing for un-hashed content, and the ~20KiB
+# it offers is not worth serving a stale logo for twelve months. Hash the
+# filenames and this becomes free; until then this is the honest setting.
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/projects/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# What is deliberately NOT here
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Security headers, CSP included, live in next.config.ts. Netlify's header
+# rules do not reach HTML served by the Next runtime - only static files - so
+# setting them here silently covers assets and leaves every page uncovered.
+# That was measured on production: the CSP was present on /paper.webp and
+# absent on /he. Keeping a copy here as well would also risk two CSP headers on
+# one response, which browsers intersect rather than merge.
+
+# No 404 redirect rules, and that is a finding rather than an omission.
 #
 # A `[[redirects]]` block with `status = 404` is the standard Netlify way to
-# serve a custom error page with a real status. It was tried, deployed, and
-# measured on production: /he/nope-123 still answered 200. The Next runtime
-# claims the path through the middleware before Netlify's redirect table is
-# consulted, so the rule never fires.
-#
-# The commit that added it said to delete it rather than leave a rule that does
-# nothing, if exactly this happened. It happened.
+# serve a custom error page with a real status. It was tried, deployed and
+# measured: /he/nope-123 still answered 200. The Next runtime claims the path
+# through the middleware before Netlify's redirect table is consulted, so the
+# rule never fired. A rule that looks like a safeguard and is not one is worse
+# than no rule.
 #
 # So the site keeps the soft 404 knowingly: an unknown path serves the
 # localised 404 page - lang, dir, navigation, footer - with `noindex, follow`
 # and no sitemap entry, and answers 200. The alternative was measured too:
-# `notFound()` returns a genuine 404 and Next's built-in error page, with no
-# lang and no dir. That is 3.1.1 Level A. A status code is not worth it.
-
-# Everything under public/ was served `max-age=0, must-revalidate` - Next's
-# default - so every repeat visitor re-downloaded the paper texture and all
-# five project captures. These are content, not build output, so they carry no
-# hash: a year of caching would strand a replacement. A day is the compromise -
-# it removes the cost for a session and for same-week return visits, and a
-# changed image is live within 24h without anyone remembering to bust anything.
-[[headers]]
-  for = "/*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/projects/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-# Everything under public/ was served `max-age=0, must-revalidate` - Next's
-# default - so every repeat visitor re-downloaded the paper texture and all
-# five project captures. These are content, not build output, so they carry no
-# hash: a year of caching would strand a replacement. A day is the compromise -
-# it removes the cost for a session and for same-week return visits, and a
-# changed image is live within 24h without anyone remembering to bust anything.
-[[headers]]
-  for = "/*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/projects/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-[[headers]]
-  for = "/*.svg"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
-
-# Content-Security-Policy, REPORT-ONLY on purpose.
-#
-# The site already sends HSTS, X-Frame-Options, X-Content-Type-Options,
-# Referrer-Policy and Permissions-Policy; CSP was the only one missing. It is
-# also the only one that can take the site down if it is wrong, and Next ships
-# inline bootstrap scripts and inline styles that a naive policy blocks
-# instantly.
-#
-# So it reports and does not enforce. Watch the browser console on a deploy
-# preview, confirm nothing is blocked - especially /_next/image, the inline
-# hydration script and the JSON-LD blocks - and only then rename the header to
-# Content-Security-Policy. Do not skip that step to score a point.
-#
-# 'unsafe-inline' on script-src is required by Next's bootstrap; removing it
-# needs a nonce threaded through the layout, which is a separate change.
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"
-
-# Security headers live in next.config.ts, not here. Netlify's header rules do
-# not reach HTML served by the Next.js runtime — only static files — so setting
-# them at this layer silently covered assets and left every page uncovered.
+# `notFound()` returns a genuine 404 and Next's built-in error page, which
+# carries no lang and no dir. That is a 3.1.1 Level A failure traded for a
+# status code, and the trade is not worth making.

@@ -124,11 +124,29 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     const band = headerRef.current
     if (!band || typeof ResizeObserver === 'undefined') return
 
-    const publish = () =>
-      document.documentElement.style.setProperty('--nav-h', `${band.offsetHeight}px`)
+    const publish = (px: number) =>
+      document.documentElement.style.setProperty('--nav-h', `${px}px`)
 
-    publish()
-    const observer = new ResizeObserver(publish)
+    // One forced read, at mount, because nothing has measured the band yet.
+    publish(band.offsetHeight)
+
+    /*
+     * The observer reads its entry, not the element. Calling `offsetHeight`
+     * inside the callback forces a synchronous layout that the observer had
+     * just performed - Lighthouse flagged it as a forced reflow on production,
+     * and it fires on every resize and on every step of the accessibility
+     * menu's text control. `borderBoxSize` carries the same number, already
+     * computed.
+     *
+     * `blockSize` is the height only in a horizontal writing mode. The band is
+     * one: the site's single `writing-mode: vertical-rl` is scoped to
+     * `.draft-annotation__text`, and RTL changes `direction`, not the axis.
+     * The fallback covers engines that fire an entry without `borderBoxSize`.
+     */
+    const observer = new ResizeObserver(([entry]) => {
+      const box = entry.borderBoxSize?.[0]
+      publish(box ? box.blockSize : band.offsetHeight)
+    })
     observer.observe(band)
     return () => observer.disconnect()
   }, [])

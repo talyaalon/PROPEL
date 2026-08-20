@@ -67,6 +67,14 @@ const nextConfig: NextConfig = {
     // AVIF first, WebP as the fallback — meaningfully smaller than JPEG/PNG
     // for the screenshot-heavy portfolio pages.
     formats: ['image/avif', 'image/webp'],
+    /*
+     * Pinned, not inherited. Next's own default is 60s; Netlify's runtime was
+     * serving a day, which is the number we want but not one we chose. The
+     * sources are un-hashed files in public/, so the reasoning matches the
+     * cache block in netlify.toml: long enough to pay off, short enough that a
+     * replaced image is not stranded.
+     */
+    minimumCacheTTL: 86400,
   },
   poweredByHeader: false,
 
