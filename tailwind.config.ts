@@ -6,9 +6,13 @@ import type { Config } from 'tailwindcss'
  *
  * It needs two values, not one. Measured against the two surfaces:
  *
- *              on #f6f5f1 light    on #1c1e19 dark
- *   #7a1c09       9.6:1 (AAA)          1.5:1 (fails)
- *   #e0714d       3.4:1 (large only)   5.3:1 (AA)
+ *              on #f6f5f1 light    on #24271f dark
+ *   #7a1c09       9.6:1 (AAA)          1.4:1 (fails)
+ *   #ff5347       3.3:1 (large only)   4.8:1 (AA)
+ *
+ * The dark value has been wrong twice by reading as orange - see the long note
+ * above --accent in globals.css, which records why hue matching was the wrong
+ * test and the green channel is the right one.
  *
  * A single red cannot serve both themes - dark red on a dark surface is not
  * merely dull, it is unreadable. So the accent is a CSS variable that flips with

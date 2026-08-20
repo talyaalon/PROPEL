@@ -99,24 +99,42 @@
    * #7A1C09 measures 1.44:1 on --panel here - not "low contrast", unreadable.
    * So the dark scopes need a lighter accent, and the only question is which.
    *
-   * It was #e0714d, whose hue is 14.7 deg. That is far enough from the brand's
-   * 10.1 to read as salmon rather than as the brand - the owner saw it as
-   * orange, and they were right. #f55f41 is hue 10.0: the SAME hue as
-   * #7A1C09, at a lightness that clears AA (4.76:1 on --panel, 5.28:1 on
-   * --surface). Same colour, turned up, instead of a different one.
+   * Two attempts got this wrong. #e0714d was hue 14.7 deg and read as salmon.
+   * #ff5347 was picked to fix it by matching the brand's hue exactly - 10.0
+   * against 10.1 - on the theory that the same hue is the same colour turned
+   * up. The owner called it orange again, and they were right again.
+   *
+   * Hue equality does not survive a lightness change. #7A1C09 sits at 26%
+   * lightness, where hue 10 reads as brick. At the 61% lightness AA forces on
+   * a dark ground, that same hue reads as coral. The channel carrying the
+   * orange is green: #ff5347 is G95 B65, a 30-point spread. Perceived
+   * orange-ness tracks that spread, not the hue angle.
+   *
+   * So this one is chosen on the green channel. #ff5347 is G83 B71 - spread
+   * cut from 30 to 12 - which drops the hue to 3.9 and reads red rather than
+   * coral. It costs nothing: 4.75:1 on --panel against the 4.76:1 it replaces,
+   * measured on the three dark surfaces the token is actually painted on
+   * (#171915, #1f221c, #24271f).
+   *
+   * A deeper red is not available here, and that is worth writing down so it
+   * is not attempted a fourth time. Deep red needs darkness; darkness on a
+   * dark ground fails contrast. Anything clearing 4.5:1 on #24271f is at least
+   * 58% light. Within that floor this is as red as it gets before it turns
+   * pink - a green-blue spread of 0 gives #ff4c4c, which reads candy, not
+   * brand.
    */
-  --accent: #f55f41;
-  --accent-soft: rgba(245, 95, 65, 0.55);
-  --accent-faint: rgba(245, 95, 65, 0.08);
-  --accent-wash: rgba(245, 95, 65, 0.22);
+  --accent: #ff5347;
+  --accent-soft: rgba(255, 83, 71, 0.55);
+  --accent-faint: rgba(255, 83, 71, 0.08);
+  --accent-wash: rgba(255, 83, 71, 0.22);
   --on-accent: #1c1e19;
   /* Fill stays the brand; only the edge lightens - see .btn. */
   --btn-bg: #7a1c09;
   --btn-fg: #f7f6f2;
-  --btn-border: #f55f41;
+  --btn-border: #ff5347;
   --draft-line: rgba(241, 239, 234, 0.36);
   --draft-grid: rgba(241, 239, 234, 0.055);
-  --selection-bg: #f55f41;
+  --selection-bg: #ff5347;
   --selection-fg: #1c1e19;
 }
 
@@ -306,7 +324,7 @@ html {
        takes the lightened edge, exactly as the dark root does. */
     --btn-bg: #7a1c09;
     --btn-fg: #f7f6f2;
-    --btn-border: #f55f41;
+    --btn-border: #ff5347;
     --surface: #1c1e19;
     --band: #161813;
     --panel: #24271f;
@@ -316,10 +334,10 @@ html {
     --line: rgba(241, 239, 234, 0.14);
     --line-strong: rgba(241, 239, 234, 0.3);
     --field-border: #6f736a;
-    --accent: #f55f41;
-    --accent-soft: rgba(245, 95, 65, 0.55);
-    --accent-faint: rgba(245, 95, 65, 0.08);
-    --accent-wash: rgba(245, 95, 65, 0.22);
+    --accent: #ff5347;
+    --accent-soft: rgba(255, 83, 71, 0.55);
+    --accent-faint: rgba(255, 83, 71, 0.08);
+    --accent-wash: rgba(255, 83, 71, 0.22);
     --on-accent: #1c1e19;
     --draft-line: rgba(241, 239, 234, 0.36);
     --draft-grid: rgba(241, 239, 234, 0.055);
@@ -1119,19 +1137,26 @@ html {
   --selection-fg: #ffffff;
 }
 
+/* The high-contrast accent was #ff9b78 - hue 15.6, G155 B120, a 35-point green
+   spread. It was the most orange value in the file, and this is the one mode a
+   visitor cannot simply look past it. #ff9d8f pulls the spread to 14 and the
+   hue to 7.5, and gains contrast rather than spending it: 9.78:1 on --band
+   against the 9.54:1 it replaces, 10.47:1 on black. Contrast is this mode's
+   whole purpose, so the replacement was measured before it was allowed to be
+   prettier. */
 :root[data-theme='dark'][data-a11y-contrast] {
   --ink: #ffffff;
   --slate: #e6e4de;
   --line: rgba(255, 255, 255, 0.6);
   --line-strong: rgba(255, 255, 255, 0.85);
-  --accent: #ff9b78;
-  --accent-soft: rgba(255, 155, 120, 0.8);
+  --accent: #ff9d8f;
+  --accent-soft: rgba(255, 157, 143, 0.8);
   --panel: #000000;
   --surface: #000000;
   --band: #0b0c09;
   --raised: #0b0c09;
   --header: #0b0c09;
-  --selection-bg: #ff9b78;
+  --selection-bg: #ff9d8f;
   --selection-fg: #000000;
 }
 
