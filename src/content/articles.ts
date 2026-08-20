@@ -373,11 +373,13 @@ export function getInternalArticles(): (Article & { slug: string })[] {
  * paragraph, and a wrong one is worse than none - it is the first small
  * promise the page breaks. 200 words per minute is the common figure for
  * Hebrew and English prose alike; headings are counted, since they are read.
+ * Rounds UP: `round` gave the same article 1 minute in Hebrew and 2 in English,
+ * because the two bodies differ by a few words either side of the halfway mark.
  */
 export function readingMinutes(article: Article, lang: Locale): number {
   if (isExternal(article) || !article.body) return 0
   const words = article.body[lang].trim().split(/\s+/).filter(Boolean).length
-  return Math.max(1, Math.round(words / 200))
+  return Math.max(1, Math.ceil(words / 200))
 }
 
 export function getArticleBySlug(slug: string) {

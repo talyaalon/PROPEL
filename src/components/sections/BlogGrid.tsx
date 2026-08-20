@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import FilterChips from '@/components/FilterChips'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import type { Locale } from '@/lib/i18n'
 import { isExternal, type Article, type ArticleTopic } from '@/content/articles'
 
@@ -17,6 +17,7 @@ type BlogDict = {
   topics: Record<ArticleTopic, string>
   read_more: string
   external_note: string
+  ours_title: string
   sources_title: string
   sources_body: string
 }
@@ -77,7 +78,12 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
           )}
         </div>
 
-        <h2 className="mb-3">{article.title[lang]}</h2>
+        {/* H3: a card title sits UNDER its group's heading. Six of these are
+            other sites' article titles, and at h2 they ranked level with the
+            section's own heading. */}
+        <h3 className="mb-3 text-[1.1875rem] font-bold leading-snug text-brand-ink lg:text-[1.375rem]">
+          {article.title[lang]}
+        </h3>
 
         <p className="mb-6 flex-1 text-[0.875rem] leading-relaxed text-brand-slate">
           {article.excerpt[lang]}
@@ -148,9 +154,17 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
         />
       )}
 
-      {/* Ours. This is the grid the page exists for. */}
+      {/* Ours. This is the grid the page exists for, and it gets a heading of
+          its own so both groups are introduced the same way. */}
       {visible.length > 0 && (
-        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">{visible.map(card)}</div>
+        <section aria-labelledby="blog-ours">
+          <h2 id="blog-ours" className="text-brand-ink lg:text-[1.75rem]">
+            {dict.ours_title}
+          </h2>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            {visible.map(card)}
+          </div>
+        </section>
       )}
 
       {/* Theirs - a reference shelf beneath the writing rather than instead of
@@ -195,8 +209,8 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
                   href={`/${lang}/portfolio/${project.slug}`}
                   className="group flex items-baseline gap-3 text-[1rem] text-brand-ink transition-colors duration-200 hover:text-brand-accent"
                 >
-                  <ArrowUpRight
-                    className="h-4 w-4 flex-shrink-0 -rotate-90 text-brand-accent rtl:-scale-x-100"
+                  <ArrowRight
+                    className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span className="font-semibold">{project.title}</span>

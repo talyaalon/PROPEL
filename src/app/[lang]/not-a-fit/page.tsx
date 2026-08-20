@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { X, Check, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, Check, X } from 'lucide-react'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
@@ -139,8 +139,8 @@ export default async function NotAFitPage({ params }: Props) {
                   href={`/${lang}/services/${service.slug}`}
                   className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[1rem] text-brand-ink transition-colors duration-200 hover:text-brand-accent"
                 >
-                  <ArrowUpRight
-                    className="h-4 w-4 flex-shrink-0 -rotate-90 text-brand-accent rtl:-scale-x-100"
+                  <ArrowRight
+                    className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span className="font-semibold">{service.title[lang]}</span>

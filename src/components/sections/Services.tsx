@@ -55,7 +55,7 @@ export default function Services({ lang, dict, clause }: Props) {
             )}
             {dict.eyebrow}
           </p>
-          <h2 id="services-heading" className="max-w-3xl">
+          <h2 id="services-heading" className="max-w-3xl text-brand-ink">
             {dict.section_title}
           </h2>
           <p className="mt-5 max-w-xl text-base leading-[1.75] text-brand-slate sm:text-[1.1875rem]">

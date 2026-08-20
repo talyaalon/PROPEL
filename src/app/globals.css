@@ -1035,8 +1035,11 @@ html {
    * correctness with no animation. The grow was a 700ms flourish on the most
    * performance-critical text on the site; the mark itself is the design.
    *
-   * `background-position` is direction-aware: `0 88%` resolves to the start
-   * edge, so the band sits correctly in both locales with no RTL variant.
+   * `background-position: 0 88%` is NOT direction-aware - 0 is the left edge
+   * in both locales. It does not matter here only because the band is
+   * `background-size: 100%` and covers the whole box either way. It mattered
+   * when this grew from 0%, where it swept from the last Hebrew word to the
+   * first; that is gone with the animation.
    */
   .marker-wash {
     background-image: linear-gradient(var(--accent-wash), var(--accent-wash));

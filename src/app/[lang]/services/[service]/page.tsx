@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { Check, MessageCircle, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, Check, MessageCircle } from 'lucide-react'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
@@ -148,8 +148,8 @@ export default async function ServicePage({ params }: Props) {
                     href={`/${lang}/portfolio/${project.slug}`}
                     className="card flex flex-wrap items-baseline gap-3 p-5"
                   >
-                    <ArrowUpRight
-                      className="h-4 w-4 flex-shrink-0 -rotate-90 text-brand-accent rtl:-scale-x-100"
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
                       aria-hidden="true"
                     />
                     <span className="font-semibold text-brand-ink">

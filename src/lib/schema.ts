@@ -155,7 +155,9 @@ export function collectionPageSchema(input: {
     name: input.name,
     description: input.description,
     url: `${siteConfig.url}/${input.lang}/${input.path}`,
-    isPartOf: { '@id': `${siteConfig.url}/#organization` },
+    // The page is part of the WEBSITE, not of the company. schema.org gives
+    // isPartOf a CreativeWork domain; an Organization is not one.
+    isPartOf: { '@id': `${siteConfig.url}/${input.lang}#website` },
     inLanguage: input.lang,
   }
 }
