@@ -68,7 +68,10 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
           {/* Brand column */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          {/* The lockup centres inside its column. It is the one block here
+              that is a mark rather than a list, and left-aligning it against
+              three ragged link columns left it looking dropped in. */}
+          <div className="flex flex-col items-center text-center sm:col-span-2 lg:col-span-1 lg:items-start lg:text-start">
             <Logo tagline={dict.tagline} className="text-[1.625rem]" />
             {(siteConfig.legalName || siteConfig.businessId) && (
               <p className="mt-4 text-[0.75rem] leading-relaxed text-brand-slate">
@@ -187,7 +190,10 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
         </div>
 
         {/* ── Bottom bar ──────────────────────────────────────── */}
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-brand-line pt-6 sm:flex-row sm:items-center lg:mt-16 lg:pt-8">
+        {/* Centred, not pushed to the two edges. The copyright and the locale
+            switch sat at opposite ends of a 1280px rule with nothing between
+            them, which read as two stray labels rather than a closing line. */}
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 border-t border-brand-line pt-6 text-center sm:flex-row sm:gap-8 lg:mt-16 lg:pt-8">
           <p className="text-[0.75rem] text-brand-slate">{dict.copyright}</p>
           <LocaleSwitch
             lang={lang}
