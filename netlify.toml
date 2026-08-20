@@ -17,6 +17,38 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# The 404 status, without giving up the localised 404 page.
+#
+# The middleware REWRITES an unknown path under a locale to that locale's 404
+# page, which is what makes it a Hebrew page for a Hebrew visitor - lang, dir,
+# navigation, footer, the accessibility menu. A rewrite answers 200, so Google
+# reads these as soft 404s.
+#
+# The alternative was tested and rejected twice: calling `notFound()` from the
+# catch-all DOES return a real 404, and serves Next's built-in error page with
+# no lang, no dir and no chrome. That is a 3.1.1 Level A failure on a site that
+# publishes an accessibility statement, in exchange for a status code.
+#
+# These rules are the third way: Netlify serves the target's CONTENT with the
+# status given here. Non-forced, so they apply only when nothing else matched -
+# a real route, a static file and the metadata routes all win first.
+#
+# UNVERIFIABLE LOCALLY. `next start` does not read netlify.toml. This must be
+# checked on a deploy preview:
+#     curl -I https://<preview>/he/nope-123   -> HTTP/2 404
+#     curl -s  https://<preview>/he/nope-123  -> lang="he" dir="rtl", nav present
+# If the Next runtime claims the path before these rules, delete this block
+# rather than leaving a rule that does nothing.
+[[redirects]]
+  from = "/he/*"
+  to = "/he/404"
+  status = 404
+
+[[redirects]]
+  from = "/en/*"
+  to = "/en/404"
+  status = 404
+
 # Everything under public/ was served `max-age=0, must-revalidate` - Next's
 # default - so every repeat visitor re-downloaded the paper texture and all
 # five project captures. These are content, not build output, so they carry no
