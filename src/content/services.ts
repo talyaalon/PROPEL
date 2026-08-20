@@ -153,7 +153,7 @@ export const servicePages: ServicePage[] = [
       en: 'An online store is not a page with a pay button - it is the connection between what the customer sees and what the business does.',
     },
     body: {
-      he: 'ההזמנה היא רק ההתחלה. השאלות שקובעות אם החנות עובדת הן מה קורה אחריה: איך המטבח יודע מה להכין, איך המלאי יורד, מי מעדכן מחיר ואיפה. בנינו חנות דו-לשונית לרשת עם שישה סניפים - עם מסכי מלקט, מסכי מטבח, וסנכרון דו-כיווני עם מערכת ה-ERP - ובדיקות אוטומטיות שרצות על מסלול ההזמנה בכל עדכון, כי במסחר ההבדל בין באג לבין יום מכירות אבוד הוא אותו הבדל.',
+      he: 'ההזמנה היא רק ההתחלה. השאלות שקובעות אם החנות עובדת הן מה קורה אחריה: איך המטבח יודע מה להכין, איך המלאי יורד, מי מעדכן מחיר ואיפה. בנינו חנות דו-לשונית לרשת עם שישה סניפים - עם מסכי מלקט, מסכי מטבח, וסנכרון דו-כיווני עם מערכת ה-ERP - ובדיקות אוטומטיות שרצות על מסלול ההזמנה בכל עדכון, כי במסחר אין הבדל בין באג לבין יום מכירות אבוד.',
       en: 'The order is only the beginning. The questions that decide whether a store works are what happens after it: how the kitchen knows what to make, how stock comes down, who updates a price and where. We built a bilingual store for a six-branch chain - picker screens, kitchen displays, two-way ERP sync - with automated tests running the ordering path on every update, because in commerce the difference between a bug and a lost day of sales is no difference at all.',
     },
     outcomesTitle: { he: 'מה זה נותן', en: 'What it gives you' },

@@ -11,6 +11,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import { breadcrumbSchema, caseStudySchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import ProjectScreens from '@/components/ProjectScreens'
+import PrivateProjectShowcase from '@/components/PrivateProjectShowcase'
 import FlowDiagram from '@/components/FlowDiagram'
 import { getProjects, getProjectBySlug, projectTitle, changedLines } from '@/content/projects'
 
@@ -200,20 +201,37 @@ export default async function ProjectPage({ params }: Props) {
           at all - the journey went from the best asset on the site to the
           emptiest one. The captures already exist and are already deployed;
           they were simply never rendered on this route. */}
-      {project.screens && (
+      {/* Always rendered. It used to be gated on `screens`, so the two systems
+          behind a login - the strongest engineering in the portfolio - had no
+          visual block at all on their own case study. The placeholder at least
+          says the absence is deliberate. */}
+      {
         <section
           className="border-t border-brand-line bg-brand-surface px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
           aria-label={t.screenshots}
         >
           <div className="mx-auto max-w-5xl">
-            <ProjectScreens
-              desktop={project.screens.desktop}
-              mobile={project.screens.mobile}
-              title={projectTitle(project, lang)}
-            />
+            {project.screens ? (
+              <ProjectScreens
+                desktop={project.screens.desktop}
+                mobile={project.screens.mobile}
+                title={projectTitle(project, lang)}
+              />
+            ) : (
+              /* A system behind a login. Full width here, where there is room
+                 for a recording to be legible - the card version is 330px. */
+              <PrivateProjectShowcase
+                media={project.media}
+                lang={lang}
+                placeholderLabel={dict.portfolio.private_project}
+                ariaLabel={dict.portfolio.showcase_label}
+                prevLabel={dict.portfolio.showcase_prev}
+                nextLabel={dict.portfolio.showcase_next}
+              />
+            )}
           </div>
         </section>
-      )}
+      }
 
       {/* ── What was stuck / what we built / what changed ──────────────────
           The narrative, in the order a buyer reads it: their problem, our
@@ -462,7 +480,14 @@ function Block({ clause, title, body }: { clause?: string; title: string; body: 
 `. Without it both paragraphs collapse into one wall of
         text - the second paragraph of every `solution` is a distinct point.
       */}
-      <p className="mt-4 whitespace-pre-line text-lg leading-relaxed text-brand-ink">{body}</p>
+      {/* `anywhere`, not `break-words`: the narrative names real identifiers -
+        `resolveOrderCompany` is 19 unbreakable Latin characters, ~330px at
+        200% text. `break-word` prevents nothing here because it does not
+        lower the paragraph's min-content, and the grid item is sized from it;
+        `anywhere` is the only value that does. */}
+      <p className="mt-4 whitespace-pre-line text-lg leading-relaxed text-brand-ink [overflow-wrap:anywhere]">
+        {body}
+      </p>
     </div>
   )
 }

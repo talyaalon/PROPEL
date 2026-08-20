@@ -20,6 +20,9 @@ type PortfolioDict = {
   filter_status: string
   filter_status_one: string
   private_project: string
+  showcase_label: string
+  showcase_prev: string
+  showcase_next: string
 }
 
 type Props = {

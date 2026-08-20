@@ -9,7 +9,7 @@
  *
  *  Every project below is real and its `liveUrl` was verified to respond.
  *
- *  ⚠️  WHAT IS STILL MISSING — the outcome numbers.
+ *  ⚠️  WHAT IS STILL MISSING - the outcome numbers.
  *
  *  Three projects now carry the full narrative: `headline`, `challenge`,
  *  `solution` and `changed`. What they do not carry is business outcomes, and
@@ -62,7 +62,7 @@ function isPending(value: string): boolean {
 
 export type ProjectResult = {
   /**
-   * The number itself — kept short and glanceable. e.g. '×2.4', '−73%', '22'.
+   * The number itself - kept short and glanceable. e.g. '×2.4', '−73%', '22'.
    * `PENDING` marks one we have not been given; it is never rendered.
    */
   metric: string
@@ -71,7 +71,7 @@ export type ProjectResult = {
 }
 
 export type ProjectImage = {
-  /** Path under /public — e.g. '/projects/jcafe/storefront.webp' */
+  /** Path under /public - e.g. '/projects/jcafe/storefront.webp' */
   src: string
   alt: Bilingual
 }
@@ -129,7 +129,7 @@ export type Project = {
    */
   flow?: { label: Bilingual; meta?: Bilingual }[]
   /**
-   * What changed afterwards — one line per outcome.
+   * What changed afterwards - one line per outcome.
    *
    * Separate from `results` on purpose. `results` is a number in a block you
    * take in at a glance; this is the sentence that says what the number means.
@@ -146,6 +146,23 @@ export type Project = {
    * the empty frame instead.
    */
   screens?: { desktop: string; mobile: string }
+  /**
+   * Recordings and stills of a system that sits behind a login.
+   *
+   * Two of the strongest projects here are internal tools: a visitor sees a
+   * lock icon and a sentence, which proves nothing. This is where their
+   * evidence goes once the owner supplies it - screen recordings with dummy
+   * data. Until then `PrivateProjectShowcase` renders its placeholder, and
+   * NOTHING here is invented: no mock screenshots, no generated images.
+   */
+  media?: {
+    /** Path under /public. `.mp4`/`.webm` render as video, images as <img>. */
+    src: string
+    /** Poster frame for a video. Optional. */
+    poster?: string
+    /** Describes what the recording shows - required, it is the alt text. */
+    caption: Bilingual
+  }[]
   thumbnail?: ProjectImage
   gallery?: ProjectImage[]
   /** Featured projects sort first on the homepage grid. */
@@ -182,14 +199,14 @@ const projects: Project[] = [
       en: 'Bilingual online ordering for six branches in Thailand, including picker and kitchen display screens.',
     },
     challenge: {
-      he: 'רשת כשרה עם שישה סניפים בתאילנד, וקהל שמדבר שתי שפות. ההזמנות הגיעו בערוצים מפוזרים, המטבח קיבל אותן בהעברה ידנית, ולא היה מקום אחד שבו אפשר לראות מה קורה בכל הסניפים באותו רגע. המלאי והתמחור ניהלו חיים נפרדים במערכת ה-ODOO, בלי קשר למה שהלקוח רואה באתר.',
+      he: 'רשת כשרה עם שישה סניפים בתאילנד, וקהל שמדבר שתי שפות. ההזמנות הגיעו בערוצים מפוזרים, המטבח קיבל אותן בהעברה ידנית, ולא היה מקום אחד שבו אפשר לראות מה קורה בכל הסניפים באותו רגע.\n\nמתחת לזה ישבה תקלה חמורה יותר: שלושה מקורות אמת מתחרים לזהות הסניף, והזמנות דלפו בין סניפים. בקוד היה fallback קשיח לסניף ברירת מחדל בכ-38 מקומות. במערכת הזמנות, הזמנה שמגיעה לסניף הלא נכון היא לא באג בתצוגה - היא ארוחה שיצאה מהמטבח הלא נכון.',
       // TODO(i18n)
-      en: 'A kosher chain with six branches in Thailand and an audience speaking two languages. Orders arrived through scattered channels, the kitchen received them by hand, and there was no single place to see what was happening across every branch at once. Stock and pricing led a separate life inside ODOO, disconnected from what the customer saw on the site.',
+      en: 'A kosher chain with six branches in Thailand and an audience speaking two languages. Orders arrived through scattered channels, the kitchen received them by hand, and there was no single place to see what was happening across every branch at once.\n\nUnderneath that sat a worse fault: three competing sources of truth for branch identity, and orders leaking between branches. The code carried a hard fallback to a default branch in about 38 places. In an ordering system, an order that reaches the wrong branch is not a display bug - it is a meal that left the wrong kitchen.',
     },
     solution: {
-      he: 'חנות אונליין דו-לשונית עם תשלום מאובטח, ומעליה שכבת תפעול: מסך מלקט בכל סניף שמראה מה צריך להרכיב עכשיו, ומסך מטבח (KDS) שמקבל את ההזמנה ישר — בלי שאף אחד יצטרך להקריא אותה בקול. הכל מסונכרן דו-כיוונית עם ODOO, כך שמלאי ומחירים נשארים מקור אמת אחד.\n\nמעל זה בנינו סדרת בדיקות אוטומטיות שרצה על מסלול ההזמנה בכל עדכון — כדי שאף שינוי בקוד לא ישבור את היכולת של לקוח להזמין ולשלם. במסחר, זה ההבדל בין באג לבין יום מכירות אבוד.',
+      he: 'ההחלטה ההנדסית: השרת הופך לסמכות הבלעדית לזהות הסניף. הוספנו את resolveOrderCompany, עברנו למקור אמת יחיד מבוסס cookie מסוג httpOnly, נתנו לכל סניף מפתח עגלה נפרד, והסרנו את כל ה-fallbacks הקשיחים - כולם, לא רובם. סמכות אחת במקום שלוש.\n\nמעל זה נבנתה שכבת התפעול: חנות דו-לשונית עם תשלום מאובטח, מסך מלקט בכל סניף שמראה מה צריך להרכיב עכשיו, ומסך מטבח (KDS) שמקבל את ההזמנה ישר - בלי שאף אחד יצטרך להקריא אותה בקול. הכל מסונכרן דו-כיוונית עם ODOO, כך שמלאי ומחירים נשארים מקור אמת אחד.',
       // TODO(i18n)
-      en: 'A bilingual storefront with secure checkout, and an operations layer above it: a picker screen in each branch showing what to assemble right now, and a kitchen display that receives the order directly — with nobody reading it out loud. Everything syncs both ways with ODOO, so stock and prices stay a single source of truth.\n\nOn top of that, an automated test suite runs the ordering path on every update, so no code change can break a customer’s ability to order and pay. In commerce, that is the difference between a bug and a lost day of sales.',
+      en: 'The engineering decision: the server becomes the sole authority for branch identity. We added resolveOrderCompany, moved to a single source of truth held in an httpOnly cookie, gave every branch its own cart key, and removed every hard fallback - all of them, not most. One authority in place of three.\n\nThe operations layer was built on top of that: a bilingual storefront with secure checkout, a picker screen in each branch showing what to assemble right now, and a kitchen display (KDS) that receives the order directly - with nobody reading it out loud. Everything syncs both ways with ODOO, so stock and prices stay a single source of truth.',
     },
     flow: [
       {
@@ -227,16 +244,24 @@ const projects: Project[] = [
     ],
     changed: [
       {
+        he: 'סוויטת הבדיקות גדלה מ-7 בדיקות ל-38',
+        en: 'The test suite grew from 7 tests to 38',
+      },
+      {
+        he: 'אפס דליפות הזמנות בין סניפים מאז',
+        en: 'Zero order leaks between branches since',
+      },
+      {
         he: `זמן מרגע הזמנה עד שהיא על מסך המטבח: ${PENDING}`,
         en: `Time from order placed to order on the kitchen screen: ${PENDING}`,
       },
-      { he: `טעויות הזמנה: ${PENDING}`, en: `Order errors: ${PENDING}` },
     ],
     results: [
       { metric: '6', label: { he: 'סניפים פעילים', en: 'active branches' } },
+      { metric: '38', label: { he: 'בדיקות אוטומטיות', en: 'automated tests' } },
+      { metric: '0', label: { he: 'דליפות הזמנות מאז', en: 'order leaks since' } },
       { metric: '2', label: { he: 'שפות ממשק', en: 'interface languages' } },
       { metric: PENDING, label: { he: 'הזמנות בחודש', en: 'orders per month' } },
-      { metric: PENDING, label: { he: 'דקות מהזמנה למטבח', en: 'minutes from order to kitchen' } },
     ],
     techStack: ['Next.js', 'Supabase', 'ODOO', 'Stripe', 'Vercel', 'Playwright'],
     liveUrl: 'https://www.jcafekosher.com/en/s/bangkok',
@@ -301,14 +326,14 @@ const projects: Project[] = [
       en: 'Bill-of-materials and recipe management with automatic costing - cost, retail and wholesale pricing - importing straight from existing Excel files.',
     },
     challenge: {
-      he: 'ניהול עץ מוצר ומתכונים באקסל. כל שינוי במחיר של חומר גלם אחד מחייב חישוב מחדש ידני של כל מוצר שמכיל אותו — ואם מוצר מורכב ממוצרים אחרים, החישוב מתפצל לכל הכיוונים. בפועל זה אומר שהתמחור מתעדכן לעיתים רחוקות, שהמרווחים נשחקים בלי שאף אחד שם לב, ושכל עדכון הוא הזדמנות לטעות שנכנסת למחיר ללקוח.',
+      he: 'ניהול עץ מוצר ומתכונים באקסל. כל שינוי במחיר של חומר גלם אחד מחייב חישוב מחדש ידני של כל מוצר שמכיל אותו - ואם מוצר מורכב ממוצרים אחרים, החישוב מתפצל לכל הכיוונים. בפועל זה אומר שהתמחור מתעדכן לעיתים רחוקות, שהמרווחים נשחקים בלי שאף אחד שם לב, ושכל עדכון הוא הזדמנות לטעות שנכנסת למחיר ללקוח.',
       // TODO(i18n)
-      en: 'Bills of materials and recipes managed in Excel. Every change to a single raw material’s price forces a manual recalculation of every product containing it — and when a product is made of other products, the calculation branches in all directions. In practice that means pricing is updated rarely, margins erode unnoticed, and every update is an opportunity for an error that reaches the customer’s price.',
+      en: 'Bills of materials and recipes managed in Excel. Every change to a single raw material’s price forces a manual recalculation of every product containing it - and when a product is made of other products, the calculation branches in all directions. In practice that means pricing is updated rarely, margins erode unnoticed, and every update is an opportunity for an error that reaches the customer’s price.',
     },
     solution: {
-      he: 'מערכת עץ מוצר עם מתכונים מקוננים, שבה שינוי מחיר של חומר גלם אחד מתגלגל אוטומטית לכל מוצר שמכיל אותו — כולל מוצרים שמורכבים ממוצרים אחרים. שלוש רמות תמחור נגזרות בו-זמנית: עלות, קמעונאי וסיטונאי, לפי אחוזי מרווח שנקבעים על ידי הלקוח.\n\nובמקום להקליד הכל מחדש — ייבוא ישיר מקבצי האקסל הקיימים. זה היה תנאי, לא פיצ’ר: מערכת שדורשת הזנה מאפס מתחילה מהתנגדות, מערכת שקוראת את מה שכבר יש מתחילה מיום הראשון.',
+      he: 'מערכת עץ מוצר עם מתכונים מקוננים, שבה שינוי מחיר של חומר גלם אחד מתגלגל אוטומטית לכל מוצר שמכיל אותו - כולל מוצרים שמורכבים ממוצרים אחרים. שלוש רמות תמחור נגזרות בו-זמנית: עלות, קמעונאי וסיטונאי, לפי אחוזי מרווח שנקבעים על ידי הלקוח.\n\nובמקום להקליד הכל מחדש - ייבוא ישיר מקבצי האקסל הקיימים. זה היה תנאי, לא פיצ’ר: מערכת שדורשת הזנה מאפס מתחילה מהתנגדות, מערכת שקוראת את מה שכבר יש מתחילה מיום הראשון.',
       // TODO(i18n)
-      en: 'A bill-of-materials system with nested recipes, where a price change to one raw material cascades automatically to every product containing it — including products built from other products. Three pricing tiers are derived at once: cost, retail and wholesale, from margins the client sets.\n\nAnd instead of retyping everything, direct import from the existing Excel files. That was a condition, not a feature: a system demanding data entry from scratch starts against resistance, while one that reads what already exists starts on day one.',
+      en: 'A bill-of-materials system with nested recipes, where a price change to one raw material cascades automatically to every product containing it - including products built from other products. Three pricing tiers are derived at once: cost, retail and wholesale, from margins the client sets.\n\nAnd instead of retyping everything, direct import from the existing Excel files. That was a condition, not a feature: a system demanding data entry from scratch starts against resistance, while one that reads what already exists starts on day one.',
     },
     flow: [
       {
@@ -372,14 +397,14 @@ const projects: Project[] = [
       en: 'Task management for maintenance, upkeep and cleaning teams - assignment, tracking and closing work orders. In daily use inside an organisation.',
     },
     challenge: {
-      he: 'צוותי תחזוקה, אחזקה וניקיון עובדים בשטח, והתיאום נעשה בטלפון ובהודעות. המשמעות: מנהל שלא יודע מה מצב הקריאות בלי להתקשר ולשאול, אין תיעוד של מה בוצע ומתי, וויכוחים על עבודות שלא ברור אם נסגרו. כשהעבודה לא רשומה — היא גם לא נמדדת, ולא ניתן לשפר אותה.',
+      he: 'צוותי תחזוקה, אחזקה וניקיון עובדים בשטח, והתיאום נעשה בטלפון ובהודעות. המשמעות: מנהל שלא יודע מה מצב הקריאות בלי להתקשר ולשאול, אין תיעוד של מה בוצע ומתי, וויכוחים על עבודות שלא ברור אם נסגרו. כשהעבודה לא רשומה - היא גם לא נמדדת, ולא ניתן לשפר אותה.',
       // TODO(i18n)
-      en: 'Maintenance, upkeep and cleaning crews work in the field, and coordination happens by phone and messages. Which means: a manager who cannot know the state of a work order without calling to ask, no record of what was done and when, and arguments over jobs nobody can confirm were closed. Work that is not recorded is not measured — and cannot be improved.',
+      en: 'Maintenance, upkeep and cleaning crews work in the field, and coordination happens by phone and messages. Which means: a manager who cannot know the state of a work order without calling to ask, no record of what was done and when, and arguments over jobs nobody can confirm were closed. Work that is not recorded is not measured - and cannot be improved.',
     },
     solution: {
-      he: 'אפליקציה שמנהלת את מחזור החיים המלא של קריאת שירות: הקצאה לאיש הצוות הנכון, מעקב במצב אמת מול מה שקורה בשטח, וסגירה מתועדת שנשארת בהיסטוריה. המנהל רואה תמונה אחת של כל הקריאות הפתוחות במקום לרדוף אחרי עדכונים.\n\nהיא בשימוש יומיומי בארגון — לא פיילוט ולא הדגמה. זה המבחן האמיתי של מערכת פנימית: שאנשים בוחרים להשתמש בה כשאף אחד לא מסתכל.',
+      he: 'אפליקציה שמנהלת את מחזור החיים המלא של קריאת שירות: הקצאה לאיש הצוות הנכון, מעקב במצב אמת מול מה שקורה בשטח, וסגירה מתועדת שנשארת בהיסטוריה. המנהל רואה תמונה אחת של כל הקריאות הפתוחות במקום לרדוף אחרי עדכונים.\n\nהיא בשימוש יומיומי בארגון - לא פיילוט ולא הדגמה. זה המבחן האמיתי של מערכת פנימית: שאנשים בוחרים להשתמש בה כשאף אחד לא מסתכל.',
       // TODO(i18n)
-      en: 'An application managing the full life cycle of a work order: assignment to the right crew member, real-time tracking against what is happening in the field, and a documented close that stays in the history. The manager sees one picture of every open call instead of chasing updates.\n\nIt is in daily use inside the organisation — not a pilot and not a demo. That is the real test of an internal system: that people choose to use it when nobody is watching.',
+      en: 'An application managing the full life cycle of a work order: assignment to the right crew member, real-time tracking against what is happening in the field, and a documented close that stays in the history. The manager sees one picture of every open call instead of chasing updates.\n\nIt is in daily use inside the organisation - not a pilot and not a demo. That is the real test of an internal system: that people choose to use it when nobody is watching.',
     },
     flow: [
       { label: { he: 'קריאת שירות נפתחת', en: 'A work order is opened' } },
@@ -506,7 +531,7 @@ export function getProjectSlugs(): string[] {
   return getProjects().map((project) => project.slug)
 }
 
-/** Categories that actually have a published project — drives the filter chips. */
+/** Categories that actually have a published project - drives the filter chips. */
 export function getUsedCategories(): ProjectCategory[] {
   const used = new Set(getProjects().map((project) => project.category))
   return projectCategories.filter((category) => used.has(category))

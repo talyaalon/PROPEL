@@ -4,7 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import ProjectScreens from '@/components/ProjectScreens'
 import FilterChips from '@/components/FilterChips'
-import { MessageCircle, Lock } from 'lucide-react'
+import { MessageCircle } from 'lucide-react'
+import PrivateProjectShowcase from '@/components/PrivateProjectShowcase'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
 import { projectTitle, type Project, type ProjectCategory } from '@/content/projects'
@@ -25,6 +26,9 @@ type PortfolioDict = {
   filter_status: string
   filter_status_one: string
   private_project: string
+  showcase_label: string
+  showcase_prev: string
+  showcase_next: string
 }
 
 type Props = {
@@ -100,22 +104,16 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     title={`${projectTitle(project, lang)} - ${dict.categories[project.category]}`}
                   />
                 ) : (
-                  /*
-                   * A grey box with grey text in it reads as a screenshot that
-                   * failed to load - which is worse than the empty frame it
-                   * replaced, because it sits beside a CTA card with an accent
-                   * border that unambiguously reads as designed. The lock says
-                   * "this is deliberate" before the sentence is read, and the
-                   * accent rule ties it to the rest of the system.
-                   */
-                  <div className="flex min-h-[176px] flex-col items-center justify-center gap-3 border border-brand-line bg-brand-panel px-6 py-10 text-center">
-                    <span className="flex h-11 w-11 items-center justify-center border border-brand-accent text-brand-accent">
-                      <Lock className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <span className="max-w-[220px] text-[0.875rem] leading-relaxed text-brand-slate">
-                      {dict.private_project}
-                    </span>
-                  </div>
+                  /* Behind a login: shows the owner's recordings once they
+                     exist, and the honest lock placeholder until then. */
+                  <PrivateProjectShowcase
+                    media={project.media}
+                    lang={lang}
+                    placeholderLabel={dict.private_project}
+                    ariaLabel={dict.showcase_label}
+                    prevLabel={dict.showcase_prev}
+                    nextLabel={dict.showcase_next}
+                  />
                 )}
 
                 {/* Category chip */}
