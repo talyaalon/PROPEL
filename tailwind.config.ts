@@ -109,40 +109,28 @@ const config: Config = {
         },
       },
 
+      /*
+       * One family, on the owner's instruction: Assistant, everywhere.
+       *
+       * It replaces a four-family system - Chakra Petch for Latin display,
+       * Heebo for Hebrew display, Frank Ruhl Libre for Hebrew headings and the
+       * serif tagline, Assistant for body. That system existed to solve a real
+       * problem (Chakra Petch has no Hebrew glyphs, so Hebrew fell through per
+       * character to a Hebrew face) and it worked, but it cost 95-126KB per
+       * page across nine woff2 files - the largest asset class on the site,
+       * ahead of every image.
+       *
+       * Assistant is variable, carries Hebrew and Latin in one file, and was
+       * already being downloaded. The role names stay so no call site changes:
+       * `font-display`, `font-heading` and `font-serif` all resolve here, and
+       * weight and letter-spacing continue to do the work of distinguishing a
+       * heading from body text.
+       */
       fontFamily: {
-        /*
-         * Chakra Petch carries no Hebrew glyphs, and that is the mechanism
-         * rather than a limitation: Latin and digits render in its technical
-         * letterforms while Hebrew falls through to Heebo automatically, per
-         * character, with no locale branching in the markup.
-         *
-         * The raw family name comes first, not `var(--font-chakra)`. That
-         * variable expands to `"Chakra Petch", "Chakra Petch Fallback"`, and the
-         * fallback is next/font's metric-adjusted *local Arial* - which does
-         * carry Hebrew. So it satisfied every Hebrew character before the
-         * cascade ever reached Heebo, and every Hebrew heading on the primary
-         * locale rendered in Arial while Heebo shipped in the build and was
-         * never downloaded by anyone. Confirmed per node with glyph counts:
-         * h1 was Arial x7 glyphs.
-         *
-         * Ordering the raw name, then Heebo, then the metric fallback keeps the
-         * no-layout-shift benefit for Latin and gets Hebrew the face it was
-         * chosen for.
-         */
-        display: ['Chakra Petch', 'var(--font-heebo)', 'var(--font-chakra)', 'sans-serif'],
-        /*
-         * Headings only. Same mechanism as `display`, one family further on:
-         * Chakra Petch takes the Latin and the digits, and Hebrew - which it
-         * has no glyphs for - falls through to Frank Ruhl Libre instead of
-         * Heebo. Buttons, tags and eyebrows keep `display`, so the technical
-         * letterforms still carry the small Latin type.
-         */
-        heading: ['Chakra Petch', 'var(--font-frank)', 'var(--font-chakra)', 'serif'],
-        body: ['var(--font-assistant)', 'var(--font-heebo)', 'sans-serif'],
-        /* Echoes the serif tagline on the printed logo. Frank Ruhl Libre is one
-           of the few quality Hebrew serifs on Google Fonts, so one family
-           covers the tagline in both languages. */
-        serif: ['var(--font-frank)', 'Georgia', 'serif'],
+        display: ['var(--font-assistant)', 'sans-serif'],
+        heading: ['var(--font-assistant)', 'sans-serif'],
+        body: ['var(--font-assistant)', 'sans-serif'],
+        serif: ['var(--font-assistant)', 'sans-serif'],
       },
 
       transitionTimingFunction: {

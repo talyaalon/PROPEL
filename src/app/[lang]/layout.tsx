@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Script from 'next/script'
 import type { Metadata, Viewport } from 'next'
-import { Assistant, Chakra_Petch, Frank_Ruhl_Libre, Heebo } from 'next/font/google'
+import { Assistant } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import { locales, getDirection, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
@@ -25,65 +25,28 @@ assertProductionConfig()
 //
 // Two roles, three families:
 //
-// display Chakra Petch → Heebo headings, buttons, tags, numerals
-// body Assistant → Heebo running text
-//
-// Chakra Petch carries no Hebrew glyphs, which is what makes the split work
-// rather than something to work around: Latin and digits render in Chakra
-// Petch's technical letterforms while Hebrew falls through to Heebo
-// automatically, per character, with no locale branching in the markup.
-//
-// Chakra Petch and Heebo are requested at fixed weights because neither ships a
-// variable build on Google Fonts; Assistant is left variable.
-
-const chakraPetch = Chakra_Petch({
-  subsets: ['latin'],
-  // 400 removed: measured `status: unloaded` on production in both locales
-  // after a full scroll. Headings use 600 and 700; nothing uses 400, and a
-  // `rel=preload` fetched its 9.8KB on every page anyway.
-  weight: ['600', '700'],
-  variable: '--font-chakra',
-  display: 'swap',
-})
-
 /*
- * Hebrew subset only, and only the two weights headings actually use. Latin in
- * the display face is Chakra Petch's job, and body text is Assistant's - which
- * carries Hebrew of its own. Four weights across two subsets was 92.7KB in the
- * build that no visitor ever downloaded, because of the fallback ordering
- * described in tailwind.config.ts.
+ * One typeface: Assistant, for everything.
+ *
+ * It replaced a deliberate four-family system, and the reasoning that system
+ * was built on is worth keeping because it was correct: Chakra Petch carries
+ * no Hebrew glyphs, so Latin and digits rendered in its technical letterforms
+ * while Hebrew fell through per character to Heebo - and later to Frank Ruhl
+ * Libre for headings - with no locale branching anywhere in the markup. The
+ * font-stack ORDER was load-bearing: the raw family name had to come first,
+ * because next/font's metric fallback is a local Arial that does carry Hebrew
+ * and would otherwise satisfy every Hebrew character before the cascade
+ * reached the Hebrew face.
+ *
+ * All of that is gone now, on the owner's instruction, and the trade is a good
+ * one: four families across nine woff2 files were 95-126KB per page, the
+ * largest asset class on the site. Assistant is a single variable font
+ * carrying both scripts, and it was already in the build.
+ *
+ * Hierarchy is now carried by weight, size and letter-spacing alone - which is
+ * what `font-display`'s uppercase tracking and the heading weights were always
+ * doing anyway, next to the family change.
  */
-const heebo = Heebo({
-  subsets: ['hebrew'],
-  // Same measurement, same result - 12.0KB of Hebrew 400 that never
-  // rendered a glyph. Headings fall through to 700.
-  weight: ['700'],
-  variable: '--font-heebo',
-  display: 'swap',
-})
-
-// Tagline only — the serif in the printed lockup. Not preloaded: it renders a
-// single line, well below the critical path.
-const frankRuhl = Frank_Ruhl_Libre({
-  subsets: ['hebrew', 'latin'],
-  /*
-   * 400 for the tagline, 700 for headings.
-   *
-   * Chakra Petch carries no Hebrew, so on the default locale every heading
-   * fell through to Heebo 700 - the most common face in Israeli web design,
-   * paired with Assistant, which is the most common pairing. The site's entire
-   * typographic identity existed only on /en.
-   *
-   * Frank Ruhl Libre was already here, already subset for Hebrew, and earning
-   * its bytes with 23 glyphs at 10.4px in the footer. A bold Hebrew serif at
-   * 66px against Chakra Petch's Latin numerals is the printed logo's own
-   * pairing, and almost nobody in this market uses it.
-   */
-  weight: ['400', '700'],
-  variable: '--font-frank',
-  display: 'swap',
-})
-
 const assistant = Assistant({
   subsets: ['hebrew', 'latin'],
   variable: '--font-assistant',
@@ -191,7 +154,7 @@ export default async function RootLayout({ children, params }: Props) {
       /* No data-theme attribute means light. ThemeToggle writes data-theme="dark",
          and prefsInitScript below restores the stored choice before first paint -
          every surface, text and accent colour flips through CSS variables. */
-      className={`${chakraPetch.variable} ${heebo.variable} ${assistant.variable} ${frankRuhl.variable}`}
+      className={assistant.variable}
     >
       {/*
         No literal <head> element.
