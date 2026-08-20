@@ -17,37 +17,43 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# The 404 status, without giving up the localised 404 page.
+# NO 404 redirect rules here, and that is a finding rather than an omission.
 #
-# The middleware REWRITES an unknown path under a locale to that locale's 404
-# page, which is what makes it a Hebrew page for a Hebrew visitor - lang, dir,
-# navigation, footer, the accessibility menu. A rewrite answers 200, so Google
-# reads these as soft 404s.
+# A `[[redirects]]` block with `status = 404` is the standard Netlify way to
+# serve a custom error page with a real status. It was tried, deployed, and
+# measured on production: /he/nope-123 still answered 200. The Next runtime
+# claims the path through the middleware before Netlify's redirect table is
+# consulted, so the rule never fires.
 #
-# The alternative was tested and rejected twice: calling `notFound()` from the
-# catch-all DOES return a real 404, and serves Next's built-in error page with
-# no lang, no dir and no chrome. That is a 3.1.1 Level A failure on a site that
-# publishes an accessibility statement, in exchange for a status code.
+# The commit that added it said to delete it rather than leave a rule that does
+# nothing, if exactly this happened. It happened.
 #
-# These rules are the third way: Netlify serves the target's CONTENT with the
-# status given here. Non-forced, so they apply only when nothing else matched -
-# a real route, a static file and the metadata routes all win first.
-#
-# UNVERIFIABLE LOCALLY. `next start` does not read netlify.toml. This must be
-# checked on a deploy preview:
-#     curl -I https://<preview>/he/nope-123   -> HTTP/2 404
-#     curl -s  https://<preview>/he/nope-123  -> lang="he" dir="rtl", nav present
-# If the Next runtime claims the path before these rules, delete this block
-# rather than leaving a rule that does nothing.
-[[redirects]]
-  from = "/he/*"
-  to = "/he/404"
-  status = 404
+# So the site keeps the soft 404 knowingly: an unknown path serves the
+# localised 404 page - lang, dir, navigation, footer - with `noindex, follow`
+# and no sitemap entry, and answers 200. The alternative was measured too:
+# `notFound()` returns a genuine 404 and Next's built-in error page, with no
+# lang and no dir. That is 3.1.1 Level A. A status code is not worth it.
 
-[[redirects]]
-  from = "/en/*"
-  to = "/en/404"
-  status = 404
+# Everything under public/ was served `max-age=0, must-revalidate` - Next's
+# default - so every repeat visitor re-downloaded the paper texture and all
+# five project captures. These are content, not build output, so they carry no
+# hash: a year of caching would strand a replacement. A day is the compromise -
+# it removes the cost for a session and for same-week return visits, and a
+# changed image is live within 24h without anyone remembering to bust anything.
+[[headers]]
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/projects/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
 
 # Everything under public/ was served `max-age=0, must-revalidate` - Next's
 # default - so every repeat visitor re-downloaded the paper texture and all

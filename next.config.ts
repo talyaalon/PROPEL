@@ -14,6 +14,37 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  /*
+   * REPORT-ONLY, deliberately, and here rather than in netlify.toml.
+   *
+   * It was added to netlify.toml first and deployed. Measured on production:
+   * present on /paper.webp, absent on /he - because Netlify's header rules do
+   * not reach HTML served by the Next runtime. That is the exact trap the
+   * comment at the top of this list already records for the other four
+   * headers, and I walked into it anyway.
+   *
+   * Report-only because CSP is the one security header that can take a site
+   * down if it is wrong, and Next ships inline bootstrap scripts a naive
+   * policy blocks instantly. Watch the browser console on production, confirm
+   * nothing is blocked, and only then rename the key to
+   * 'Content-Security-Policy'. `'unsafe-inline'` on script-src is required by
+   * that bootstrap; removing it needs a nonce threaded through the layout.
+   */
+  {
+    key: 'Content-Security-Policy-Report-Only',
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://www.googletagmanager.com",
+      "font-src 'self' data:",
+      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com",
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+    ].join('; '),
+  },
 ]
 
 const nextConfig: NextConfig = {
