@@ -1,4 +1,13 @@
-import { Monitor, Zap, TrendingUp, Code2, Check, ArrowRight, type LucideIcon } from 'lucide-react'
+import {
+  ArrowRight,
+  Boxes,
+  Check,
+  Code2,
+  Monitor,
+  TrendingUp,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
 import FeaturedServiceCard, { type ServiceItem } from './FeaturedServiceCard'
@@ -24,11 +33,12 @@ export const serviceIcons: Record<string, LucideIcon> = {
   Zap,
   TrendingUp,
   Code2,
+  Boxes,
 }
 
 export default function Services({ lang, dict, clause }: Props) {
   // A featured service gets its own full-width card below the grid rather than
-  // competing for a column with the standard three.
+  // competing for a column with the standard ones.
   const standard = dict.items.filter((item) => !item.featured)
   const featured = dict.items.filter((item) => item.featured)
 
@@ -54,7 +64,11 @@ export default function Services({ lang, dict, clause }: Props) {
         </div>
 
         {/* Standard services */}
-        <div className="grid gap-5 sm:gap-6 lg:grid-cols-3">
+        {/* Two columns at lg, not three: there are four standard services
+            now, and a fourth item in a 3-column grid leaves an empty cell -
+            the defect the portfolio grid already had to fix. Half-width also
+            gives the systems card the room its six-item stack needs. */}
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-2">
           {standard.map((service) => {
             const Icon = serviceIcons[service.icon] ?? Monitor
 

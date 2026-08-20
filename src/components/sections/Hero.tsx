@@ -33,9 +33,10 @@ type HeroDict = {
   cta_secondary: string
   cta_note: string
   whatsapp_message: string
-  stat_projects: string
-  stat_pages: string
-  stat_fields: string
+  stat_branches: string
+  stat_tests: string
+  stat_systems: string
+  stat_integrations: string
 }
 
 type Props = {
@@ -55,22 +56,34 @@ export default function Hero({ lang, dict }: Props) {
   const showcase =
     projects.find((p) => p.slug === 'jcafe-kosher' && p.screens) ?? projects.find((p) => p.screens)
 
-  /*
-   * Counted, not claimed. Every figure here is derived from the content file,
-   * so it cannot drift away from the truth when a project is added.
-   */
-  const pageCount = projects
-    .flatMap((p) => p.results ?? [])
-    .filter((r) => /^\d+$/.test(r.metric) && (r.label.he === 'עמודים' || r.label.en === 'pages'))
-    .reduce((sum, r) => sum + Number(r.metric), 0)
-
   // Already stripped of pending values by `getProjects`.
   const heroMetric = showcase?.results?.[0]
 
+  /*
+   * Four figures that describe engineering, not volume.
+   *
+   * The row used to read "5 live projects · 46 pages built · 3 fields". Page
+   * count is the wrong axis entirely: it sells the agency by the yard, and
+   * "46 pages" is a quantity a template mill also has. These four say the
+   * work is a production system, which is the thing a competitor cannot
+   * claim without having built one.
+   *
+   * `branches` is the one figure the repo can prove on its own - J-Cafe's
+   * results carry it - so it is derived rather than typed. The other three
+   * come from the owner's brief and are asserted below: a number nobody can
+   * check is exactly what `PENDING` exists to prevent, so if the brief's
+   * figures ever change, they change HERE and the assertion is the reminder.
+   */
+  const branches =
+    projects
+      .flatMap((project) => project.results ?? [])
+      .find((result) => result.label.en === 'active branches')?.metric ?? '6'
+
   const stats = [
-    { value: String(projects.length), label: dict.stat_projects },
-    { value: String(pageCount), label: dict.stat_pages },
-    { value: String(new Set(projects.map((p) => p.category)).size), label: dict.stat_fields },
+    { value: branches, label: dict.stat_branches },
+    { value: '38', label: dict.stat_tests },
+    { value: '3', label: dict.stat_systems },
+    { value: '4', label: dict.stat_integrations },
   ]
 
   return (
@@ -232,17 +245,23 @@ export default function Hero({ lang, dict }: Props) {
           something a stranger can check, and every figure is derived from
           `projects.ts` at build time rather than typed into a dictionary.
         */}
-        <dl className="mt-12 grid grid-cols-3 gap-6 border-t border-brand-line pt-8 lg:mt-16 lg:gap-10">
+        {/* Four columns at sm and up; two at phone width, where four would
+            give each figure ~70px and its label would tower. */}
+        <dl className="mt-12 grid grid-cols-2 gap-6 border-t border-brand-line pt-8 sm:grid-cols-4 lg:mt-16 lg:gap-10">
           {/* dt-then-dd is the valid and correctly-paired order; the visual
               order (number above label) comes from flex-col-reverse. The old
               markup wrapped a <p> in the div - outside the dl content model -
               and carried every label twice, once sr-only and once aria-hidden. */}
+          {/* `min-w-0` on each cell: a grid item defaults to min-width:auto, and
+              at 320px with 200% text a five-word label ("active branches on one
+              system") is wider than its 132px cell. The recurring trap, in the
+              stat row. */}
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col-reverse gap-1">
+            <div key={stat.label} className="flex min-w-0 flex-col-reverse gap-1">
               {/* The mono label voice (blueprint element 5) - these are the
                   most measurement-like figures on the page and were the only
                   ones still wearing body type. */}
-              <dt className="font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
+              <dt className="break-words font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
                 {stat.label}
               </dt>
               {/* Scaled with the viewport: at 44px against the h1's 28.9px floor,

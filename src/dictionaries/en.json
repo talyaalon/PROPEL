@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Business website design and automation | PROPEL",
-    "description": "We build fast websites and automations that take manual work off your team, for small and mid-sized businesses. Scoping, development and launch on timelines you can plan around."
+    "title": "Business systems and automation | PROPEL",
+    "description": "We build management and ordering systems, automations that take manual work off your team, and the website that sits on top of them. For small and mid-sized businesses in Israel."
   },
   "a11y": {
     "skip_to_content": "Skip to main content",
@@ -24,39 +24,40 @@
     "blog": "Blog"
   },
   "hero": {
-    "h1_pre": "Every manual process",
-    "h1_focus": "is time you never get back",
+    "h1_pre": "Systems that do not talk",
+    "h1_focus": "cost you hours every month",
     "h1_post": "",
-    "subtitle": "We build business websites and automated systems that replace the paper, the pen and the spreadsheet - and give you the hours back.",
+    "subtitle": "We build the one system your business runs on - ordering, management and automation - and the website that sits on top of it.",
     "cta_primary": "Let's Talk",
     "cta_secondary": "Explore Services",
     "cta_note": "A 20-minute scoping call. No commitment.",
     "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
     "eyebrow": "Automation for business",
-    "stat_projects": "live projects",
-    "stat_pages": "pages built",
-    "stat_fields": "fields"
+    "stat_branches": "active branches on one system",
+    "stat_tests": "automated tests in the E2E suite",
+    "stat_systems": "systems in daily production use",
+    "stat_integrations": "external integrations"
   },
   "trusted_by": "Businesses working with us",
   "services": {
-    "section_title": "Services: business websites, automation and organic growth",
-    "section_subtitle": "Three disciplines, one goal - your business doing less work for the same result",
+    "section_title": "Services: systems, automation and websites for business",
+    "section_subtitle": "Four disciplines, one goal - your business doing less work for the same result",
     "cta_label": "Talk to us",
     "stack_label": "Built with",
     "items": [
       {
-        "id": "webdev",
-        "icon": "Monitor",
-        "title": "Business website design",
-        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
+        "id": "systems",
+        "icon": "Boxes",
+        "title": "Custom systems",
+        "description": "When the spreadsheet, the CRM and the register stop talking - we build the one system the business runs on.",
         "outcomes": [
-          "Sub-second loads, even on mobile data",
-          "Built from the ground up to rank on Google",
-          "Accessible by standard, without bolt-on widgets",
-          "You own the code and the domain"
+          "Multi-branch ordering and management systems",
+          "Integration with what you already run (ERP, register, payments)",
+          "Purpose-built operations screens for the kitchen, warehouse or field crew",
+          "Built with automated tests - not \"works on my machine\""
         ],
-        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
-        "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
+        "stack": ["Next.js", "PostgreSQL", "Supabase", "ODOO", "Stripe", "Playwright"],
+        "whatsapp_message": "Hi PROPEL, I would like to talk about a custom system for my business."
       },
       {
         "id": "automation",
@@ -71,6 +72,20 @@
         ],
         "stack": ["n8n", "Make", "Zapier", "API"],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about automating my business."
+      },
+      {
+        "id": "webdev",
+        "icon": "Monitor",
+        "title": "Business website design",
+        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
+        "outcomes": [
+          "Sub-second loads, even on mobile data",
+          "Built from the ground up to rank on Google",
+          "Accessible by standard, without bolt-on widgets",
+          "You own the code and the domain"
+        ],
+        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
+        "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
       },
       {
         "id": "seo",
@@ -146,7 +161,7 @@
       "cta_label": "Let's talk"
     },
     "cta_title": "The next one could be yours",
-    "cta_body": "Tell me what is slowing you down - a site, a manual process, systems that do not talk to each other - and I will come back with something concrete.",
+    "cta_body": "Tell us what is slowing you down - a site, a manual process, systems that do not talk to each other - and we will come back with something concrete.",
     "cta_button": "Talk on WhatsApp",
     "cta_whatsapp": "Hi, I saw your work on the site and would like to talk about a project.",
     "private_project": "Private project - the system sits behind a login",
@@ -267,7 +282,7 @@
     "section_subtitle": "Who's behind this",
     "paragraphs": [
       "PROPEL was founded on one simple belief: small and mid-sized businesses deserve the same standard of digital execution large corporations get - without corporate pricing and without corporate timelines.",
-      "We build, automate and grow. We work directly with the business owner, with no layers of account management, and we measure every project by what it changed in the business."
+      "We build systems, streamline processes and grow visibility in Google. We work directly with the business owner, with no layers of account management, and we measure every project by what it changed in the business."
     ],
     "values": [
       {

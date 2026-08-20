@@ -178,10 +178,17 @@ html {
   }
 
   /*
-   * The ceiling is the hero's whole job. At 4.125rem the H1 was 66px against
-   * H2s at 52 - a ratio of 1.27, which is not a headline dominating a page,
-   * it is the same voice one notch louder. 5.75rem takes it to 92px and the
-   * ratio to 1.77.
+   * The ceiling is the hero's whole job, and it is tuned to the hero's COPY.
+   *
+   * 5.75rem (92px) was measured against a 34-character Hebrew headline. The
+   * positioning rewrite replaced it with a 49-character one, and at the old
+   * ceiling that ran four lines and pushed the page's only CTA 45px below the
+   * fold at 1366x657 - the commonest laptop viewport. 4.5rem holds the CTA
+   * above it in both languages.
+   *
+   * One ceiling now, not two: the `:lang(en)` override existed only because
+   * English ran longer than Hebrew at the same ceiling. Both headlines are
+   * ~50 characters today, so the exception has nothing left to do.
    *
    * The floor does not move. It is what keeps 200% text on a 320px screen
    * from scrolling sideways, and it was measured to get there.
@@ -196,29 +203,10 @@ html {
    * between. The floor still owns 320px at 200% - measured, no reflow.
    */
   h1 {
-    font-size: clamp(1.75rem, calc(0.4rem + 6vw), 5.75rem);
+    font-size: clamp(1.75rem, calc(0.4rem + 6vw), 4.5rem);
     line-height: 0.98;
   }
 
-  /*
-   * A lower ceiling for English only.
-   *
-   * 5.75rem was tuned against the Hebrew H1 - 33 characters of short words,
-   * 3-4 lines at 1440, CTA comfortably above the fold. The English H1 is 46
-   * characters of longer words, and at the same ceiling it ran SIX lines at
-   * 1366x657 (the commonest laptop viewport), 535px tall, with the page's only
-   * CTA 172px below the fold and a word sliced in half by the fold line. At
-   * 4.5rem it drops to 294px and the whole CTA row is visible.
-   *
-   * Per-language rather than global, because the Hebrew ratio - H1 at 92px
-   * against H2 at 46, the "one headline dominating the page" decision recorded
-   * above - was measured and is worth keeping where it works. Latin simply
-   * runs ~40% longer than Hebrew for the same sentence, and the same ceiling
-   * cannot serve both.
-   */
-  :lang(en) h1 {
-    font-size: clamp(1.75rem, calc(0.4rem + 6vw), 4.5rem);
-  }
 
   h2 {
     font-size: clamp(1.375rem, calc(0.3rem + 3.3vw), 2.875rem);
