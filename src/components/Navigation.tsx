@@ -106,6 +106,33 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
    * cleanup never ran and `body { overflow: hidden }` persisted — the page
    * stayed unscrollable until a reload.
    */
+  /*
+   * Publishes the sticky band's real height as `--nav-h`, for scroll-padding.
+   *
+   * The band is `min-height` now rather than a fixed height, so it grows two
+   * ways a stylesheet cannot predict: the row wraps when the content stops
+   * fitting (126px at /en 768), and it scales with the accessibility menu's
+   * text control (131px at 200%). A hardcoded `scroll-padding-top` was right
+   * for exactly one of those and buried in-page anchor targets 50px under the
+   * header in the other.
+   *
+   * A ResizeObserver is the only thing that knows. The CSS keeps its em value
+   * as the fallback, so anchors still clear the band before this runs and if
+   * JavaScript never does.
+   */
+  useEffect(() => {
+    const band = headerRef.current
+    if (!band || typeof ResizeObserver === 'undefined') return
+
+    const publish = () =>
+      document.documentElement.style.setProperty('--nav-h', `${band.offsetHeight}px`)
+
+    publish()
+    const observer = new ResizeObserver(publish)
+    observer.observe(band)
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     if (!isOpen) return
 
@@ -167,7 +194,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     <header ref={headerRef} className="sticky top-0 z-50 transition-all duration-500 ease-smooth">
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
-        className="header-band relative h-[68px] overflow-hidden border-b border-brand-line backdrop-blur-xl sm:h-[76px]"
+        className="header-band relative flex min-h-[68px] items-center border-b border-brand-line backdrop-blur-xl sm:min-h-[76px]"
         aria-label={a11y.primary_nav}
       >
         <div
@@ -175,7 +202,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
           aria-hidden="true"
         />
 
-        <div className="relative mx-auto flex h-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href={`/${lang}`} className="flex-shrink-0" aria-label={a11y.home}>
             {logoSrc ? (

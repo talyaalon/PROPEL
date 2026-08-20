@@ -122,14 +122,22 @@
 
 html {
   scroll-behavior: smooth;
-  /* Matches the sticky nav height so anchor targets are not buried under it */
-  scroll-padding-top: 68px;
+  /*
+   * Clears the sticky nav so an anchor target is not buried under it.
+   *
+   * In `em`, not `px`: the band is `min-height` now rather than a fixed
+   * height, so it grows with the text - at the accessibility menu's 200%
+   * setting it measures 107px, and a hardcoded 76px dropped every in-page
+   * target 31px under the header. `em` on `html` tracks the root font size,
+   * which is exactly what that control changes.
+   */
+  scroll-padding-top: var(--nav-h, 4.25em);
   background-color: var(--surface);
 }
 
 @media (min-width: 640px) {
   html {
-    scroll-padding-top: 76px;
+    scroll-padding-top: var(--nav-h, 4.75em);
   }
 }
 
