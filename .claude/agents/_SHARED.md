@@ -49,6 +49,43 @@ does not flip with the theme. One measured 12.2:1 where every sibling measured
 Before reporting what a class does - or concluding an element is styled as
 written - check it exists: `npm run audit -- css <the-class>`.
 
+That checker was itself wrong twice, and both failures are fixed - it is
+trustworthy now, and the history is why you should still sanity-check a
+surprising answer against the built CSS. It reported DID NOT COMPILE for every
+arbitrary value and every variant prefix: it searched for a raw bracket in a
+file where Tailwind writes an escaped one, and then again for anything cssnano
+rewrote into hex-escape form (a comma is emitted as an escaped 2c followed by a
+space). Both classes of false negative shipped. If it tells you a class you can
+see working does not compile, grep the built CSS for the declaration before you
+believe it.
+
+**`min-width: auto` is this project's most recurring defect - seven instances
+and counting.** A flex or grid item will not shrink below its content's
+min-content width unless told to. Every one of these shipped:
+
+- a hero column that grew to its longest unbreakable word
+- device frames that set a 320px floor on a whole card
+- the accessibility menu's own heading, which made the panel scroll sideways
+  and open pre-scrolled, showing "00%" and "50%" as the first two size chips
+- a spec table's `TECHNOLOGIES` header, 210px of one unbreakable word
+- the same word inside a flex heading row, 12px of page overflow
+- long topic labels inside an `inline-flex` eyebrow, which cannot wrap its
+  items at all without `flex-wrap`
+- five-word stat labels in a 132px grid cell at 200% text
+
+The tell is always the same: something looks fine at 1440 and 100%, and pushes
+the page sideways at 320 with 200% text. `min-w-0` on the item, `break-words`
+or `overflow-wrap: anywhere` on the text. Note that `break-word` does NOT lower
+min-content - only `anywhere`/`break-all` does. When you find one, check its
+siblings; they usually travel in groups.
+
+**Logical properties resolve against the element's OWN writing mode.** An
+`inset-inline-end` on an element with `writing-mode: vertical-rl` is a VERTICAL
+inset. That shipped: a margin annotation landed on the wrong side, silently
+overrode its own `top`, and printed through the H1 at 1280-1390px. If an
+element rotates its writing mode, positioning belongs on a wrapper that does
+not.
+
 **Check whether a fix became the defect.** The empty grid cell in the portfolio
 was a 420px hole; the card added to fill it stretched to 662px around 178px of
 content and became a 483px hole. When reviewing a recent change, measure the
@@ -88,6 +125,30 @@ reviewers independently rewrote the gap measurement and got three different
 numbers for the same boundary; that is why it lives in one place now. Extend it
 if it is missing something - a permanent improvement beats a temp script.
 
+**The edge runtime does not have your build's environment.** `process.env.CONTEXT`
+exists during the Netlify build and NOT in the middleware at request time. That
+divergence shipped: the pages knew a draft article was hidden, the middleware
+thought it was visible, and the URL fell through to Next's bare 404 with no
+`lang`, no `dir` and no chrome. Anything the middleware and the pages must agree
+on has to be inlined at build time (`next.config.ts` -> `env`). If you see the
+middleware read an environment variable, check that the pages read the same one
+the same way.
+
+**Test at 320px with 200% text, in both locales.** That combination is where
+this project's layout defects live, and passing at 1440/100% predicts nothing.
+The menu's own text control sets the root font size, so reproduce it that way:
+
+```js
+await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
+const { s, c } = await page.evaluate(() => ({
+  s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth,
+}))   // s > c is a 1.4.10 Reflow failure
+```
+
+To find the culprit rather than guess, walk every element for
+`scrollWidth > clientWidth`, and separately range-measure text nodes - a
+`getBoundingClientRect` on the element misses an overflowing inline.
+
 **Measure on the built site, not the dev server.** Dev serves unminified CSS
 and no static optimisation, so spacing and performance numbers taken there are
 not the numbers users get.
@@ -111,6 +172,20 @@ curl -s -o /dev/null -w '%{http_code}\n' "$ORIGIN/$CSS"    # must be 200
 
 If contrast comes back 21:1 in *both* themes, stop - that is impossible, and
 you are measuring an unstyled page.
+
+The stylesheet check catches an unstyled page. It does NOT catch a *stale* one:
+a server left running from before a rebuild serves the previous build happily,
+fully styled, and every number you take describes code that no longer exists.
+A whole 16-check verification run was failed by this and re-passed unchanged
+after a restart. Confirm identity, not just health - compare the served page
+against something only the current build contains:
+
+```
+cat .next/BUILD_ID
+curl -s $ORIGIN/he | grep -c 'a-class-only-this-build-has'
+```
+
+Kill the port and restart before measuring anything you intend to report.
 
 Then drive it with `playwright-core`, which is already installed, against the
 Chromium already on the machine - do not download a browser:
