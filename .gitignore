@@ -49,3 +49,5 @@ next-env.d.ts
 .audit-tmp/
 scripts/tmp/
 scripts/.*.tmp.mjs
+.tmp-*
+_verify_*.mjs
