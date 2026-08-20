@@ -123,7 +123,7 @@ export const articles: Article[] = [
 
 ## איך יודעים אם זה המצב שלכם
 
-פתחו את האתר שלכם בנייד, ברשת סלולרית, בלי wifi. ספרו לעצמכם עד שהוא שמיש. אחר כך בדקו כמה תוספים פעילים אצלכם - ואם אתם לא בטוחים מה חצי מהם עושה, זו כבר חצי תשובה. ההעברה לקוד נקי היא לא שכתוב של העסק; העיצוב יכול להישאר, התוכן נשאר, הכתובות נשארות. מה שמשתנה הוא מה שמתחת.`,
+פתחו את האתר שלכם בנייד, ברשת סלולרית, בלי wifi. ספרו שניות עד שהוא שמיש. אחר כך בדקו כמה תוספים פעילים אצלכם - ואם אתם לא בטוחים מה חצי מהם עושה, זו כבר חצי תשובה. ההעברה לקוד נקי היא לא שכתוב של העסק; העיצוב יכול להישאר, התוכן נשאר, הכתובות נשארות. מה שמשתנה הוא מה שמתחת.`,
       en: `WordPress is not born slow. It becomes slow - plugin after plugin, a theme that ships whole libraries for one button, and updates that each add another layer. The slowness is not a malfunction; it is the accumulated price of how the site is built.
 
 ## Where the time goes
@@ -236,7 +236,7 @@ Not from a feature list. Start from where the time is lost today - which action 
 
 ## השאלות ששוות יותר מהמחיר
 
-לפני שמשווים מספרים, כדאי לשאול כל מציע: מי הבעלים של הקוד ושל התוכן בסוף התהליך? מה קורה אם נרצה לעזוב? כמה עולה שנה של תחזוקה, ומה היא כוללת? האם האתר עומד בתקן הנגישות הישראלי - שהוא חובה חוקית, לא תוספת? מציע שעונה על אלה בבהירות שווה יותר ממציע שנתן מחיר נמוך ונעלם מהשאלות.
+לפני שמשווים מספרים, כדאי לשאול כל מציע: מי הבעלים של הקוד ושל התוכן בסוף התהליך? מה קורה אם נרצה לעזוב? כמה עולה שנה של תחזוקה, ומה היא כוללת? האם האתר עומד בתקן הנגישות הישראלי - שהוא חובה חוקית, לא תוספת? מציע שעונה על אלה בבהירות שווה יותר ממציע שנתן מחיר נמוך והתחמק מהשאלות.
 
 ## ולמה אין כאן מספר
 
@@ -341,7 +341,7 @@ Because we do not have one. What we have is a twenty-minute scoping call, free a
       en: 'Structured data for a local business',
     },
     excerpt: {
-      he: 'הסכמה שמאפשרת לגוגל להבין שאתר הוא עסק - שם, טלפון, שעות ואזור שירות. זה מה שמייצר תוצאות מועשרות.',
+      he: 'ה-Schema שמאפשרת לגוגל להבין שאתר הוא עסק - שם, טלפון, שעות ואזור שירות. זה מה שמייצר תוצאות מועשרות.',
       en: 'The schema that lets Google understand a site is a business - name, phone, hours and service area. This is what produces rich results.',
     },
   },
