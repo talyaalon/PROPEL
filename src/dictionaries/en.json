@@ -77,9 +77,9 @@
         "id": "webdev",
         "icon": "Monitor",
         "title": "Business website design",
-        "description": "A site that loads instantly, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
+        "description": "A fast site, works properly on a phone, and brings in enquiries - not just one that looks good in a deck.",
         "outcomes": [
-          "Sub-second loads, even on mobile data",
+          "Fully static - no server assembling the page per request",
           "Built from the ground up to rank on Google",
           "Accessible by standard, without bolt-on widgets",
           "You own the code and the domain"
