@@ -65,6 +65,9 @@
      has to be its own token. */
   --accent-wash: rgba(122, 28, 9, 0.16);
   --on-accent: #f7f6f2;
+  --btn-bg: #7a1c09;
+  --btn-fg: #f7f6f2;
+  --btn-border: #7a1c09;
   --selection-bg: #7a1c09;
   --selection-fg: #f7f6f2;
 }
@@ -90,15 +93,30 @@
   --field-border: #6f736a;
   --success: #4ac47e;
   --success-soft: rgba(74, 196, 126, 0.16);
-  /* #7A1C09 measures 1.5:1 here — unreadable. Same hue, lightened to 5.1:1. */
-  --accent: #e0714d;
-  --accent-soft: rgba(224, 113, 77, 0.55);
-  --accent-faint: rgba(224, 113, 77, 0.08);
-  --accent-wash: rgba(224, 113, 77, 0.22);
+  /*
+   * The brand red, light enough to be legible on a dark ground.
+   *
+   * #7A1C09 measures 1.44:1 on --panel here - not "low contrast", unreadable.
+   * So the dark scopes need a lighter accent, and the only question is which.
+   *
+   * It was #e0714d, whose hue is 14.7 deg. That is far enough from the brand's
+   * 10.1 to read as salmon rather than as the brand - the owner saw it as
+   * orange, and they were right. #f55f41 is hue 10.0: the SAME hue as
+   * #7A1C09, at a lightness that clears AA (4.76:1 on --panel, 5.28:1 on
+   * --surface). Same colour, turned up, instead of a different one.
+   */
+  --accent: #f55f41;
+  --accent-soft: rgba(245, 95, 65, 0.55);
+  --accent-faint: rgba(245, 95, 65, 0.08);
+  --accent-wash: rgba(245, 95, 65, 0.22);
   --on-accent: #1c1e19;
+  /* Fill stays the brand; only the edge lightens - see .btn. */
+  --btn-bg: #7a1c09;
+  --btn-fg: #f7f6f2;
+  --btn-border: #f55f41;
   --draft-line: rgba(241, 239, 234, 0.36);
   --draft-grid: rgba(241, 239, 234, 0.055);
-  --selection-bg: #e0714d;
+  --selection-bg: #f55f41;
   --selection-fg: #1c1e19;
 }
 
@@ -276,6 +294,11 @@ html {
      The dark theme swaps back, so the inverted section is always the opposite
      of whatever the visitor chose - not always dark. */
   .section--invert {
+    /* A dark island in the light theme: the button keeps the brand fill and
+       takes the lightened edge, exactly as the dark root does. */
+    --btn-bg: #7a1c09;
+    --btn-fg: #f7f6f2;
+    --btn-border: #f55f41;
     --surface: #1c1e19;
     --band: #161813;
     --panel: #24271f;
@@ -285,10 +308,10 @@ html {
     --line: rgba(241, 239, 234, 0.14);
     --line-strong: rgba(241, 239, 234, 0.3);
     --field-border: #6f736a;
-    --accent: #e0714d;
-    --accent-soft: rgba(224, 113, 77, 0.55);
-    --accent-faint: rgba(224, 113, 77, 0.08);
-    --accent-wash: rgba(224, 113, 77, 0.22);
+    --accent: #f55f41;
+    --accent-soft: rgba(245, 95, 65, 0.55);
+    --accent-faint: rgba(245, 95, 65, 0.08);
+    --accent-wash: rgba(245, 95, 65, 0.22);
     --on-accent: #1c1e19;
     --draft-line: rgba(241, 239, 234, 0.36);
     --draft-grid: rgba(241, 239, 234, 0.055);
@@ -303,6 +326,10 @@ html {
   }
 
   :root[data-theme='dark'] .section--invert {
+    /* A light island in the dark theme: back to the flat brand edge. */
+    --btn-bg: #7a1c09;
+    --btn-fg: #f7f6f2;
+    --btn-border: #7a1c09;
     --surface: #f6f5f1;
     --band: #eeece5;
     --panel: #faf9f6;
@@ -657,12 +684,26 @@ html {
   }
 
   /* ── Buttons ──────────────────────────────────────────────────────────── */
+  /*
+   * The button carries the BRAND red in every theme.
+   *
+   * It used to fill with `--accent`, which the dark scopes lighten for
+   * legibility - so the primary CTA turned salmon on the footer, the process
+   * section and the whole dark theme, and stopped looking like the brand.
+   *
+   * It does not have to. A filled button's contrast requirement is its TEXT
+   * against its own fill, and #f7f6f2 on #7a1c09 is 9.72:1 - the fill can stay
+   * the brand red anywhere. What the dark scopes genuinely need is a visible
+   * BOUNDARY, because #7a1c09 against a near-black page is 1.60:1 and the
+   * button's edge disappears (1.4.11 Non-text Contrast). So the border, not
+   * the fill, is what lightens: `--accent` at 5.28:1 draws the edge.
+   */
   .btn {
     @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
     height: 48px;
-    background: var(--accent);
-    color: var(--on-accent);
-    border: 1px solid var(--accent);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    border: 1px solid var(--btn-border);
   }
 
   .btn:hover {
