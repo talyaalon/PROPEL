@@ -41,7 +41,7 @@ export default function MotionToggle({ label }: { label: string }) {
       // Until mounted the icon would render from the default state and could
       // contradict what the inline script has already applied.
       aria-pressed={mounted ? paused : undefined}
-      className="inline-flex h-9 w-9 items-center justify-center border border-brand-line text-brand-slate transition-colors duration-200 ease-smooth hover:border-brand-accent hover:text-brand-accent"
+      className="inline-flex h-10 w-10 items-center justify-center border border-brand-line text-brand-slate transition-colors duration-200 ease-smooth hover:border-brand-accent hover:text-brand-accent"
     >
       {mounted && paused ? (
         <Play className="h-4 w-4" aria-hidden="true" />

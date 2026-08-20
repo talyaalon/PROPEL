@@ -30,5 +30,11 @@
     "sharp": "^0.35.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "> 0.5%",
+    "not op_mini all"
+  ]
 }

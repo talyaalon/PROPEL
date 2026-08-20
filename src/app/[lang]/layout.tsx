@@ -217,11 +217,16 @@ export default async function RootLayout({ children, params }: Props) {
           measured LCP of 2.84s at 1440. Declaring it moves the request to the
           front of the queue.
         */}
-        {/* Default priority, not high: paper.webp is a decorative texture,
-            and at fetchPriority="high" it competed for first-window bandwidth
-            with the fonts and CSS that the (text) LCP actually needs. Still
-            preloaded, so the background does not pop in late. */}
-        <link rel="preload" as="image" href="/paper.webp" />
+        {/*
+          `fetchPriority="high"`, and the reasoning that removed it was wrong.
+          I demoted this on the grounds that a decorative texture should not
+          outbid the fonts - but the LCP element on this site IS
+          `section.header-band`, whose background is this file. An external
+          audit measured 1,060ms of "resource load delay" out of a 1.7s LCP,
+          and Lighthouse names the fix explicitly: fetchpriority=high on the
+          preload. It is 14,676 bytes; it is not competing with anything.
+        */}
+        <link rel="preload" as="image" href="/paper.webp" fetchPriority="high" />
 
         {/* Applies the stored theme and accessibility preferences before the
             browser paints. A client component cannot run this early. */}

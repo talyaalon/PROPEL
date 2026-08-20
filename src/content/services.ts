@@ -37,6 +37,53 @@ export type ServicePage = {
 
 export const servicePages: ServicePage[] = [
   {
+    slug: 'websites',
+    title: { he: 'בניית אתר תדמית', en: 'Business website development' },
+    metaTitle: {
+      he: 'בניית אתר תדמית לעסק | PROPEL',
+      en: 'Business website development | PROPEL',
+    },
+    metaDescription: {
+      he: 'אתר תדמית מהיר שעובד מצוין בנייד, בנוי מהיסוד להופיע בגוגל, נגיש לפי ת"י 5568 - והקוד והדומיין רשומים עליכם.',
+      en: 'A fast business website that works properly on a phone, built from the ground up to appear in Google, accessible to the Israeli standard - with the code and the domain registered to you.',
+    },
+    eyebrow: { he: 'שירות', en: 'Service' },
+    intro: {
+      he: 'אתר מהיר, עובד מצוין בנייד, ומביא פניות - לא רק נראה טוב במצגת.',
+      en: 'A fast site that works properly on a phone and brings in enquiries - not one that only looks good in a deck.',
+    },
+    body: {
+      he: 'אתר תדמית הוא לרוב הדבר הראשון שלקוח רואה, ולעיתים קרובות היחיד. אנחנו בונים אותו סטטי במלואו - בלי שרת שמרכיב את העמוד בכל בקשה ובלי תוספים שרצים ברקע - כך שהוא נטען מהר גם ברשת סלולרית ואין בו מה לפרוץ.\n\nהנגישות והופעה בגוגל אינן תוספת בסוף: המבנה הסמנטי, הכותרות והסכמות נבנים מההתחלה, וכך גם העמידה בת"י 5568. בסוף התהליך הקוד והדומיין רשומים עליכם, ואתם לא נעולים אצלנו או אצל אף פלטפורמה.',
+      en: 'A business website is usually the first thing a client sees, and often the only one. We build it fully static - no server assembling the page per request, no plugins running in the background - so it loads fast on mobile data and there is nothing in it to break into.\n\nAccessibility and appearing in Google are not an afterthought: the semantic structure, the headings and the schema are built in from the start, and so is meeting the Israeli standard. At the end the code and the domain are registered to you, and you are not locked to us or to any platform.',
+    },
+    outcomesTitle: { he: 'מה זה נותן', en: 'What it gives you' },
+    outcomes: [
+      {
+        he: 'סטטי במלואו - בלי שרת שמרכיב את העמוד בכל בקשה',
+        en: 'Fully static - no server assembling the page per request',
+      },
+      { he: 'בנוי מהיסוד להופיע בגוגל', en: 'Built from the ground up to appear in Google' },
+      {
+        he: 'נגיש לפי ת"י 5568, בלי תוספים חיצוניים',
+        en: 'Accessible to the Israeli standard, with no third-party overlay',
+      },
+      {
+        he: 'אתם הבעלים של הקוד ושל הדומיין',
+        en: 'You own the code and the domain',
+      },
+    ],
+    proofTitle: { he: 'אתרים שבנינו', en: 'Sites we built' },
+    proofBody: {
+      he: 'שני אתרים חיים שאפשר לפתוח ולבדוק - אחד לשירותי גרירה, אחד למכון טיפולי.',
+      en: 'Two live sites you can open and check - one for roadside recovery, one for a therapy practice.',
+    },
+    proofSlugs: ['hagorer2', 'cnafim-lauf'],
+    whatsappMessage: {
+      he: 'היי PROPEL, אשמח לדבר על בניית אתר תדמית.',
+      en: 'Hi PROPEL, I would like to talk about building a business website.',
+    },
+  },
+  {
     slug: 'automation',
     title: { he: 'אוטומציה לעסקים', en: 'Business automation' },
     metaTitle: {

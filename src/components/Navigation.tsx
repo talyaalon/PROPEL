@@ -229,7 +229,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 key={link.href}
                 onNavigate={() => setIsOpen(false)}
                 href={link.href}
-                className="group relative text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                className="group relative flex min-h-[24px] items-center py-1.5 text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
               >
                 {link.label}
                 {/* Logical `start-0` and `origin-*` keyed off the locale: the
@@ -252,7 +252,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               lang={lang}
               label={dict.toggle_lang}
               switchLabel={a11y.switch_language}
-              className="text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+              className="flex min-h-[24px] items-center px-1 py-1.5 text-[0.875rem] font-medium tracking-wide text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             />
             {/*
               The phone number, in the header.
@@ -271,7 +271,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 href={`tel:${siteConfig.phoneDial}`}
                 dir="ltr"
                 data-analytics="phone:nav"
-                className="hidden items-center gap-2 text-[0.875rem] font-semibold tracking-wide text-brand-ink transition-colors duration-300 hover:text-brand-accent lg:flex"
+                className="hidden min-h-[24px] items-center gap-2 py-1.5 text-[0.875rem] font-semibold tracking-wide text-brand-ink transition-colors duration-300 hover:text-brand-accent lg:flex"
               >
                 <Phone className="h-4 w-4 text-brand-accent" aria-hidden="true" />
                 {siteConfig.phoneDisplay}

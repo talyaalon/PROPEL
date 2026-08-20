@@ -1019,27 +1019,32 @@ html {
    * no mirrored variant needed - which retires the underline-rtl/ltr pair
    * this element used to require.
    */
+  /*
+   * Painted, not animated - and that is a deliberate trade, not an omission.
+   *
+   * It used to grow via `background-size` over 700ms. Lighthouse flags that as
+   * a non-composited animation ("Unsupported CSS Property: background-size"),
+   * which means 700ms of main-thread repaint on the element that IS the LCP
+   * text. The obvious remedy - animate `transform: scaleX()` on a pseudo -
+   * cannot work here: a pseudo-element is one box, and this mark has to draw
+   * one band per WRAPPED LINE. That is what `box-decoration-break: clone`
+   * does, and it is the fix for a real defect (the stroke used to run 387px
+   * past the last word whenever the phrase wrapped).
+   *
+   * So the choice was per-line correctness plus main-thread work, or per-line
+   * correctness with no animation. The grow was a 700ms flourish on the most
+   * performance-critical text on the site; the mark itself is the design.
+   *
+   * `background-position` is direction-aware: `0 88%` resolves to the start
+   * edge, so the band sits correctly in both locales with no RTL variant.
+   */
   .marker-wash {
     background-image: linear-gradient(var(--accent-wash), var(--accent-wash));
     background-repeat: no-repeat;
     background-position: 0 88%;
-    background-size: 0% 0.35em;
+    background-size: 100% 0.35em;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
-    animation: marker-grow 700ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
-  }
-
-  @keyframes marker-grow {
-    to {
-      background-size: 100% 0.35em;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marker-wash {
-      animation: none;
-      background-size: 100% 0.35em;
-    }
   }
 
   /* Shared grain texture, carried over from the previous system. */
