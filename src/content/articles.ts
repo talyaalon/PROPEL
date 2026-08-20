@@ -97,7 +97,7 @@ export const articles: Article[] = [
       en: 'Why your WordPress site is slow - and what it costs you',
     },
     excerpt: {
-      he: 'האטיות היא לא תקלה - היא המחיר המצטבר של הדרך שבה האתר בנוי. איפה הזמן הולך, מה זה עולה, ומה האלטרנטיבה.',
+      he: 'האיטיות היא לא תקלה - היא המחיר המצטבר של הדרך שבה האתר בנוי. איפה הזמן הולך, מה זה עולה, ומה האלטרנטיבה.',
       en: 'The slowness is not a malfunction - it is the accumulated price of how the site is built. Where the time goes, what it costs, and the alternative.',
     },
     description: {
@@ -107,7 +107,7 @@ export const articles: Article[] = [
     relatedService: 'migration',
     relatedProjects: ['hagorer2', 'cnafim-lauf'],
     body: {
-      he: `וורדפרס לא נולד איטי. הוא נהיה איטי - תוסף אחרי תוסף, תבנית שמביאה איתה ספריות שלמות בשביל כפתור אחד, ועדכונים שכל אחד מהם מוסיף עוד שכבה. האטיות היא לא תקלה; היא המחיר המצטבר של הדרך שבה האתר נבנה.
+      he: `וורדפרס לא נולד איטי. הוא נהיה איטי - תוסף אחרי תוסף, תבנית שמביאה איתה ספריות שלמות בשביל כפתור אחד, ועדכונים שכל אחד מהם מוסיף עוד שכבה. האיטיות היא לא תקלה; היא המחיר המצטבר של הדרך שבה האתר נבנה.
 
 ## איפה הזמן הולך
 

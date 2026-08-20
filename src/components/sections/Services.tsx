@@ -107,7 +107,7 @@ export default function Services({ lang, dict, clause }: Props) {
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {service.stack.map((tech) => (
-                      <span key={tech} className="tag">
+                      <span key={tech} className="tag" dir="auto">
                         {tech}
                       </span>
                     ))}
@@ -119,7 +119,7 @@ export default function Services({ lang, dict, clause }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-analytics={`whatsapp:service-${service.id}`}
-                  className="group/cta mt-auto inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
+                  className="group/cta mt-auto self-start inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-500 ease-smooth hover:text-brand-ink"
                 >
                   {dict.cta_label}
                   {/*

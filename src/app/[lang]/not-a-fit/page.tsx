@@ -133,7 +133,22 @@ export default async function NotAFitPage({ params }: Props) {
           {/* The services, as the way out of this page. A visitor who read the
               whole list and is still here has qualified themselves. */}
           <ul className="mt-8 flex flex-col gap-3">
-            {servicePages.map((service) => (
+            {/*
+              Migration is appended rather than living in `servicePages`: it has
+              its own route and its own dictionary block, which is why it was
+              missing from this list at all. The section-04 lead above describes
+              it almost verbatim - a site built on a platform that you want to
+              own - so a list without it hands the exact reader it just
+              described four links and not the one they came for.
+            */}
+            {[
+              ...servicePages.map((service) => ({
+                slug: service.slug,
+                title: service.title[lang],
+                intro: service.intro[lang],
+              })),
+              { slug: 'migration', title: dict.migration.h1, intro: dict.migration.intro },
+            ].map((service) => (
               <li key={service.slug}>
                 <Link
                   href={`/${lang}/services/${service.slug}`}
@@ -143,8 +158,8 @@ export default async function NotAFitPage({ params }: Props) {
                     className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
                     aria-hidden="true"
                   />
-                  <span className="font-semibold">{service.title[lang]}</span>
-                  <span className="body-text min-w-0">{service.intro[lang]}</span>
+                  <span className="font-semibold">{service.title}</span>
+                  <span className="body-text min-w-0">{service.intro}</span>
                 </Link>
               </li>
             ))}

@@ -139,7 +139,17 @@ export default async function ProjectPage({ params }: Props) {
             `<title>` - a case study that never names the client reads as one we
             are not allowed to talk about.
           */}
-          <p className="eyebrow mb-4">{projectTitle(project, lang)}</p>
+          {/*
+            Only when the H1 is something OTHER than the name. Two of the five
+            case studies carry no `headline`, so the H1 falls back to the title
+            - and the eyebrow printed the identical string directly above it,
+            small then large, with nothing in between. That reads as a
+            rendering bug rather than a design. When the fallback fires the H1
+            already names the client, so the eyebrow has nothing left to add.
+          */}
+          {project.headline?.[lang] && (
+            <p className="eyebrow mb-4">{projectTitle(project, lang)}</p>
+          )}
 
           <h1 className="mb-6 font-display leading-[1.08]">
             {project.headline?.[lang] ?? projectTitle(project, lang)}

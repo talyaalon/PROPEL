@@ -70,7 +70,7 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
     const body = (
       <>
         <div className="mb-4 flex items-center justify-between gap-3">
-          <span className="tag">{dict.topics[article.topic]}</span>
+          <span className="tag" dir="auto">{dict.topics[article.topic]}</span>
           {external && (
             <span className="font-display text-[0.75rem] uppercase tracking-[.06em] text-brand-slate">
               {article.source}

@@ -97,9 +97,17 @@ export default function FeaturedServiceCard({ service, stackLabel, href }: Props
             {stackLabel}
           </p>
 
+          {/*
+            dir=auto on the chips. They inherit rtl from the document, and the
+            bidi algorithm then throws a leading digit run to the far side of a
+            Latin word: "301 Redirects" painted as "Redirects 301". `auto` takes
+            direction from the first STRONG character, so Latin stack labels read
+            ltr while the Hebrew topic chips that share this class stay rtl -
+            which a blanket dir="ltr" would have broken.
+          */}
           <div className="mb-8 flex flex-wrap gap-1.5">
             {service.stack.map((tech) => (
-              <span key={tech} className="tag">
+              <span key={tech} className="tag" dir="auto">
                 {tech}
               </span>
             ))}
@@ -120,7 +128,7 @@ export default function FeaturedServiceCard({ service, stackLabel, href }: Props
           {href && (
             <Link
               href={href}
-              className="mt-3 inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+              className="mt-3 self-start inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
             >
               {service.read_more}
               <ArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />

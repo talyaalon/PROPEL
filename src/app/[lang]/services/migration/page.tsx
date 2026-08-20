@@ -139,7 +139,7 @@ export default async function MigrationPage({ params }: Props) {
             </p>
             <ul aria-label={dict.services.stack_label} className="flex flex-wrap gap-1.5">
               {service.stack.map((tech) => (
-                <li key={tech} className="tag">
+                <li key={tech} className="tag" dir="auto">
                   {tech}
                 </li>
               ))}

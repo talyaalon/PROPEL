@@ -140,8 +140,22 @@ export default async function ArticlePage({ params }: Props) {
           {dict.blog.topics[article.topic]}
         </p>
         <p className="mb-6 font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
-          <time dateTime={article.date} dir="ltr">
-            {article.date}
+          {/*
+            The attribute stays machine-readable; the text is for a person.
+            This printed the raw `2026-08-18` while the card that links here
+            printed "18 באוג׳ 2026" - the same date in two formats, one of them
+            not a date any reader writes. Same formatter as BlogGrid, so the
+            card and the page it opens cannot drift again.
+            No `dir` override: the formatted Hebrew string starts with a strong
+            Hebrew character and an ISO string does not, so a hardcoded ltr was
+            right for the old value and wrong for this one.
+          */}
+          <time dateTime={article.date}>
+            {new Intl.DateTimeFormat(lang === 'he' ? 'he-IL' : 'en-GB', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            }).format(new Date(article.date))}
           </time>
           {/* Computed from the body, never typed - a stated reading time that
               does not match the article is the first promise the page breaks. */}
