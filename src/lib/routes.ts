@@ -23,6 +23,7 @@ export const staticPaths = [
   '/portfolio',
   '/services/migration',
   '/blog',
+  '/not-a-fit',
   '/accessibility',
   '/privacy',
 ] as const

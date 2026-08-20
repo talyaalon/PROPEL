@@ -27,6 +27,7 @@ type FooterDict = {
   email_label: string
   legal_title: string
   accessibility: string
+  not_a_fit: string
   privacy: string
   copyright: string
   whatsapp_message: string
@@ -103,6 +104,14 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
               {dict.legal_title}
             </h2>
             <ul className="space-y-3.5">
+              <li>
+                <Link
+                  href={`/${lang}/not-a-fit`}
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                >
+                  {dict.not_a_fit}
+                </Link>
+              </li>
               <li>
                 <Link
                   href={`/${lang}/accessibility`}

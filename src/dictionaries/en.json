@@ -323,6 +323,7 @@
     "email_label": "Email",
     "legal_title": "Information",
     "accessibility": "Accessibility Statement",
+    "not_a_fit": "When we are not a fit",
     "privacy": "Privacy Policy",
     "copyright": "All rights reserved © PROPEL",
     "whatsapp_message": "Hi PROPEL, I'd like to get in touch.",
@@ -379,5 +380,46 @@
     "ownership_title": "Who owns the code and the domain",
     "proof_title": "Two projects that are exactly this",
     "proof_body": "Both of these were rebuilt in clean code. You can open them and look."
+  },
+  "not_a_fit": {
+    "eyebrow": "Transparency",
+    "meta_title": "When we are not the right fit",
+    "meta_description": "Not every project suits us, and it is better to know before a call than after. What we do not do, and who to ask instead.",
+    "h1": "When we are not the right fit",
+    "intro": "One of the values we state is that we will tell you what is not worth doing - even when it shrinks our own project. This is the page where that gets tested.",
+    "body": "We are not right for every project, and you should know that now rather than after a long call. This list is by TYPE of work, not size of business - some of our best projects are one-person businesses.",
+    "items_title": "What we do not do",
+    "items": [
+      {
+        "title": "Native mobile apps",
+        "body": "iOS and Android are their own craft, and we have no such project in the portfolio. What we do have: a fast site installable as an app (PWA), which covers a good share of the cases."
+      },
+      {
+        "title": "Paid campaign management",
+        "body": "We do organic search - showing up without paying per click. Google Ads and Meta Ads are a different discipline with different logic, and we do not run them."
+      },
+      {
+        "title": "Design without the build",
+        "body": "We are not a design studio. Everything we design we also build and ship - which is what keeps us honest about what will look good and also work."
+      },
+      {
+        "title": "Building on a closed platform",
+        "body": "We will not build you a new site on WordPress, Wix or Base44. One of our services is getting businesses off them; it is hard to sell that and build another one in the same breath."
+      },
+      {
+        "title": "Ongoing content and marketing",
+        "body": "Copywriting, social and email are not us. We build the system the content sits on, and connect it to whoever does that work."
+      },
+      {
+        "title": "A project that must ship this week",
+        "body": "A business site takes 2-3 weeks and a system 4-6. We commit to a date up front, so we will not promise a timeline we know we cannot meet."
+      }
+    ],
+    "instead_title": "Who to ask instead",
+    "instead_body": "For a native app, a mobile studio. For campaigns, a media agency. For design alone, a branding studio. For ongoing content, a copywriter or content manager. If it helps, we are happy to point you in the right direction even if we never work together.",
+    "fit_title": "What we are right for",
+    "fit_body": "If you have a manual process that repeats, systems that do not talk to each other, or a site built on a platform that you want to own - that is exactly us.",
+    "cta_label": "Still sounds like a fit? Tell us",
+    "whatsapp_message": "Hi PROPEL, I read the fit page and would like to check whether my project suits you."
   }
 }
