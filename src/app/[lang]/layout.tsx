@@ -5,6 +5,8 @@ import { Assistant, Chakra_Petch, Frank_Ruhl_Libre, Heebo } from 'next/font/goog
 import { notFound } from 'next/navigation'
 import { locales, getDirection, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
+import { professionalServiceSchema, webSiteSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 import { siteConfig, assertProductionConfig } from '@/lib/config'
 import { getProjects } from '@/content/projects'
 import { getLogoSrc } from '@/lib/brandAssets'
@@ -266,6 +268,12 @@ export default async function RootLayout({ children, params }: Props) {
             skipped nothing in Safari and only worked elsewhere by relying on
             the sequential-focus starting point. Same pattern as the form's
             success and error regions. */}
+        {/* Site-wide structured data. The organization is one business, so it
+            is one node with one @id, present on every page that references it
+            - which is all of them. The WebSite node declares the locale. */}
+        <JsonLd schema={professionalServiceSchema(lang, dict.meta.description)} />
+        <JsonLd schema={webSiteSchema(lang, dict.meta.title, dict.meta.description)} />
+
         <main id="main" tabIndex={-1} className="outline-none">
           {children}
         </main>

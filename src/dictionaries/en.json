@@ -340,8 +340,12 @@
     "meta_description": "A collection of professional sources on site performance, organic search, accessibility and development - selected by PROPEL.",
     "all_label": "All",
     "read_more": "Read more",
+    "reading_time": "{n} min read",
+    "reading_time_one": "1 min read",
     "back_to_blog": "Back to blog",
     "external_note": "External link, opens in a new tab",
+    "sources_title": "Sources we keep going back to",
+    "sources_body": "We did not write these. We read them. The documentation and research the work here leans on.",
     "topics": {
       "web": "Build & performance",
       "seo": "Organic search",

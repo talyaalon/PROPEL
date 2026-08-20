@@ -100,6 +100,27 @@ export function serviceSchema(input: {
   }
 }
 
+/**
+ * The site itself, per locale.
+ *
+ * `inLanguage` is the point: two locales are two WebSite nodes, each declaring
+ * what it is written in, both published by the one organization entity. The
+ * `@id` is locale-scoped for that reason - unlike the organization, which is
+ * one business and therefore one node.
+ */
+export function webSiteSchema(lang: Locale, name: string, description: string): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${siteConfig.url}/${lang}#website`,
+    url: `${siteConfig.url}/${lang}`,
+    name,
+    description,
+    inLanguage: lang === 'he' ? 'he-IL' : 'en',
+    publisher: { '@id': `${siteConfig.url}/#organization` },
+  }
+}
+
 /** An original article on the blog. */
 export function articleSchema(input: {
   lang: Locale

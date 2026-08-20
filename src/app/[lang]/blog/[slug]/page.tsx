@@ -9,7 +9,7 @@ import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { articleSchema, breadcrumbSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
-import { getInternalArticles, getArticleBySlug } from '@/content/articles'
+import { getInternalArticles, getArticleBySlug, readingMinutes } from '@/content/articles'
 import { getProjects, projectTitle } from '@/content/projects'
 import { getServicePage } from '@/content/services'
 
@@ -91,6 +91,9 @@ export default async function ArticlePage({ params }: Props) {
   const isRtl = lang === 'he'
   const BackArrow = isRtl ? ArrowRight : ArrowLeft
 
+  // Hebrew needs a singular form: "1 דקות" is not a thing.
+  const minutes = readingMinutes(article, lang)
+
   const relatedProjects = getProjects().filter((project) =>
     (article.relatedProjects ?? []).includes(project.slug),
   )
@@ -140,6 +143,14 @@ export default async function ArticlePage({ params }: Props) {
           <time dateTime={article.date} dir="ltr">
             {article.date}
           </time>
+          {/* Computed from the body, never typed - a stated reading time that
+              does not match the article is the first promise the page breaks. */}
+          <span className="mx-2" aria-hidden="true">
+            ·
+          </span>
+          {minutes === 1
+            ? dict.blog.reading_time_one
+            : dict.blog.reading_time.replace('{n}', String(minutes))}
         </p>
 
         <h1 className="max-w-2xl">{article.title[lang]}</h1>

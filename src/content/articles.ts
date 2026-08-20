@@ -366,6 +366,20 @@ export function getInternalArticles(): (Article & { slug: string })[] {
   )
 }
 
+/**
+ * Reading time in minutes, computed from the body.
+ *
+ * Derived, not a field: a typed number drifts the moment anyone edits a
+ * paragraph, and a wrong one is worse than none - it is the first small
+ * promise the page breaks. 200 words per minute is the common figure for
+ * Hebrew and English prose alike; headings are counted, since they are read.
+ */
+export function readingMinutes(article: Article, lang: Locale): number {
+  if (isExternal(article) || !article.body) return 0
+  const words = article.body[lang].trim().split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.round(words / 200))
+}
+
 export function getArticleBySlug(slug: string) {
   return getInternalArticles().find((article) => article.slug === slug)
 }

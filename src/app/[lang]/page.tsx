@@ -4,7 +4,7 @@ import { isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { getProjects } from '@/content/projects'
 import { pageMetadata } from '@/lib/pageMetadata'
-import { professionalServiceSchema, faqSchema } from '@/lib/schema'
+import { faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import Reveal from '@/components/Reveal'
 import Hero from '@/components/sections/Hero'
@@ -73,7 +73,9 @@ export default async function Page({ params }: Props) {
 
   return (
     <>
-      <JsonLd schema={professionalServiceSchema(lang, dict.meta.description)} />
+      {/* The organization node moved to the layout - every page carries it now,
+          because every page's schema references its @id. What stays here is
+          the FAQ, which only exists on this page. */}
       <JsonLd schema={faqSchema(dict.faq.items)} />
 
       {/* Order follows the questions a prospect asks, in the order they ask them:
