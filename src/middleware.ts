@@ -41,6 +41,28 @@ function knownPaths(): Set<string> {
   return new Set(sitePaths())
 }
 
+/**
+ * Next's generated metadata routes, which live under the locale segment and
+ * are not pages.
+ *
+ * `src/app/[lang]/opengraph-image.tsx` is served at `/he/opengraph-image`.
+ * The config matcher below excludes `opengraph-image` only at the START of a
+ * path, so the locale-prefixed one fell straight through to the unknown-path
+ * rewrite: every og:image and twitter:image on all 36 URLs returned 48KB of
+ * 404 HTML with `Content-Type: text/html` instead of a PNG. Every share card
+ * on the site was broken, silently, because nothing renders an og:image on
+ * the page itself.
+ *
+ * Listed as a family rather than one string so adding `twitter-image.tsx`
+ * later does not reintroduce it.
+ */
+const METADATA_ROUTES = new Set([
+  '/opengraph-image',
+  '/twitter-image',
+  '/icon',
+  '/apple-icon',
+])
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const locale = getLocaleFromPath(pathname)
@@ -75,6 +97,7 @@ export function middleware(request: NextRequest) {
    * should reach.
    */
   const rest = pathname.slice(`/${locale}`.length).replace(/\/$/, '')
+  if (METADATA_ROUTES.has(rest)) return NextResponse.next()
   if (!knownPaths().has(rest)) {
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/404`

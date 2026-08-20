@@ -27,6 +27,7 @@ import { join, extname } from 'node:path'
  * check cannot itself drift from the value it is guarding.
  */
 const configSource = readFileSync('src/lib/config.ts', 'utf8')
+const routeSource = readFileSync('src/lib/routes.ts', 'utf8')
 const rawMatch = configSource.match(/const PHONE_RAW = '([^']+)'/)
 
 if (!rawMatch) {
@@ -126,6 +127,57 @@ for (const file of outputFiles) {
     if (!placeholderHits.has(marker)) placeholderHits.set(marker, new Set())
     placeholderHits.get(marker).add(file)
   }
+}
+
+/*
+ * Every og:image must point at a path the middleware will actually serve.
+ *
+ * This shipped: `src/app/[lang]/opengraph-image.tsx` is served at
+ * `/he/opengraph-image`, the middleware's matcher excluded `opengraph-image`
+ * only at the START of a path, and so the locale-prefixed one was rewritten to
+ * the 404 page. Every share card on all 36 URLs returned 48KB of HTML with
+ * `Content-Type: text/html`. Nothing on the page renders an og:image, so
+ * nothing looked wrong - it was found by an external audit weeks later.
+ *
+ * Checked statically: strip the locale from each og:image URL and require the
+ * remainder to be a known site path or a metadata route. That is exactly the
+ * decision the middleware makes, so the two cannot disagree without this
+ * failing.
+ */
+// Read from the middleware, never restated here. A first version of this check
+// hardcoded the same list and therefore passed while the middleware had no
+// pass-through at all - it could not fail for the defect it exists to catch,
+// which is worse than not having it.
+const middlewareSource = readFileSync('src/middleware.ts', 'utf8')
+const metadataBlock = middlewareSource.match(/const METADATA_ROUTES = new Set\(\[([\s\S]*?)\]\)/)
+const passesThrough =
+  metadataBlock && /METADATA_ROUTES\.has\(rest\)\s*\)\s*return NextResponse\.next\(\)/.test(middlewareSource)
+    ? [...metadataBlock[1].matchAll(/'([^']+)'/g)].map((m) => m[1])
+    : []
+
+const ogFailures = new Set()
+
+for (const file of outputFiles.filter((f) => f.endsWith('.html'))) {
+  const html = readFileSync(file, 'utf8')
+  for (const [, url] of html.matchAll(/property="og:image" content="([^"]+)"/g)) {
+    // Next appends a content hash as a query string; the route is the path.
+    const path = url.replace(/^https?:\/\/[^/]+/, '').replace(/[?#].*$/, '')
+    const rest = path.replace(/^\/(he|en)/, '')
+    if (passesThrough.includes(rest)) continue
+    if (routeSource.includes(`'${rest}'`)) continue
+    ogFailures.add(`${path}  (referenced by ${file})`)
+  }
+}
+
+if (ogFailures.size > 0) {
+  console.error(`\n[contact] An og:image points at a path the middleware will rewrite.\n`)
+  for (const f of [...ogFailures].slice(0, 6)) console.error(`  ${f}`)
+  console.error(
+    `\n  The middleware rewrites anything not in sitePaths() to the localised` +
+      `\n  404 page, so this share card serves HTML instead of an image. Add the` +
+      `\n  route to METADATA_ROUTES in src/middleware.ts, or to sitePaths().\n`,
+  )
+  process.exit(1)
 }
 
 if (placeholderHits.size > 0) {
