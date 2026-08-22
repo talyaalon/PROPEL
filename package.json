@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "node scripts/blog/generate.mjs",
     "build": "next build",
     "postbuild": "node scripts/check-contact.mjs",
     "start": "next start",

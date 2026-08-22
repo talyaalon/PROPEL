@@ -52,10 +52,19 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
   const visibleSources = filtered(sources)
 
   const formatDate = (iso: string) =>
+    /*
+     * timeZone pinned. `new Date('2026-08-19')` is UTC midnight, and this
+     * component formats on the visitor's machine: west of UTC that midnight
+     * is still the 18th, so the card showed one date while the article page -
+     * formatted at build time - showed another, plus a hydration text
+     * mismatch on every /blog visit from those timezones. A date-only string
+     * formatted in UTC is the same date everywhere.
+     */
     new Intl.DateTimeFormat(lang === 'he' ? 'he-IL' : 'en-GB', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
+      timeZone: 'UTC',
     }).format(new Date(iso))
 
   /*

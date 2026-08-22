@@ -10,10 +10,13 @@ type Props = {
 }
 
 export default function LegalPage({ lang, doc, contactBlock }: Props) {
+  // timeZone pinned for the same reason as BlogGrid: a date-only string is
+  // UTC midnight, and unpinned it renders as yesterday west of UTC.
   const formattedDate = new Intl.DateTimeFormat(lang === 'he' ? 'he-IL' : 'en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   }).format(new Date(siteConfig.legalUpdated))
 
   return (

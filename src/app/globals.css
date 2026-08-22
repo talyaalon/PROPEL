@@ -740,6 +740,105 @@ html {
   }
 
   /* ── Tag ──────────────────────────────────────────────────────────────── */
+  /* ── Article body ─────────────────────────────────────────────────────────
+     The MDX articles mix Hebrew prose with Latin technical terms (`httpOnly`,
+     `|| 14`, WCAG) - the exact place RTL typography breaks. Every rule here is
+     a README-PUBLISHING section 5 item, and none of them existed before:
+
+     · code always LTR, `isolate` not `embed` - without isolation the bidi
+       algorithm throws punctuation around `|| 14` to the wrong side of a
+       Hebrew sentence.
+     · 68ch measure - Hebrew is denser than Latin and a full-width line stops
+       being readable sooner. The container is max-w-3xl (48rem); 68ch of
+       17px Assistant is narrower, so this clamps prose without moving the
+       page furniture.
+     · lists and quotes indent with padding-inline-start / border-inline-start,
+       so they mirror for free in English.
+     · pre scrolls inside its own box - wide code must never widen the page
+       (the 320px/200% rule this project keeps tripping on). */
+  .article-body,
+  .article-measure {
+    max-width: 68ch;
+  }
+
+  .article-body code {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: ui-monospace, 'Cascadia Code', 'Segoe UI Mono', Consolas, monospace;
+    font-size: 0.875em;
+    padding: 0.1em 0.4em;
+    background: var(--panel);
+    border: 1px solid var(--line);
+  }
+
+  .article-body pre {
+    direction: ltr;
+    unicode-bidi: isolate;
+    text-align: left;
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  /* At 375px the fence's one meaningful line ran 14px past the box - the
+     reader saw `|| 1` where the article's whole argument is `|| 14`. Half the
+     inline padding buys 16px, which covers it without touching the layout
+     anywhere else. */
+  @media (max-width: 400px) {
+    .article-body pre {
+      padding-inline: 0.75rem;
+    }
+  }
+
+  .article-body pre code {
+    /* The chip treatment is for inline mentions; inside a block it doubles
+       the border and shrinks twice. */
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 0.8125rem;
+  }
+
+  .article-body ul {
+    padding-inline-start: 1.25rem;
+    list-style: disc;
+  }
+
+  .article-body ul li {
+    margin-top: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--ink);
+    padding-inline-start: 0.25rem;
+  }
+
+  .article-body ul li::marker {
+    color: var(--accent);
+  }
+
+  .article-body blockquote {
+    margin-top: 1.25rem;
+    border-inline-start: 2px solid var(--accent);
+    padding-inline-start: 1.25rem;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--slate);
+  }
+
+  .article-link {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .article-link:hover {
+    color: var(--ink);
+  }
+
   .tag {
     @apply inline-flex items-center px-2.5 py-1 font-display text-[0.6875rem] font-semibold uppercase tracking-[.06em];
     color: var(--slate);

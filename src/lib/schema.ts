@@ -128,17 +128,30 @@ export function articleSchema(input: {
   headline: string
   description: string
   datePublished: string
+  /** Only when the content genuinely changed - Google shows dateModified. */
+  dateModified?: string
+  keywords?: string[]
 }): Json {
+  const url = `${siteConfig.url}/${input.lang}/blog/${input.slug}`
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: input.headline,
     description: input.description,
     datePublished: input.datePublished,
+    dateModified: input.dateModified ?? input.datePublished,
     inLanguage: input.lang,
-    url: `${siteConfig.url}/${input.lang}/blog/${input.slug}`,
+    url,
+    mainEntityOfPage: url,
+    /*
+     * @id references, not the README's inline Organization objects: the site
+     * declares one Organization entity and everything points at it. Two
+     * inline copies with the same name would be a second entity for Google to
+     * reconcile - the exact split the /#organization consolidation fixed.
+     */
     author: { '@id': `${siteConfig.url}/#organization` },
     publisher: { '@id': `${siteConfig.url}/#organization` },
+    ...(input.keywords && input.keywords.length ? { keywords: input.keywords.join(', ') } : {}),
   }
 }
 

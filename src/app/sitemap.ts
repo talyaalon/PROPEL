@@ -34,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // slug -> ISO date, for the only content that carries a real one.
   const articleDates = new Map(
-    getInternalArticles().map((article) => [`/blog/${article.slug}`, article.date]),
+    getInternalArticles().map((article) => [`/blog/${article.slug}`, article.updated ?? article.date]),
   )
 
   return allPaths.flatMap((path) =>

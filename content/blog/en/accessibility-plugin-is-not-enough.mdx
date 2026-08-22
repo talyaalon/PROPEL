@@ -1,0 +1,113 @@
+---
+title: "Your Accessibility Widget Probably Isn't Doing What You Think"
+description: "The little circle in the corner isn't accessibility, and it isn't protection either. What WCAG actually asks for, what automated scans miss, and where to start."
+date: "2026-08-05"
+category: "Engineering & Performance"
+slug: "accessibility-plugin-is-not-enough"
+readingTime: 6
+draft: false
+
+# --- Extended SEO fields ---
+author: "PROPEL"
+updated: "2026-08-20"
+lang: "en"
+keywords:
+  - "accessibility overlay"
+  - "WCAG 2.2 AA"
+  - "accessibility widget"
+  - "ADA website compliance"
+  - "European Accessibility Act"
+  - "screen reader testing"
+ogTitle: "An Accessibility Widget Is Not an Accessible Website"
+ogDescription: "What WCAG actually requires, why automated scans are too reassuring, and three things you can check today."
+related:
+  - "wordpress-vs-custom-code-true-cost"
+faq:
+  - q: "Is an accessibility overlay enough for WCAG compliance?"
+    a: "No. An overlay is an interface layer that lets users change how a page looks. It doesn't fix code structure, image alternatives, heading hierarchy or keyboard navigation — which is most of what the guidelines actually require. At best it's a pleasant addition on top of a site that is already accessible."
+  - q: "What do automated accessibility scans miss?"
+    a: "Automated tools are good at binary structural checks. They can't judge whether alt text describes the image in context, whether the heading hierarchy is logical, or whether a full task can be completed with a keyboard alone. Those require manual review and real use."
+  - q: "Where should a business start with accessibility?"
+    a: "Try navigating your own site with the keyboard only, listen to your homepage with a screen reader you already own, and run an automated scan treating the results as an opening list rather than a final verdict."
+---
+
+Almost every business website now carries the same widget. A circle in the corner, usually blue or orange, with a little person icon. Click it and a drawer opens: enlarge text, high contrast, readable font, stop animations.
+
+The business owner paid for it, installed it, ticked the box. And something genuinely did happen. Just not the thing they think happened.
+
+> A note on scope: this is a technical explainer, not legal advice. Your specific obligations depend on where you operate and who your users are, and are worth checking with a qualified accessibility specialist.
+
+## What the guidelines actually ask for
+
+Nearly every accessibility regime in use today points at the same technical document: the W3C's Web Content Accessibility Guidelines, at level AA. In the United States, ADA Title III case law consistently treats WCAG as the practical benchmark for public-facing sites. In the European Union, the European Accessibility Act pulls a wide range of consumer-facing digital services into scope, again resting on the same underlying criteria. Israel's standard SI 5568 is a direct adoption of WCAG. Different laws, same technical target.
+
+Now read what the guidelines ask for, and notice what they **don't** say.
+
+They don't say "install a tool that lets users enlarge text." They say the site itself — its structure, its code, its content — must be accessible. That's a requirement about the site, not about a layer placed on top of it.
+
+## What the widget actually does
+
+An accessibility overlay is an interface layer. It sits above the site and lets a user change how it looks: size, colour, spacing.
+
+That isn't worthless. Some users are genuinely helped by it, particularly people with mild to moderate low vision who prefer to control the display. But an overlay is a partial solution by nature: it adds an interface layer, and it does not repair problems in the code, the structure or the content underneath.
+
+Here's why that matters in practice. A blind user doesn't see the widget. They don't need larger text — they aren't looking at the screen at all. They browse with a screen reader that announces the page in code order, and they navigate by keyboard alone.
+
+And a screen reader doesn't care what the widget offers. It cares whether:
+
+- Images have alternative text that says something, or `img-4471.jpg`
+- Headings form a logical hierarchy, or were all just styled large and bold with no structure
+- Form fields have an associated `label`, or only grey placeholder text that vanishes the moment you start typing
+- A button is really a `button`, or a `div` with an `onClick` the keyboard never reaches
+- You can move through the whole site with Tab, always see where focus is, and reach everything clickable
+
+Not one of those is solved by an external tool. All of them live in the code.
+
+## Why automated scans are too reassuring
+
+The next step most people take is to run an automated audit. You get a score, sometimes green, and you feel better.
+
+The problem is that automated tools capture a limited slice of the picture. They're excellent at binary structural checks, but the critical failures — logical keyboard navigation, image descriptions that make sense in context, a coherent heading hierarchy — only surface through manual review and actual use.
+
+Which makes sense when you think about it. Software can check **whether** an image has alt text. It can't check whether that text describes the image. `alt="image"` passes the scan perfectly and conveys nothing to anybody.
+
+Likewise, a scan will confirm the page has an `h1`. It won't notice that the next heading is an `h4`, and that anyone navigating by heading in a screen reader gets a structure that doesn't hold together.
+
+## The part businesses actually worry about
+
+Let's talk about the legal side, because that's why most people arrive at this topic in the first place. Again — not legal advice, and your specific position is worth checking with a specialist.
+
+Two things are worth knowing.
+
+**An accessibility statement is the central document.** It should describe what has actually been made accessible and include contact details for accessibility matters. A generic statement copied from another site, describing adaptations you never made, is worse than having none — because it asserts something untrue.
+
+**Overlay vendors' legal guarantees deserve scrutiny.** A widget that promises protection is making a claim about outcomes it doesn't control. Litigation in the United States has repeatedly involved sites that had an overlay installed at the time of the complaint. If a vendor offers a warranty, read carefully what it actually covers and what triggers it.
+
+## The good news: this isn't a huge project
+
+So far this sounds intimidating. In practice, a site built properly from the start meets most of the requirements without special effort, because most of what the guidelines ask for is simply correct construction.
+
+`button` for a button. `nav` for navigation. A `label` on every field. A heading hierarchy that reflects the content structure. Reasonable colour contrast. A visible focus ring. These aren't accessibility adaptations — they're correct HTML. Anyone who wrote them properly got accessibility on the way.
+
+The pain starts when you try to add accessibility to a site built without thinking about it. Then it really is a project.
+
+## Where to start, practically
+
+If you have a site now and want to know where you stand, three things you can do today without paying anyone:
+
+**Try browsing your site with the keyboard only.** Take your hand off the mouse. `Tab` forward, `Shift+Tab` back, `Enter` to activate. Get from the homepage to a submitted contact form. If you got stuck, or lost track of where focus was, a screen reader will get stuck in the same place.
+
+**Turn on the screen reader you already own.** VoiceOver on Mac and iPhone, Narrator on Windows. Close your eyes for a minute and listen to your homepage. It's the single minute that changes people's understanding of this topic the most.
+
+**Run a scan — and treat it as an opening list.** Tools like axe or Lighthouse will hand you the obvious failures. Fix them, and don't assume you're finished.
+
+---
+
+The bottom line: the widget in the corner isn't accessibility, and it isn't protection. At best it's a pleasant addition on top of a site that's already accessible. If it's the only thing you have, you have a widget, not an accessible site.
+
+Want to know where your site actually stands? [Get in touch](/en/contact) and we'll go through it.
+
+## Sources
+
+- [Web Content Accessibility Guidelines (WCAG) — W3C](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- [WAI-ARIA and accessibility fundamentals — W3C Web Accessibility Initiative](https://www.w3.org/WAI/)

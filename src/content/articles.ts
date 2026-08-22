@@ -27,10 +27,11 @@
 
 import type { Locale } from '@/lib/i18n'
 import { isProductionDeploy } from '@/lib/config'
+import { mdxPosts } from '@/content/generated/posts'
 
 export type Bilingual = Record<Locale, string>
 
-export const articleTopics = ['web', 'seo', 'automation', 'ecommerce'] as const
+export const articleTopics = ['web', 'seo', 'automation', 'ecommerce', 'engineering'] as const
 export type ArticleTopic = (typeof articleTopics)[number]
 
 type ArticleBase = {
@@ -72,6 +73,11 @@ type InternalArticle = ArticleBase & {
    * publishes when the owner has read and approved it, not before.
    */
   draft?: boolean
+  /**
+   * A real content revision, not a tweak - drives the sitemap's lastModified
+   * and the Article schema's dateModified. Only the MDX pipeline sets it.
+   */
+  updated?: string
   externalUrl?: never
   source?: never
 }
@@ -347,6 +353,52 @@ Because we do not have one. What we have is a twenty-minute scoping call, free a
   },
 ]
 
+// ── MDX posts ─────────────────────────────────────────────────────────────────
+
+/*
+ * The three articles under content/blog/ arrive through code generation
+ * (scripts/blog/generate.mjs, run by prebuild) rather than by being typed
+ * here, because their source of record is the read-only MDX files. They join
+ * the same array so every consumer - the grid, the routes, the sitemap, the
+ * middleware - sees one list and cannot disagree about what exists.
+ *
+ * `excerpt` doubles as `description`: the MDX schema has one description
+ * field serving both the card and the meta tag, which is also how the SERP
+ * uses it.
+ */
+const mdxArticles: Article[] = mdxPosts.map((post) => ({
+  slug: post.slug,
+  topic: post.topic as ArticleTopic,
+  date: post.date,
+  updated: post.updated ?? undefined,
+  draft: post.draft,
+  title: post.title,
+  excerpt: post.description,
+  description: post.description,
+  body: post.body,
+}))
+
+/*
+ * A slug collision between a typed article and an MDX post is silent
+ * otherwise: two cards, one URL, and getArticleBySlug serves whichever sorts
+ * newer while the other body becomes unreachable. Every other authoring
+ * mistake in this pipeline fails the build loudly; this one must too. Module
+ * scope, so the prerender throws before anything ships.
+ */
+{
+  const seen = new Set<string>()
+  for (const article of [...articles, ...mdxArticles]) {
+    if (isExternal(article) || !article.slug) continue
+    if (seen.has(article.slug)) {
+      throw new Error(
+        `duplicate article slug "${article.slug}" - one is typed in articles.ts, ` +
+          'one comes from content/blog/. Rename or remove one of them.'
+      )
+    }
+    seen.add(article.slug)
+  }
+}
+
 // ── Accessors ─────────────────────────────────────────────────────────────────
 
 /** Newest first. */
@@ -354,7 +406,7 @@ Because we do not have one. What we have is a twenty-minute scoping call, free a
 const showDrafts = !isProductionDeploy()
 
 export function getArticles(): Article[] {
-  return articles
+  return [...articles, ...mdxArticles]
     .filter((article) => showDrafts || isExternal(article) || !article.draft)
     .sort((a, b) => b.date.localeCompare(a.date))
 }

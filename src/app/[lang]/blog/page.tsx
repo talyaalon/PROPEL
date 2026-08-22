@@ -65,10 +65,18 @@ export default async function BlogPage({ params }: Props) {
           dict={dict.blog}
           articles={getArticles()}
           topics={getUsedTopics()}
-          // The three with a public URL - the ones a reader can actually go
-          // and look at. Air Manage and BOM sit behind a login.
+          // Public-URL projects only - the ones a reader can actually go and
+          // look at. Air Manage and BOM sit behind a login.
+          //
+          // J-Cafe is excluded DELIBERATELY, not for lack of screens: the
+          // branch-leakage article on this same page is the anonymised story
+          // of a multi-branch restaurant platform, and README-PUBLISHING
+          // section 6 forbids placing it next to the J-Cafe case study - a
+          // reader who sees both on one page makes the connection the
+          // anonymisation exists to prevent. If the full named version is
+          // ever published instead, this filter goes with it.
           projects={getProjects()
-            .filter((project) => project.screens)
+            .filter((project) => project.screens && project.slug !== 'jcafe-kosher')
             .slice(0, 3)
             .map((project) => ({
               slug: project.slug,
