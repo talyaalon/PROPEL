@@ -5,6 +5,7 @@ import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
+import { mdxPosts } from '@/content/generated/posts'
 import { getProjects, projectTitle } from '@/content/projects'
 import { siteConfig } from '@/lib/config'
 import { serviceSchema, breadcrumbSchema } from '@/lib/schema'
@@ -195,6 +196,41 @@ export default async function MigrationPage({ params }: Props) {
           </div>
         </section>
       )}
+      {/* README-PUBLISHING section 6: the article is this page's argument at
+          full length - what three years actually cost, which is the question
+          every migration lead is really asking. */}
+      {(() => {
+        const post = mdxPosts.find((p) => p.slug === 'wordpress-vs-custom-code-true-cost' && !p.draft)
+        if (!post) return null
+        return (
+          <section className="section" aria-labelledby="migration-article">
+            <div className="mx-auto max-w-3xl">
+              <h2
+                id="migration-article"
+                className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+              >
+                {dict.services.from_blog_title}
+              </h2>
+              <ul className="mt-6 flex flex-col gap-4">
+                <li>
+                  <Link
+                    href={`/${lang}/blog/${post.slug}`}
+                    className="card flex flex-wrap items-baseline gap-3 p-5"
+                  >
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold text-brand-ink">{post.title[lang]}</span>
+                    <span className="body-text">{post.description[lang]}</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </section>
+        )
+      })()}
+
     </>
   )
 }

@@ -32,6 +32,12 @@ export type ServicePage = {
   proofBody: Bilingual
   /** Slugs into projects.ts - the evidence. */
   proofSlugs: string[]
+  /**
+   * Slugs into content/blog/ - the articles that make this service's argument
+   * at full length. README-PUBLISHING section 6's inbound half: the articles
+   * already link the services; these are the services linking back.
+   */
+  articles?: string[]
   whatsappMessage: Bilingual
 }
 
@@ -78,6 +84,7 @@ export const servicePages: ServicePage[] = [
       en: 'Two live sites you can open and check - one for roadside recovery, one for a therapy practice.',
     },
     proofSlugs: ['hagorer2', 'cnafim-lauf'],
+    articles: ['accessibility-plugin-is-not-enough'],
     whatsappMessage: {
       he: 'היי PROPEL, אשמח לדבר על בניית אתר תדמית.',
       en: 'Hi PROPEL, I would like to talk about building a business website.',
@@ -178,6 +185,7 @@ export const servicePages: ServicePage[] = [
       en: 'A work-order system in daily organisational use, and a costing system replacing an entire spreadsheet.',
     },
     proofSlugs: ['air-manage', 'bom-recipes'],
+    articles: ['branch-leakage-case-study'],
     whatsappMessage: {
       he: 'היי PROPEL, אשמח לדבר על מערכת ניהול לעסק שלי.',
       en: 'Hi PROPEL, I would like to talk about a management system for my business.',

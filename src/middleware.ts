@@ -98,6 +98,18 @@ export function middleware(request: NextRequest) {
    */
   const rest = pathname.slice(`/${locale}`.length).replace(/\/$/, '')
   if (METADATA_ROUTES.has(rest)) return NextResponse.next()
+  /*
+   * Nested metadata: /he/blog/<slug>/opengraph-image and friends. The leaf is
+   * one of the metadata routes and the parent must be a page that exists -
+   * without the second check this would exempt /he/anything/opengraph-image
+   * from the 404 rewrite. Added for the per-article link-preview cards; the
+   * root-level check above stays untouched because the postbuild guard parses
+   * it by shape.
+   */
+  const cut = rest.lastIndexOf('/')
+  if (cut > 0 && METADATA_ROUTES.has(rest.slice(cut)) && knownPaths().has(rest.slice(0, cut))) {
+    return NextResponse.next()
+  }
   if (!knownPaths().has(rest)) {
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/404`

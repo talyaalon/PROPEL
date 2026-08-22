@@ -10,6 +10,7 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import { serviceSchema, breadcrumbSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import { getProjects, projectTitle } from '@/content/projects'
+import { mdxPosts } from '@/content/generated/posts'
 import { getServicePage, getServiceSlugs } from '@/content/services'
 
 /**
@@ -129,6 +130,47 @@ export default async function ServicePage({ params }: Props) {
           </ul>
         </div>
       </section>
+
+      {/*
+        README-PUBLISHING section 6: the article that makes this service's
+        argument at full length. The service page states the claim; the
+        article is the evidence a sceptical reader actually wants. Draft
+        filtering is already done - mdxPosts only ever contains published
+        pairs on a production deploy.
+      */}
+      {(service.articles ?? []).length > 0 && (
+        <section className="section" aria-labelledby="service-articles">
+          <div className="mx-auto max-w-3xl">
+            <h2
+              id="service-articles"
+              className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+            >
+              {dict.services.from_blog_title}
+            </h2>
+            <ul className="mt-6 flex flex-col gap-4">
+              {(service.articles ?? []).flatMap((slug) => {
+                const post = mdxPosts.find((p) => p.slug === slug && !p.draft)
+                if (!post) return []
+                return [
+                  <li key={slug}>
+                    <Link
+                      href={`/${lang}/blog/${slug}`}
+                      className="card flex flex-wrap items-baseline gap-3 p-5"
+                    >
+                      <ArrowRight
+                        className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                        aria-hidden="true"
+                      />
+                      <span className="font-semibold text-brand-ink">{post.title[lang]}</span>
+                      <span className="body-text">{post.description[lang]}</span>
+                    </Link>
+                  </li>,
+                ]
+              })}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {proof.length > 0 && (
         <section className="section" aria-labelledby="service-proof">

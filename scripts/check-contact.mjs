@@ -165,6 +165,30 @@ for (const file of outputFiles.filter((f) => f.endsWith('.html'))) {
     const rest = path.replace(/^\/(he|en)/, '')
     if (passesThrough.includes(rest)) continue
     if (routeSource.includes(`'${rest}'`)) continue
+    /*
+     * Nested metadata: /blog/<slug>/opengraph-image. Mirrors the middleware's
+     * second check - the leaf must be a metadata route AND the parent must be
+     * a path the middleware knows, which for articles means the generated
+     * posts module (routes.ts builds article paths from it rather than
+     * spelling them out, so routeSource alone cannot see them). The mirror is
+     * only trusted if the middleware actually contains the nested rule; if
+     * someone deletes it there, this guard goes back to failing, which is the
+     * point of reading the source instead of restating it.
+     */
+    const cut = rest.lastIndexOf('/')
+    if (cut > 0 && passesThrough.includes(rest.slice(cut))) {
+      const nestedRule = /METADATA_ROUTES\.has\(rest\.slice\(cut\)\)\s*&&\s*knownPaths\(\)\.has\(rest\.slice\(0,\s*cut\)\)/.test(
+        middlewareSource,
+      )
+      const parent = rest.slice(0, cut)
+      const parentKnown =
+        routeSource.includes(`'${parent}'`) ||
+        (parent.startsWith('/blog/') &&
+          readFileSync('src/content/generated/posts.ts', 'utf8').includes(
+            `"slug": "${parent.slice('/blog/'.length)}"`,
+          ))
+      if (nestedRule && parentKnown) continue
+    }
     ogFailures.add(`${path}  (referenced by ${file})`)
   }
 }

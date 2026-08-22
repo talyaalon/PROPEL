@@ -161,6 +161,8 @@ export function collectionPageSchema(input: {
   path: string
   name: string
   description: string
+  /** Absolute URLs of the pages this collection actually contains. */
+  hasPart?: string[]
 }): Json {
   return {
     '@context': 'https://schema.org',
@@ -168,6 +170,7 @@ export function collectionPageSchema(input: {
     name: input.name,
     description: input.description,
     url: `${siteConfig.url}/${input.lang}/${input.path}`,
+    ...(input.hasPart && input.hasPart.length ? { hasPart: input.hasPart } : {}),
     // The page is part of the WEBSITE, not of the company. schema.org gives
     // isPartOf a CreativeWork domain; an Organization is not one.
     isPartOf: { '@id': `${siteConfig.url}/${input.lang}#website` },

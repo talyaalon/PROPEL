@@ -71,6 +71,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? mdx.ogTitle[lang]
     : `${mdx.ogTitle[lang]} | PROPEL`
 
+  /*
+   * images overridden in BOTH blocks: pageMetadata pins the site-wide card
+   * explicitly (its own hard-won rule - an inherited openGraph is how six
+   * pages once shared the homepage's), so without these lines the article
+   * would ship its own headline over the generic brand card. The URL is the
+   * sibling opengraph-image route; the middleware passes nested metadata
+   * leaves that sit under known paths.
+   */
+  const image = {
+    url: `${siteConfig.url}/${lang}/blog/${slug}/opengraph-image`,
+    width: 1200,
+    height: 630,
+    alt: mdx.ogTitle[lang],
+  }
+
   return {
     ...base,
     ...(mdx.keywords[lang].length ? { keywords: mdx.keywords[lang] } : {}),
@@ -81,11 +96,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       publishedTime: mdx.date,
       modifiedTime: mdx.updated ?? mdx.date,
+      images: [image],
     },
     twitter: {
       ...base.twitter,
       title: social,
       description: mdx.ogDescription[lang],
+      images: [image.url],
     },
   }
 }

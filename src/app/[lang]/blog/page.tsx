@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
-import { getArticles, getUsedTopics } from '@/content/articles'
+import { getArticles, getInternalArticles, getUsedTopics } from '@/content/articles'
 import { getProjects, projectTitle } from '@/content/projects'
 import BlogGrid from '@/components/sections/BlogGrid'
 import { collectionPageSchema } from '@/lib/schema'
+import { siteConfig } from '@/lib/config'
 import JsonLd from '@/components/JsonLd'
 
 type Props = {
@@ -44,6 +45,10 @@ export default async function BlogPage({ params }: Props) {
           path: 'blog',
           name: dict.blog.meta_title,
           description: dict.blog.meta_description,
+          // The articles the page lists - the schema stops describing an empty shelf.
+          hasPart: getInternalArticles().map(
+            (article) => `${siteConfig.url}/${lang}/blog/${article.slug}`,
+          ),
         })}
       />
       <div className="mx-auto max-w-7xl">
