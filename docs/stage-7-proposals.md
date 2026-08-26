@@ -1,4 +1,4 @@
-# Stage 7 — structures, for approval before anything is built
+# Stage 7 - structures, for approval before anything is built
 
 Per the brief: **structure, not content.** Nothing here is implemented. Each
 section says what the page is, what it stands on, and what it would cost.
@@ -42,7 +42,7 @@ one content file, one dynamic route, `dynamicParams = false`, registered in
 **Cost:** ~1 content file, ~1 route, 6 new URLs (28 → 34 in the sitemap).
 
 **The risk worth naming:** a vertical page and its service page can compete for
-the same query. The split has to be real — the service page answers "what is
+the same query. The split has to be real - the service page answers "what is
 business automation", the vertical answers "what does a restaurant chain need".
 If the copy cannot hold that line, three pages become three thin duplicates and
 the site is worse. **This is the one item here I would build last.**
@@ -51,7 +51,7 @@ the site is worse. **This is the one item here I would build last.**
 
 ## 2. "מתי אנחנו לא הכתובת"
 
-A page that filters by **project type, not budget** — the brief is explicit and
+A page that filters by **project type, not budget** - the brief is explicit and
 there are no monetary figures anywhere in it.
 
 Route: `/not-a-fit` (he: "מתי אנחנו לא הכתובת").
@@ -65,7 +65,7 @@ Route: `/not-a-fit` (he: "מתי אנחנו לא הכתובת").
 ```
 
 **Content to be written by the owner.** I can offer the structure and the
-category axis; the actual list is a business decision — which projects you
+category axis; the actual list is a business decision - which projects you
 refuse is a positioning statement, not a copywriting task.
 
 **Why it belongs:** the site already claims transparency as a value; a page
@@ -76,7 +76,7 @@ that turns work away is the only cheap way to prove it. It also removes the
 
 ---
 
-## 3. Cal.com — the performance cost, measured before the decision
+## 3. Cal.com - the performance cost, measured before the decision
 
 **Today the homepage loads zero third-party scripts.** That is unusual and it
 is worth something: nothing on the critical path is outside our control.
@@ -89,25 +89,25 @@ Cal.com offers two integrations:
 | **Link out** | Zero bytes. An `<a>` to `cal.com/propel`, `rel="noopener"`. | Booking on their domain |
 
 **Recommendation: link out, not embed.** The friction the brief wants removed
-is "we will get back to you" — and a link removes that just as completely as an
+is "we will get back to you" - and a link removes that just as completely as an
 embed does. The embed buys one avoided click and costs the performance claim we
 just had to reword, on the page that is the whole funnel.
 
 **Prerequisite either way:** a Cal.com account and a configured event type. Not
-a code task — say the word and give me the URL, and the link is a ten-minute
+a code task - say the word and give me the URL, and the link is a ten-minute
 change to the contact section and the hero CTA row.
 
 **Middle option if you want it inline later:** load the embed only on
 `/contact` (a page that does not exist yet), never on the homepage, and behind
-a click — the visitor asks for the scheduler, and only then does it download.
+a click - the visitor asks for the scheduler, and only then does it download.
 
 ---
 
 ## Suggested order
 
-1. **"מתי אנחנו לא הכתובת"** — cheapest, no ranking risk, and it proves a value
+1. **"מתי אנחנו לא הכתובת"** - cheapest, no ranking risk, and it proves a value
    the site already claims.
-2. **Cal.com as a link** — ten minutes once the account exists.
-3. **The verticals** — highest value and highest risk. Build one
+2. **Cal.com as a link** - ten minutes once the account exists.
+3. **The verticals** - highest value and highest risk. Build one
    (`restaurants`, the strongest case), measure whether it ranks without
    cannibalising `/services/ecommerce`, and only then build the other two.

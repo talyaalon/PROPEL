@@ -14,7 +14,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
  * - Reduced-motion is checked here *and* in CSS, so the preference wins even
  * before this component mounts.
  *
- * The observer disconnects after the first intersection — revealing once is the
+ * The observer disconnects after the first intersection - revealing once is the
  * point; re-animating on every scroll past is the thing that gets irritating.
  */
 

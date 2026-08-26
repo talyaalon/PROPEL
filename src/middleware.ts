@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-// Must live inside `src/` — Next only picks middleware up from the directory
+// Must live inside `src/` - Next only picks middleware up from the directory
 // that contains the `app` folder. At the project root it is silently ignored.
 import { locales, defaultLocale, type Locale } from './lib/i18n'
 import { sitePaths } from './lib/routes'

@@ -37,8 +37,8 @@ const config: Config = {
      * Zero corner radius across the whole site, buttons and cards included.
      *
      * Declared at `theme` level rather than `extend` so it replaces Tailwind's
-     * scale outright: every `rounded-*` utility in the codebase — `rounded-full`
-     * included — collapses to square without editing each call site.
+     * scale outright: every `rounded-*` utility in the codebase - `rounded-full`
+     * included - collapses to square without editing each call site.
      */
     borderRadius: {
       none: '0px',
@@ -86,7 +86,7 @@ const config: Config = {
         brand: {
           /*
            * Semantic tokens. These resolve through CSS variables so a single set
-           * of utility classes serves both themes — no `dark:` variant on every
+           * of utility classes serves both themes - no `dark:` variant on every
            * element, and no duplicated markup.
            */
           surface: 'var(--surface)',

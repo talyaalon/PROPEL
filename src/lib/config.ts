@@ -133,7 +133,7 @@ export const siteConfig = {
 // ── Deploy environment ────────────────────────────────────────────────────────
 
 /**
- * True only for a real production deploy — not for local builds and not for
+ * True only for a real production deploy - not for local builds and not for
  * branch/preview deploys.
  *
  * Checked per host rather than through `NODE_ENV`, because `npm run build`

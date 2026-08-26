@@ -1,7 +1,7 @@
 # Article template
 
 Copy the block below into the `articles` array in `src/content/articles.ts`,
-above the existing entries. Leave `draft: true` until you want it live —
+above the existing entries. Leave `draft: true` until you want it live -
 drafts render locally and in Netlify previews, and are absent from production
 and from the sitemap.
 
@@ -13,7 +13,7 @@ adding a second content format would mean two places to look for an article.
 ## The body format
 
 Paragraphs separated by a blank line. A line beginning `## ` is a section
-heading and joins the page's clause numbering automatically. Nothing else —
+heading and joins the page's clause numbering automatically. Nothing else -
 no bold, no lists, no images. An article that needs more should change this
 file first, so the need is a decision rather than an accident.
 
@@ -81,5 +81,5 @@ npm run start -- -p 4455
 npm run audit -- headings          # the article's outline, both locales
 ```
 
-Then check the page at 320px with the accessibility menu's text set to 200% —
+Then check the page at 320px with the accessibility menu's text set to 200% -
 that combination is where this project's layout defects live.

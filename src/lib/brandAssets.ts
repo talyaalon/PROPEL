@@ -5,7 +5,7 @@ import type { Locale } from './i18n'
 /**
  * Resolves the logo artwork for a locale, or null when none has been added.
  *
- * Server-side only — it touches the filesystem. The result is passed down as a
+ * Server-side only - it touches the filesystem. The result is passed down as a
  * plain string prop, because `Navigation` is a client component and importing
  * this module into it would drag `node:fs` into the browser bundle.
  *

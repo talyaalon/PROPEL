@@ -4,9 +4,9 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *
  *  The section renders only when this array has entries, so an empty list is a
- *  valid state — better no testimonials than invented ones.
+ *  valid state - better no testimonials than invented ones.
  *
- *  An anonymous quote ("great service! — a happy client") is worth close to
+ *  An anonymous quote ("great service! - a happy client") is worth close to
  *  nothing. A name, a business and a photo is what makes it evidence. Ask for
  *  one right after a launch, while the relief is fresh.
  *
@@ -19,7 +19,7 @@
  *      },
  *      name: 'ישראל ישראלי',
  *      role: { he: 'מנכ"ל, שם החברה', en: 'CEO, Company Name' },
- *      photo: '/testimonials/israel.webp',   // optional — initials are used when absent
+ *      photo: '/testimonials/israel.webp',   // optional - initials are used when absent
  *    }
  */
 
@@ -30,7 +30,7 @@ export type Testimonial = {
   /** Real name. Anonymous testimonials do not build trust. */
   name: string
   role: Bilingual
-  /** Path under /public. Optional — falls back to initials. */
+  /** Path under /public. Optional - falls back to initials. */
   photo?: string
 }
 

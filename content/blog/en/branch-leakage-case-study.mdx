@@ -25,14 +25,14 @@ faq:
   - q: "What is tenant leakage in a multi-branch system?"
     a: "It's when an action performed in the context of one branch gets recorded against a different one. The system returns no error, so the problem usually surfaces during an inventory count or a month-end reconciliation rather than in the logs."
   - q: "Why is a default value in code a problem?"
-    a: "Because it converts not knowing into a silent decision. Instead of stopping and reporting that it can't determine which entity an action belongs to, the system picks one and continues — enacting a business policy nobody ever approved."
+    a: "Because it converts not knowing into a silent decision. Instead of stopping and reporting that it can't determine which entity an action belongs to, the system picks one and continues - enacting a business policy nobody ever approved."
   - q: "How do you make sure it doesn't come back?"
-    a: "A single server-side source of truth, an identity value the client cannot modify, and total removal of default fallbacks — so every case where identity is lost fails loudly and gets caught in CI before it ships."
+    a: "A single server-side source of truth, an identity value the client cannot modify, and total removal of default fallbacks - so every case where identity is lost fails loudly and gets caught in CI before it ships."
 ---
 
 Some bugs explode. The server goes down, the screen goes white, everyone knows within three minutes.
 
-Then there's the other kind. Everything works. No errors in the logs, no alerts, no 500s. It's just that every so often, an order placed at one branch shows up on the kitchen screen at another one. The staff prepare it — why wouldn't they? It appeared on their screen. Meanwhile the actual customer is waiting somewhere else entirely. And nobody knows where to start looking.
+Then there's the other kind. Everything works. No errors in the logs, no alerts, no 500s. It's just that every so often, an order placed at one branch shows up on the kitchen screen at another one. The staff prepare it - why wouldn't they? It appeared on their screen. Meanwhile the actual customer is waiting somewhere else entirely. And nobody knows where to start looking.
 
 We called it "branch leakage," and it taught us more about architecture than any other bug we've run into.
 
@@ -48,7 +48,7 @@ That turned out not to be a basic question at all.
 
 When we opened the code, branch identity had three separate sources, and each of them was right some of the time.
 
-**The first** was the URL. The customer landed on an address containing the branch identifier, which looks like a reasonable source of truth. It was — until someone shared a link over WhatsApp, or returned from browser history, or clicked a stale Google result.
+**The first** was the URL. The customer landed on an address containing the branch identifier, which looks like a reasonable source of truth. It was - until someone shared a link over WhatsApp, or returned from browser history, or clicked a stale Google result.
 
 **The second** was client-side state. The selected branch lived in application memory and in browser local storage. Fast, convenient, and in sync with the URL roughly eighty percent of the time. The remainder was the bug surface.
 
@@ -62,7 +62,7 @@ const companyId = resolveCompany(req) || 14;
 
 Fourteen. The default branch. Somebody wrote it once, probably back when there was a single branch and it was correct, and then it spread. We found that expression in roughly 38 different places in the codebase.
 
-It's worth being precise about what `|| 14` actually says. It doesn't say "I don't know." It says **"I don't know, so I'll guess, and I'll guess with total confidence and tell nobody."** That's why there were no errors in the logs. The system never failed. It succeeded — at the wrong branch.
+It's worth being precise about what `|| 14` actually says. It doesn't say "I don't know." It says **"I don't know, so I'll guess, and I'll guess with total confidence and tell nobody."** That's why there were no errors in the logs. The system never failed. It succeeded - at the wrong branch.
 
 ## Why this sounded like a small bug and wasn't
 
@@ -70,7 +70,7 @@ The temptation is to fix the symptom: find the one path where the branch got los
 
 But consider what `|| 14` means in business terms. It means the system is willing to **credit revenue to one branch for work another branch did**. Under single ownership that might be a rounding error. In a chain where each branch has its own P&L, it's a problem that touches people's money.
 
-Then there's the other side — inventory. A branch that received an order that wasn't its own deducted from its own stock. The end-of-day count didn't reconcile. Somebody went looking in the storeroom for bottles that had never left it.
+Then there's the other side - inventory. A branch that received an order that wasn't its own deducted from its own stock. The end-of-day count didn't reconcile. Somebody went looking in the storeroom for bottles that had never left it.
 
 The moment we understood that, this stopped being a bug fix and became an architecture question.
 
@@ -80,13 +80,13 @@ The rule we settled on was short: **the browser proposes, the server decides.**
 
 The client can request a branch. Through the URL, through a button, through whatever it likes. But nothing arriving from the browser enters an order until the server has validated it against its own source. One function became the sole gate through which branch identity is assigned to an order. There is no other way in.
 
-Underneath it, we placed an `httpOnly` cookie holding the active branch. The `httpOnly` choice was deliberate: client-side JavaScript **cannot** read it or change it. Not because we distrusted users, but because a value that can be changed from the console is a value that will eventually be changed by accident — by our own code, not anyone else's.
+Underneath it, we placed an `httpOnly` cookie holding the active branch. The `httpOnly` choice was deliberate: client-side JavaScript **cannot** read it or change it. Not because we distrusted users, but because a value that can be changed from the console is a value that will eventually be changed by accident - by our own code, not anyone else's.
 
-The cart moved to per-branch keys. Until then there was a single cart, and switching branches dragged products along with it — sometimes products that didn't exist on the other branch's menu at all.
+The cart moved to per-branch keys. Until then there was a single cart, and switching branches dragged products along with it - sometimes products that didn't exist on the other branch's menu at all.
 
 Then came the least pleasant and most important part: **we removed all 38 fallbacks.** We didn't replace them with a smarter default. We removed them. If the system doesn't know which branch it's in, it stops and says so out loud.
 
-That sounds like a regression. In practice it's the opposite. **A loud failure once a day beats a quiet, wrong success once a week** — the first gets fixed the day it appears; the second gets discovered at month end, when somebody tries to close a report.
+That sounds like a regression. In practice it's the opposite. **A loud failure once a day beats a quiet, wrong success once a week** - the first gets fixed the day it appears; the second gets discovered at month end, when somebody tries to close a report.
 
 ## Knowing it's actually done
 
@@ -102,11 +102,11 @@ Zero leaks since.
 
 ## What we took from it
 
-**Every `||` in a codebase is a business decision disguised as a technical one.** `|| 14` looked like crash protection. It was actually policy — "when we're unsure, credit this branch" — that nobody ever approved.
+**Every `||` in a codebase is a business decision disguised as a technical one.** `|| 14` looked like crash protection. It was actually policy - "when we're unsure, credit this branch" - that nobody ever approved.
 
 **A single source of truth isn't academic rigour.** Three sources that agree most of the time are worse than one source that occasionally admits it doesn't know, because in the first case you have no way of knowing when you're wrong.
 
-**The best architectural test is asking where the system lies.** Not where it falls over — where it proceeds confidently without grounds. That's where the expensive bugs live.
+**The best architectural test is asking where the system lies.** Not where it falls over - where it proceeds confidently without grounds. That's where the expensive bugs live.
 
 ---
 

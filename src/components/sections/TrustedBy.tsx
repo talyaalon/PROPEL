@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { clients } from '@/content/clients'
 
 /**
- * Client logo strip. Renders nothing until there are real logos — an empty
+ * Client logo strip. Renders nothing until there are real logos - an empty
  * "trusted by" row is worse than none at all.
  */
 export default function TrustedBy({ label }: { label: string }) {

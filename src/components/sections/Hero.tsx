@@ -101,7 +101,7 @@ export default function Hero({ lang, dict }: Props) {
       {!usesPlaceholderDomain && (
         <span className="draft-annotation" aria-hidden="true">
           <span className="draft-annotation__text">
-            {new URL(siteConfig.url).hostname} — {dict.eyebrow}
+            {new URL(siteConfig.url).hostname} - {dict.eyebrow}
           </span>
         </span>
       )}

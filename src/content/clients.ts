@@ -1,6 +1,6 @@
 /**
  * ─────────────────────────────────────────────────────────────────────────────
- *  CLIENT LOGOS — the "trusted by" strip under the hero
+ *  CLIENT LOGOS - the "trusted by" strip under the hero
  * ─────────────────────────────────────────────────────────────────────────────
  *
  *  The strip renders only when this array has entries, so leaving it empty is a
@@ -18,7 +18,7 @@
  *
  *    { name: 'Acme', logo: '/clients/acme.svg', url: 'https://acme.co.il' }
  *
- *  Use SVG where possible, sized to roughly 120×40, in a single flat colour —
+ *  Use SVG where possible, sized to roughly 120×40, in a single flat colour -
  *  the strip renders them in muted monochrome so mixed brand colours do not
  *  fight the page.
  */
@@ -28,7 +28,7 @@ export type Client = {
   name: string
   /** Path under /public. */
   logo: string
-  /** Optional — makes the logo a link to the client's site. */
+  /** Optional - makes the logo a link to the client's site. */
   url?: string
 }
 

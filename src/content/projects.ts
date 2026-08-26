@@ -141,7 +141,7 @@ export type Project = {
   /**
    * Full-page screenshots driving the scrolling screen previews.
    *
-   * Captured by `npm run shots`. Only publicly browsable sites have them —
+   * Captured by `npm run shots`. Only publicly browsable sites have them -
    * a login screen says nothing about the work, so projects behind one keep
    * the empty frame instead.
    */

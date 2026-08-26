@@ -5,7 +5,7 @@ import { locales, isLocale } from '@/lib/i18n'
  * Link-preview card, generated at build time.
  *
  * Without this, sharing the site in WhatsApp, LinkedIn or Slack renders a blank
- * card — which, for a business whose main channel is WhatsApp, is the single
+ * card - which, for a business whose main channel is WhatsApp, is the single
  * most expensive thing missing from the site.
  *
  * Deliberately Latin-only: ImageResponse ships Latin glyphs by default, and

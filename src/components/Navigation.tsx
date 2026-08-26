@@ -120,7 +120,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
    * The resize guard is not cosmetic. The drawer and its close button are both
    * `md:hidden`; opening the drawer on a phone and then rotating to landscape
    * used to leave `isOpen` true with no way to reach the toggle, so this
-   * cleanup never ran and `body { overflow: hidden }` persisted — the page
+   * cleanup never ran and `body { overflow: hidden }` persisted - the page
    * stayed unscrollable until a reload.
    */
   /*

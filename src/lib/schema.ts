@@ -5,7 +5,7 @@ import { servicePages } from '@/content/services'
 
 /**
  * JSON-LD builders. This is what lets Google understand that PROPEL is a
- * business — name, services, contact, area served — rather than just a page of
+ * business - name, services, contact, area served - rather than just a page of
  * text, and it is the prerequisite for any rich result.
  */
 

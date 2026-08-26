@@ -2,7 +2,7 @@
   command = "npm run build"
   publish = ".next"
 
-# Netlify's Next.js runtime — handles the App Router, the middleware and the
+# Netlify's Next.js runtime - handles the App Router, the middleware and the
 # image optimiser. Without it the middleware locale redirect does not run.
 [[plugins]]
   package = "@netlify/plugin-nextjs"

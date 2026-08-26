@@ -24,7 +24,7 @@ related:
   - "wordpress-vs-custom-code-true-cost"
 faq:
   - q: "Is an accessibility overlay enough for WCAG compliance?"
-    a: "No. An overlay is an interface layer that lets users change how a page looks. It doesn't fix code structure, image alternatives, heading hierarchy or keyboard navigation — which is most of what the guidelines actually require. At best it's a pleasant addition on top of a site that is already accessible."
+    a: "No. An overlay is an interface layer that lets users change how a page looks. It doesn't fix code structure, image alternatives, heading hierarchy or keyboard navigation - which is most of what the guidelines actually require. At best it's a pleasant addition on top of a site that is already accessible."
   - q: "What do automated accessibility scans miss?"
     a: "Automated tools are good at binary structural checks. They can't judge whether alt text describes the image in context, whether the heading hierarchy is logical, or whether a full task can be completed with a keyboard alone. Those require manual review and real use."
   - q: "Where should a business start with accessibility?"
@@ -43,7 +43,7 @@ Nearly every accessibility regime in use today points at the same technical docu
 
 Now read what the guidelines ask for, and notice what they **don't** say.
 
-They don't say "install a tool that lets users enlarge text." They say the site itself — its structure, its code, its content — must be accessible. That's a requirement about the site, not about a layer placed on top of it.
+They don't say "install a tool that lets users enlarge text." They say the site itself - its structure, its code, its content - must be accessible. That's a requirement about the site, not about a layer placed on top of it.
 
 ## What the widget actually does
 
@@ -51,7 +51,7 @@ An accessibility overlay is an interface layer. It sits above the site and lets 
 
 That isn't worthless. Some users are genuinely helped by it, particularly people with mild to moderate low vision who prefer to control the display. But an overlay is a partial solution by nature: it adds an interface layer, and it does not repair problems in the code, the structure or the content underneath.
 
-Here's why that matters in practice. A blind user doesn't see the widget. They don't need larger text — they aren't looking at the screen at all. They browse with a screen reader that announces the page in code order, and they navigate by keyboard alone.
+Here's why that matters in practice. A blind user doesn't see the widget. They don't need larger text - they aren't looking at the screen at all. They browse with a screen reader that announces the page in code order, and they navigate by keyboard alone.
 
 And a screen reader doesn't care what the widget offers. It cares whether:
 
@@ -67,7 +67,7 @@ Not one of those is solved by an external tool. All of them live in the code.
 
 The next step most people take is to run an automated audit. You get a score, sometimes green, and you feel better.
 
-The problem is that automated tools capture a limited slice of the picture. They're excellent at binary structural checks, but the critical failures — logical keyboard navigation, image descriptions that make sense in context, a coherent heading hierarchy — only surface through manual review and actual use.
+The problem is that automated tools capture a limited slice of the picture. They're excellent at binary structural checks, but the critical failures - logical keyboard navigation, image descriptions that make sense in context, a coherent heading hierarchy - only surface through manual review and actual use.
 
 Which makes sense when you think about it. Software can check **whether** an image has alt text. It can't check whether that text describes the image. `alt="image"` passes the scan perfectly and conveys nothing to anybody.
 
@@ -75,11 +75,11 @@ Likewise, a scan will confirm the page has an `h1`. It won't notice that the nex
 
 ## The part businesses actually worry about
 
-Let's talk about the legal side, because that's why most people arrive at this topic in the first place. Again — not legal advice, and your specific position is worth checking with a specialist.
+Let's talk about the legal side, because that's why most people arrive at this topic in the first place. Again - not legal advice, and your specific position is worth checking with a specialist.
 
 Two things are worth knowing.
 
-**An accessibility statement is the central document.** It should describe what has actually been made accessible and include contact details for accessibility matters. A generic statement copied from another site, describing adaptations you never made, is worse than having none — because it asserts something untrue.
+**An accessibility statement is the central document.** It should describe what has actually been made accessible and include contact details for accessibility matters. A generic statement copied from another site, describing adaptations you never made, is worse than having none - because it asserts something untrue.
 
 **Overlay vendors' legal guarantees deserve scrutiny.** A widget that promises protection is making a claim about outcomes it doesn't control. Litigation in the United States has repeatedly involved sites that had an overlay installed at the time of the complaint. If a vendor offers a warranty, read carefully what it actually covers and what triggers it.
 
@@ -87,7 +87,7 @@ Two things are worth knowing.
 
 So far this sounds intimidating. In practice, a site built properly from the start meets most of the requirements without special effort, because most of what the guidelines ask for is simply correct construction.
 
-`button` for a button. `nav` for navigation. A `label` on every field. A heading hierarchy that reflects the content structure. Reasonable colour contrast. A visible focus ring. These aren't accessibility adaptations — they're correct HTML. Anyone who wrote them properly got accessibility on the way.
+`button` for a button. `nav` for navigation. A `label` on every field. A heading hierarchy that reflects the content structure. Reasonable colour contrast. A visible focus ring. These aren't accessibility adaptations - they're correct HTML. Anyone who wrote them properly got accessibility on the way.
 
 The pain starts when you try to add accessibility to a site built without thinking about it. Then it really is a project.
 
@@ -99,7 +99,7 @@ If you have a site now and want to know where you stand, three things you can do
 
 **Turn on the screen reader you already own.** VoiceOver on Mac and iPhone, Narrator on Windows. Close your eyes for a minute and listen to your homepage. It's the single minute that changes people's understanding of this topic the most.
 
-**Run a scan — and treat it as an opening list.** Tools like axe or Lighthouse will hand you the obvious failures. Fix them, and don't assume you're finished.
+**Run a scan - and treat it as an opening list.** Tools like axe or Lighthouse will hand you the obvious failures. Fix them, and don't assume you're finished.
 
 ---
 
@@ -109,5 +109,5 @@ Want to know where your site actually stands? [Get in touch](/en/contact) and we
 
 ## Sources
 
-- [Web Content Accessibility Guidelines (WCAG) — W3C](https://www.w3.org/WAI/standards-guidelines/wcag/)
-- [WAI-ARIA and accessibility fundamentals — W3C Web Accessibility Initiative](https://www.w3.org/WAI/)
+- [Web Content Accessibility Guidelines (WCAG) - W3C](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- [WAI-ARIA and accessibility fundamentals - W3C Web Accessibility Initiative](https://www.w3.org/WAI/)

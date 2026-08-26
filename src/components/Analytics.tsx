@@ -8,7 +8,7 @@ import { useEffect } from 'react'
  * Every call to action in the site carries a `data-analytics` attribute naming
  * where it sits (`whatsapp:hero`, `whatsapp:service-webdev`, `contact:submit`).
  * This listener forwards those clicks to whichever analytics provider is on the
- * page, and does nothing when none is — so the instrumentation is already in
+ * page, and does nothing when none is - so the instrumentation is already in
  * place the moment you add GA4, Vercel Analytics or anything else.
  *
  * Without this you can see that leads arrive but never which part of the page

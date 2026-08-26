@@ -1,6 +1,6 @@
 # PROPEL
 
-Bilingual (Hebrew/English) marketing site for PROPEL — web development and
+Bilingual (Hebrew/English) marketing site for PROPEL - web development and
 business automation. Next.js App Router, fully statically generated, no CMS and
 no database.
 
@@ -14,8 +14,8 @@ npm run dev                    # http://localhost:3000 → redirects to /he
 
 | | |
 |---|---|
-| Rendering | Every route is static. `src/app/[lang]/layout.tsx` is the only root layout — it renders `<html>` directly rather than reading the locale from a request header, which would opt the whole site into per-request rendering. |
-| Locales | `he` (default) and `en`. `src/middleware.ts` redirects `/` to a locale using `Accept-Language`. **The middleware must stay inside `src/`** — with the app under `src/app`, Next silently ignores it at the project root. |
+| Rendering | Every route is static. `src/app/[lang]/layout.tsx` is the only root layout - it renders `<html>` directly rather than reading the locale from a request header, which would opt the whole site into per-request rendering. |
+| Locales | `he` (default) and `en`. `src/middleware.ts` redirects `/` to a locale using `Accept-Language`. **The middleware must stay inside `src/`** - with the app under `src/app`, Next silently ignores it at the project root. |
 | Content | Plain TypeScript under `src/content`. Translated UI strings live in `src/dictionaries/{he,en}.json`; both files must keep the same shape. |
 | Styling | Tailwind. Brand tokens are in `tailwind.config.ts`. |
 | Contact form | Posts to Netlify Forms. `public/__forms.html` is the detection file; its field names must match `ContactForm` exactly. The Resend server action it replaced is gone. |
@@ -27,7 +27,7 @@ what is still environment-driven.
 
 **The phone number is not.** It is committed as `PHONE_RAW`, and the displayed,
 dialled and WhatsApp forms are all derived from it. To change the number, edit
-that line — that is the whole procedure.
+that line - that is the whole procedure.
 
 It used to be two environment variables, `NEXT_PUBLIC_PHONE_DISPLAY` and
 `NEXT_PUBLIC_WHATSAPP_PHONE`, and they drifted: the live site spent three
@@ -48,7 +48,7 @@ or `PROPEL_PRODUCTION=1` anywhere else) rather than through `NODE_ENV`, because
 
 ## Adding content
 
-**Projects** — `src/content/projects.ts`. Every entry ships with `draft: true`
+**Projects** - `src/content/projects.ts`. Every entry ships with `draft: true`
 and drafts are hidden from production deploys, so nothing half-written can go
 live. Fill in every `‹…›` placeholder, then set `draft: false`.
 
@@ -58,14 +58,14 @@ is a description; with a number it is evidence, and it is what closes B2B deals.
 If no project is published the portfolio section does not render at all, and the
 navigation and footer drop their portfolio links automatically.
 
-**Testimonials** — `src/content/testimonials.ts`. Needs a real name and company;
+**Testimonials** - `src/content/testimonials.ts`. Needs a real name and company;
 an anonymous quote is worth close to nothing. Empty by default, and the section
 hides itself.
 
-**Client logos** — `src/content/clients.ts`. Renders the strip under the hero.
+**Client logos** - `src/content/clients.ts`. Renders the strip under the hero.
 Ask permission before using a client's mark.
 
-**Legal pages** — `src/content/legal.ts`. The accessibility statement is a legal
+**Legal pages** - `src/content/legal.ts`. The accessibility statement is a legal
 requirement for Israeli business sites (IS 5568) and must name an accessibility
 coordinator; set `NEXT_PUBLIC_A11Y_CONTACT_NAME`. Review both pages with the
 business owner before launch.
@@ -78,7 +78,7 @@ the middleware does not run and there is no locale redirect.
 
 Connect the GitHub repository in the Netlify UI rather than uploading builds, so
 every push deploys and pull requests get previews. Set the environment variables
-in the Netlify project settings — `.env.local` is gitignored and never deployed.
+in the Netlify project settings - `.env.local` is gitignored and never deployed.
 
 Current project: `subtle-begonia-d730cc`, deploying from `main` on
 `shlomo435/propel`. Live at https://propel.co.il.
@@ -91,7 +91,7 @@ sync by pushing to each.
 ### The contributor gate
 
 Netlify's free plan allows only one Git contributor on a **private** repository,
-and it identifies the contributor by **who pushed** — not by the commit author.
+and it identifies the contributor by **who pushed** - not by the commit author.
 A push from any other GitHub account is rejected before the build starts with
 "Build blocked: Unrecognized Git contributor", regardless of what the commit
 metadata says. Rewriting commit authorship does not work around it.
@@ -108,13 +108,13 @@ Netlify → Members → Git Contributors, or builds will stop.
   or you lose the ability to tell which part of the page produces leads.
 - Sections below the fold are wrapped in `<Reveal>`. The hidden state is
   server-rendered, with a `<noscript>` rule and a `prefers-reduced-motion` rule
-  both forcing it visible — content must never be trapped behind JavaScript.
+  both forcing it visible - content must never be trapped behind JavaScript.
 - The logo is HTML text in Raleway (`src/components/Logo.tsx`), not an image. An
   SVG loaded through `<img>` cannot reach the page's webfonts. If you swap in a
   designed logo, change that one component.
 - **Tailwind opacity modifiers do not work on brand tokens at all.** The colour
   tokens are bare `var(--x)` with no `<alpha-value>` channel, so `bg-brand-ink/40`
-  compiles to nothing — silently, with no error and no warning. This has shipped
+  compiles to nothing - silently, with no error and no warning. This has shipped
   three separate times. A translucent value needs its own token. Check any
   suspicious class with `npm run audit -- css <class>`.
 
@@ -137,5 +137,5 @@ npm run audit -- css <cls> # whether a Tailwind class compiles to anything
 ```
 
 The audit harness drives a real browser against a production build and refuses
-to run against an unstyled page — measuring a page whose CSS failed to load
+to run against an unstyled page - measuring a page whose CSS failed to load
 produces numbers that look excellent and mean the opposite.

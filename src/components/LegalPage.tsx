@@ -18,7 +18,7 @@ export type LegalContactLine = {
 type Props = {
   lang: Locale
   doc: LegalDocument
-  /** Rendered under the last section — used for the accessibility enquiries block. */
+  /** Rendered under the last section - used for the accessibility enquiries block. */
   contactBlock?: { heading: string; lines: LegalContactLine[] }
 }
 

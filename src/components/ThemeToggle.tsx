@@ -10,7 +10,7 @@ import { THEME_KEY } from '@/lib/clientPrefs'
  *
  * The chosen theme is written to <html data-theme> and remembered in
  * localStorage. First paint is handled by `themeInitScript` below rather than
- * by this component — a client component cannot run before hydration, so a
+ * by this component - a client component cannot run before hydration, so a
  * returning dark-mode visitor would otherwise get a flash of the light page.
  */
 export default function ThemeToggle({ label }: { label: string }) {

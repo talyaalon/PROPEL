@@ -5,7 +5,7 @@
  * regulations (תקנות שוויון זכויות לאנשים עם מוגבלות) require a business website
  * to meet IS 5568 and to publish a statement naming an accessibility coordinator
  * and how to reach them. As an agency that sells websites, having one is also a
- * sales asset — clients ask.
+ * sales asset - clients ask.
  *
  * ⚠️  Review both pages with the business owner before launch, and fill in the
  *     NEXT_PUBLIC_A11Y_CONTACT_NAME / NEXT_PUBLIC_LEGAL_NAME env vars.

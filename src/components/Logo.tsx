@@ -21,7 +21,7 @@ type Props = {
 
 /*
  * There used to be a `tone` prop here that rendered the wordmark in `--surface`
- * — the page background colour. Its only use was the footer, where it produced
+ * - the page background colour. Its only use was the footer, where it produced
  * 1.04:1 in light and 1.11:1 in dark: an invisible logo in both themes. It was
  * a leftover from the earlier dark-footer design. `--ink` is correct on every
  * surface the mark actually appears on.

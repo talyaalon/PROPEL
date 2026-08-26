@@ -10,12 +10,12 @@
  * Every colour a component uses resolves through one of these variables, which
  * is what lets a single set of utility classes serve both themes.
  *
- * Surfaces and type are sampled from the printed logo — warm paper and a
+ * Surfaces and type are sampled from the printed logo - warm paper and a
  * near-black with a green cast, plus the silver of the arrow mark.
  *
  * The accent carries two values because one red cannot serve both surfaces.
  * The brand red #7A1C09 reaches 9.6:1 on the light background and 1.5:1 on the
- * dark one — unreadable — so dark mode uses the same hue lightened to 5.1:1.
+ * dark one - unreadable - so dark mode uses the same hue lightened to 5.1:1.
  */
 :root {
   /* Sampled from the logo: warm paper, not the cool grey it replaced. */
@@ -189,7 +189,7 @@ html {
    *
    * `tracking-normal` throughout, deliberately: negative letter-spacing pulls
    * Hebrew glyphs into each other in a way it does not in Latin. Tracking is
-   * applied only to Latin-only elements — buttons, tags, eyebrows, nav.
+   * applied only to Latin-only elements - buttons, tags, eyebrows, nav.
    */
   h1,
   h2 {
@@ -859,7 +859,7 @@ html {
   }
 
   /* ── Header band ──────────────────────────────────────────────────────────
-     The navigation and hero sit on the supplied paper artwork itself — the
+     The navigation and hero sit on the supplied paper artwork itself - the
      whole file, uncropped and untiled. An earlier attempt cut a region out of
      the logo and mirrored it into a repeating tile; the reflection produced a
      visible symmetry, so this uses the real thing instead.
@@ -873,7 +873,7 @@ html {
        outgrew the band at large text sizes rather than letting it reflow. */
     /* Reads the token, which flips with the theme. This was hardcoded to the
        light paper colour, so in dark mode the nav, the drawer and the whole
-       hero rendered cream-on-cream — the h1 measured 1.08:1. */
+       hero rendered cream-on-cream - the h1 measured 1.08:1. */
     background-color: var(--header);
     background-image: var(--paper);
     background-repeat: no-repeat;
@@ -909,7 +909,7 @@ html {
      A container whose background is a full-page screenshot. Moving the
      background from top to bottom over 17s reads as the site scrolling inside
      the frame. `background-position` is transitioned rather than the
-     `background` shorthand — the shorthand includes background-image, which the
+     `background` shorthand - the shorthand includes background-image, which the
      browser cannot interpolate.
 
      The scroll starts on hover at desktop, and on entering the viewport at

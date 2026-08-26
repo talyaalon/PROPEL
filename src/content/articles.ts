@@ -21,8 +21,8 @@
  *  So the list starts as a resource shelf and is built to absorb original posts
  *  without a rewrite: give an entry a `slug` instead of an `externalUrl` and it
  *  becomes an internal article in the same grid. Three or four pieces on what
- *  you already know — why WordPress gets slow, what a site actually costs, what
- *  happens when the developer disappears — are worth more than thirty links.
+ *  you already know - why WordPress gets slow, what a site actually costs, what
+ *  happens when the developer disappears - are worth more than thirty links.
  */
 
 import type { Locale } from '@/lib/i18n'
@@ -40,7 +40,7 @@ type ArticleBase = {
   topic: ArticleTopic
   /** ISO date, used for ordering and for the visible date on the card. */
   date: string
-  /** Path under /public. Optional — cards fall back to a typographic tile. */
+  /** Path under /public. Optional - cards fall back to a typographic tile. */
   image?: string
 }
 
@@ -322,7 +322,7 @@ export function getArticleBySlug(slug: string) {
   return getInternalArticles().find((article) => article.slug === slug)
 }
 
-/** Topics that actually have an article — drives the filter chips. */
+/** Topics that actually have an article - drives the filter chips. */
 export function getUsedTopics(): ArticleTopic[] {
   const used = new Set(getArticles().map((article) => article.topic))
   return articleTopics.filter((topic) => used.has(topic))

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
  *
  * Scales a single element on the X axis rather than animating `width`, so the
  * whole thing stays on the compositor and never triggers layout during scroll.
- * It is decorative — `aria-hidden`, no role — because the same information is
+ * It is decorative - `aria-hidden`, no role - because the same information is
  * already available to assistive tech through the scrollbar itself.
  */
 export default function ScrollProgress() {

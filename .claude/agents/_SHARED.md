@@ -214,6 +214,14 @@ combinations.
 
 **Do not change files.** You review. Findings go back as text.
 
+**Never use a long dash** - neither the em dash (U+2014) nor the en dash
+(U+2013). Not in your findings, not in code you propose, not in comments, not
+in copy, not in a commit message, in any language. Write a plain ASCII hyphen
+`-` instead, or restructure the sentence. This is the owner's standing
+preference for the whole project (see `CLAUDE.md`), the repository was swept
+clean of both characters in one pass, and a proposed fix that reintroduces one
+has to be rewritten before it can be applied.
+
 ## Output
 
 Ordered by severity, worst first. Per finding:

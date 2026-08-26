@@ -9,7 +9,7 @@
  *   desktop.webp   1566 wide
  *   mobile.webp     370 wide
  *
- * Height is whatever the page turns out to be — the taller the capture, the more
+ * Height is whatever the page turns out to be - the taller the capture, the more
  * natural the scroll inside the frame looks. Output is capped at 6000px so a
  * pathologically long page cannot produce a multi-megabyte background.
  *
@@ -30,7 +30,7 @@ const BROWSERS = [
 
 /*
  * Only publicly browsable sites belong here. Air Manage and BOM & Recipes sit
- * behind a login, so a capture of either is just a sign-in box — which says
+ * behind a login, so a capture of either is just a sign-in box - which says
  * nothing about the work and would make the card look broken rather than
  * impressive. Those two keep the empty frame instead.
  *
@@ -74,7 +74,7 @@ async function capture(page, target, view) {
   await page.goto(target.url, { waitUntil: 'networkidle', timeout: 60_000 })
 
   // Scroll the whole page once so lazy-loaded images and reveal animations have
-  // fired — otherwise the capture is full of empty placeholders.
+  // fired - otherwise the capture is full of empty placeholders.
   await page.evaluate(async () => {
     await new Promise((resolve) => {
       let y = 0

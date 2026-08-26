@@ -19,7 +19,7 @@ type Props = {
   params: Promise<{ lang: string; slug: string }>
 }
 
-// Only the slugs that exist are routable — anything else is a 404, not a
+// Only the slugs that exist are routable - anything else is a 404, not a
 // server render that then throws.
 export const dynamicParams = false
 

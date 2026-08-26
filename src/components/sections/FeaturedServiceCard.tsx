@@ -38,7 +38,7 @@ type Props = {
 /**
  * The wide service card.
  *
- * Three columns at desktop — pitch, outcomes, stack + CTA — collapsing to a
+ * Three columns at desktop - pitch, outcomes, stack + CTA - collapsing to a
  * single column below `lg`. The outcome list is the reason for the extra width:
  * eight items would make a standard card twice the height of its neighbours,
  * while here they sit two-up and the row stays balanced.

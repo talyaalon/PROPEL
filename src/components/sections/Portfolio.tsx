@@ -35,7 +35,7 @@ type Props = {
 export default function Portfolio({ lang, dict, clause }: Props) {
   const projects = getProjects()
 
-  // Nothing published yet — render nothing rather than an empty shell.
+  // Nothing published yet - render nothing rather than an empty shell.
   // Navigation and Footer drop their portfolio links in the same situation.
   if (projects.length === 0) return null
 
@@ -46,7 +46,7 @@ export default function Portfolio({ lang, dict, clause }: Props) {
           with no referent - precision theatre, exactly what the design doc
           forbids. */}
       <span className="draft-annotation" aria-hidden="true">
-        <span className="draft-annotation__text">03 — {dict.eyebrow}</span>
+        <span className="draft-annotation__text">03 - {dict.eyebrow}</span>
       </span>
 
       <div className="mx-auto max-w-7xl">
