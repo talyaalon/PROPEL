@@ -11,6 +11,32 @@
   NODE_VERSION = "20"
 
 # ─────────────────────────────────────────────────────────────────────────────
+# One canonical host
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Measured on 2026-08-27: propel.co.il and propel-agency.netlify.app both
+# served the complete site, each with a canonical pointing at ITSELF, each
+# with its own robots.txt and its own 38-URL sitemap. Google was being handed
+# two identical sites, so links, shares and anything the articles earn split
+# between them - and the .co.il, the one that matters for Israeli search, got
+# only part of it.
+#
+# `force = true` because the path IS served by the Next handler; without it a
+# rule that merely matches an existing route does not win. A host-scoped
+# `from` means this fires only for requests arriving on the netlify.app host,
+# so it is inert on the deploy that serves the real domain.
+#
+# VERIFY AFTER DEPLOY: `curl -sI https://propel-agency.netlify.app/he` must
+# answer 301 with `location: https://propel.co.il/he`. A previous redirect
+# rule in this file never fired (see the 404 note at the bottom), so this one
+# is not trusted until it is measured.
+[[redirects]]
+  from = "https://propel-agency.netlify.app/*"
+  to = "https://propel.co.il/:splat"
+  status = 301
+  force = true
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Caching
 # ─────────────────────────────────────────────────────────────────────────────
 

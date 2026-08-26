@@ -190,6 +190,39 @@ export const articles: Article[] = [
  * field serving both the card and the meta tag, which is also how the SERP
  * uses it.
  */
+/*
+ * The inbound half of README-PUBLISHING section 6.
+ *
+ * The MDX frontmatter carries `related` (article -> article) but no service
+ * or project fields, so the three articles rendered with the contact CTA as
+ * their only in-body internal link: everything a shared article earned
+ * stopped at the article instead of reaching a money page. The article
+ * template already renders both card types when the fields are present, so
+ * this mapping is all that was missing.
+ *
+ * Kept here rather than in the MDX because the MDX files are the read-only
+ * source of record for the WRITING; which service a piece feeds is a site
+ * structure decision, and it belongs with the other site structure.
+ */
+const ARTICLE_LINKS: Record<string, { service?: string; projects?: string[] }> = {
+  'accessibility-plugin-is-not-enough': {
+    service: 'websites',
+    projects: ['hagorer2', 'cnafim-lauf'],
+  },
+  // The anonymised multi-branch restaurant story. NOT linked to jcafe-kosher:
+  // README-PUBLISHING forbids placing the two next to each other, because a
+  // reader who sees both makes the connection the anonymisation exists to
+  // prevent. Air Manage and BOM make the same argument without that risk.
+  'branch-leakage-case-study': {
+    service: 'management-systems',
+    projects: ['air-manage', 'bom-recipes'],
+  },
+  'wordpress-vs-custom-code-true-cost': {
+    service: 'migration',
+    projects: ['hagorer2'],
+  },
+}
+
 const mdxArticles: Article[] = mdxPosts.map((post) => ({
   slug: post.slug,
   topic: post.topic as ArticleTopic,
@@ -200,7 +233,26 @@ const mdxArticles: Article[] = mdxPosts.map((post) => ({
   excerpt: post.description,
   description: post.description,
   body: post.body,
+  relatedService: ARTICLE_LINKS[post.slug]?.service,
+  relatedProjects: ARTICLE_LINKS[post.slug]?.projects,
 }))
+
+/*
+ * A mapping entry for a slug that no longer exists is silent - the article is
+ * renamed or deleted and the link simply never renders again. Module scope,
+ * like the collision guard below, so the build says so instead.
+ */
+{
+  const slugs = new Set(mdxPosts.map((post) => post.slug))
+  for (const slug of Object.keys(ARTICLE_LINKS)) {
+    if (!slugs.has(slug)) {
+      throw new Error(
+        `ARTICLE_LINKS has an entry for "${slug}", which is not a post under content/blog/. ` +
+          'Remove the entry or restore the article.',
+      )
+    }
+  }
+}
 
 /*
  * A slug collision between a typed article and an MDX post is silent
@@ -227,7 +279,15 @@ const mdxArticles: Article[] = mdxPosts.map((post) => ({
 
 /** Newest first. */
 /** Drafts are visible locally and in previews, never on a production deploy. */
-const showDrafts = !isProductionDeploy()
+/**
+ * Drafts are visible locally and in previews, never on a production deploy.
+ *
+ * Exported because two page templates resolve MDX posts straight out of
+ * `mdxPosts`, bypassing the accessors below - and a third copy of this
+ * expression is exactly how the sitemap and the middleware drifted apart once
+ * before.
+ */
+export const showDrafts = !isProductionDeploy()
 
 export function getArticles(): Article[] {
   return [...articles, ...mdxArticles]

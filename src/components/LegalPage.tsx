@@ -2,11 +2,24 @@ import { siteConfig } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
 import type { LegalDocument } from '@/content/legal'
 
+/**
+ * One row of the contact card. `href` makes the value actionable - the page
+ * exists for someone who has already hit a barrier, and asking them to retype
+ * a phone number is the wrong thing to ask.
+ */
+export type LegalContactLine = {
+  label: string
+  value: string
+  href?: string
+  /** Latin digit runs reorder inside a Hebrew line without this. */
+  dir?: 'ltr'
+}
+
 type Props = {
   lang: Locale
   doc: LegalDocument
-  /** Rendered under the last section — used for the accessibility coordinator block. */
-  contactBlock?: { heading: string; lines: string[] }
+  /** Rendered under the last section — used for the accessibility enquiries block. */
+  contactBlock?: { heading: string; lines: LegalContactLine[] }
 }
 
 export default function LegalPage({ lang, doc, contactBlock }: Props) {
@@ -66,8 +79,21 @@ export default function LegalPage({ lang, doc, contactBlock }: Props) {
             </h2>
             <ul className="space-y-2">
               {contactBlock.lines.map((line) => (
-                <li key={line} className="text-[1rem] leading-[1.7] text-brand-slate">
-                  {line}
+                <li key={line.label} className="text-[1rem] leading-[1.7] text-brand-slate">
+                  {line.label}:{' '}
+                  {line.href ? (
+                    <a
+                      href={line.href}
+                      dir={line.dir}
+                      className="inline-block py-1 font-medium text-brand-ink underline underline-offset-4 transition-colors duration-300 hover:text-brand-accent"
+                    >
+                      <span className="break-all">{line.value}</span>
+                    </a>
+                  ) : (
+                    <span dir={line.dir} className="text-brand-ink">
+                      {line.value}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>

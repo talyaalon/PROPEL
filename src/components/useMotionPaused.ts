@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useSyncExternalStore } from 'react'
-import { MOTION_KEY } from '@/lib/clientPrefs'
+import { MOTION_KEY, A11Y_KEY } from '@/lib/clientPrefs'
 
 /**
  * Whether automatic motion is paused, read from the document itself.
@@ -44,9 +44,28 @@ export function useMotionPaused(): [boolean, (paused: boolean) => void] {
 
     try {
       if (next) localStorage.setItem(MOTION_KEY, 'paused')
-      else localStorage.removeItem(MOTION_KEY)
+      else {
+        localStorage.removeItem(MOTION_KEY)
+        /*
+         * The legacy field, from when the accessibility menu stored `motion`
+         * inside its own preference object. `prefsInitScript` still honours it
+         * so those visitors stay paused - which meant un-pausing cleared this
+         * key, and the next page load read the old object and paused again.
+         * The control appeared broken forever. Clearing the pause has to clear
+         * both places that can express it.
+         */
+        const stored = localStorage.getItem(A11Y_KEY)
+        if (stored) {
+          const prefs = JSON.parse(stored)
+          if (prefs && typeof prefs === 'object' && 'motion' in prefs) {
+            delete prefs.motion
+            localStorage.setItem(A11Y_KEY, JSON.stringify(prefs))
+          }
+        }
+      }
     } catch {
-      // Private browsing refuses writes. The preference holds for this page view.
+      // Private browsing refuses writes, and corrupt JSON throws. Either way
+      // the preference holds for this page view.
     }
   }, [])
 

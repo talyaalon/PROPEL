@@ -4,7 +4,7 @@ import { locales, isLocale } from '@/lib/i18n'
 import { siteConfig } from '@/lib/config'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { accessibilityStatement } from '@/content/legal'
-import LegalPage from '@/components/LegalPage'
+import LegalPage, { type LegalContactLine } from '@/components/LegalPage'
 
 type Props = {
   params: Promise<{ lang: string }>
@@ -34,13 +34,46 @@ export default async function AccessibilityPage({ params }: Props) {
 
   const isHe = lang === 'he'
 
-  // The regulations require a named coordinator and a way to reach them.
-  const lines = [
-    siteConfig.a11yContactName &&
-      `${isHe ? 'רכז נגישות' : 'Accessibility coordinator'}: ${siteConfig.a11yContactName}`,
-    siteConfig.phoneDisplay && `${isHe ? 'טלפון' : 'Phone'}: ${siteConfig.phoneDisplay}`,
-    siteConfig.email && `${isHe ? 'אימייל' : 'Email'}: ${siteConfig.email}`,
-  ].filter((line): line is string => Boolean(line))
+  // The regulations require a way to reach someone about accessibility, and
+  // every channel here is actionable: this page's reader may be the one person
+  // on the site who cannot comfortably retype a phone number.
+  const candidates: (LegalContactLine | null)[] = [
+    siteConfig.a11yContactName
+      ? {
+          label: isHe ? 'רכז נגישות' : 'Accessibility coordinator',
+          value: siteConfig.a11yContactName,
+        }
+      : null,
+    siteConfig.phoneDisplay
+      ? {
+          label: isHe ? 'טלפון' : 'Phone',
+          value: siteConfig.phoneDisplay,
+          href: `tel:${siteConfig.phoneDial}`,
+          dir: 'ltr' as const,
+        }
+      : null,
+    siteConfig.email
+      ? {
+          label: isHe ? 'אימייל' : 'Email',
+          value: siteConfig.email,
+          href: `mailto:${siteConfig.email}`,
+          dir: 'ltr' as const,
+        }
+      : null,
+    /*
+     * The form, always. The other two rows are phone and WhatsApp - both
+     * require a phone call - and this is the page a visitor reaches BECAUSE
+     * something already blocked them. Someone who cannot use a phone was
+     * being offered no channel at all, while a fully labelled form sat one
+     * link away.
+     */
+    {
+      label: isHe ? 'טופס' : 'Form',
+      value: isHe ? 'טופס יצירת קשר באתר' : 'Contact form on the site',
+      href: `/${lang}#contact`,
+    },
+  ]
+  const lines = candidates.filter((line): line is LegalContactLine => line !== null)
 
   return (
     <LegalPage

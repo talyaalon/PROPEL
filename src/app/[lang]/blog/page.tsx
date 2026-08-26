@@ -70,8 +70,9 @@ export default async function BlogPage({ params }: Props) {
           dict={dict.blog}
           articles={getArticles()}
           topics={getUsedTopics()}
-          // Public-URL projects only - the ones a reader can actually go and
-          // look at. Air Manage and BOM sit behind a login.
+          // Public-URL projects only (two, once J-Cafe is excluded) - the
+          // ones a reader can actually go and look at. Air Manage and BOM sit
+          // behind a login.
           //
           // J-Cafe is excluded DELIBERATELY, not for lack of screens: the
           // branch-leakage article on this same page is the anonymised story

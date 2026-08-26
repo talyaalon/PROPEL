@@ -405,7 +405,11 @@ export default async function ProjectPage({ params }: Props) {
               target="_blank"
               rel="noopener noreferrer"
               data-analytics={`whatsapp:case-study-${project.slug}`}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-full bg-brand-surface px-8 py-4 text-[1rem] font-semibold text-brand-ink transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,0,0,0.3)]"
+              // `.btn` like every other primary CTA. This one was
+              // `bg-brand-surface` inside a `--panel` card: 1.02:1 against its
+              // own background in both themes, a flat rectangle at the end of
+              // the site's strongest sales page.
+              className="btn mt-7"
             >
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
               {t.cta_label}

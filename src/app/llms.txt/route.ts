@@ -1,5 +1,7 @@
 import { siteConfig } from '@/lib/config'
 import { getProjects, projectTitle } from '@/content/projects'
+import { servicePages } from '@/content/services'
+import { getInternalArticles } from '@/content/articles'
 
 /**
  * /llms.txt - the site, summarised for AI assistants and LLM crawlers.
@@ -44,6 +46,28 @@ export function GET(): Response {
 
   const fields = new Set(projects.map((project) => project.category)).size
 
+  /*
+   * Derived, like the project lines above. This section used to be typed by
+   * hand and said the migration page was "the one service with its own page"
+   * - true when it was written, false from the day four more shipped. An
+   * assistant reading this file repeated a claim the site itself contradicts.
+   */
+  const serviceLines = servicePages
+    .map(
+      (service) =>
+        `- [${service.title.en}](${base}/he/services/${service.slug}): ${service.intro.en}`,
+    )
+    .join('\n')
+
+  // Same reasoning: the articles are the pages most worth citing, and they
+  // were absent entirely.
+  const articleLines = getInternalArticles()
+    .map(
+      (article) =>
+        `- [${article.title.en}](${base}/he/blog/${article.slug}): ${article.description.en}`,
+    )
+    .join('\n')
+
   const body = `# PROPEL
 
 > Web development and business automation studio, Israel. We build business
@@ -60,11 +84,19 @@ Contact: WhatsApp/phone +972-53-715-4945 · ${base}/he#contact
 
 - [Home (he)](${base}/he): what we build and how we work
 - [Home (en)](${base}/en)
-- [WordPress/Wix migration service](${base}/he/services/migration): rebuilds in modern code - the one service with its own page
 - [Portfolio](${base}/he/portfolio): all projects
 - [Blog / resources](${base}/he/blog)
 - [Accessibility statement (IS 5568)](${base}/he/accessibility)
 - [Privacy](${base}/he/privacy)
+
+## Services (each has a page of its own)
+
+${serviceLines}
+- [WordPress/Wix migration service](${base}/he/services/migration): rebuilds an existing site in clean code the client owns
+
+## Articles we wrote
+
+${articleLines}
 
 ## Case studies (Hebrew)
 

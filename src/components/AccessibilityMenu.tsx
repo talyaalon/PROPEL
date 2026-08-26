@@ -104,7 +104,21 @@ export default function AccessibilityMenu({ dict, statementHref }: Props) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(A11Y_KEY)
-      if (stored) setPrefs({ ...DEFAULTS, ...JSON.parse(stored) })
+      /*
+       * Only the four keys this menu owns. Spreading the whole stored object
+       * carried a legacy `motion` field into state, and the next `update()`
+       * wrote it straight back - so the object kept resurrecting a preference
+       * this component no longer manages. See useMotionPaused.
+       */
+      if (stored) {
+        const { text, contrast, links, spacing } = JSON.parse(stored) ?? {}
+        setPrefs({
+          text: typeof text === 'number' ? text : DEFAULTS.text,
+          contrast: Boolean(contrast),
+          links: Boolean(links),
+          spacing: Boolean(spacing),
+        })
+      }
     } catch {
       // Corrupt or unreadable storage falls back to defaults rather than throwing.
     }

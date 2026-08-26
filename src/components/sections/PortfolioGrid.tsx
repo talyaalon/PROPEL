@@ -169,7 +169,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                 <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
                   <Link
                     href={`/${lang}/portfolio/${project.slug}`}
-                    className="text-[0.875rem] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
+                    className="py-1.5 text-[0.875rem] font-semibold tracking-wide text-brand-ink underline-offset-2 transition-colors duration-200 hover:text-brand-slate hover:underline"
                   >
                     {dict.view_project}
                     <span className="sr-only"> - {projectTitle(project, lang)}</span>
@@ -179,7 +179,7 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                     target="_blank"
                     rel="noopener noreferrer"
                     data-analytics={`whatsapp:project-${project.slug}`}
-                    className="flex items-center gap-1.5 text-[0.875rem] text-brand-slate transition-colors duration-200 hover:text-brand-ink"
+                    className="flex items-center gap-1.5 py-1.5 text-[0.875rem] text-brand-slate transition-colors duration-200 hover:text-brand-ink"
                   >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
                     WhatsApp

@@ -18,6 +18,7 @@
     "process": "Process",
     "portfolio": "Work",
     "about": "About",
+    "contact": "Contact",
     "cta": "Let's Talk",
     "toggle_lang": "HE",
     "whatsapp_message": "Hi PROPEL, let's talk about a new project.",
@@ -43,6 +44,7 @@
     "section_title": "Services: systems, automation and websites for business",
     "section_subtitle": "Four disciplines, one goal - your business doing less work for the same result",
     "cta_label": "Talk to us",
+    "read_more": "More about this service",
     "stack_label": "Built with",
     "from_blog_title": "From the blog",
     "items": [
@@ -365,7 +367,12 @@
     "filter_status": "{n} articles shown",
     "filter_status_one": "1 article shown",
     "related_title": "From our work",
-    "related_body": "The articles above explain the principles. These are the sites where they actually live."
+    "related_more": "More from us",
+    "related_body": "The articles above explain the principles. These are the sites where they actually live.",
+    "cta_title": "Got a question the articles don't answer?",
+    "cta_body": "A 20-minute scoping call, no commitment. We'll tell you what we would do in your position - even if that isn't us.",
+    "cta_button": "Talk to us",
+    "cta_whatsapp": "Hi PROPEL, I was reading your blog and I have a question."
   },
   "a11y_menu": {
     "title": "Accessibility",

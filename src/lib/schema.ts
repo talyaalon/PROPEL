@@ -1,6 +1,7 @@
 import { siteConfig } from './config'
 import type { Locale } from './i18n'
 import type { Project } from '@/content/projects'
+import { servicePages } from '@/content/services'
 
 /**
  * JSON-LD builders. This is what lets Google understand that PROPEL is a
@@ -9,6 +10,27 @@ import type { Project } from '@/content/projects'
  */
 
 export type Json = Record<string, unknown>
+
+/**
+ * The service names in the offer catalog, in the locale of the page carrying
+ * it. They were four English strings on both locales, so the Hebrew page's
+ * catalogue named its services in a language neither the page nor the queries
+ * use - and two of the four had no page at all.
+ *
+ * Derived, not copied. A hand-written list here started drifting immediately:
+ * the migration service is already called three different things across the
+ * site, and a fourth name invented in the schema helps nobody.
+ */
+const MIGRATION_NAME: Record<Locale, string> = {
+  he: 'העברת אתר לקוד נקי שבבעלותכם',
+  en: 'Migration to clean code you own',
+}
+
+function offerCatalog(lang: Locale): string[] {
+  // migration predates the service-content file and keeps its own route, so
+  // it is the one entry servicePages cannot supply.
+  return [...servicePages.map((service) => service.title[lang]), MIGRATION_NAME[lang]]
+}
 
 export function professionalServiceSchema(lang: Locale, description: string): Json {
   return {
@@ -50,15 +72,10 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
     ],
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Services',
-      // The migration service shipped without being added here, so the
-      // catalogue listed three of the four services the page renders.
-      itemListElement: [
-        'Web development',
-        'Business automation',
-        'SEO and organic growth',
-        'Legacy migration to clean, owned code',
-      ].map((name) => ({
+      name: lang === 'he' ? 'שירותים' : 'Services',
+      // One entry per page under /services/ - the catalogue used to name four
+      // services in English on both locales, two of which had no page.
+      itemListElement: offerCatalog(lang).map((name) => ({
         '@type': 'Offer',
         itemOffered: { '@type': 'Service', name },
       })),
@@ -151,6 +168,13 @@ export function articleSchema(input: {
      */
     author: { '@id': `${siteConfig.url}/#organization` },
     publisher: { '@id': `${siteConfig.url}/#organization` },
+    /*
+     * The per-article share card, which already exists and answers 200 at
+     * this exact path. Article rich results and Discover both want an image,
+     * and the site was paying to generate one per article without declaring
+     * it anywhere Google reads.
+     */
+    image: [`${url}/opengraph-image`],
     ...(input.keywords && input.keywords.length ? { keywords: input.keywords.join(', ') } : {}),
   }
 }
@@ -208,6 +232,14 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
     ...(project.year ? { dateCreated: String(project.year) } : {}),
     url: `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
     creator: { '@id': `${siteConfig.url}/#organization` },
+    /*
+     * The desktop capture, for projects that have one. These files are
+     * already served from /public and are the only crawlable image of any
+     * project on the site - the frames themselves are CSS backgrounds, so
+     * without this the portfolio has no presence in image search at all.
+     * Projects behind a login have no capture and correctly get no key.
+     */
+    ...(project.screens ? { image: `${siteConfig.url}${project.screens.desktop}` } : {}),
     keywords: project.techStack.join(', '),
   }
 }

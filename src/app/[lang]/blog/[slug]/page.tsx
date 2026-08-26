@@ -9,7 +9,12 @@ import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
-import { getInternalArticles, getArticleBySlug, readingMinutes } from '@/content/articles'
+import {
+  getInternalArticles,
+  getArticleBySlug,
+  readingMinutes,
+  showDrafts,
+} from '@/content/articles'
 import { getProjects, projectTitle } from '@/content/projects'
 import { mdxPosts } from '@/content/generated/posts'
 import { getServicePage } from '@/content/services'
@@ -290,6 +295,18 @@ export default async function ArticlePage({ params }: Props) {
   const relatedProjects = getProjects().filter((project) =>
     (article.relatedProjects ?? []).includes(project.slug),
   )
+
+  /*
+   * The generator validates that a `related` slug EXISTS, not that it is
+   * published - so a live article naming a draft would render a card that
+   * 404s on production while looking correct in a preview. `showDrafts`
+   * rather than a bare `!draft` for the mirror-image reason: on a preview
+   * deploy the draft article is published and listed, and hiding its inbound
+   * links is hiding them in the one place they are reviewed.
+   */
+  const relatedPosts = (mdx?.related ?? []).flatMap((relatedSlug) =>
+    mdxPosts.filter((post) => post.slug === relatedSlug && (showDrafts || !post.draft)),
+  )
   // 'migration' predates the service-page content file and keeps its own
   // route; the article template resolves it from the dictionary instead.
   const relatedService = article.relatedService ? getServicePage(article.relatedService) : undefined
@@ -433,8 +450,10 @@ export default async function ArticlePage({ params }: Props) {
           </section>
         )}
 
-        {/* Cross-links between the posts themselves - the `related` field. */}
-        {mdx && mdx.related.length > 0 && (
+        {/* Cross-links between the posts themselves - the `related` field.
+            Guarded on the RESOLVED list: guarding on `mdx.related` rendered
+            the heading over an empty list when every entry was a draft. */}
+        {relatedPosts.length > 0 && (
           <nav aria-labelledby="article-more" className="mt-14 border-t border-brand-line pt-10">
             <h2
               id="article-more"
@@ -443,27 +462,21 @@ export default async function ArticlePage({ params }: Props) {
               {dict.blog.more_articles_title}
             </h2>
             <ul className="mt-6 flex flex-col gap-4">
-              {mdx.related.flatMap((relatedSlug) => {
-                const relatedPost = mdxPosts.find((post) => post.slug === relatedSlug)
-                if (!relatedPost) return []
-                return [
-                  <li key={relatedSlug}>
-                    <Link
-                      href={`/${lang}/blog/${relatedSlug}`}
-                      className="card flex flex-wrap items-baseline gap-3 p-5"
-                    >
-                      <ArrowRight
-                        className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
-                        aria-hidden="true"
-                      />
-                      <span className="font-semibold text-brand-ink">
-                        {relatedPost.title[lang]}
-                      </span>
-                      <span className="body-text">{relatedPost.description[lang]}</span>
-                    </Link>
-                  </li>,
-                ]
-              })}
+              {relatedPosts.map((relatedPost) => (
+                <li key={relatedPost.slug}>
+                  <Link
+                    href={`/${lang}/blog/${relatedPost.slug}`}
+                    className="card flex flex-wrap items-baseline gap-3 p-5"
+                  >
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold text-brand-ink">{relatedPost.title[lang]}</span>
+                    <span className="body-text">{relatedPost.description[lang]}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         )}
@@ -472,8 +485,11 @@ export default async function ArticlePage({ params }: Props) {
             it feeds, and the shipped work that backs its argument. */}
         {(relatedMigration || relatedService || relatedProjects.length > 0) && (
           <div className="mt-14 border-t border-brand-line pt-10">
+            {/* `related_more`, not `related_title`: this list now leads with a
+                SERVICE page, and "From our work" over a service link is a
+                heading that stopped describing its own list. */}
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate">
-              {dict.blog.related_title}
+              {dict.blog.related_more}
             </h2>
             <ul className="mt-6 flex flex-col gap-4">
               {relatedMigration && (

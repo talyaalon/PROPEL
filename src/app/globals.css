@@ -724,9 +724,22 @@ html {
    * button's edge disappears (1.4.11 Non-text Contrast). So the border, not
    * the fill, is what lightens: `--accent` at 5.28:1 draws the edge.
    */
+  /*
+   * `min-height`, not `height`.
+   *
+   * A fixed 48px box does not grow with its own label, so at the 200% text
+   * setting the site's accessibility menu offers, the words rendered ABOVE and
+   * BELOW the red fill - on the page background, at roughly 1:1. Not clipped:
+   * `.btn` sets no overflow, so the text was painted invisible. That is 1.4.4
+   * Resize Text, on the primary call to action, triggered by the site's own
+   * control. Measured: nine buttons overflowed by 17-38px at 320px/200%.
+   *
+   * `py-3` restores the 48px resting height (24px line-box + 12px twice), so
+   * nothing moves at 100% - verified against the built CSS.
+   */
   .btn {
-    @apply inline-flex items-center justify-center gap-2.5 px-8 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
-    height: 48px;
+    @apply inline-flex items-center justify-center gap-2.5 px-8 py-3 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] transition-all duration-200 ease-smooth;
+    min-height: 48px;
     background: var(--btn-bg);
     color: var(--btn-fg);
     border: 1px solid var(--btn-border);

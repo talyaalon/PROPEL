@@ -43,6 +43,18 @@ export const prefsInitScript = `
   if (p.contrast) r.setAttribute('data-a11y-contrast','');
   if (p.links) r.setAttribute('data-a11y-links','');
   if (p.spacing) r.setAttribute('data-a11y-spacing','');
-  if (p.motion) r.dataset.motion = 'paused';
+  /*
+   * The legacy pause, from when the accessibility menu stored motion inside
+   * its own object. Converted to the canonical key rather than merely
+   * honoured: the menu now writes back only the four keys it owns, so the
+   * first unrelated preference change would otherwise DROP this field and the
+   * visitor's pause would vanish on the following load - silently, one
+   * navigation later. Migrating here runs before paint on every page, whatever
+   * components happen to mount.
+   */
+  if (p.motion) {
+    r.dataset.motion = 'paused';
+    localStorage.setItem('${MOTION_KEY}', 'paused');
+  }
 }catch(e){}})();
 `.trim()

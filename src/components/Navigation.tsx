@@ -18,6 +18,7 @@ type NavDict = {
   process: string
   portfolio: string
   about: string
+  contact: string
   cta: string
   toggle_lang: string
   whatsapp_message: string
@@ -79,6 +80,18 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
   const drawerRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
+  /*
+   * The sticky BAND, which is what `--nav-h` claims to measure - not the
+   * <header>, which also contains the drawer.
+   *
+   * Observing the header meant that opening the drawer grew `--nav-h` from
+   * 68px to 598px, and `scroll-padding-top` with it. Tapping a drawer link
+   * parked the anchor 598px below the target and the drawer then unmounted,
+   * leaving the visitor somewhere arbitrary - on a 568px-tall phone, with the
+   * contact form entirely off screen. The band is the part that stays on
+   * screen and is therefore the part an anchor has to clear.
+   */
+  const bandRef = useRef<HTMLElement>(null)
 
   const isRtl = lang === 'he'
 
@@ -88,6 +101,10 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}#portfolio` }] : []),
     { label: dict.about, href: `/${lang}#about` },
     { label: dict.blog, href: `/${lang}/blog` },
+    // Measured: the form started 13 screens down on a phone and the only
+    // route to it outside the scroll was the footer. The visitor who prefers
+    // a form to a live chat had no visible way to reach one.
+    { label: dict.contact, href: `/${lang}#contact` },
   ]
 
   /*
@@ -121,7 +138,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
    * JavaScript never does.
    */
   useEffect(() => {
-    const band = headerRef.current
+    const band = bandRef.current
     if (!band || typeof ResizeObserver === 'undefined') return
 
     const publish = (px: number) =>
@@ -212,6 +229,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     <header ref={headerRef} className="sticky top-0 z-50 transition-all duration-500 ease-smooth">
       {/* ── Main nav bar ────────────────────────────────────────── */}
       <nav
+        ref={bandRef}
         className="header-band relative flex min-h-[68px] items-center border-b border-brand-line backdrop-blur-xl sm:min-h-[76px]"
         aria-label={a11y.primary_nav}
       >
@@ -281,6 +299,15 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
               WhatsApp - a B2B buyer, anyone on a desktop without WhatsApp Web -
               had one route to this business and it was eleven screens down.
 
+              `xl:` rather than `lg:`. Adding the Contact item pushed the row
+              past its single-line budget: measured 126px at 1024 and 1080 in
+              BOTH locales - a sticky band eating 16% of an iPad-landscape
+              viewport on every page. Deferring the phone by one breakpoint
+              returns the band to 76px there. The number is still one tap away
+              in the contact section and the footer, and the header keeps its
+              WhatsApp CTA throughout; a permanently doubled sticky band is
+              the worse trade.
+
               `dir="ltr"` because a phone number is a Latin-digit sequence and
               would otherwise reorder in the Hebrew header.
             */}
@@ -289,7 +316,7 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
                 href={`tel:${siteConfig.phoneDial}`}
                 dir="ltr"
                 data-analytics="phone:nav"
-                className="hidden min-h-[24px] items-center gap-2 py-1.5 text-[0.875rem] font-semibold tracking-wide text-brand-ink transition-colors duration-300 hover:text-brand-accent lg:flex"
+                className="hidden min-h-[24px] items-center gap-2 py-1.5 text-[0.875rem] font-semibold tracking-wide text-brand-ink transition-colors duration-300 hover:text-brand-accent xl:flex"
               >
                 <Phone className="h-4 w-4 text-brand-accent" aria-hidden="true" />
                 {siteConfig.phoneDisplay}
@@ -314,7 +341,9 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
             className="rounded-xl p-2 text-brand-ink transition-colors duration-200 hover:bg-brand-line md:hidden"
             aria-label={isOpen ? a11y.close_menu : a11y.open_menu}
             aria-expanded={isOpen}
-            aria-controls="mobile-menu"
+            // The drawer mounts only while open; a reference to an id that is
+            // not in the DOM is worse than none - see AccessibilityMenu.
+            aria-controls={isOpen ? 'mobile-menu' : undefined}
           >
             {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -335,7 +364,15 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
            * the page is inert, which is what actually constrains focus.
            */
           aria-label={a11y.primary_nav}
-          className="animate-slide-down header-band border-b border-brand-line px-4 pb-6 pt-3 text-start sm:px-6 md:hidden"
+          /*
+           * Its own scroll, because the page behind it is locked
+           * (`body { overflow: hidden }`) while it is open. Without this the
+           * drawer simply painted past the bottom of a short viewport and its
+           * WhatsApp CTA - and, at 200% text, the language switch - could not
+           * be reached by touch at all: 320x568 and any phone in landscape.
+           * `dvh` rather than `vh` so the mobile URL bar does not cost 60px.
+           */
+          className="animate-slide-down header-band max-h-[calc(100dvh-var(--nav-h,68px))] overflow-y-auto border-b border-brand-line px-4 pb-6 pt-3 text-start sm:px-6 md:hidden"
         >
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (

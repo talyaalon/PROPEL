@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import FilterChips from '@/components/FilterChips'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, MessageCircle } from 'lucide-react'
+import { getWhatsAppURL } from '@/lib/whatsapp'
 import type { Locale } from '@/lib/i18n'
 import { isExternal, type Article, type ArticleTopic } from '@/content/articles'
 
@@ -20,6 +21,10 @@ type BlogDict = {
   ours_title: string
   sources_title: string
   sources_body: string
+  cta_title: string
+  cta_body: string
+  cta_button: string
+  cta_whatsapp: string
 }
 
 type Props = {
@@ -78,10 +83,21 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
 
     const body = (
       <>
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <span className="tag" dir="auto">{dict.topics[article.topic]}</span>
+        {/*
+          `flex-wrap` and `min-w-0`, because `.card` is `overflow: hidden` and
+          both children default to `min-width: auto`. Measured on /en/blog at
+          320px with the accessibility menu's 200% text: the row's content ran
+          to 324px inside a 304px card and the publisher name was cut
+          mid-word - "SCHEMA.OR". The document never scrolled sideways, so a
+          page-level reflow check could not see it. `anywhere` rather than
+          `break-word` because only `anywhere` lowers the min-content width.
+        */}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+          <span className="tag min-w-0" dir="auto">
+            {dict.topics[article.topic]}
+          </span>
           {external && (
-            <span className="font-display text-[0.75rem] uppercase tracking-[.06em] text-brand-slate">
+            <span className="min-w-0 [overflow-wrap:anywhere] font-display text-[0.75rem] uppercase tracking-[.06em] text-brand-slate">
               {article.source}
             </span>
           )}
@@ -230,6 +246,42 @@ export default function BlogGrid({ lang, dict, articles, topics, projects }: Pro
           </ul>
         </aside>
       )}
+
+      {/*
+        Measured: this page carried no contact affordance in its own flow at
+        all - a reader arriving from search got navigation and nothing else.
+        The article pages close with a CTA; the index did not.
+      */}
+      {/* A section, not an aside: this is the page's own closing action, not
+          complementary content - and an unnamed second `complementary`
+          landmark next to the named one above is a worse map, not a richer
+          one. */}
+      {/* `mb-14` to match the `mt-14`: <main> has no bottom padding, so
+          without it this panel stopped 28px short of the footer band and read
+          as falling into it. `lg:text-[1.75rem]` because the bare h2 clamp
+          renders 46px here - louder than every content heading on the page,
+          and the closing CTA is not the loudest thing on a blog index. */}
+      <section
+        aria-labelledby="blog-cta"
+        className="mb-14 mt-14 flex flex-col items-center border border-brand-accent bg-brand-panel p-8 text-center"
+      >
+        <h2 id="blog-cta" className="text-brand-accent lg:text-[1.75rem]">
+          {dict.cta_title}
+        </h2>
+        <p className="mt-3 max-w-xl text-[0.9375rem] leading-relaxed text-brand-slate">
+          {dict.cta_body}
+        </p>
+        <a
+          href={getWhatsAppURL(dict.cta_whatsapp)}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-analytics="whatsapp:blog-index"
+          className="btn mt-6"
+        >
+          <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
+          {dict.cta_button}
+        </a>
+      </section>
     </>
   )
 }

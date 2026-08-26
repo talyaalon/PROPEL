@@ -11,6 +11,7 @@ import { serviceSchema, breadcrumbSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import { getProjects, projectTitle } from '@/content/projects'
 import { mdxPosts } from '@/content/generated/posts'
+import { showDrafts } from '@/content/articles'
 import { getServicePage, getServiceSlugs } from '@/content/services'
 
 /**
@@ -62,6 +63,12 @@ export default async function ServicePage({ params }: Props) {
 
   const dict = await getDictionary(lang)
   const proof = getProjects().filter((project) => service.proofSlugs.includes(project.slug))
+
+  // Published articles this service links to. `showDrafts` so a preview deploy
+  // - the only place a draft is reviewed - shows its links too.
+  const serviceArticles = (service.articles ?? []).flatMap((slug) =>
+    mdxPosts.filter((post) => post.slug === slug && (showDrafts || !post.draft)),
+  )
 
   return (
     <>
@@ -134,11 +141,13 @@ export default async function ServicePage({ params }: Props) {
       {/*
         README-PUBLISHING section 6: the article that makes this service's
         argument at full length. The service page states the claim; the
-        article is the evidence a sceptical reader actually wants. Draft
-        filtering is already done - mdxPosts only ever contains published
-        pairs on a production deploy.
+        article is the evidence a sceptical reader actually wants. The
+        generator emits drafts too (`draft: true`); only articles.ts filters
+        them, and this reads mdxPosts directly - hence `showDrafts` above.
+        Guarded on the RESOLVED list, so a service whose only article is a
+        draft does not render this heading over an empty list.
       */}
-      {(service.articles ?? []).length > 0 && (
+      {serviceArticles.length > 0 && (
         <section className="section" aria-labelledby="service-articles">
           <div className="mx-auto max-w-3xl">
             <h2
@@ -148,25 +157,21 @@ export default async function ServicePage({ params }: Props) {
               {dict.services.from_blog_title}
             </h2>
             <ul className="mt-6 flex flex-col gap-4">
-              {(service.articles ?? []).flatMap((slug) => {
-                const post = mdxPosts.find((p) => p.slug === slug && !p.draft)
-                if (!post) return []
-                return [
-                  <li key={slug}>
-                    <Link
-                      href={`/${lang}/blog/${slug}`}
-                      className="card flex flex-wrap items-baseline gap-3 p-5"
-                    >
-                      <ArrowRight
-                        className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
-                        aria-hidden="true"
-                      />
-                      <span className="font-semibold text-brand-ink">{post.title[lang]}</span>
-                      <span className="body-text">{post.description[lang]}</span>
-                    </Link>
-                  </li>,
-                ]
-              })}
+              {serviceArticles.map((post) => (
+                <li key={post.slug}>
+                  <Link
+                    href={`/${lang}/blog/${post.slug}`}
+                    className="card flex flex-wrap items-baseline gap-3 p-5"
+                  >
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold text-brand-ink">{post.title[lang]}</span>
+                    <span className="body-text">{post.description[lang]}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </section>

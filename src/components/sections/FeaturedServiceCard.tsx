@@ -124,11 +124,17 @@ export default function FeaturedServiceCard({ service, stackLabel, href }: Props
           </a>
 
           {/* Without this the service page has one inbound link - the sitemap -
-              and no route to it from the site at all. */}
+              and no route to it from the site at all.
+
+              Quiet grey, matching the same link on the standard cards. It used
+              to carry the exact styling of those cards' PRIMARY WhatsApp CTA -
+              so one sentence appeared twice on one screen, once as a muted
+              link and once at primary weight, and neither treatment meant
+              anything. The solid `.btn` above is this card's primary. */}
           {href && (
             <Link
               href={href}
-              className="mt-3 self-start inline-flex items-center gap-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+              className="mt-3 self-start inline-flex items-center gap-1.5 py-1.5 text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
             >
               {service.read_more}
               <ArrowRight className="h-3.5 w-3.5 rtl:-scale-x-100" aria-hidden="true" />
