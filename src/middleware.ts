@@ -42,6 +42,35 @@ function knownPaths(): Set<string> {
 }
 
 /**
+ * Set on the rewritten 404 response, read by the Netlify edge function that
+ * upgrades its status to 404.
+ *
+ * Three ways of getting a real 404 status out of this route were built and
+ * measured before this one, and each failed differently:
+ *
+ *  - `[[redirects]]` with `status = 404` in netlify.toml. Never fired: the
+ *    Next runtime claims the path before Netlify consults the redirect table.
+ *  - `notFound()` from the catch-all page. Returns a genuine 404, but Next
+ *    renders `not-found.tsx` OUTSIDE `[lang]/layout.tsx` - measured as
+ *    `<html>` with no `lang`, no `dir`, no stylesheet, no navigation and no
+ *    footer. That is 3.1.1 Language of Page at Level A, traded for a status
+ *    code.
+ *  - Fetching the prerendered `/he/404` from inside the middleware and
+ *    returning its body with a 404 status. Next answers a middleware's
+ *    self-fetch with a 5.5KB client shell rather than the rendered page;
+ *    measured at 5,573 bytes against the 51,174 the same URL serves directly.
+ *
+ * So the page keeps its own rendering path, which is the one that works, and
+ * the status is corrected at the edge - the one layer that runs before the
+ * Next handler and can still see the response on its way out.
+ *
+ * Locally (`next start`) there is no edge function, so an unknown path answers
+ * 200 with this header present. That is the same soft 404 the site served
+ * before, and it carries `noindex` either way.
+ */
+export const NOT_FOUND_MARKER = 'x-propel-notfound'
+
+/**
  * Next's generated metadata routes, which live under the locale segment and
  * are not pages.
  *
@@ -113,7 +142,16 @@ export function middleware(request: NextRequest) {
   if (!knownPaths().has(rest)) {
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/404`
-    return NextResponse.rewrite(url)
+    /*
+     * The rewrite serves the localised, fully-styled 404 page. The marker
+     * header is what turns the 200 into a real 404, in
+     * `netlify/edge-functions/not-found-status.ts` - see the note below the
+     * `NOT_FOUND_MARKER` constant.
+     */
+    const response = NextResponse.rewrite(url)
+    response.headers.set(NOT_FOUND_MARKER, '1')
+    response.headers.set('x-robots-tag', 'noindex')
+    return response
   }
 
   return NextResponse.next()
