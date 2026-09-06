@@ -218,7 +218,12 @@
     "index_meta_title": "Work - sites and systems we built",
     "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel.",
     "stack_label": "Tech stack",
-    "view_all": "See all work"
+    "view_all": "See all work",
+    "index_lead_title": "How to read this work",
+    "index_lead_body": "Every case study opens with what was stuck for the client, not with what we know how to build. Then what we built, the process end to end, and the tools. Outcome numbers appear only where the client gave us one - what is missing is simply not written.",
+    "index_stat_projects": "live projects",
+    "index_stat_fields": "fields",
+    "index_stat_public": "sites you can open and check"
   },
   "process": {
     "section_title": "How it works - from brief to build to launch",

@@ -33,6 +33,17 @@ type Props = {
   stackLabel: string
   /** Where the card's own page lives, when it has one. */
   href?: string
+  /**
+   * How many outcome lines to show before the card hands off to its page.
+   *
+   * The migration card printed all eight, which is the entire outcome list of
+   * /he/services/migration - measured as 54.8% 8-gram overlap between that
+   * page's `<main>` and the homepage's, the second highest on the site. A
+   * teaser that reproduces the page it links to gives a reader no reason to
+   * follow the link and gives Google two pages making the same argument.
+   * Undefined shows all of them, which is what a card with no page does.
+   */
+  maxOutcomes?: number
 }
 
 /**
@@ -43,8 +54,14 @@ type Props = {
  * eight items would make a standard card twice the height of its neighbours,
  * while here they sit two-up and the row stays balanced.
  */
-export default function FeaturedServiceCard({ service, stackLabel, href }: Props) {
+export default function FeaturedServiceCard({
+  service,
+  stackLabel,
+  href,
+  maxOutcomes,
+}: Props) {
   const Icon = iconMap[service.icon] ?? Code2
+  const outcomes = maxOutcomes ? service.outcomes.slice(0, maxOutcomes) : service.outcomes
 
   return (
     <div className="card mt-5 sm:mt-6 lg:col-span-3">
@@ -76,7 +93,7 @@ export default function FeaturedServiceCard({ service, stackLabel, href }: Props
           )}
 
           <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-            {service.outcomes.map((outcome) => (
+            {outcomes.map((outcome) => (
               <li
                 key={outcome}
                 className="flex items-start gap-2.5 text-[0.875rem] leading-snug text-brand-ink"

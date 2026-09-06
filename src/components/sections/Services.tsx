@@ -192,6 +192,9 @@ export default function Services({ lang, dict, clause }: Props) {
             service={service}
             stackLabel={dict.stack_label}
             href={service.id === 'migration' ? `/${lang}/services/migration` : undefined}
+            // Half the list on the homepage; the page it links to has all
+            // eight. See the note on the prop.
+            maxOutcomes={service.id === 'migration' ? 4 : undefined}
           />
         ))}
       </div>

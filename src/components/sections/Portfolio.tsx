@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { getProjects, getUsedCategories, type ProjectCategory } from '@/content/projects'
+import { getProjects, type ProjectCategory } from '@/content/projects'
 import type { Locale } from '@/lib/i18n'
 import PortfolioGrid from './PortfolioGrid'
 
@@ -35,8 +35,27 @@ type Props = {
   dict: PortfolioDict
 }
 
+/**
+ * How many case studies the homepage shows before handing off to the index.
+ *
+ * Three, not all five, and the reason is measured. The homepage and
+ * /he/portfolio rendered the same grid over the same five projects: an 8-gram
+ * shingle comparison of the two `<main>` elements put them at 89.7% identical,
+ * which is the highest overlap anywhere on the site and a fair description of
+ * why Search Console lists /he/portfolio and /en/portfolio as "crawled,
+ * currently not indexed". A page that repeats another page has to earn its
+ * place, and the index earns it by being the only page with the full set.
+ *
+ * Three is also what the grid wants: the homepage row is `lg:grid-cols-3`, so
+ * five projects left a hole that the CTA card was invented to fill. Three
+ * projects plus that card is two clean rows.
+ */
+const HOMEPAGE_LIMIT = 3
+
 export default function Portfolio({ lang, dict, clause }: Props) {
-  const projects = getProjects()
+  const published = getProjects()
+  // `getProjects` sorts featured first, so this is the three the owner chose.
+  const projects = published.slice(0, HOMEPAGE_LIMIT)
 
   // Nothing published yet - render nothing rather than an empty shell.
   // Navigation and Footer drop their portfolio links in the same situation.
@@ -70,12 +89,10 @@ export default function Portfolio({ lang, dict, clause }: Props) {
           </p>
         </div>
 
-        <PortfolioGrid
-          lang={lang}
-          dict={dict}
-          projects={projects}
-          categories={getUsedCategories()}
-        />
+        {/* No category chips here. They filter a set of three, two of which
+            share a category - a control that cannot change what you see. The
+            index has all five and keeps them. */}
+        <PortfolioGrid lang={lang} dict={dict} projects={projects} categories={[]} />
 
         {/* The route to the portfolio index. Without it the hub had no inbound
             link from the page that every visitor lands on first, and the grid
