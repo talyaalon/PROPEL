@@ -79,7 +79,32 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }]
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      /*
+       * The generated share cards, kept out of the index.
+       *
+       * `/he/blog/branch-leakage-case-study/opengraph-image` was reported by
+       * Search Console as "crawled, not indexed": it is a route, so it is
+       * crawlable, and it answers `image/png` with nothing to say about
+       * itself. It exists to be read by WhatsApp and LinkedIn when someone
+       * pastes the article's URL, never to be a search result of its own.
+       *
+       * Declared here rather than in netlify.toml for the reason recorded at
+       * the top of this file and re-measured since: Netlify's header rules
+       * reach static files under /_next/static and do not reach responses the
+       * Next runtime serves. These routes are served by that runtime, so a
+       * rule there would have looked right and done nothing.
+       */
+      {
+        source: '/:path*/opengraph-image',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      },
+      {
+        source: '/:path*/twitter-image',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      },
+    ]
   },
 }
 
