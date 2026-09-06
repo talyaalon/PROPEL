@@ -11,7 +11,10 @@
     "lint": "next lint",
     "check:contact": "node scripts/check-contact.mjs",
     "shots": "node scripts/capture-screens.mjs",
-    "audit": "node scripts/audit.mjs"
+    "audit": "node scripts/audit.mjs",
+    "audit:seo": "node scripts/seo-audit.mjs",
+    "audit:links": "node scripts/inlinks.mjs",
+    "audit:overlap": "node scripts/overlap.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.511.0",
