@@ -181,12 +181,44 @@ for (const file of outputFiles.filter((f) => f.endsWith('.html'))) {
         middlewareSource,
       )
       const parent = rest.slice(0, cut)
-      const parentKnown =
-        routeSource.includes(`'${parent}'`) ||
-        (parent.startsWith('/blog/') &&
-          readFileSync('src/content/generated/posts.ts', 'utf8').includes(
-            `"slug": "${parent.slice('/blog/'.length)}"`,
-          ))
+      /*
+       * The parent paths routes.ts DERIVES rather than spells out. It builds
+       * article paths from the generated posts module and case-study paths
+       * from the content file, so `routeSource.includes` cannot see either -
+       * and a guard that cannot see a legitimate path reports it as a defect.
+       * That happened: the case studies gained their own share cards and this
+       * failed the build on six correct URLs while the middleware was serving
+       * all of them as image/png.
+       */
+      const derivedParents = [
+        {
+          prefix: '/blog/',
+          file: 'src/content/generated/posts.ts',
+          pattern: (slug) => `"slug": "${slug}"`,
+          // The line in routes.ts that actually produces this family of paths.
+          derivation: '`/blog/${article.slug}`',
+        },
+        {
+          prefix: '/portfolio/',
+          file: 'src/content/projects.ts',
+          pattern: (slug) => `slug: '${slug}'`,
+          derivation: '`/portfolio/${project.slug}`',
+        },
+      ]
+      /*
+       * BOTH halves, not either. Checking only the content file would accept a
+       * slug that exists as content while routes.ts had stopped publishing it -
+       * which is exactly the state that makes the middleware rewrite the URL,
+       * so the guard would go quiet on the defect it exists to catch. Proven by
+       * deleting the derivation from routes.ts and watching this fail.
+       */
+      const derived = derivedParents.some(
+        ({ prefix, file, pattern, derivation }) =>
+          parent.startsWith(prefix) &&
+          routeSource.includes(derivation) &&
+          readFileSync(file, 'utf8').includes(pattern(parent.slice(prefix.length))),
+      )
+      const parentKnown = routeSource.includes(`'${parent}'`) || derived
       if (nestedRule && parentKnown) continue
     }
     ogFailures.add(`${path}  (referenced by ${file})`)

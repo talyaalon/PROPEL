@@ -40,13 +40,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Brand name + work descriptor. A name-only title spends the SERP line on
   // a brand nobody searches yet; the suffix says what the work was.
   const suffix = project.titleTag?.[lang]
-  return pageMetadata({
+  const base = pageMetadata({
     lang,
     path: `portfolio/${project.slug}`,
     title: suffix ? `${projectTitle(project, lang)} - ${suffix}` : projectTitle(project, lang),
     description: project.summary[lang],
     type: 'article',
   })
+
+  /*
+   * The case study's OWN share card, overriding the site-wide one.
+   *
+   * `pageMetadata` pins the generic card explicitly - it has to, because an
+   * inherited `openGraph` is how six pages once shared the homepage's - so
+   * this has to override both blocks, exactly as the article route does.
+   * Without it a case study pasted into WhatsApp showed the brand rectangle.
+   */
+  const image = {
+    url: `${siteConfig.url}/${lang}/portfolio/${project.slug}/opengraph-image`,
+    width: 1200,
+    height: 630,
+    alt: projectTitle(project, lang),
+  }
+
+  return {
+    ...base,
+    openGraph: { ...base.openGraph, images: [image] },
+    twitter: { ...base.twitter, images: [image.url] },
+  }
 }
 
 // ── Page ─────────────────────────────────────────────────────────────────────
@@ -161,8 +182,22 @@ export default async function ProjectPage({ params }: Props) {
             <p className="eyebrow mb-4">{projectTitle(project, lang)}</p>
           )}
 
+          {/*
+            The fallback carries the trade, not just the brand.
+
+            Two of the five case studies have no `headline`, so the H1 was the
+            brand name alone - "הגורר 2" - and the strongest on-page signal on
+            the page said nothing a person searches for. `titleTag` is the
+            two-word answer to "what is this", it is already approved copy, and
+            the <title> has used it for months; the H1 simply had not. Where a
+            locale has no titleTag - the transliterated English names carry the
+            trade in parentheses already - it falls back to the name as before.
+          */}
           <h1 className="mb-6 font-display leading-[1.08]">
-            {project.headline?.[lang] ?? projectTitle(project, lang)}
+            {project.headline?.[lang] ??
+              (project.titleTag?.[lang]
+                ? `${projectTitle(project, lang)} - ${project.titleTag[lang]}`
+                : projectTitle(project, lang))}
           </h1>
 
           {/* Client / year - omitted entirely when unknown rather than shown blank */}
