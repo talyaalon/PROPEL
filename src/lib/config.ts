@@ -126,6 +126,23 @@ export const siteConfig = {
    */
   a11yContactName: process.env.NEXT_PUBLIC_A11Y_CONTACT_NAME ?? '',
 
+  /**
+   * Public profiles that are the same business - a Google Business Profile,
+   * LinkedIn, a GitHub organisation.
+   *
+   * `sameAs` is how Google connects this site to a profile it already knows
+   * about, and it is the single most useful field for local search that the
+   * organisation node is missing. Environment-only and comma-separated,
+   * because inventing a profile URL is worse than having none: a `sameAs`
+   * pointing at a page that is not this business is a wrong claim in the
+   * knowledge graph, and there is no profile to point at until the owner
+   * creates one.
+   */
+  sameAs: (process.env.NEXT_PUBLIC_SAME_AS ?? '')
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean),
+
   /** Last review date of the legal pages, ISO format. */
   legalUpdated: process.env.NEXT_PUBLIC_LEGAL_UPDATED ?? '2026-07-27',
 } as const

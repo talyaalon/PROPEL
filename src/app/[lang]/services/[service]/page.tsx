@@ -78,6 +78,8 @@ export default async function ServicePage({ params }: Props) {
           path: `services/${service.slug}`,
           name: service.title[lang],
           description: service.metaDescription[lang],
+          // The page's own visible list, not a second description of it.
+          offers: service.outcomes.map((outcome) => outcome[lang]),
         })}
       />
       <JsonLd

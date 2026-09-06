@@ -58,6 +58,28 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
     telephone: siteConfig.phoneDial || undefined,
     email: siteConfig.email || undefined,
     /*
+     * The same phone in the form Google reads as a channel rather than a
+     * string. `areaServed` and `availableLanguage` are what make it useful:
+     * they say this number answers in Hebrew and English, for Israel.
+     */
+    ...(siteConfig.phoneDial
+      ? {
+          contactPoint: {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            telephone: siteConfig.phoneDial,
+            areaServed: 'IL',
+            availableLanguage: ['he', 'en'],
+            ...(siteConfig.email ? { email: siteConfig.email } : {}),
+          },
+        }
+      : {}),
+    /*
+     * Set NEXT_PUBLIC_SAME_AS once a Google Business Profile exists. Absent
+     * rather than guessed - see the note on the field in lib/config.ts.
+     */
+    ...(siteConfig.sameAs.length > 0 ? { sameAs: siteConfig.sameAs } : {}),
+    /*
      * A band, not a price. The FAQ already tells visitors projects "usually
      * start in the low thousands of shekels", so this says nothing new - it
      * just says it in the form Google reads. Anything more precise would need
@@ -104,6 +126,8 @@ export function serviceSchema(input: {
   path: string
   name: string
   description: string
+  /** The page's own outcome lines - what this service actually includes. */
+  offers?: string[]
 }): Json {
   return {
     '@context': 'https://schema.org',
@@ -111,9 +135,34 @@ export function serviceSchema(input: {
     name: input.name,
     description: input.description,
     url: `${siteConfig.url}/${input.lang}/${input.path}`,
+    /*
+     * The service's own name, which is also the query the page exists for.
+     * `name` carries the full SERP line ("בניית אתר תדמית לעסק | PROPEL" on
+     * some pages); `serviceType` is the bare category, which is the field
+     * Google reads to classify the offering.
+     */
+    serviceType: input.name,
     provider: { '@id': `${siteConfig.url}/#organization` },
     areaServed: { '@type': 'Country', name: 'Israel' },
     availableLanguage: ['he', 'en'],
+    /*
+     * What the service includes, taken from the page's own visible outcome
+     * list. Structured data that describes content the page does not show is
+     * a violation; these are the exact lines a reader sees under "what it
+     * gives you".
+     */
+    ...(input.offers && input.offers.length > 0
+      ? {
+          hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: input.name,
+            itemListElement: input.offers.map((offer) => ({
+              '@type': 'Offer',
+              itemOffered: { '@type': 'Service', name: offer },
+            })),
+          },
+        }
+      : {}),
   }
 }
 
@@ -239,7 +288,16 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
      * without this the portfolio has no presence in image search at all.
      * Projects behind a login have no capture and correctly get no key.
      */
-    ...(project.screens ? { image: `${siteConfig.url}${project.screens.desktop}` } : {}),
+    ...(project.screens
+      ? {
+          image: {
+            '@type': 'ImageObject',
+            url: `${siteConfig.url}${project.screens.desktop}`,
+            contentUrl: `${siteConfig.url}${project.screens.desktop}`,
+            caption: project.summary[lang],
+          },
+        }
+      : {}),
     keywords: project.techStack.join(', '),
   }
 }
