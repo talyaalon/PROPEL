@@ -95,10 +95,23 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
 
   const isRtl = lang === 'he'
 
+  /*
+   * Services and Work point at their hub PAGES, not at the homepage anchors
+   * they used to.
+   *
+   * `/he/portfolio` and `/he/services` were in the sitemap and linked from
+   * nowhere - Search Console reported both, plus five of the case studies
+   * under them, as "crawled, currently not indexed". An anchor to a section of
+   * the homepage is not a link to the page that ranks for the same subject; it
+   * is a link to the homepage. This is the one change that gives every hub an
+   * inbound link from all 40 pages on the site.
+   *
+   * Process and About have no page of their own, so they stay anchors.
+   */
   const navLinks = [
-    { label: dict.services, href: `/${lang}#services` },
+    { label: dict.services, href: `/${lang}/services` },
     { label: dict.process, href: `/${lang}#process` },
-    ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}#portfolio` }] : []),
+    ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}/portfolio` }] : []),
     { label: dict.about, href: `/${lang}#about` },
     { label: dict.blog, href: `/${lang}/blog` },
     // Measured: the form started 13 screens down on a phone and the only

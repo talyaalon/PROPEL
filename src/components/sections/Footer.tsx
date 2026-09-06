@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { NavLink } from '@/components/Navigation'
+import { getProjects, projectTitle } from '@/content/projects'
 import { MessageCircle, Phone, Mail } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
@@ -16,6 +17,9 @@ type FooterDict = {
   nav_portfolio: string
   nav_about: string
   nav_blog: string
+  work_title: string
+  services_title: string
+  nav_services_hub: string
   nav_migration: string
   nav_websites: string
   nav_automation: string
@@ -47,28 +51,40 @@ type Props = {
 export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) {
   const altLangLabel = lang === 'he' ? 'EN' : 'HE'
 
+  /*
+   * Three lists, not one.
+   *
+   * Adding the five service pages and then the five case studies to a single
+   * "quick links" column produced a thirteen-item ladder beside three short
+   * ones - measured at 1440 as one column running 460px past the others. The
+   * links all have to be here, for the reason below; how they are grouped is
+   * a separate question, and by subject is the answer a reader can scan.
+   *
+   * Every dedicated service page gets a site-wide inbound link. The migration
+   * page had exactly one before this, and a page nothing links to is a page
+   * nothing ranks.
+   */
   const navLinks = [
-    { label: dict.nav_services, href: `/${lang}#services` },
     { label: dict.nav_process, href: `/${lang}#process` },
-    ...(hasProjects ? [{ label: dict.nav_portfolio, href: `/${lang}#portfolio` }] : []),
     { label: dict.nav_about, href: `/${lang}#about` },
     { label: dict.nav_blog, href: `/${lang}/blog` },
-    // Every dedicated service page gets a site-wide inbound link here. The
-    // migration page had exactly ONE before this - a page nothing links to
-    // is a page nothing ranks.
+    { label: dict.nav_faq, href: `/${lang}#faq` },
+    { label: dict.nav_contact, href: `/${lang}#contact` },
+  ]
+
+  const serviceLinks = [
+    { label: dict.nav_services_hub, href: `/${lang}/services` },
     { label: dict.nav_websites, href: `/${lang}/services/websites` },
     { label: dict.nav_automation, href: `/${lang}/services/automation` },
     { label: dict.nav_management, href: `/${lang}/services/management-systems` },
     { label: dict.nav_ecommerce, href: `/${lang}/services/ecommerce` },
     { label: dict.nav_migration, href: `/${lang}/services/migration` },
-    { label: dict.nav_faq, href: `/${lang}#faq` },
-    { label: dict.nav_contact, href: `/${lang}#contact` },
   ]
 
   return (
     <footer className="section--invert draft-marks px-4 py-16 text-brand-ink sm:px-6 lg:px-8 lg:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-4 lg:gap-12">
+        <div className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-5 lg:gap-10">
           {/* Brand column */}
           {/* The lockup centres inside its column. It is the one block here
               that is a mark rather than a list, and left-aligning it against
@@ -103,38 +119,57 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Services */}
           <div>
             <h2 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
-              {dict.legal_title}
+              {dict.services_title}
             </h2>
             <ul className="space-y-3.5">
-              <li>
-                <Link
-                  href={`/${lang}/not-a-fit`}
-                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
-                >
-                  {dict.not_a_fit}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${lang}/accessibility`}
-                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
-                >
-                  {dict.accessibility}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${lang}/privacy`}
-                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
-                >
-                  {dict.privacy}
-                </Link>
-              </li>
+              {serviceLinks.map((link) => (
+                <li key={link.href}>
+                  <NavLink
+                    href={link.href}
+                    className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Work - every case study, from every page.
+              Their only sitewide route was the homepage grid; the portfolio
+              hub now carries them too, but a footer column is what makes each
+              one reachable in a single click from a service page or an
+              article, which is where a convinced reader actually is. */}
+          {hasProjects && (
+            <div>
+              <h2 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+                {dict.work_title}
+              </h2>
+              <ul className="space-y-3.5">
+                <li>
+                  <Link
+                    href={`/${lang}/portfolio`}
+                    className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  >
+                    {dict.nav_portfolio}
+                  </Link>
+                </li>
+                {getProjects().map((project) => (
+                  <li key={project.slug}>
+                    <Link
+                      href={`/${lang}/portfolio/${project.slug}`}
+                      className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                    >
+                      {projectTitle(project, lang)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Contact */}
           <div>
@@ -186,6 +221,43 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
                     </a>
                   </li>
                 )}
+
+            {/* Legal, inside the contact column.
+                Six link columns do not fit at 1440 and these are the three
+                shortest lists on the site, so they share a column with the
+                contact block rather than losing a heading. They are NOT
+                optional furniture: the accessibility statement has to be
+                reachable from every page. */}
+            <h2 className="mb-4 mt-8 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
+              {dict.legal_title}
+            </h2>
+            <ul className="space-y-3.5">
+              <li>
+                <Link
+                  href={`/${lang}/not-a-fit`}
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                >
+                  {dict.not_a_fit}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${lang}/accessibility`}
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                >
+                  {dict.accessibility}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={`/${lang}/privacy`}
+                  className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                >
+                  {dict.privacy}
+                </Link>
+              </li>
+            </ul>
+
               </ul>
             )}
           </div>

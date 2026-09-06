@@ -59,7 +59,14 @@
           "Purpose-built operations screens for the kitchen, warehouse or field crew",
           "Built with automated tests - not \"works on my machine\""
         ],
-        "stack": ["Next.js", "PostgreSQL", "Supabase", "ODOO", "Stripe", "Playwright"],
+        "stack": [
+          "Next.js",
+          "PostgreSQL",
+          "Supabase",
+          "ODOO",
+          "Stripe",
+          "Playwright"
+        ],
         "whatsapp_message": "Hi PROPEL, I would like to talk about a custom system for my business."
       },
       {
@@ -73,7 +80,12 @@
           "Your systems talk to each other instead of through you",
           "Alerts only for what actually needs you"
         ],
-        "stack": ["n8n", "Make", "Zapier", "API"],
+        "stack": [
+          "n8n",
+          "Make",
+          "Zapier",
+          "API"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about automating my business."
       },
       {
@@ -87,7 +99,12 @@
           "Accessible by standard, without bolt-on widgets",
           "You own the code and the domain"
         ],
-        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
+        "stack": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about building a website."
       },
       {
@@ -101,7 +118,12 @@
           "Content aimed at buying intent, not raw traffic",
           "A monthly report with numbers, not promises"
         ],
-        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
+        "stack": [
+          "Search Console",
+          "GA4",
+          "Ahrefs",
+          "Schema.org"
+        ],
         "whatsapp_message": "Hi PROPEL, I'd like to talk about organic growth."
       },
       {
@@ -122,14 +144,28 @@
           "Content, forms and tracking (GA4/GTM) migrated one-to-one",
           "Readable, documented code - any developer can pick it up"
         ],
-        "stack": ["Next.js", "TypeScript", "Tailwind", "Git", "Vercel", "301 Redirects", "GA4"],
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind",
+          "Git",
+          "Vercel",
+          "301 Redirects",
+          "GA4"
+        ],
         "cta_label": "Free fit check",
         "whatsapp_message": "Hi PROPEL, I have a site I want to migrate to clean code.",
         "analytics": "whatsapp:service-migration",
         "read_more": "More about this service"
       }
     ],
-    "eyebrow": "Services"
+    "eyebrow": "Services",
+    "hub_eyebrow": "Services",
+    "hub_title": "What we build for businesses",
+    "hub_subtitle": "Five services, each with a page of its own: what it solves, how it works, and the projects that stand behind it.",
+    "hub_meta_title": "Services - websites, systems and automation for business | PROPEL",
+    "hub_meta_description": "Business websites, management systems, automation, online stores and migration to clean code you own. Every service has a detailed page and the work that proves it.",
+    "hub_proof_label": "Work that proves it"
   },
   "portfolio": {
     "section_title": "Sites and systems we built for clients in Israel",
@@ -161,7 +197,9 @@
       "next_project": "Next project",
       "cta_title": "Facing something similar?",
       "cta_body": "Tell us what's stuck and we'll tell you honestly whether - and how - we can help.",
-      "cta_label": "Let's talk"
+      "cta_label": "Let's talk",
+      "related_service_title": "The service behind this work",
+      "prev_project": "Previous project"
     },
     "cta_title": "The next one could be yours",
     "cta_body": "Tell us what is slowing you down - a site, a manual process, systems that do not talk to each other - and we will come back with something concrete.",
@@ -179,7 +217,8 @@
     "index_subtitle": "Five projects, each with the problem it was built to solve and what actually changed.",
     "index_meta_title": "Work - sites and systems we built",
     "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel.",
-    "stack_label": "Tech stack"
+    "stack_label": "Tech stack",
+    "view_all": "See all work"
   },
   "process": {
     "section_title": "How it works - from brief to build to launch",
@@ -335,7 +374,10 @@
     "nav_automation": "Business automation",
     "nav_management": "Management systems",
     "nav_ecommerce": "Online stores",
-    "nav_migration": "WordPress migration"
+    "nav_migration": "WordPress migration",
+    "work_title": "Work",
+    "nav_services_hub": "All services",
+    "services_title": "Services"
   },
   "blog": {
     "eyebrow": "Resources",

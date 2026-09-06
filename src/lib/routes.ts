@@ -21,6 +21,10 @@ import { getInternalArticles } from '@/content/articles'
 export const staticPaths = [
   '',
   '/portfolio',
+  // The services hub. The five service pages were reachable from the footer
+  // and from nothing else; a set of leaves with no parent is what "crawled,
+  // currently not indexed" looks like from Google's side.
+  '/services',
   '/services/migration',
   '/blog',
   '/not-a-fit',

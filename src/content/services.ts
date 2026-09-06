@@ -247,6 +247,19 @@ export function getServicePage(slug: string): ServicePage | undefined {
   return servicePages.find((service) => service.slug === slug)
 }
 
+/**
+ * The service pages a given project is cited as proof for.
+ *
+ * Derived from `proofSlugs` rather than declared a second time on the project.
+ * The service page already says "this case study backs this service"; a case
+ * study saying "this service is backed by me" is the same fact, and two
+ * hand-maintained copies of one fact is how the sitemap and the middleware
+ * drifted apart before `lib/routes.ts` existed.
+ */
+export function servicesForProject(projectSlug: string): ServicePage[] {
+  return servicePages.filter((service) => service.proofSlugs.includes(projectSlug))
+}
+
 export function getServiceSlugs(): string[] {
   return servicePages.map((service) => service.slug)
 }

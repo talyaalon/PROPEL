@@ -14,6 +14,7 @@ import ProjectScreens from '@/components/ProjectScreens'
 import PrivateProjectShowcase from '@/components/PrivateProjectShowcase'
 import FlowDiagram from '@/components/FlowDiagram'
 import { getProjects, getProjectBySlug, projectTitle, changedLines } from '@/content/projects'
+import { servicesForProject } from '@/content/services'
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>
@@ -86,7 +87,16 @@ export default async function ProjectPage({ params }: Props) {
   const published = getProjects()
   const index = published.findIndex((p) => p.slug === project.slug)
   const next = published[(index + 1) % published.length]
+  const previous = published[(index - 1 + published.length) % published.length]
   const hasNext = published.length > 1
+
+  /*
+   * The services this work is cited as proof for. A case study was a leaf:
+   * every route into it came from a hub, and the only route out was the next
+   * case study. A reader convinced by this page had nowhere to go that sells
+   * the thing it demonstrates.
+   */
+  const relatedServices = servicesForProject(project.slug)
 
   return (
     <div className="bg-brand-surface">
@@ -416,27 +426,84 @@ export default async function ProjectPage({ params }: Props) {
             </a>
           </div>
 
+          {/* The service this work is evidence for.
+              A case study was a leaf: every route in came from a hub and the
+              only route out was the next case study, so a reader this page
+              convinced had nowhere to go that sells what it demonstrates. */}
+          {relatedServices.length > 0 && (
+            <nav aria-labelledby="case-service" className="mt-8">
+              <h2
+                id="case-service"
+                className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+              >
+                {t.related_service_title}
+              </h2>
+              <ul className="mt-4 flex flex-col gap-3">
+                {relatedServices.map((service) => (
+                  <li key={service.slug}>
+                    <Link
+                      href={`/${lang}/services/${service.slug}`}
+                      className="card flex flex-wrap items-baseline gap-3 p-5"
+                    >
+                      <ArrowRight
+                        className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                        aria-hidden="true"
+                      />
+                      <span className="font-semibold text-brand-ink">{service.title[lang]}</span>
+                      <span className="body-text">{service.intro[lang]}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
+          {/* Previous AND next. One-way links round a five-item ring meant the
+              first case study a visitor opened was reachable again only by
+              going all the way round it. */}
           {hasNext && (
-            <Link
-              href={`/${lang}/portfolio/${next.slug}`}
-              className="card group mt-8 flex items-center justify-between gap-4 p-6 sm:p-7"
-            >
-              <span>
-                <span className="block text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
-                  {t.next_project}
-                </span>
-                <span className="mt-1.5 block text-[1.125rem] font-bold text-brand-ink">
-                  {projectTitle(next, lang)}
-                </span>
-              </span>
-              {/* An icon rather than the literal glyph - see Services.tsx.
-                  U+2192 is absent from Chakra Petch and dragged in two Heebo
-                  symbol subsets. `rtl:-scale-x-100` mirrors it. */}
-              <ArrowRight
-                className="h-4 w-4 text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
-                aria-hidden="true"
-              />
-            </Link>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {[
+                { project: previous, label: t.prev_project, back: true },
+                { project: next, label: t.next_project, back: false },
+              ]
+                // With two published projects `previous` and `next` are the
+                // same page, and two identical cards side by side reads as a
+                // rendering fault. One card is correct there.
+                .filter(
+                  (entry, i, all) => i === 0 || entry.project.slug !== all[0].project.slug,
+                )
+                .map(({ project: sibling, label, back }) => (
+                  <Link
+                    key={label}
+                    href={`/${lang}/portfolio/${sibling.slug}`}
+                    className="card group flex items-center justify-between gap-4 p-6 sm:p-7"
+                  >
+                    <span>
+                      <span className="block text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-brand-slate">
+                        {label}
+                      </span>
+                      <span className="mt-1.5 block text-[1.125rem] font-bold text-brand-ink">
+                        {projectTitle(sibling, lang)}
+                      </span>
+                    </span>
+                    {/* An icon rather than the literal glyph - see Services.tsx.
+                        U+2192 is absent from Chakra Petch and dragged in two Heebo
+                        symbol subsets. `rtl:-scale-x-100` mirrors it. */}
+                    {back ? (
+                      <ArrowLeft
+                        className="h-4 w-4 flex-shrink-0 text-brand-slate transition-transform duration-300 group-hover:-translate-x-1 rtl:-scale-x-100 rtl:group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <ArrowRight
+                        className="h-4 w-4 flex-shrink-0 text-brand-slate transition-transform duration-300 group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Link>
+                ))}
+            </div>
           )}
         </div>
       </section>

@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import { getProjects, getUsedCategories, type ProjectCategory } from '@/content/projects'
 import type { Locale } from '@/lib/i18n'
 import PortfolioGrid from './PortfolioGrid'
@@ -16,6 +18,7 @@ type PortfolioDict = {
   cta_whatsapp: string
   stack_label: string
   eyebrow: string
+  view_all: string
   filter_label: string
   filter_status: string
   filter_status_one: string
@@ -73,6 +76,22 @@ export default function Portfolio({ lang, dict, clause }: Props) {
           projects={projects}
           categories={getUsedCategories()}
         />
+
+        {/* The route to the portfolio index. Without it the hub had no inbound
+            link from the page that every visitor lands on first, and the grid
+            above was the end of the road rather than a way into it. */}
+        <div className="mt-10 flex justify-center lg:mt-14">
+          <Link
+            href={`/${lang}/portfolio`}
+            className="group/all inline-flex items-center gap-2 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+          >
+            {dict.view_all}
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-300 group-hover/all:translate-x-1 rtl:-scale-x-100 rtl:group-hover/all:-translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </div>
     </section>
   )

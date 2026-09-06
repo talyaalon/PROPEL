@@ -59,7 +59,14 @@
           "מסכי תפעול ייעודיים למטבח, מחסן או צוות שטח",
           "נבנה עם בדיקות אוטומטיות - לא \"עובד אצלי\""
         ],
-        "stack": ["Next.js", "PostgreSQL", "Supabase", "ODOO", "Stripe", "Playwright"],
+        "stack": [
+          "Next.js",
+          "PostgreSQL",
+          "Supabase",
+          "ODOO",
+          "Stripe",
+          "Playwright"
+        ],
         "whatsapp_message": "היי PROPEL, אשמח לדבר על מערכת מותאמת לעסק שלי."
       },
       {
@@ -73,7 +80,12 @@
           "מערכות מדברות ביניהן במקום דרככם",
           "התראות על מה שדורש התערבות, ורק על זה"
         ],
-        "stack": ["n8n", "Make", "Zapier", "API"],
+        "stack": [
+          "n8n",
+          "Make",
+          "Zapier",
+          "API"
+        ],
         "whatsapp_message": "היי PROPEL, אשמח לדבר על אוטומציה לעסק שלי."
       },
       {
@@ -87,7 +99,12 @@
           "נגיש לפי ת\"י 5568, בלי תוספים חיצוניים",
           "אתם הבעלים של הקוד ושל הדומיין"
         ],
-        "stack": ["Next.js", "React", "TypeScript", "Tailwind"],
+        "stack": [
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Tailwind"
+        ],
         "whatsapp_message": "היי PROPEL, אשמח לדבר על בניית אתר."
       },
       {
@@ -101,7 +118,12 @@
           "תוכן שמכוון לכוונת רכישה, לא לתנועה סתם",
           "דוח חודשי עם מספרים, לא עם הבטחות"
         ],
-        "stack": ["Search Console", "GA4", "Ahrefs", "Schema.org"],
+        "stack": [
+          "Search Console",
+          "GA4",
+          "Ahrefs",
+          "Schema.org"
+        ],
         "whatsapp_message": "היי PROPEL, אשמח לדבר על קידום אורגני לעסק שלי."
       },
       {
@@ -122,14 +144,28 @@
           "מעבירים תכנים, טפסים ומדידה (GA4/GTM) אחד לאחד",
           "קוד קריא ומתועד - כל מפתח אחר יוכל להמשיך ממנו"
         ],
-        "stack": ["Next.js", "TypeScript", "Tailwind", "Git", "Vercel", "301 Redirects", "GA4"],
+        "stack": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind",
+          "Git",
+          "Vercel",
+          "301 Redirects",
+          "GA4"
+        ],
         "cta_label": "בדיקת התאמה חינם",
         "whatsapp_message": "היי PROPEL, יש לי אתר שאני רוצה להעביר לקוד נקי.",
         "analytics": "whatsapp:service-migration",
         "read_more": "קראו עוד על השירות"
       }
     ],
-    "eyebrow": "שירותים"
+    "eyebrow": "שירותים",
+    "hub_eyebrow": "שירותים",
+    "hub_title": "מה אנחנו בונים לעסקים",
+    "hub_subtitle": "חמישה שירותים, כל אחד עם עמוד משלו: מה הוא פותר, איך זה עובד, ואילו פרויקטים מהתיק עומדים מאחוריו.",
+    "hub_meta_title": "שירותים - בניית אתרים, מערכות ואוטומציה לעסקים | PROPEL",
+    "hub_meta_description": "בניית אתר תדמית, מערכות ניהול, אוטומציה, חנות אונליין והעברת אתר לקוד נקי. כל שירות עם עמוד מפורט והפרויקטים שמוכיחים אותו.",
+    "hub_proof_label": "עבודות שמוכיחות את זה"
   },
   "portfolio": {
     "section_title": "אתרים ומערכות שבנינו ללקוחות בישראל",
@@ -161,7 +197,9 @@
       "next_project": "הפרויקט הבא",
       "cta_title": "יש לכם אתגר דומה?",
       "cta_body": "ספרו לנו מה תקוע, ונגיד לכם בכנות אם ואיך אנחנו יכולים לעזור.",
-      "cta_label": "בואו נדבר"
+      "cta_label": "בואו נדבר",
+      "related_service_title": "השירות שמאחורי העבודה הזאת",
+      "prev_project": "הפרויקט הקודם"
     },
     "cta_title": "הפרויקט הבא יכול להיות שלכם",
     "cta_body": "ספרו לנו מה מאט אתכם - אתר, תהליך ידני או מערכת שלא מדברת עם עצמה - ונחזור אליכם עם הצעה קונקרטית.",
@@ -179,7 +217,8 @@
     "index_subtitle": "חמישה פרויקטים, כל אחד עם הבעיה שהוא בא לפתור ומה שהשתנה בפועל.",
     "index_meta_title": "עבודות - אתרי תדמית ומערכות שבנינו",
     "index_meta_description": "תיק עבודות של PROPEL: אתרי תדמית, חנויות אונליין ומערכות ניהול שנבנו לעסקים קטנים ובינוניים בישראל.",
-    "stack_label": "טכנולוגיות"
+    "stack_label": "טכנולוגיות",
+    "view_all": "לכל העבודות"
   },
   "process": {
     "section_title": "תהליך העבודה - מאפיון, בנייה ועלייה לאוויר",
@@ -335,7 +374,10 @@
     "nav_automation": "אוטומציה לעסקים",
     "nav_management": "מערכות ניהול לעסק",
     "nav_ecommerce": "בניית חנות אונליין",
-    "nav_migration": "העברת אתר מוורדפרס"
+    "nav_migration": "העברת אתר מוורדפרס",
+    "work_title": "עבודות",
+    "nav_services_hub": "כל השירותים",
+    "services_title": "שירותים"
   },
   "blog": {
     "eyebrow": "משאבים",
