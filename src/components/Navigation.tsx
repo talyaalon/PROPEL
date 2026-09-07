@@ -114,10 +114,18 @@ export default function Navigation({ lang, dict, hasProjects, a11y, logoSrc }: P
     ...(hasProjects ? [{ label: dict.portfolio, href: `/${lang}/portfolio` }] : []),
     { label: dict.about, href: `/${lang}#about` },
     { label: dict.blog, href: `/${lang}/blog` },
-    // Measured: the form started 13 screens down on a phone and the only
-    // route to it outside the scroll was the footer. The visitor who prefers
-    // a form to a live chat had no visible way to reach one.
-    { label: dict.contact, href: `/${lang}#contact` },
+    /*
+     * The contact PAGE, not the homepage anchor it pointed at.
+     *
+     * The anchor was added because the form started 13 screens down on a
+     * phone and the footer was the only route to it. /he/contact now exists -
+     * it is the URL a business card points at - and sending every page's
+     * contact link to a real page rather than to a section of the homepage is
+     * the same fix that gave the services and portfolio hubs their inbound
+     * links. The homepage section keeps its own id and its own place in the
+     * scroll for anyone already there.
+     */
+    { label: dict.contact, href: `/${lang}/contact` },
   ]
 
   /*

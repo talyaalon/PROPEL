@@ -325,7 +325,30 @@
       "A short call - what is stuck, what already exists, what you want to happen.",
       "A written proposal with scope, timeline and price. No obligation."
     ],
-    "eyebrow": "Contact"
+    "eyebrow": "Contact",
+    "page_eyebrow": "Contact",
+    "page_h1": "Tell us what is stuck",
+    "page_meta_title": "Contact - websites and systems for business",
+    "page_meta_description": "Tell us what is stuck in your business and we will come back within one business day. Form, WhatsApp or phone - and what to include so the first reply is useful.",
+    "page_lead": "You do not need a written brief and you do not need to know what should be built. A description of what is not working is enough for us to say whether we are the right people.",
+    "channels_title": "Which channel to use",
+    "channels": [
+      "WhatsApp - fastest, and good for a short question or a fit check.",
+      "Phone - when explaining is easier than writing, or when it is urgent.",
+      "The form - when there is detail to give, or when you are writing after hours."
+    ],
+    "include_title": "What to include",
+    "include_body": "The more we know up front, the more our first reply is an answer rather than a request for details.",
+    "include_items": [
+      "What the business does, in one line.",
+      "The process that is stuck today and how it actually runs - a spreadsheet, WhatsApp, a paper pad.",
+      "What already exists: a site, a system, a register, a CRM.",
+      "What you would want to happen instead.",
+      "Any deadline or budget constraint is better said early."
+    ],
+    "fit_title": "Before you write",
+    "fit_body": "There is work we do not take, and both sides are better off knowing that before a call. We wrote about it plainly on its own page.",
+    "fit_link": "When we are not the right fit"
   },
   "about": {
     "section_title": "Building websites for small businesses in Israel",
@@ -382,7 +405,8 @@
     "nav_migration": "WordPress migration",
     "work_title": "Work",
     "nav_services_hub": "All services",
-    "services_title": "Services"
+    "services_title": "Services",
+    "nav_terms": "Terms of use"
   },
   "blog": {
     "eyebrow": "Resources",

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { locales } from '@/lib/i18n'
 import { siteConfig } from '@/lib/config'
-import { sitePaths } from '@/lib/routes'
+import { sitemapPaths } from '@/lib/routes'
 import { lastContentChange } from '@/lib/contentDates'
 import { getInternalArticles } from '@/content/articles'
 
@@ -54,8 +54,9 @@ function sourceFile(path: string): string {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // One list, shared with the middleware - see src/lib/routes.ts for why.
-  const allPaths = sitePaths()
+  // Shared with the middleware, minus anything routable only for review -
+  // see `unlistedPaths` in src/lib/routes.ts for the one case and why.
+  const allPaths = sitemapPaths()
 
   // slug -> ISO date, for the content that carries a real one of its own.
   const articleDates = new Map(

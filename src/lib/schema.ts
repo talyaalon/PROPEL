@@ -251,6 +251,28 @@ export function collectionPageSchema(input: {
   }
 }
 
+/**
+ * The contact page. `mainEntity` points at the organization rather than
+ * restating its phone and email, so there is one node describing the business
+ * and this page references it.
+ */
+export function contactPageSchema(input: {
+  lang: Locale
+  name: string
+  description: string
+}): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: input.name,
+    description: input.description,
+    url: `${siteConfig.url}/${input.lang}/contact`,
+    inLanguage: input.lang === 'he' ? 'he-IL' : 'en',
+    isPartOf: { '@id': `${siteConfig.url}/${input.lang}#website` },
+    mainEntity: { '@id': `${siteConfig.url}/#organization` },
+  }
+}
+
 export function breadcrumbSchema(items: { name: string; url: string }[]): Json {
   return {
     '@context': 'https://schema.org',

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { NavLink } from '@/components/Navigation'
 import { getProjects, projectTitle } from '@/content/projects'
+import { termsArePublished } from '@/content/terms'
 import { MessageCircle, Phone, Mail } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
@@ -27,6 +28,7 @@ type FooterDict = {
   nav_ecommerce: string
   nav_faq: string
   nav_contact: string
+  nav_terms: string
   whatsapp_cta: string
   phone_label: string
   email_label: string
@@ -69,7 +71,7 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
     { label: dict.nav_about, href: `/${lang}#about` },
     { label: dict.nav_blog, href: `/${lang}/blog` },
     { label: dict.nav_faq, href: `/${lang}#faq` },
-    { label: dict.nav_contact, href: `/${lang}#contact` },
+    { label: dict.nav_contact, href: `/${lang}/contact` },
   ]
 
   const serviceLinks = [
@@ -256,6 +258,18 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
                   {dict.privacy}
                 </Link>
               </li>
+              {/* Only once the draft is approved. A link to a page the
+                  middleware 404s is worse than no link. */}
+              {termsArePublished && (
+                <li>
+                  <Link
+                    href={`/${lang}/terms`}
+                    className="text-[0.875rem] font-medium text-brand-slate transition-colors duration-300 hover:text-brand-ink"
+                  >
+                    {dict.nav_terms}
+                  </Link>
+                </li>
+              )}
             </ul>
 
               </ul>
