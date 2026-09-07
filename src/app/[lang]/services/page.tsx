@@ -124,12 +124,27 @@ export default async function ServicesHub({ params }: Props) {
                   index === cards.length - 1 && cards.length % 2 === 1 ? ' lg:col-span-2' : ''
                 }`}
               >
+                {/*
+                  One link per card, and it is the title.
+                
+                  The card carried a second link at the bottom to the same URL
+                  with generic text, so every card cost two tab stops for one
+                  destination - five extra on the page - and split its anchor
+                  text between the service name and "read more". The title is
+                  the better anchor for both a reader and a crawler, so the
+                  arrow moved up here and the duplicate went. The proof links
+                  below stay: they go somewhere else.
+                */}
                 <h2 className="text-[1.25rem] font-bold text-brand-ink sm:text-[1.4375rem]">
                   <Link
                     href={`/${lang}/services/${card.slug}`}
-                    className="transition-colors duration-300 hover:text-brand-accent"
+                    className="group/card inline-flex items-baseline gap-2 transition-colors duration-300 hover:text-brand-accent"
                   >
                     {card.title}
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 self-center text-brand-accent transition-transform duration-300 group-hover/card:translate-x-1 rtl:-scale-x-100 rtl:group-hover/card:-translate-x-1"
+                      aria-hidden="true"
+                    />
                   </Link>
                 </h2>
 
@@ -160,17 +175,6 @@ export default async function ServicesHub({ params }: Props) {
                   </div>
                 )}
 
-                <Link
-                  href={`/${lang}/services/${card.slug}`}
-                  className="group/cta mt-5 inline-flex items-center gap-1.5 self-start py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
-                >
-                  {dict.services.read_more}
-                  <span className="sr-only"> - {card.title}</span>
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1 rtl:-scale-x-100 rtl:group-hover/cta:-translate-x-1"
-                    aria-hidden="true"
-                  />
-                </Link>
               </li>
             )
           })}
