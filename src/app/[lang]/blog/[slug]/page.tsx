@@ -54,10 +54,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticleBySlug(slug)
   if (!article || !('description' in article)) return {}
 
+  /*
+   * The SHORT headline in the <title>, where one exists.
+   *
+   * The layout appends " | PROPEL" to every title, so the full article
+   * headline rendered at 63-73 characters and Google truncated it. `ogTitle`
+   * is the same headline written short for the share card - already approved
+   * copy, already carrying the query - so the SERP gets that and the page
+   * keeps its full H1. Nothing new was written for this.
+   *
+   * Guarded on length rather than applied blindly: an ogTitle that is not
+   * actually shorter would be a change for its own sake, and the English one
+   * for the WordPress article is not much shorter than its headline.
+   */
+  const mdxForTitle = mdxPosts.find((post) => post.slug === slug)
+  const short = mdxForTitle?.ogTitle[lang]
+  const headline =
+    short && short.length < article.title[lang].length ? short : article.title[lang]
+
   const base = pageMetadata({
     lang,
     path: `blog/${slug}`,
-    title: article.title[lang],
+    title: headline,
     description: article.description[lang],
     type: 'article',
   })
@@ -149,18 +167,13 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
       // carry the security rel, same policy as BlogGrid's source cards.
       /*
        * The MDX files link their closing CTA to /he/contact and /en/contact.
-       * No such route exists - the site's contact target is the homepage
-       * anchor, the same one the footer uses - so the one conversion link in
-       * every article body landed on the localised 404. The files are
-       * read-only source of record, and where a link points is a routing
-       * concern, so the mapping lives here with the rest of the routing
-       * decisions. If a real /contact page is ever built, delete this and the
-       * links start meaning what they say.
+       * There used to be a rewrite here sending those to the homepage anchor,
+       * because no such route existed and the one conversion link in every
+       * article body landed on the localised 404. The route exists now, so
+       * the links mean what they say and the rewrite is gone - which is
+       * exactly what the note it replaced said to do.
        */
-      const href =
-        g.href !== undefined && /^\/(he|en)\/contact$/.test(g.href)
-          ? g.href.replace('/contact', '#contact')
-          : g.href
+      const href = g.href
       out.push(
         g.href.startsWith('/') ? (
           <Link key={key} href={href as string} className="article-link">

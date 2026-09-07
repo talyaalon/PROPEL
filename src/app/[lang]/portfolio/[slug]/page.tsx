@@ -44,7 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     lang,
     path: `portfolio/${project.slug}`,
     title: suffix ? `${projectTitle(project, lang)} - ${suffix}` : projectTitle(project, lang),
-    description: project.summary[lang],
+    // The card line is the fallback - see `metaDescription` on Project.
+    description: project.metaDescription?.[lang] ?? project.summary[lang],
     type: 'article',
   })
 

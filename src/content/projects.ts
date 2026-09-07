@@ -113,6 +113,15 @@ export type Project = {
   titleTag?: Bilingual
   /** One line for the portfolio card. */
   summary: Bilingual
+  /**
+   * The case study's meta description, when the card line is too short for one.
+   *
+   * `summary` is written to fit a card, which makes it 69-110 characters - a
+   * good card line and a thin search result. Rewriting it for the SERP would
+   * change the card on the homepage, the portfolio index and the blog, so the
+   * SERP gets its own sentence instead. Absent means the summary serves both.
+   */
+  metaDescription?: Bilingual
   techStack: string[]
   liveUrl?: string
   year?: number

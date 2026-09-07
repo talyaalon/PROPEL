@@ -23,8 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata({
     lang,
     path: 'accessibility',
-    title: doc.title,
-    description: doc.intro,
+    // The visible H1 and opening line are the fallback, not the rule - see
+    // `metaTitle` on LegalDocument.
+    title: doc.metaTitle ?? doc.title,
+    description: doc.metaDescription ?? doc.intro,
   })
 }
 

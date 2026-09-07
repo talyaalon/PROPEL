@@ -20,10 +20,25 @@ export type LegalSection = {
 }
 
 export type LegalDocument = {
+  /** The visible H1. */
   title: string
+  /** The visible opening paragraph. */
   intro: string
   updatedLabel: string
   sections: LegalSection[]
+  /**
+   * Search-result copy, when the visible copy is the wrong length for it.
+   *
+   * These pages used `title` and `intro` for both jobs, and the two jobs
+   * disagree: "הצהרת נגישות" is the right H1 and a 12-character <title>, and
+   * the privacy intro is a good opening line and an 81-character description.
+   * Stretching the visible copy to fit a SERP is the wrong fix - it changes
+   * what a visitor reads to satisfy a character count - so the SERP gets its
+   * own strings and the page keeps its own. Absent means "the visible copy is
+   * fine for both", which is true of the accessibility intro.
+   */
+  metaTitle?: string
+  metaDescription?: string
 }
 
 // ── Accessibility statement ──────────────────────────────────────────────────

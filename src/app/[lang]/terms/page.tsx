@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const base = pageMetadata({
     lang,
     path: 'terms',
-    title: doc.title,
-    description: doc.intro,
+    title: doc.metaTitle ?? doc.title,
+    description: doc.metaDescription ?? doc.intro,
   })
 
   // A draft is not a page for a search engine to hold an opinion about.
