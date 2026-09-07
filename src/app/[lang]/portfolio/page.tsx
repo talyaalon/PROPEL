@@ -49,7 +49,16 @@ export default async function PortfolioIndex({ params }: Props) {
   const projects = getProjects()
   // Facts about the content file, not typed numbers that can go stale.
   const fields = new Set(projects.map((project) => project.category)).size
-  const publicSites = projects.filter((project) => project.liveUrl).length
+  /*
+   * `screens`, not `liveUrl`. Two projects carry a liveUrl and sit behind a
+   * login, and `screens` is exactly the field projects.ts uses to mean
+   * "publicly browsable" - it is why PortfolioGrid renders the private-project
+   * placeholder for those two. Counting liveUrl made this block claim five
+   * sites a visitor can open while two cards on the same scroll say the system
+   * is behind a login. The one block written to establish that a missing
+   * number is simply not written cannot be the block that overstates.
+   */
+  const publicSites = projects.filter((project) => project.screens).length
 
   return (
     <section className="section" aria-labelledby="portfolio-index-heading">
@@ -109,14 +118,13 @@ export default async function PortfolioIndex({ params }: Props) {
               { value: fields, label: dict.portfolio.index_stat_fields },
               { value: publicSites, label: dict.portfolio.index_stat_public },
             ].map((stat) => (
-              <div key={stat.label}>
-                <dt className="sr-only">{stat.label}</dt>
-                <dd>
-                  <span className="num block text-[2.25rem] leading-none">{stat.value}</span>
-                  <span className="mt-2 block text-[0.75rem] leading-snug text-brand-slate">
-                    {stat.label}
-                  </span>
-                </dd>
+              /* The visible label IS the <dt>. It was an sr-only <dt> plus the
+                 same words again inside the <dd>, so a screen reader read every
+                 stat twice. `flex-col-reverse` keeps the number above the label
+                 without repeating it. */
+              <div key={stat.label} className="flex flex-col-reverse">
+                <dt className="mt-2 text-[0.75rem] leading-snug text-brand-slate">{stat.label}</dt>
+                <dd className="num text-[2.25rem] leading-none">{stat.value}</dd>
               </div>
             ))}
           </dl>

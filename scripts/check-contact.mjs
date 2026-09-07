@@ -27,7 +27,16 @@ import { join, extname } from 'node:path'
  * check cannot itself drift from the value it is guarding.
  */
 const configSource = readFileSync('src/lib/config.ts', 'utf8')
+/*
+ * Comments stripped. The derivation check is a substring search, so commenting
+ * OUT the line that publishes the case-study paths left the string in place and
+ * the guard passed - while sitePaths() no longer contained them and the
+ * middleware would have rewritten every share card to the 404 page. That is
+ * precisely the state this guard exists to catch.
+ */
 const routeSource = readFileSync('src/lib/routes.ts', 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/\/\/.*$/gm, '')
 const rawMatch = configSource.match(/const PHONE_RAW = '([^']+)'/)
 
 if (!rawMatch) {

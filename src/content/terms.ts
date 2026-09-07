@@ -36,9 +36,19 @@ export const termsArePublished = false
 export const termsOfUse: Record<Locale, LegalDocument> = {
   he: {
     title: 'תנאי שימוש',
+    /*
+     * Ready for the day the flag flips. Without these the page would enter the
+     * sitemap with a 19-character title and a 213-character description, which
+     * scripts/seo-audit warns on - so approval would have meant a boolean plus
+     * another copy round.
+     */
+    metaTitle: 'תנאי שימוש באתר - מה חל, על מה, ומה לא',
+    metaDescription:
+      'התנאים חלים על הגלישה באתר ועל פנייה דרך הטופס, ולא על עבודה בתשלום - לכל פרויקט יש הצעת מחיר והסכם נפרדים. כולל קניין רוחני, אחריות ודין ישראלי.',
     intro:
       'התנאים האלה חלים על השימוש באתר הזה. הם נכתבו בשפה פשוטה ככל האפשר, ולא כתחליף להסכם ההתקשרות - כל פרויקט מתנהל לפי הצעת מחיר והסכם נפרדים שנחתמים מולכם.',
     updatedLabel: 'עודכן',
+    updatedAt: '2026-09-07',
     sections: [
       {
         heading: 'על מה התנאים האלה חלים',
@@ -101,9 +111,13 @@ export const termsOfUse: Record<Locale, LegalDocument> = {
   },
   en: {
     title: 'Terms of use',
+    metaTitle: 'Terms of use: what they cover and what they do not',
+    metaDescription:
+      'These terms cover browsing this site and sending an enquiry, not paid work, which runs under a separate signed agreement. Intellectual property, liability and Israeli law.',
     intro:
       'These terms apply to your use of this website. They are written as plainly as possible and are not a substitute for an engagement agreement - every project runs under a separate quote and contract signed with you.',
     updatedLabel: 'Updated',
+    updatedAt: '2026-09-07',
     sections: [
       {
         heading: 'What these terms cover',

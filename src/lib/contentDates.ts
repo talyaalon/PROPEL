@@ -44,6 +44,20 @@ function canUseGit(): boolean {
     repositoryIsUsable = false
   }
 
+  /*
+   * Say so, once, in the build log. Degrading to "no lastmod" is the correct
+   * behaviour, but it is also invisible: the build stays green, the sitemap
+   * stays valid, and the only symptom is 36 missing elements nobody reads. If
+   * Netlify's clone turns out to be shallow, this line is what says so on the
+   * first deploy instead of leaving the feature quietly inert.
+   */
+  if (!repositoryIsUsable) {
+    console.warn(
+      '[contentDates] git history unavailable (shallow clone or no git) - ' +
+        'sitemap lastmod omitted for every path except the articles',
+    )
+  }
+
   return repositoryIsUsable
 }
 

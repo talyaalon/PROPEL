@@ -63,8 +63,8 @@ type InternalArticle = ArticleBase & {
    * excerpt on the card; only the <title> and the meta description change.
    * Only the MDX pipeline sets these.
    */
-  metaTitle?: Bilingual
-  metaDescription?: Bilingual
+  metaTitle?: Partial<Bilingual>
+  metaDescription?: Partial<Bilingual>
   /**
    * The article itself. Paragraphs separated by blank lines; a line starting
    * with `## ` is a section heading and joins the clause numbering. No other
@@ -243,16 +243,29 @@ const mdxArticles: Article[] = mdxPosts.map((post) => ({
   body: post.body,
   relatedService: ARTICLE_LINKS[post.slug]?.service,
   relatedProjects: ARTICLE_LINKS[post.slug]?.projects,
-  // Set on the article only when at least one locale wrote one; the other
-  // locale falls back to its own title/description so nothing changes there.
+  /*
+   * Per locale, and undefined where the MDX file set nothing.
+   *
+   * This used to fill the missing side with the full post title, which looks
+   * harmless and is not: the blog route reads `metaTitle?.[lang] ?? <the short
+   * ogTitle fallback>`, so a Hebrew-only seoTitle silently switched the English
+   * <title> back to the 63-73 character headline that fallback exists to
+   * shorten. `Partial<Bilingual>` lets one locale opt in without speaking for
+   * the other.
+   */
   ...(post.seoTitle.he || post.seoTitle.en
-    ? { metaTitle: { he: post.seoTitle.he ?? post.title.he, en: post.seoTitle.en ?? post.title.en } }
+    ? {
+        metaTitle: {
+          ...(post.seoTitle.he ? { he: post.seoTitle.he } : {}),
+          ...(post.seoTitle.en ? { en: post.seoTitle.en } : {}),
+        },
+      }
     : {}),
   ...(post.seoDescription.he || post.seoDescription.en
     ? {
         metaDescription: {
-          he: post.seoDescription.he ?? post.description.he,
-          en: post.seoDescription.en ?? post.description.en,
+          ...(post.seoDescription.he ? { he: post.seoDescription.he } : {}),
+          ...(post.seoDescription.en ? { en: post.seoDescription.en } : {}),
         },
       }
     : {}),

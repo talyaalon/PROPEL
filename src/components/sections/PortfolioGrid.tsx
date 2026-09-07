@@ -196,11 +196,22 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
          * card-height hole, the largest single gap on the page. Rather than
          * stretching the last row to hide it, the cell carries the invitation
          * that the whole section is building towards. Six items, two full rows.
+         *
+         * On the homepage there are three projects now, and 3 + this card is
+         * four items in a three-column grid: measured at 1440 as the CTA alone
+         * at one edge with 869px of empty grid beside it, which is the hole it
+         * was invented to fill, moved. So it spans the row whenever the cards
+         * above it already fill their last one. At sm the grid is two columns
+         * and four items divide evenly, hence the two independent tests.
          */}
         {/* justify-center + the default stretch, not self-start: the card is
             ~156px of content in a ~500px row, and pinned to the top it left a
             278px void below itself - the second defect this cell has produced. */}
-        <article className="flex flex-col items-center justify-center border border-brand-accent bg-brand-panel p-8 text-center">
+        <article
+          className={`flex flex-col items-center justify-center border border-brand-accent bg-brand-panel p-8 text-center${
+            visible.length % 2 === 0 ? ' sm:col-span-2' : ''
+          }${visible.length % 3 === 0 ? ' lg:col-span-3' : ' lg:col-span-1'}`}
+        >
           <h3 className="text-brand-accent">{dict.cta_title}</h3>
           <p className="mt-3 text-[0.875rem] leading-relaxed text-brand-slate">{dict.cta_body}</p>
           <a

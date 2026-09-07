@@ -52,9 +52,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params
   if (!isLocale(lang)) return {}
 
+  const copy = notFoundCopy[lang]
+
   return {
-    title: notFoundCopy[lang].title,
-    // It answers 200, so this is what keeps it out of the index.
+    title: copy.title,
+    /*
+     * Its own description and share card, not the layout's.
+     *
+     * Setting only `title` left this page inheriting the homepage's
+     * description, `og:title` and `og:url` - so a dead link pasted into
+     * WhatsApp previewed as the homepage, and this was the one duplicate meta
+     * description across all 45 responses. That is the exact defect
+     * `pageMetadata` was written to stop; this route predates it and never
+     * used it.
+     */
+    description: copy.body,
+    openGraph: {
+      title: copy.title,
+      description: copy.body,
+      type: 'website',
+      siteName: 'PROPEL',
+      locale: lang === 'he' ? 'he_IL' : 'en_US',
+      // No `url`: there is no canonical address for "whatever you typed".
+      url: undefined,
+    },
+    twitter: { title: copy.title, description: copy.body },
+    // It answers 200 locally and 404 through the edge function, and either way
+    // this is what keeps it out of the index.
     robots: { index: false, follow: true },
   }
 }

@@ -38,6 +38,16 @@ import { getInternalArticles } from '@/content/articles'
  */
 const CONTENT_SOURCE: { prefix: string; file: string }[] = [
   { prefix: '/portfolio/', file: 'src/content/projects.ts' },
+  /*
+   * Before the '/services/' entry below, and longest match wins. The migration
+   * page predates content/services.ts and reads every string it renders from
+   * `dict.migration`, so dating it from services.ts told Google it had not
+   * changed on the commit that rewrote its meta description - and would tell
+   * Google it HAD changed whenever one of the five other service pages was
+   * edited. A lastmod that is wrong for one URL is what teaches a crawler to
+   * ignore the field on all 42.
+   */
+  { prefix: '/services/migration', file: 'src/dictionaries/he.json' },
   { prefix: '/services/', file: 'src/content/services.ts' },
   { prefix: '/accessibility', file: 'src/content/legal.ts' },
   { prefix: '/privacy', file: 'src/content/legal.ts' },

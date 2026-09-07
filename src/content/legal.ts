@@ -39,6 +39,17 @@ export type LegalDocument = {
    */
   metaTitle?: string
   metaDescription?: string
+  /**
+   * This document's own review date, ISO, when it differs from
+   * `NEXT_PUBLIC_LEGAL_UPDATED`.
+   *
+   * That variable is shared by the privacy policy and the accessibility
+   * statement, which were reviewed together. The terms draft was written
+   * later, and rendering July under a September document contradicts its own
+   * clause saying the date at the top is when it last changed. Moving the
+   * shared value would have been a lie about the other two.
+   */
+  updatedAt?: string
 }
 
 // ── Accessibility statement ──────────────────────────────────────────────────

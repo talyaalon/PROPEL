@@ -13,7 +13,6 @@ type FooterDict = {
   tagline: string
   links_title: string
   contact_title: string
-  nav_services: string
   nav_process: string
   nav_portfolio: string
   nav_about: string
@@ -223,13 +222,27 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
                     </a>
                   </li>
                 )}
+              </ul>
+            )}
 
-            {/* Legal, inside the contact column.
-                Six link columns do not fit at 1440 and these are the three
-                shortest lists on the site, so they share a column with the
-                contact block rather than losing a heading. They are NOT
-                optional furniture: the accessibility statement has to be
-                reachable from every page. */}
+            {/*
+              Legal, sharing the contact column.
+
+              Six link columns do not fit at 1440 and these are the shortest
+              lists on the site, so they sit under the contact block rather
+              than losing their heading.
+
+              A SIBLING of that block, not a child of it. They were written
+              inside the contact `<ul>` and inside its
+              `phoneDisplay || email` guard, which three independent reviews
+              caught: a `<ul>` may only contain `<li>`, so a screen reader
+              announced a one-item list containing a heading and a second
+              list (1.3.1 and 4.1.1, both Level A); `.space-y-3` on the parent
+              beat the `mt-8` here, so the heading sat 12px under the phone
+              number instead of 32px; and the accessibility statement - which
+              has to be reachable from every page - would have disappeared
+              entirely the day both contact env vars were unset.
+            */}
             <h2 className="mb-4 mt-8 text-[0.75rem] font-semibold uppercase tracking-[0.22em] text-brand-slate">
               {dict.legal_title}
             </h2>
@@ -271,9 +284,6 @@ export default function Footer({ lang, dict, hasProjects, switchLabel }: Props) 
                 </li>
               )}
             </ul>
-
-              </ul>
-            )}
           </div>
         </div>
 

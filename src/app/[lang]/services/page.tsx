@@ -108,11 +108,22 @@ export default async function ServicesHub({ params }: Props) {
         </div>
 
         <ul className="grid gap-5 sm:gap-6 lg:grid-cols-2">
-          {cards.map((card) => {
+          {cards.map((card, index) => {
             const proof = projects.filter((project) => card.proofSlugs.includes(project.slug))
 
             return (
-              <li key={card.slug} className="card flex min-w-0 flex-col">
+              /* The last card spans the row when the count is odd. Five cards
+                 in a two-column grid left the migration service - the one the
+                 business most wants WordPress refugees to read - alone in row
+                 three with an empty cell beside it, directly above the footer,
+                 and it is also the shortest card because it is the only one
+                 with no proof list. A full-width band reads as deliberate. */
+              <li
+                key={card.slug}
+                className={`card flex min-w-0 flex-col${
+                  index === cards.length - 1 && cards.length % 2 === 1 ? ' lg:col-span-2' : ''
+                }`}
+              >
                 <h2 className="text-[1.25rem] font-bold text-brand-ink sm:text-[1.4375rem]">
                   <Link
                     href={`/${lang}/services/${card.slug}`}

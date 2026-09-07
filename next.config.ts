@@ -82,28 +82,24 @@ const nextConfig: NextConfig = {
     return [
       { source: '/:path*', headers: securityHeaders },
       /*
-       * The generated share cards, kept out of the index.
+       * NO `X-Robots-Tag: noindex` on the share cards, and the reason is worth
+       * writing down because the opposite was tried on this branch.
        *
-       * `/he/blog/branch-leakage-case-study/opengraph-image` was reported by
-       * Search Console as "crawled, not indexed": it is a route, so it is
-       * crawlable, and it answers `image/png` with nothing to say about
-       * itself. It exists to be read by WhatsApp and LinkedIn when someone
-       * pastes the article's URL, never to be a search result of its own.
+       * Search Console reports
+       * `/he/blog/branch-leakage-case-study/opengraph-image` as "crawled,
+       * currently not indexed", and a noindex header was added to settle it.
+       * That was wrong. Google requires the image in structured data to be
+       * crawlable AND indexable, and this site declares exactly these URLs as
+       * `Article.image` on every article and as the organization's `image` on
+       * every page. The header made both properties dead weight - it disabled
+       * the article image in search results in order to tidy a status line
+       * that is not an error. "Crawled, currently not indexed" is the correct
+       * resting state for an image route: it is fetched by WhatsApp and
+       * LinkedIn when a link is pasted, and it does not compete for a ranking.
        *
-       * Declared here rather than in netlify.toml for the reason recorded at
-       * the top of this file and re-measured since: Netlify's header rules
-       * reach static files under /_next/static and do not reach responses the
-       * Next runtime serves. These routes are served by that runtime, so a
-       * rule there would have looked right and done nothing.
+       * If these ever DO need to be excluded, remove `image` from
+       * `articleSchema` and repoint the organization's image first.
        */
-      {
-        source: '/:path*/opengraph-image',
-        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
-      },
-      {
-        source: '/:path*/twitter-image',
-        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
-      },
     ]
   },
 }
