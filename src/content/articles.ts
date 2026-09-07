@@ -58,6 +58,14 @@ type InternalArticle = ArticleBase & {
   /** The meta description - what the SERP shows under the title. */
   description: Bilingual
   /**
+   * Search-result copy, when `title` / `description` are the wrong length for
+   * a SERP. The article keeps its full headline as the H1 and its full
+   * excerpt on the card; only the <title> and the meta description change.
+   * Only the MDX pipeline sets these.
+   */
+  metaTitle?: Bilingual
+  metaDescription?: Bilingual
+  /**
    * The article itself. Paragraphs separated by blank lines; a line starting
    * with `## ` is a section heading and joins the clause numbering. No other
    * markup - an article that needs more than paragraphs and headings should
@@ -235,6 +243,19 @@ const mdxArticles: Article[] = mdxPosts.map((post) => ({
   body: post.body,
   relatedService: ARTICLE_LINKS[post.slug]?.service,
   relatedProjects: ARTICLE_LINKS[post.slug]?.projects,
+  // Set on the article only when at least one locale wrote one; the other
+  // locale falls back to its own title/description so nothing changes there.
+  ...(post.seoTitle.he || post.seoTitle.en
+    ? { metaTitle: { he: post.seoTitle.he ?? post.title.he, en: post.seoTitle.en ?? post.title.en } }
+    : {}),
+  ...(post.seoDescription.he || post.seoDescription.en
+    ? {
+        metaDescription: {
+          he: post.seoDescription.he ?? post.description.he,
+          en: post.seoDescription.en ?? post.description.en,
+        },
+      }
+    : {}),
 }))
 
 /*

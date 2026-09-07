@@ -49,6 +49,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
     intro:
       'אנחנו רואים בנגישות האתר חלק מהמקצועיות שלנו, ולא תוספת. האתר הזה נבנה מלכתחילה כך שיהיה שמיש עבור כמה שיותר אנשים, כולל משתמשי מקלדת וקוראי מסך.',
     updatedLabel: 'עודכן לאחרונה',
+    metaTitle: 'הצהרת נגישות - תקן ישראלי 5568 ברמה AA ודרכי פנייה',
     sections: [
       {
         heading: 'רמת ההנגשה',
@@ -110,6 +111,7 @@ export const accessibilityStatement: Record<Locale, LegalDocument> = {
     intro:
       'We treat accessibility as part of doing the job properly, not as an add-on. This site was built from the start to be usable by as many people as possible, including keyboard and screen-reader users.',
     updatedLabel: 'Last updated',
+    metaDescription: 'This site is built to Israeli standard IS 5568 at level AA. Every page has an accessibility menu, and you can report anything that is not accessible.',
     sections: [
       {
         heading: 'Conformance level',
@@ -178,6 +180,8 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
     title: 'מדיניות פרטיות',
     intro: 'המדיניות הזו מסבירה איזה מידע אנחנו אוספים דרך האתר, למה, ומה הזכויות שלכם לגביו.',
     updatedLabel: 'עודכן לאחרונה',
+    metaTitle: 'מדיניות פרטיות - איזה מידע נאסף ומה הזכויות שלכם',
+    metaDescription: 'המדיניות מסבירה איזה מידע אנחנו אוספים דרך האתר, למה משתמשים בו ועם מי הוא משותף, ומה הזכויות שלכם לעיין במידע ולבקש את תיקונו או את מחיקתו.',
     sections: [
       {
         heading: 'איזה מידע נאסף',
@@ -222,6 +226,8 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
     intro:
       'This policy explains what information we collect through the site, why, and what rights you have over it.',
     updatedLabel: 'Last updated',
+    metaTitle: 'Privacy Policy: What We Collect and Your Rights',
+    metaDescription: 'This policy explains what information we collect through the site, why we use it, who it may pass to, and the rights you have under Israeli privacy law.',
     sections: [
       {
         heading: 'What we collect',

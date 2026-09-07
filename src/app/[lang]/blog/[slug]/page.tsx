@@ -69,14 +69,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
    */
   const mdxForTitle = mdxPosts.find((post) => post.slug === slug)
   const short = mdxForTitle?.ogTitle[lang]
+  // An explicit seoTitle wins; otherwise the short share-card headline when
+  // it is genuinely shorter; otherwise the full headline.
   const headline =
-    short && short.length < article.title[lang].length ? short : article.title[lang]
+    article.metaTitle?.[lang] ??
+    (short && short.length < article.title[lang].length ? short : article.title[lang])
 
   const base = pageMetadata({
     lang,
     path: `blog/${slug}`,
     title: headline,
-    description: article.description[lang],
+    description: article.metaDescription?.[lang] ?? article.description[lang],
     type: 'article',
   })
 

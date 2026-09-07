@@ -46,12 +46,12 @@ export const servicePages: ServicePage[] = [
     slug: 'websites',
     title: { he: 'בניית אתר תדמית', en: 'Business website development' },
     metaTitle: {
-      he: 'בניית אתר תדמית לעסק | PROPEL',
+      he: 'בניית אתר תדמית לעסק - מהיר, נגיש ומביא פניות | PROPEL',
       en: 'Business website development | PROPEL',
     },
     metaDescription: {
-      he: 'אתר תדמית מהיר שעובד מצוין בנייד, בנוי מהיסוד להופיע בגוגל, נגיש לפי ת"י 5568 - והקוד והדומיין רשומים עליכם.',
-      en: 'A fast business website that works properly on a phone, built from the ground up to appear in Google, accessible to the Israeli standard - with the code and the domain registered to you.',
+      he: 'אתר תדמית מהיר שעובד מצוין בנייד ומביא פניות. סטטי במלואו, בנוי מהיסוד להופיע בגוגל ונגיש לפי ת"י 5568. בסוף התהליך הקוד והדומיין רשומים עליכם.',
+      en: 'A fast business site that works properly on a phone, built to appear in Google and accessible to the Israeli standard. The code and the domain are yours.',
     },
     eyebrow: { he: 'שירות', en: 'Service' },
     intro: {
@@ -99,7 +99,7 @@ export const servicePages: ServicePage[] = [
     },
     metaDescription: {
       he: 'כל תהליך שאתם עושים ידנית פעמיים ביום הוא תהליך שאפשר להפסיק לעשות. אנחנו בונים מערכות שמחליפות את הדף, העט והאקסל - הזמנות, קריאות שירות ותמחור.',
-      en: 'Any process you do by hand twice a day is a process you can stop doing. We build systems that replace the paper, the pen and the spreadsheet - orders, work orders and pricing.',
+      en: 'Any process you do by hand twice a day is one you can stop doing. We build the system that replaces the manual part and connect it to what you already have.',
     },
     eyebrow: { he: 'שירות', en: 'Service' },
     intro: {
@@ -148,7 +148,7 @@ export const servicePages: ServicePage[] = [
       en: 'Custom business management systems | PROPEL',
     },
     metaDescription: {
-      he: 'מערכת ניהול שנבנית סביב התהליך שלכם - קריאות שירות, תמחור, עץ מוצר - במקום להכריח את העסק להתאים את עצמו לתוכנת מדף.',
+      he: 'מערכת ניהול שנבנית סביב התהליך האמיתי שלכם - קריאות שירות, תמחור, עץ מוצר - עם ייבוא מהאקסל הקיים, במקום להתאים את העסק לתוכנת מדף.',
       en: 'A management system built around your process - work orders, pricing, bill of materials - instead of forcing the business to fit off-the-shelf software.',
     },
     eyebrow: { he: 'שירות', en: 'Service' },
@@ -200,7 +200,7 @@ export const servicePages: ServicePage[] = [
     },
     metaDescription: {
       he: 'חנות אונליין שמחוברת לתפעול האמיתי - מלאי, תמחור והזמנות שמגיעות ישר למטבח או למחסן, לא לתיבת מייל שמישהו צריך לזכור לבדוק.',
-      en: 'An online store wired to real operations - stock, pricing, and orders that reach the kitchen or the warehouse directly, not an inbox someone has to remember to check.',
+      en: 'An online store wired to what the business actually does: orders that reach fulfilment directly, stock and prices in one source of truth, secure checkout.',
     },
     eyebrow: { he: 'שירות', en: 'Service' },
     intro: {

@@ -26,6 +26,9 @@ export type MdxPost = {
   keywords: PerLocale<string[]>
   ogTitle: PerLocale<string>
   ogDescription: PerLocale<string>
+  /** Search-result copy; null where the title/description serve both jobs. */
+  seoTitle: PerLocale<string | null>
+  seoDescription: PerLocale<string | null>
   faq: PerLocale<MdxFaqEntry[]>
   body: PerLocale<string>
 }
@@ -73,6 +76,14 @@ export const mdxPosts: MdxPost[] = [
     "ogDescription": {
       "he": "מה תקן 5568 באמת דורש, למה סריקה אוטומטית מרגיעה יותר מדי, ושלושה דברים שאפשר לבדוק היום.",
       "en": "What WCAG actually requires, why automated scans are too reassuring, and three things you can check today."
+    },
+    "seoTitle": {
+      "he": "תוסף נגישות הוא לא הנגשת אתר: מה תקן 5568 דורש",
+      "en": "An Accessibility Widget Is Not an Accessible Site"
+    },
+    "seoDescription": {
+      "he": "הווידג'ט בפינה הוא לא הנגשה, והוא לא מגן עליכם. מה תקן 5568 באמת דורש מהקוד, מה סריקה אוטומטית מפספסת, ושלושה דברים שאפשר לבדוק היום בלי לשלם.",
+      "en": "The widget in the corner isn't accessibility, and it isn't protection. What WCAG asks for, what automated scans miss, and three checks you can run today."
     },
     "faq": {
       "he": [
@@ -150,6 +161,14 @@ export const mdxPosts: MdxPost[] = [
       "he": "שלושה מקורות אמת, 38 fallbacks שקטים, ומה שקורה כשמערכת מנחשת בביטחון מלא.",
       "en": "Three sources of truth, 38 silent fallbacks, and what happens when a system guesses with full confidence."
     },
+    "seoTitle": {
+      "he": null,
+      "en": null
+    },
+    "seoDescription": {
+      "he": "הזמנות נחתו במטבח של הסניף הלא נכון, בלי אף שגיאה בלוגים. שלושה מקורות אמת לזהות הסניף, ברירת מחדל שקטה בקוד, והכלל שבא במקומם: הדפדפן מציע, השרת מחליט.",
+      "en": null
+    },
     "faq": {
       "he": [
         {
@@ -226,6 +245,14 @@ export const mdxPosts: MdxPost[] = [
     "ogDescription": {
       "he": "חמש עלויות שמתגלות רק בשנה השנייה, ומתי וורדפרס דווקא הבחירה הנכונה.",
       "en": "Five costs that surface in year two, and when WordPress is genuinely the right call."
+    },
+    "seoTitle": {
+      "he": "וורדפרס או קוד ייעודי: חמש עלויות שלא בהצעת המחיר",
+      "en": "WordPress or Custom Code: The Three-Year Cost"
+    },
+    "seoDescription": {
+      "he": null,
+      "en": null
     },
     "faq": {
       "he": [

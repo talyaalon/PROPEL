@@ -134,6 +134,16 @@ export function validateFrontmatter(data, file = '<unknown>') {
   const ogDescription = str('ogDescription', false)
   bounded('ogDescription', ogDescription, 1, 110)
 
+  // Search-result copy, when the headline and description are the wrong
+  // length for a SERP. The layout appends " | PROPEL" (9 characters) to every
+  // <title>, so 51 here renders as the 60 Google shows. Absent means the
+  // page's own title and description serve both jobs.
+  const seoTitle = str('seoTitle', false)
+  bounded('seoTitle', seoTitle, 1, 51)
+
+  const seoDescription = str('seoDescription', false)
+  bounded('seoDescription', seoDescription, 1, 158)
+
   // faq: a list of { q, a }, both required on every entry
   const faqRaw = data.faq
   const faq = []
@@ -161,6 +171,7 @@ export function validateFrontmatter(data, file = '<unknown>') {
   const KNOWN = new Set([
     'title', 'description', 'date', 'category', 'slug', 'readingTime', 'draft',
     'author', 'updated', 'lang', 'keywords', 'ogTitle', 'ogDescription', 'related', 'faq',
+    'seoTitle', 'seoDescription',
   ])
   for (const key of Object.keys(data)) {
     if (!KNOWN.has(key)) at(`unknown field "${key}"`)
@@ -173,6 +184,7 @@ export function validateFrontmatter(data, file = '<unknown>') {
     value: {
       title, description, date, category, slug, readingTime, draft,
       author, updated, lang, keywords, ogTitle, ogDescription, related, faq,
+      seoTitle, seoDescription,
     },
   }
 }
@@ -206,8 +218,10 @@ export function validateMinimal() {
   if (v.lang !== undefined) problems.push('lang should stay undefined')
   if (v.ogTitle !== undefined) problems.push('ogTitle should stay undefined')
   if (v.ogDescription !== undefined) problems.push('ogDescription should stay undefined')
+  if (v.seoTitle !== undefined) problems.push('seoTitle should stay undefined')
+  if (v.seoDescription !== undefined) problems.push('seoDescription should stay undefined')
 
   return problems.length
     ? { ok: false, detail: problems.join('; ') }
-    : { ok: true, detail: 'seven required fields validate; eight optional fields defaulted' }
+    : { ok: true, detail: 'seven required fields validate; ten optional fields defaulted' }
 }

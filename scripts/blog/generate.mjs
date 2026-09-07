@@ -231,6 +231,10 @@ const records = paired.map((slug) => {
       he: he.fm.ogDescription ?? he.fm.description,
       en: en.fm.ogDescription ?? en.fm.description,
     },
+    // null, not a fallback: the page decides what to fall back to, and a
+    // fallback baked in here would hide that a value was never set.
+    seoTitle: { he: he.fm.seoTitle ?? null, en: en.fm.seoTitle ?? null },
+    seoDescription: { he: he.fm.seoDescription ?? null, en: en.fm.seoDescription ?? null },
     faq: { he: he.fm.faq, en: en.fm.faq },
     body: { he: he.body, en: en.body },
   }
@@ -264,6 +268,9 @@ export type MdxPost = {
   keywords: PerLocale<string[]>
   ogTitle: PerLocale<string>
   ogDescription: PerLocale<string>
+  /** Search-result copy; null where the title/description serve both jobs. */
+  seoTitle: PerLocale<string | null>
+  seoDescription: PerLocale<string | null>
   faq: PerLocale<MdxFaqEntry[]>
   body: PerLocale<string>
 }

@@ -207,6 +207,10 @@ const projects: Project[] = [
       he: 'מסחר אונליין דו-לשוני לשישה סניפים בתאילנד, כולל מסכי מלקט ומסכי מטבח (KDS).',
       en: 'Bilingual online ordering for six branches in Thailand, including picker and kitchen display screens.',
     },
+    metaDescription: {
+      he: 'מסחר אונליין דו-לשוני לרשת כשרה עם שישה סניפים בתאילנד: תשלום מאובטח, מסך מלקט בכל סניף ומסך מטבח (KDS), בסנכרון דו-כיווני מול ODOO.',
+      en: 'Bilingual online ordering for a kosher chain with six branches in Thailand: secure checkout, picker screens, a kitchen display, and two-way ODOO sync.',
+    },
     challenge: {
       he: 'רשת כשרה עם שישה סניפים בתאילנד, וקהל שמדבר שתי שפות. ההזמנות הגיעו בערוצים מפוזרים, המטבח קיבל אותן בהעברה ידנית, ולא היה מקום אחד שבו אפשר לראות מה קורה בכל הסניפים באותו רגע.\n\nמתחת לזה ישבה תקלה חמורה יותר: שלושה מקורות אמת מתחרים לזהות הסניף, והזמנות דלפו בין סניפים. בקוד היה fallback קשיח לסניף ברירת מחדל בכ-38 מקומות. במערכת הזמנות, הזמנה שמגיעה לסניף הלא נכון היא לא באג בתצוגה - היא ארוחה שיצאה מהמטבח הלא נכון.',
       // TODO(i18n)
@@ -290,6 +294,10 @@ const projects: Project[] = [
       he: 'אתר גרירה וחילוץ בן 22 עמודים, בנוי לקידום אורגני ונגיש לפי ת"י 5568.',
       en: 'A 22-page towing and roadside recovery site, built for organic search and accessible to the Israeli standard IS 5568.',
     },
+    metaDescription: {
+      he: 'אתר תדמית לשירותי גרירה וחילוץ בן 22 עמודים, בנוי לקידום אורגני ונגיש לפי ת"י 5568. האתר ניתן להתקנה בנייד כ-PWA ונבנה ב-HTML/CSS עם Schema.org.',
+      en: 'A 22-page towing and roadside recovery site built for organic search, installable on mobile as a PWA, and accessible to the Israeli standard IS 5568.',
+    },
     results: [
       { metric: '22', label: { he: 'עמודים', en: 'pages' } },
       { metric: 'PWA', label: { he: 'ניתן להתקנה בנייד', en: 'installable on mobile' } },
@@ -312,6 +320,10 @@ const projects: Project[] = [
       he: 'אתר מכון טיפול והכשרה בן 24 עמודים, עם עמוד ייעודי לכל מתודה - CBT, NLP, EMR והוראה מתקנת.',
       en: 'A 24-page site for a therapy and training practice, with a dedicated page for each method - CBT, NLP, EMR and remedial teaching.',
     },
+    metaDescription: {
+      he: 'אתר תדמית למכון טיפול והכשרה בן 24 עמודים, עם עמוד ייעודי לכל מתודה - CBT, NLP, EMR והוראה מתקנת. בנוי ב-Next.js ו-Tailwind בתצוגת RTL.',
+      en: 'A 24-page site for a therapy and training practice, with a dedicated page for each method - CBT, NLP, EMR and remedial teaching.',
+    },
     results: [
       { metric: '24', label: { he: 'עמודים', en: 'pages' } },
       { metric: '4', label: { he: 'עמודי מתודה', en: 'method pages' } },
@@ -332,6 +344,10 @@ const projects: Project[] = [
     },
     summary: {
       he: 'ניהול עצי מוצר ומתכונים עם תמחור אוטומטי - מחיר עלות, ריטייל וסיטונאי - וייבוא ישיר מקבצי Excel קיימים.',
+      en: 'Bill-of-materials and recipe management with automatic costing - cost, retail and wholesale pricing - importing straight from existing Excel files.',
+    },
+    metaDescription: {
+      he: 'מערכת עץ מוצר ומתכונים מקוננים: עדכון מחיר של חומר גלם מתגלגל אוטומטית לכל מוצר שמכיל אותו, ושלוש רמות מחיר נגזרות יחד - עלות, קמעונאי וסיטונאי. ייבוא מאקסל.',
       en: 'Bill-of-materials and recipe management with automatic costing - cost, retail and wholesale pricing - importing straight from existing Excel files.',
     },
     challenge: {
@@ -403,6 +419,10 @@ const projects: Project[] = [
     },
     summary: {
       he: 'אפליקציית ניהול משימות לצוותי תחזוקה, אחזקה ושירותי ניקיון - הקצאה, מעקב וסגירת קריאות. בשימוש יומיומי בארגון.',
+      en: 'Task management for maintenance, upkeep and cleaning teams - assignment, tracking and closing work orders. In daily use inside an organisation.',
+    },
+    metaDescription: {
+      he: 'אפליקציה לניהול קריאות שירות של צוותי תחזוקה, אחזקה וניקיון: הקצאה, מעקב במצב אמת וסגירה מתועדת שנשארת בהיסטוריה. בשימוש יומיומי בארגון.',
       en: 'Task management for maintenance, upkeep and cleaning teams - assignment, tracking and closing work orders. In daily use inside an organisation.',
     },
     challenge: {
