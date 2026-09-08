@@ -29,11 +29,12 @@ import { notFoundCopy } from '@/lib/errorMessages'
  * So the page renders the not-found content itself, inside the locale layout,
  * which is what makes it a Hebrew page for a Hebrew visitor.
  *
- * **The cost, stated plainly: this responds 200, not 404.** `noindex` below
- * keeps it out of search, which is the part that would otherwise matter. A
- * genuine 404 status would need `<html>` to move above the locale segment, and
- * that trade - every English page served as `lang="he"` - is far worse than a
- * soft 404 on a page nobody should reach.
+ * The status comes from somewhere else. A page cannot set its own, so this
+ * one is prerendered once per locale at `/{locale}/page-not-found`, and
+ * `src/middleware.ts` fetches it and re-sends it under the visitor's URL with
+ * a real 404 - see `notFoundResponse` there for the five ways that failed.
+ * Visited at its own address it answers 200: it is `noindex` and in no
+ * sitemap, nothing links to it, and nothing indexes it.
  */
 
 type Props = {
@@ -43,9 +44,11 @@ type Props = {
 export const dynamicParams = true
 
 export function generateStaticParams() {
-  // One prerendered path per locale so the segment exists in the build; every
-  // other path under it renders on demand.
-  return locales.map((lang) => ({ lang, notFound: ['404'] }))
+  // One prerendered path per locale, the one the middleware fetches. Nothing
+  // else under this segment is ever rendered on demand - `[lang]/layout.tsx`
+  // sets `dynamicParams = false` and that gates the subtree - so this address
+  // is the whole point of the file.
+  return locales.map((lang) => ({ lang, notFound: ['page-not-found'] }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -77,8 +80,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: undefined,
     },
     twitter: { title: copy.title, description: copy.body },
-    // It answers 200 locally and 404 through the edge function, and either way
-    // this is what keeps it out of the index.
+    // At its own address it answers 200; re-sent by the middleware it answers
+    // 404. Either way this is what keeps it out of the index.
     robots: { index: false, follow: true },
   }
 }

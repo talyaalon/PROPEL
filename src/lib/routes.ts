@@ -52,15 +52,22 @@ export const staticPaths = [
  * So the middleware serves it and the sitemap does not mention it. Once
  * `termsArePublished` is true the entry disappears from here and the page
  * behaves like every other one - no other code changes.
+ *
+ * The 404 page is the permanent member. It is routable because the middleware
+ * fetches it to build a real 404 response, and a sitemap entry for it would
+ * be a lie of the same kind.
  */
 function unlistedPaths(): string[] {
-  return termsArePublished ? [] : ['/terms']
+  return ['/page-not-found', ...(termsArePublished ? [] : ['/terms'])]
 }
 
 /** Every path the middleware will serve. */
 export function sitePaths(): string[] {
   return [
     ...staticPaths,
+    // The prerendered 404 page. Routable so the middleware's own fetch of it
+    // passes straight through; never listed. See unlistedPaths.
+    '/page-not-found',
     /*
      * The terms draft, routable so it can be reviewed. On a production deploy
      * with the draft unapproved it is absent entirely and the URL answers the

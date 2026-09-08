@@ -63,7 +63,7 @@ const METADATA_ROUTES = new Set([
   '/apple-icon',
 ])
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const locale = getLocaleFromPath(pathname)
 
@@ -75,26 +75,15 @@ export function middleware(request: NextRequest) {
   }
 
   /*
-   * Unmatched paths under a locale, rewritten to that locale's 404 page.
-   *
-   * Without this they fell through to Next's own built-in error page, which
-   * lives outside every layout in this project - so a Hebrew visitor following
-   * a stale link got an English page with no `lang` and no `dir`, no
-   * stylesheet, no navigation and no accessibility menu. That is 3.1.1
-   * Language of Page at Level A.
+   * Unmatched paths under a locale answer that locale's 404 page with a real
+   * 404 status. `notFoundResponse` below says how, and lists the five ways
+   * that did not work.
    *
    * It has to happen here rather than in a catch-all route. `[lang]/layout.tsx`
    * sets `dynamicParams = false` so that only the two real locales are ever
-   * built, and that gates the whole subtree: a catch-all page never runs,
-   * whatever it sets for itself. Middleware is upstream of routing, so it is
-   * the only place that can see the request at all.
-   *
-   * A rewrite keeps the URL the visitor typed and serves a prerendered page, so
-   * this responds 200 rather than 404. The page carries `noindex`, which is the
-   * part that would otherwise matter. Getting a real 404 status would mean
-   * moving `<html>` above the locale segment, and that means serving every
-   * English page as `lang="he"` - far worse than a soft 404 on a page nobody
-   * should reach.
+   * built, and that gates the whole subtree: a catch-all page never runs on
+   * demand, whatever it sets for itself. Middleware is upstream of routing, so
+   * it is the only place that can see the request at all.
    */
   const rest = pathname.slice(`/${locale}`.length).replace(/\/$/, '')
   if (METADATA_ROUTES.has(rest)) return NextResponse.next()
@@ -110,45 +99,76 @@ export function middleware(request: NextRequest) {
   if (cut > 0 && METADATA_ROUTES.has(rest.slice(cut)) && knownPaths().has(rest.slice(0, cut))) {
     return NextResponse.next()
   }
-  if (!knownPaths().has(rest)) {
-    const url = request.nextUrl.clone()
-    url.pathname = `/${locale}/404`
-    /*
-     * A rewrite WITH a 404 status. The page is the localised, fully-styled
-     * one; the status is the real one. Both, from this one line.
-     *
-     * Four ways of getting a genuine 404 out of this route were built and
-     * measured before anyone tried the obvious one:
-     *
-     *  - `[[redirects]]` with `status = 404` in netlify.toml. Never fired: the
-     *    Next runtime claims the path before Netlify consults the table.
-     *  - `notFound()` from the catch-all page. Real 404, but Next renders
-     *    `not-found.tsx` OUTSIDE `[lang]/layout.tsx` - no lang, no dir, no
-     *    stylesheet, no navigation. WCAG 3.1.1 at Level A, traded for a
-     *    status code.
-     *  - A middleware self-fetch of the prerendered `/he/404`, returned with a
-     *    404. Next answers a middleware's own fetch with a 5.5KB client shell.
-     *  - A Netlify edge function that re-sends the rewritten response with a
-     *    404 when a marker header is present. Deployed, and measured on
-     *    production doing nothing: the framework's middleware edge function
-     *    runs first and its rewrite ends the chain, so a user edge function
-     *    never sees the marked response - the marker reached the client with
-     *    the 200 intact.
-     *
-     * `NextResponse.rewrite(url, { status })` was the fifth attempt and the
-     * first that was simply never tried. Measured under `next start`:
-     * `/he/zzz-test` answers 404 with `lang="he" dir="rtl"`, the stylesheet,
-     * the navigation and the footer, and every real route still answers 200.
-     * It needs no edge function, so it also works locally - the previous
-     * mechanism could only be verified after a deploy.
-     */
-    const response = NextResponse.rewrite(url, { status: 404 })
-    // Belt and braces: the page carries noindex in its own <head> too.
-    response.headers.set('x-robots-tag', 'noindex')
-    return response
-  }
+  if (!knownPaths().has(rest)) return notFoundResponse(request, locale)
 
   return NextResponse.next()
+}
+
+/**
+ * The localised 404 page, sent with a 404 status.
+ *
+ * `/{locale}/page-not-found` is prerendered inside the locale layout, so it
+ * has `lang`, `dir`, the stylesheet, the navigation and the footer. This
+ * fetches it from the same deployment and re-sends the HTML under the URL the
+ * visitor typed, with the status the page cannot set for itself.
+ *
+ * Why a fetch, when a rewrite is one line. Five ways of getting a genuine 404
+ * out of this route were built and measured before this one:
+ *
+ *  - `[[redirects]]` with `status = 404` in netlify.toml. Never fired: the
+ *    Next runtime claims the path before Netlify consults the table.
+ *  - `notFound()` from the catch-all page. A 404, but Next renders
+ *    `not-found.tsx` OUTSIDE `[lang]/layout.tsx` - no lang, no dir, no
+ *    stylesheet, no navigation. Measured with `dynamicParams` both ways and
+ *    from inside a route group; the bare shell never changes. WCAG 3.1.1 at
+ *    Level A, traded for a status code.
+ *  - A Netlify edge function re-sending a marked response with a 404.
+ *    Deployed, and measured on production doing nothing: the framework's own
+ *    middleware edge function runs first and its rewrite ends the chain.
+ *  - `NextResponse.rewrite(url, { status: 404 })`. Correct under `next start`,
+ *    and the obvious answer. On Netlify the runtime serves the rewrite TARGET
+ *    from its cache with the target's own 200 and drops the status option -
+ *    measured on production as `Cache-Status: hit` on a path that had never
+ *    been requested before.
+ *  - A route handler under `[lang]` returning the page with a 404. The
+ *    layout's `dynamicParams = false` makes the segment static-only, and a
+ *    dynamic handler under it fails at request time (DYNAMIC_SERVER_USAGE).
+ *
+ * A response the middleware builds itself is the one thing no layer can
+ * reinterpret: it is not a rewrite, so there is no target to cache and no
+ * status to replace. The fetched path is in `sitePaths()`, so the inner
+ * request passes straight through this middleware instead of recursing into
+ * it.
+ *
+ * If the fetch fails for any reason the fallback is the previous behaviour, a
+ * rewrite to the same page: 200 with `noindex`, nothing worse than it was.
+ * `x-propel-404` says which branch answered, so a production measurement can
+ * tell them apart without reading the body.
+ */
+async function notFoundResponse(request: NextRequest, locale: Locale): Promise<NextResponse> {
+  const page = new URL(`/${locale}/page-not-found`, request.url)
+  try {
+    const upstream = await fetch(page, { headers: { accept: 'text/html' } })
+    if (upstream.ok) {
+      return new NextResponse(await upstream.text(), {
+        status: 404,
+        headers: {
+          'content-type': 'text/html; charset=utf-8',
+          // A 404 is heuristically cacheable. Say no, so a page created later
+          // is not served out of a browser cache as still missing.
+          'cache-control': 'no-cache',
+          'x-robots-tag': 'noindex',
+          'x-propel-404': 'page',
+        },
+      })
+    }
+  } catch {
+    // Fall through to the soft 404.
+  }
+  const response = NextResponse.rewrite(page)
+  response.headers.set('x-robots-tag', 'noindex')
+  response.headers.set('x-propel-404', 'rewrite')
+  return response
 }
 
 export const config = {

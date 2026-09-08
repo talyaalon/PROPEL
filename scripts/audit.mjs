@@ -347,7 +347,7 @@ async function headings(browser) {
     `/${LOCALE}/blog`,
     `/${LOCALE}/privacy`,
     `/${LOCALE}/accessibility`,
-    `/${LOCALE}/404`,
+    `/${LOCALE}/page-not-found`,
   ]
 
   for (const route of routes) {
