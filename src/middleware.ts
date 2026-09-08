@@ -42,35 +42,6 @@ function knownPaths(): Set<string> {
 }
 
 /**
- * Set on the rewritten 404 response, read by the Netlify edge function that
- * upgrades its status to 404.
- *
- * Three ways of getting a real 404 status out of this route were built and
- * measured before this one, and each failed differently:
- *
- *  - `[[redirects]]` with `status = 404` in netlify.toml. Never fired: the
- *    Next runtime claims the path before Netlify consults the redirect table.
- *  - `notFound()` from the catch-all page. Returns a genuine 404, but Next
- *    renders `not-found.tsx` OUTSIDE `[lang]/layout.tsx` - measured as
- *    `<html>` with no `lang`, no `dir`, no stylesheet, no navigation and no
- *    footer. That is 3.1.1 Language of Page at Level A, traded for a status
- *    code.
- *  - Fetching the prerendered `/he/404` from inside the middleware and
- *    returning its body with a 404 status. Next answers a middleware's
- *    self-fetch with a 5.5KB client shell rather than the rendered page;
- *    measured at 5,573 bytes against the 51,174 the same URL serves directly.
- *
- * So the page keeps its own rendering path, which is the one that works, and
- * the status is corrected at the edge - the one layer that runs before the
- * Next handler and can still see the response on its way out.
- *
- * Locally (`next start`) there is no edge function, so an unknown path answers
- * 200 with this header present. That is the same soft 404 the site served
- * before, and it carries `noindex` either way.
- */
-export const NOT_FOUND_MARKER = 'x-propel-notfound'
-
-/**
  * Next's generated metadata routes, which live under the locale segment and
  * are not pages.
  *
@@ -143,13 +114,36 @@ export function middleware(request: NextRequest) {
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/404`
     /*
-     * The rewrite serves the localised, fully-styled 404 page. The marker
-     * header is what turns the 200 into a real 404, in
-     * `netlify/edge-functions/not-found-status.ts` - see the note below the
-     * `NOT_FOUND_MARKER` constant.
+     * A rewrite WITH a 404 status. The page is the localised, fully-styled
+     * one; the status is the real one. Both, from this one line.
+     *
+     * Four ways of getting a genuine 404 out of this route were built and
+     * measured before anyone tried the obvious one:
+     *
+     *  - `[[redirects]]` with `status = 404` in netlify.toml. Never fired: the
+     *    Next runtime claims the path before Netlify consults the table.
+     *  - `notFound()` from the catch-all page. Real 404, but Next renders
+     *    `not-found.tsx` OUTSIDE `[lang]/layout.tsx` - no lang, no dir, no
+     *    stylesheet, no navigation. WCAG 3.1.1 at Level A, traded for a
+     *    status code.
+     *  - A middleware self-fetch of the prerendered `/he/404`, returned with a
+     *    404. Next answers a middleware's own fetch with a 5.5KB client shell.
+     *  - A Netlify edge function that re-sends the rewritten response with a
+     *    404 when a marker header is present. Deployed, and measured on
+     *    production doing nothing: the framework's middleware edge function
+     *    runs first and its rewrite ends the chain, so a user edge function
+     *    never sees the marked response - the marker reached the client with
+     *    the 200 intact.
+     *
+     * `NextResponse.rewrite(url, { status })` was the fifth attempt and the
+     * first that was simply never tried. Measured under `next start`:
+     * `/he/zzz-test` answers 404 with `lang="he" dir="rtl"`, the stylesheet,
+     * the navigation and the footer, and every real route still answers 200.
+     * It needs no edge function, so it also works locally - the previous
+     * mechanism could only be verified after a deploy.
      */
-    const response = NextResponse.rewrite(url)
-    response.headers.set(NOT_FOUND_MARKER, '1')
+    const response = NextResponse.rewrite(url, { status: 404 })
+    // Belt and braces: the page carries noindex in its own <head> too.
     response.headers.set('x-robots-tag', 'noindex')
     return response
   }
