@@ -25,8 +25,8 @@
     "blog": "Blog"
   },
   "hero": {
-    "h1_pre": "Systems that do not talk",
-    "h1_focus": "cost you hours every month",
+    "h1_pre": "Systems and automation for business",
+    "h1_focus": "that stop costing you hours every month",
     "h1_post": "",
     "subtitle": "We build the one system your business runs on - ordering, management and automation - and the website that sits on top of it.",
     "cta_primary": "Let's Talk",
@@ -168,7 +168,7 @@
     "hub_proof_label": "Work that proves it"
   },
   "portfolio": {
-    "section_title": "Sites and systems we built for clients in Israel",
+    "section_title": "Sites and systems we built for clients in Israel and abroad",
     "section_subtitle": "What we built, and what it actually changed",
     "view_project": "Read the case study",
     "all_label": "All",
@@ -213,10 +213,10 @@
     "filter_status": "{n} projects shown",
     "filter_status_one": "1 project shown",
     "eyebrow": "Work",
-    "index_title": "Sites and systems we built for businesses in Israel",
+    "index_title": "Sites and systems we built for clients in Israel and abroad",
     "index_subtitle": "Five projects, each with the problem it was built to solve and what actually changed.",
     "index_meta_title": "Work - sites and systems we built",
-    "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized businesses in Israel.",
+    "index_meta_description": "The PROPEL portfolio: business websites, online stores and internal systems built for small and mid-sized clients in Israel and abroad.",
     "stack_label": "Tech stack",
     "view_all": "See all work",
     "index_lead_title": "How to read this work",
