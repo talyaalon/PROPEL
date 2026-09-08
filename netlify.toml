@@ -97,9 +97,16 @@
 # rule never fired. A rule that looks like a safeguard and is not one is worse
 # than no rule.
 #
-# So the site keeps the soft 404 knowingly: an unknown path serves the
-# localised 404 page - lang, dir, navigation, footer - with `noindex, follow`
-# and no sitemap entry, and answers 200. The alternative was measured too:
-# `notFound()` returns a genuine 404 and Next's built-in error page, which
-# carries no lang and no dir. That is a 3.1.1 Level A failure traded for a
-# status code, and the trade is not worth making.
+# The 404 is solved in `src/middleware.ts` instead. It fetches the prerendered
+# localised 404 page and returns the HTML with a 404 status, so the response
+# carries `lang`, `dir`, the stylesheet, the navigation and the footer AND the
+# right status. `notFoundResponse` there records the five mechanisms that were
+# built and measured before it, including the one that works under
+# `next start` and is undone by this platform's cache. Verified on production:
+#
+#   curl -sI https://propel.co.il/he/zzz-test | grep -iE '^HTTP|propel-404'
+#   HTTP/1.1 404 Not Found
+#   X-Propel-404: page
+#
+# Do not add a redirect rule here to "fix" the 404. It cannot fire, and it
+# would only hide which layer is answering.
