@@ -2,8 +2,9 @@ import { notFound } from 'next/navigation'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { pageMetadata } from '@/lib/pageMetadata'
+import { siteConfig } from '@/lib/config'
 import { getProjects, getUsedCategories } from '@/content/projects'
-import { collectionPageSchema } from '@/lib/schema'
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import PortfolioGrid from '@/components/sections/PortfolioGrid'
 
@@ -70,6 +71,16 @@ export default async function PortfolioIndex({ params }: Props) {
           description: dict.portfolio.index_subtitle,
         })}
       />
+      {/* PROPEL > this page. Search Console reported 0 valid breadcrumbs
+          sitewide on 2026-09-13, and four page pairs emitted none at all: the
+          two hubs and the two legal pages. A hub's trail is two levels because
+          that is the truth about where it sits. */}
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          { name: dict.nav.portfolio, url: `${siteConfig.url}/${lang}/portfolio` },
+        ])}
+      />
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 lg:mb-14">
           <p className="eyebrow mb-6">
@@ -84,12 +95,6 @@ export default async function PortfolioIndex({ params }: Props) {
           <p className="lead mt-5 max-w-2xl">{dict.portfolio.index_subtitle}</p>
         </div>
 
-        {/* The cards are <h3> because on the homepage the grid sits under an
-            <h2> section heading. Here the only heading above them is the <h1>,
-            which made the outline skip a level on exactly this route - found
-            only when the headings audit was widened, because it never looked
-            at /portfolio. One hidden <h2> restores the outline without
-            renumbering a component that is correct where it lives. */}
         {/*
           The index's own content.
 
@@ -130,13 +135,37 @@ export default async function PortfolioIndex({ params }: Props) {
           </dl>
         </div>
 
-        <h2 className="sr-only">{dict.portfolio.index_title}</h2>
-        <PortfolioGrid
-          lang={lang}
-          dict={dict.portfolio}
-          projects={projects}
-          categories={getUsedCategories()}
-        />
+        {/*
+          The grid's own heading, and it must not be the <h1> string again.
+
+          PortfolioGrid starts its cards at <h3> because on the homepage
+          `sections/Portfolio.tsx` supplies the <h2> above them. This hub reuses
+          the grid without that wrapper, so it has to supply one itself. It used
+          to supply `index_title` inside an sr-only <h2>, which is character for
+          character the <h1> at the top of this page. A Search Console audit on
+          2026-09-13 found the pair on both hub URLs, and those two are already
+          the ones listed as "crawled, currently not indexed". A hidden heading
+          still counts as a heading.
+
+          The bridge is also no longer load-bearing. When it was written the
+          only heading above the cards was the <h1>, so the outline skipped
+          h1 to h3. The "how to read this work" block added after that carries a
+          real visible <h2>, and heading checkers read document order, so the
+          outline holds without this one. It stays because the grid deserves a
+          heading that describes it, and it is visible because a heading worth
+          having is worth showing.
+        */}
+        <section aria-labelledby="portfolio-index-grid">
+          <h2 id="portfolio-index-grid" className="mb-6 text-[1.25rem] font-bold text-brand-ink">
+            {dict.portfolio.index_list_heading}
+          </h2>
+          <PortfolioGrid
+            lang={lang}
+            dict={dict.portfolio}
+            projects={projects}
+            categories={getUsedCategories()}
+          />
+        </section>
       </div>
     </section>
   )

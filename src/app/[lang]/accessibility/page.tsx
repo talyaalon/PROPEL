@@ -4,6 +4,8 @@ import { locales, isLocale } from '@/lib/i18n'
 import { siteConfig } from '@/lib/config'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { accessibilityStatement } from '@/content/legal'
+import { breadcrumbSchema } from '@/lib/schema'
+import JsonLd from '@/components/JsonLd'
 import LegalPage, { type LegalContactLine } from '@/components/LegalPage'
 
 type Props = {
@@ -78,27 +80,42 @@ export default async function AccessibilityPage({ params }: Props) {
   const lines = candidates.filter((line): line is LegalContactLine => line !== null)
 
   return (
-    <LegalPage
-      lang={lang}
-      doc={accessibilityStatement[lang]}
-      contactBlock={
-        lines.length > 0
-          ? {
-              /*
-               * "Accessibility enquiries", not "Accessibility coordinator".
-               *
-               * The Israeli regulations require a service provider to appoint a
-               * named coordinator above a headcount threshold; a one-person
-               * agency is below it. The heading said a coordinator existed and
-               * then listed a phone number and an email under no name, which is
-               * a claim the site cannot support. This says what is actually
-               * true: here is where accessibility enquiries go.
-               */
-              heading: isHe ? 'פניות בנושא נגישות' : 'Accessibility enquiries',
-              lines,
-            }
-          : undefined
-      }
-    />
+    <>
+      {/* PROPEL > this page. Search Console reported 0 valid breadcrumbs
+          sitewide on 2026-09-13, and four page pairs emitted none at all: the
+          two hubs and the two legal pages. A hub's trail is two levels because
+          that is the truth about where it sits. */}
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          {
+            name: accessibilityStatement[lang].title,
+            url: `${siteConfig.url}/${lang}/accessibility`,
+          },
+        ])}
+      />
+      <LegalPage
+        lang={lang}
+        doc={accessibilityStatement[lang]}
+        contactBlock={
+          lines.length > 0
+            ? {
+                /*
+                 * "Accessibility enquiries", not "Accessibility coordinator".
+                 *
+                 * The Israeli regulations require a service provider to appoint a
+                 * named coordinator above a headcount threshold; a one-person
+                 * agency is below it. The heading said a coordinator existed and
+                 * then listed a phone number and an email under no name, which is
+                 * a claim the site cannot support. This says what is actually
+                 * true: here is where accessibility enquiries go.
+                 */
+                heading: isHe ? 'פניות בנושא נגישות' : 'Accessibility enquiries',
+                lines,
+              }
+            : undefined
+        }
+      />
+    </>
   )
 }

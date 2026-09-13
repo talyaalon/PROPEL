@@ -83,8 +83,16 @@ export default async function ServicePage({ params }: Props) {
         })}
       />
       <JsonLd
+        /* PROPEL > Services > this service.
+
+           The middle level was missing, so the trail jumped from the homepage
+           straight to the leaf and described a two-level site that does not
+           exist. It predates `/services`, which did not exist as a page when
+           this was written; the case-study trail has always had its hub and is
+           the shape copied here. */
         schema={breadcrumbSchema([
           { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          { name: dict.nav.services, url: `${siteConfig.url}/${lang}/services` },
           {
             name: service.title[lang],
             url: `${siteConfig.url}/${lang}/services/${service.slug}`,

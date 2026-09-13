@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/pageMetadata'
 import { getArticles, getInternalArticles, getUsedTopics } from '@/content/articles'
 import { getProjects, projectTitle } from '@/content/projects'
 import BlogGrid from '@/components/sections/BlogGrid'
-import { collectionPageSchema } from '@/lib/schema'
+import { breadcrumbSchema, collectionPageSchema } from '@/lib/schema'
 import { siteConfig } from '@/lib/config'
 import JsonLd from '@/components/JsonLd'
 
@@ -50,6 +50,16 @@ export default async function BlogPage({ params }: Props) {
             (article) => `${siteConfig.url}/${lang}/blog/${article.slug}`,
           ),
         })}
+      />
+      {/* PROPEL > this page. Search Console reported 0 valid breadcrumbs
+          sitewide on 2026-09-13, and four page pairs emitted none at all: the
+          two hubs and the two legal pages. A hub's trail is two levels because
+          that is the truth about where it sits. */}
+      <JsonLd
+        schema={breadcrumbSchema([
+          { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          { name: dict.nav.blog, url: `${siteConfig.url}/${lang}/blog` },
+        ])}
       />
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 lg:mb-16">

@@ -80,8 +80,11 @@ export default async function MigrationPage({ params }: Props) {
         })}
       />
       <JsonLd
+        /* PROPEL > Services > migration. The hub level was missing here too -
+           see the note on the [service] route, which had the same gap. */
         schema={breadcrumbSchema([
           { name: 'PROPEL', url: `${siteConfig.url}/${lang}` },
+          { name: dict.nav.services, url: `${siteConfig.url}/${lang}/services` },
           {
             name: dict.migration.h1,
             url: `${siteConfig.url}/${lang}/services/migration`,
