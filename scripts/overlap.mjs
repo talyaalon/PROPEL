@@ -1,7 +1,12 @@
 // 8-gram shingle overlap between the homepage and each service page.
 // Two numbers per page: full body text, and <main> only (shared nav/footer removed).
 const BASE = process.argv[2] || 'https://propel.co.il'
-const pages = ['/he/services/websites','/he/services/automation','/he/services/management-systems','/he/services/ecommerce','/he/services/migration','/he/portfolio','/he/blog']
+// '/he/services' is the hub, and it was the one page missing from this list -
+// which is why nothing measured it when it sat at 151 words, the thinnest
+// commercial page on the site. Expanding a hub is exactly the change that can
+// silently recreate the homepage-versus-portfolio duplication, so the page most
+// at risk has to be the one being watched.
+const pages = ['/he/services','/he/services/websites','/he/services/automation','/he/services/management-systems','/he/services/ecommerce','/he/services/migration','/he/portfolio','/he/blog']
 function text(html, mainOnly) {
   let h = html
   if (mainOnly) { const m = h.match(/<main[\s\S]*?<\/main>/); h = m ? m[0] : h }
