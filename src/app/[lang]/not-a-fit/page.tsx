@@ -93,15 +93,27 @@ export default async function NotAFitPage({ params }: Props) {
 
           {/* A definition list, not cards: this is a set of terms and what each
               one means, and a reader scanning for their own case wants them in
-              one column rather than a grid to sweep. */}
+              one column rather than a grid to sweep.
+
+              The nesting is load-bearing and it used to be wrong. HTML allows
+              `dl > div`, but that div must then contain the `dt` and `dd`
+              THEMSELVES. This wrapped them in a second div to hold the icon
+              beside them, so the terms sat two levels deep and the icon was a
+              direct child of the outer div - invalid either way, and a screen
+              reader stops announcing the term-to-definition pairing. An audit
+              on 2026-09-13 scored the page 93 on exactly this, in both locales.
+
+              So the icon moved inside the `dt`, where it belongs anyway: it
+              marks the term. The row is laid out on the `dt` itself, and the
+              `dd` is indented to line up with the text rather than the icon. */}
           <dl className="mt-8 flex flex-col gap-7">
             {t.items.map((item) => (
-              <div key={item.title} className="flex min-w-0 items-start gap-3">
-                <X className="mt-1.5 h-4 w-4 flex-shrink-0 text-brand-accent" aria-hidden="true" />
-                <div className="min-w-0">
-                  <dt className="font-semibold text-brand-ink">{item.title}</dt>
-                  <dd className="body-text mt-1.5">{item.body}</dd>
-                </div>
+              <div key={item.title} className="min-w-0">
+                <dt className="flex min-w-0 items-start gap-3 font-semibold text-brand-ink">
+                  <X className="mt-1.5 h-4 w-4 flex-shrink-0 text-brand-accent" aria-hidden="true" />
+                  <span className="min-w-0">{item.title}</span>
+                </dt>
+                <dd className="body-text mt-1.5 ms-7">{item.body}</dd>
               </div>
             ))}
           </dl>

@@ -191,13 +191,33 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
     title: 'מדיניות פרטיות',
     intro: 'המדיניות הזו מסבירה איזה מידע אנחנו אוספים דרך האתר, למה, ומה הזכויות שלכם לגביו.',
     updatedLabel: 'עודכן לאחרונה',
+    // Moved when the contact form and the cookies section were added on
+    // 2026-09-13. A policy that describes today's data collection under a July
+    // date is a policy nobody can trust the date on.
+    updatedAt: '2026-09-13',
     metaTitle: 'מדיניות פרטיות - איזה מידע נאסף ומה הזכויות שלכם',
     metaDescription: 'המדיניות מסבירה איזה מידע אנחנו אוספים דרך האתר, למה משתמשים בו ועם מי הוא משותף, ומה הזכויות שלכם לעיין במידע ולבקש את תיקונו או את מחיקתו.',
     sections: [
       {
         heading: 'איזה מידע נאסף',
         paragraphs: [
-          'אנחנו אוספים רק מידע שאתם מוסרים לנו ביוזמתכם - למשל כשאתם פונים אלינו דרך וואטסאפ, טלפון או אימייל. איננו דורשים הרשמה ואיננו אוספים מידע רגיש.',
+          'אנחנו אוספים רק מידע שאתם מוסרים לנו ביוזמתכם: דרך טופס יצירת הקשר באתר, או כשאתם פונים אלינו בוואטסאפ, בטלפון או באימייל. איננו דורשים הרשמה ואיננו אוספים מידע רגיש.',
+          'בטופס יצירת הקשר יש שישה שדות, ורק שניים מהם חובה: צריך למסור טלפון או אימייל, כדי שנוכל לחזור אליכם. כל השאר לבחירתכם.',
+        ],
+        list: [
+          'שם',
+          'שם העסק',
+          'טלפון',
+          'אימייל',
+          'טווח תקציב',
+          'תוכן ההודעה',
+        ],
+      },
+      {
+        heading: 'איפה המידע נשמר',
+        paragraphs: [
+          'הטופס נשלח דרך שירות הטפסים של Netlify, שהוא גם ספק האחסון של האתר. הפניות נשמרות בחשבון שלנו אצלו ומועברות אלינו בהתראה. לא נשמר עותק נוסף באתר עצמו, ולא מועבר מידע לשום גורם אחר.',
+          'לצד השדות שאתם ממלאים, שרת האתר רושם נתוני שליחה טכניים כמו כתובת IP וזמן, כפי שכל שרת אינטרנט עושה. הם משמשים למניעת שליחות אוטומטיות בלבד.',
         ],
       },
       {
@@ -215,9 +235,10 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
         ],
       },
       {
-        heading: 'מדידה ואנליטיקס',
+        heading: 'קוקיז ומדידה',
         paragraphs: [
-          'אנחנו עשויים למדוד שימוש באתר באופן אנונימי כדי לשפר אותו. מדידה כזו אינה מזהה אתכם אישית.',
+          'האתר אינו משתמש בקוקיז ואינו טוען שום סקריפט של צד שלישי. נכון לעדכון האחרון של המדיניות הזו לא מותקנת באתר שום מערכת אנליטיקס, ולכן איננו אוספים נתוני גלישה כלל.',
+          'אם נתקין בעתיד מדידה, היא תהיה אנונימית ולא תזהה אתכם אישית, והמדיניות הזו תעודכן לפני כן.',
         ],
       },
       {
@@ -237,13 +258,30 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
     intro:
       'This policy explains what information we collect through the site, why, and what rights you have over it.',
     updatedLabel: 'Last updated',
+    updatedAt: '2026-09-13',
     metaTitle: 'Privacy Policy: What We Collect and Your Rights',
     metaDescription: 'This policy explains what information we collect through the site, why we use it, who it may pass to, and the rights you have under Israeli privacy law.',
     sections: [
       {
         heading: 'What we collect',
         paragraphs: [
-          'We collect only information you choose to give us - for example when you contact us by WhatsApp, phone or email. We do not require registration and we do not collect sensitive information.',
+          'We collect only information you choose to give us: through the contact form on this site, or when you reach us by WhatsApp, phone or email. We do not require registration and we do not collect sensitive information.',
+          'The contact form has six fields and only two of them matter: you have to give either a phone number or an email address so that we can reply. Everything else is optional.',
+        ],
+        list: [
+          'Name',
+          'Business name',
+          'Phone',
+          'Email',
+          'Budget range',
+          'Your message',
+        ],
+      },
+      {
+        heading: 'Where the information is kept',
+        paragraphs: [
+          'The form is submitted through Netlify Forms, run by the same provider that hosts this site. Enquiries are stored in our account there and forwarded to us as a notification. No second copy is kept on the site itself, and nothing is passed to any other party.',
+          'Alongside the fields you fill in, the server records technical submission data such as an IP address and a timestamp, as any web server does. It is used only to stop automated submissions.',
         ],
       },
       {
@@ -261,9 +299,10 @@ export const privacyPolicy: Record<Locale, LegalDocument> = {
         ],
       },
       {
-        heading: 'Measurement and analytics',
+        heading: 'Cookies and measurement',
         paragraphs: [
-          'We may measure site usage anonymously in order to improve it. Such measurement does not identify you personally.',
+          'This site sets no cookies and loads no third-party script. As of the last update to this policy no analytics system is installed on it, so no browsing data is collected at all.',
+          'If we add measurement later it will be anonymous and will not identify you personally, and this policy will be updated before it goes live.',
         ],
       },
       {

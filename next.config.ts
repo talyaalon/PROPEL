@@ -23,15 +23,32 @@ const securityHeaders = [
    * comment at the top of this list already records for the other four
    * headers, and I walked into it anyway.
    *
-   * Report-only because CSP is the one security header that can take a site
-   * down if it is wrong, and Next ships inline bootstrap scripts a naive
-   * policy blocks instantly. Watch the browser console on production, confirm
-   * nothing is blocked, and only then rename the key to
-   * 'Content-Security-Policy'. `'unsafe-inline'` on script-src is required by
-   * that bootstrap; removing it needs a nonce threaded through the layout.
+   * It shipped report-only, which was the right way to start and the wrong
+   * way to stay: `Content-Security-Policy-Report-Only` with no `report-uri`
+   * neither enforces anything nor reports anything to anyone. It was a header
+   * that cost bytes and bought nothing, and an audit on 2026-09-13 called that
+   * correctly.
+   *
+   * Enforcing now, after establishing that the policy is already satisfied.
+   * Every origin referenced by the served pages was enumerated: the HTML
+   * references only propel.co.il, the three client sites and wa.me, all of them
+   * link targets rather than subresources, plus the w3.org and schema.org
+   * namespace URIs that live in SVG and JSON-LD attributes and are never
+   * fetched. The built CSS references no external origin at all. Fonts are
+   * self-hosted. There is no third-party script on the site.
+   *
+   * `'unsafe-inline'` on script-src stays: Next's bootstrap needs it, and
+   * removing it means threading a nonce through the layout, which is a real
+   * change rather than a header rename.
+   *
+   * The googletagmanager and google-analytics origins stay too, and they are
+   * not dead weight even though no analytics is installed. `layout.tsx` carries
+   * a GA4 snippet gated on `NEXT_PUBLIC_GA4_ID`; the day that variable is set
+   * in Netlify the tag has to be allowed to load, and a CSP that silently
+   * blocks it would be debugged from scratch by whoever sets it.
    */
   {
-    key: 'Content-Security-Policy-Report-Only',
+    key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",

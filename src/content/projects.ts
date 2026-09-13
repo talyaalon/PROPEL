@@ -475,7 +475,17 @@ const projects: Project[] = [
       },
     ],
     techStack: ['React', 'Next.js', 'Node.js', 'PostgreSQL'],
-    liveUrl: 'https://air-manage-app.netlify.app',
+    /*
+     * No `liveUrl` until a working one arrives.
+     *
+     * It was `https://air-manage-app.netlify.app`, which has returned 404 on
+     * every check since 2026-09-07 and again on 2026-09-13. The case study is
+     * the one place a prospect goes to see the work, and the button labelled
+     * "live site" took them to Not Found. The owner says the system is running
+     * and will send the real address; the button reappears the moment this line
+     * comes back, because the page already renders it only when the field
+     * exists.
+     */
   },
 ]
 
