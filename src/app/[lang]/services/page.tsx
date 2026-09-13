@@ -179,6 +179,30 @@ export default async function ServicesHub({ params }: Props) {
             )
           })}
         </ul>
+
+        {/* The honest counterweight to a page that lists five things we sell.
+
+            `/not-a-fit` had one editorial inbound link, from the contact page,
+            and the English version is one of the URLs Search Console declines
+            to index. A page enumerating what we do is the natural place to say
+            what we do not, and it is the same moment in the decision as the
+            contact page: someone weighing whether to write at all.
+
+            The label is `contact.fit_link`, the string already approved and
+            already used for this link on /contact and in the footer. Nothing
+            new is claimed here. */}
+        <div className="mt-12 border-t border-brand-line pt-8 lg:mt-16">
+          <Link
+            href={`/${lang}/not-a-fit`}
+            className="group/fit inline-flex items-center gap-1.5 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+          >
+            {dict.contact.fit_link}
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-300 group-hover/fit:translate-x-1 rtl:-scale-x-100 rtl:group-hover/fit:-translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </div>
     </section>
   )

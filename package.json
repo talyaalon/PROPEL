@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "check:contact": "node scripts/check-contact.mjs",
+    "check:portfolio": "node scripts/check-portfolio.mjs",
     "shots": "node scripts/capture-screens.mjs",
     "audit": "node scripts/audit.mjs",
     "audit:seo": "node scripts/seo-audit.mjs",

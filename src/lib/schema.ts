@@ -1,6 +1,6 @@
 import { siteConfig } from './config'
 import type { Locale } from './i18n'
-import type { Project } from '@/content/projects'
+import { projectTitle, type Project } from '@/content/projects'
 import { servicePages } from '@/content/services'
 
 /**
@@ -290,7 +290,20 @@ export function caseStudySchema(project: Project, lang: Locale): Json {
   return {
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
-    name: project.title,
+    /*
+     * `projectTitle`, not `project.title`.
+     *
+     * `title` is the brand name as written, and two of the five projects are
+     * branded in Hebrew. So the structured data on /en/portfolio/hagorer2 said
+     * `"name": "הגורר 2"` - a Hebrew name inside a block that declares
+     * `inLanguage: 'en'`, on a page whose visible heading is English. Verified
+     * on production before this was changed.
+     *
+     * `titleEn` exists for exactly this, and the visible heading, the <title>
+     * and the breadcrumb all already go through `projectTitle`. This was the
+     * one consumer still reading the raw field.
+     */
+    name: projectTitle(project, lang),
     description: project.summary[lang],
     inLanguage: lang === 'he' ? 'he-IL' : 'en',
     /*

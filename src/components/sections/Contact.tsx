@@ -1,4 +1,5 @@
-import { MessageCircle, Phone, Mail } from 'lucide-react'
+import Link from 'next/link'
+import { MessageCircle, Phone, Mail, ArrowRight } from 'lucide-react'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { siteConfig } from '@/lib/config'
 import type { Locale } from '@/lib/i18n'
@@ -14,6 +15,7 @@ type Props = {
     section_subtitle: string
     next_title: string
     next_steps: string[]
+    fit_link: string
   }
 }
 
@@ -38,6 +40,25 @@ export default function Contact({ lang, dict, clause }: Props) {
             <p className="mt-4 max-w-md text-base leading-[1.75] text-brand-slate sm:text-[1.1875rem]">
               {dict.section_subtitle}
             </p>
+
+            {/* The same link the /contact page carries, at the same moment in
+                the decision: someone reading this block is deciding whether to
+                write at all, and the honest thing to offer beside a form is the
+                page that says who we are not for.
+
+                `/not-a-fit` had one editorial inbound link sitewide. The label
+                is `contact.fit_link`, already approved and already used for
+                this exact link on /contact and in the footer. */}
+            <Link
+              href={`/${lang}/not-a-fit`}
+              className="group/fit mt-4 inline-flex items-center gap-1.5 py-1.5 font-display text-[0.8125rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+            >
+              {dict.fit_link}
+              <ArrowRight
+                className="h-4 w-4 transition-transform duration-300 group-hover/fit:translate-x-1 rtl:-scale-x-100 rtl:group-hover/fit:-translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
 
             <div className="mt-8 space-y-3">
               <a
