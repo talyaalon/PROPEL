@@ -15,7 +15,8 @@
     "audit": "node scripts/audit.mjs",
     "audit:seo": "node scripts/seo-audit.mjs",
     "audit:links": "node scripts/inlinks.mjs",
-    "audit:overlap": "node scripts/overlap.mjs"
+    "audit:overlap": "node scripts/overlap.mjs",
+    "audit:csp": "node scripts/csp-check.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.511.0",
