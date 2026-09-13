@@ -21,6 +21,7 @@ type ServicesDict = {
   cta_label: string
   stack_label: string
   read_more: string
+  view_all: string
   items: ServiceItem[]
 }
 
@@ -197,6 +198,29 @@ export default function Services({ lang, dict, clause }: Props) {
             maxOutcomes={service.id === 'migration' ? 4 : undefined}
           />
         ))}
+
+        {/* The route to the services hub, the same one the portfolio section
+            has had since the hub was built.
+
+            `scripts/inlinks.mjs` was rewritten on 2026-09-13 to count links
+            from inside `<main>` separately from site chrome, and the first
+            thing it reported was that /he/services and /en/services had ZERO
+            editorial inbound links: a commercial hub with five child pages,
+            reachable from the navigation, the footer and a sitemap, and from
+            nobody's prose. The cards above link to three of the five children
+            and never to the page that holds all of them. */}
+        <div className="mt-10 flex justify-center lg:mt-14">
+          <Link
+            href={`/${lang}/services`}
+            className="group/all inline-flex items-center gap-2 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+          >
+            {dict.view_all}
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-300 group-hover/all:translate-x-1 rtl:-scale-x-100 rtl:group-hover/all:-translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </div>
     </section>
   )
