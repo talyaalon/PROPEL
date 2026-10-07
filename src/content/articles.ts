@@ -356,6 +356,31 @@ export function getArticleBySlug(slug: string) {
   return getInternalArticles().find((article) => article.slug === slug)
 }
 
+/**
+ * The published articles that cite a given project as evidence.
+ *
+ * The inverse of `ARTICLE_LINKS`, derived rather than declared a second time -
+ * the same reasoning as `servicesForProject` in content/services.ts. An
+ * article already says "this case study backs my argument"; a case study
+ * saying "this article argues from me" is the same fact, and two
+ * hand-maintained copies of one fact is how the sitemap and the middleware
+ * drifted apart before lib/routes.ts existed.
+ *
+ * This is what gives the two thin case studies their outbound editorial link
+ * to the blog. Reads the ARTICLE_LINKS map through `getInternalArticles`, so
+ * a draft article is hidden on production exactly as it is everywhere else
+ * and the link cannot point at a URL the middleware 404s.
+ */
+export function articlesForProject(projectSlug: string): (Article & { slug: string })[] {
+  return getInternalArticles().filter(
+    (article) =>
+      // `!isExternal` narrows the union: `relatedProjects` exists only on the
+      // internal half, and the declared return type alone does not tell the
+      // compiler that an entry with a slug cannot be an external one.
+      !isExternal(article) && (article.relatedProjects ?? []).includes(projectSlug),
+  )
+}
+
 /** Topics that actually have an article - drives the filter chips. */
 export function getUsedTopics(): ArticleTopic[] {
   const used = new Set(getArticles().map((article) => article.topic))

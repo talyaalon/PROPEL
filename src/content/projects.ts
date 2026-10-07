@@ -148,6 +148,27 @@ export type Project = {
   /** Measurable outcomes. The most persuasive part of the page. */
   results?: ProjectResult[]
   /**
+   * What was actually built, item by item.
+   *
+   * Deliberately NOT `changed`, and the distinction is the one that keeps this
+   * file honest. `changed` is an outcome - what the work did for the business -
+   * and every line of it needs a number from the client, which is why most of
+   * them are `PENDING`. `delivered` is an inventory of the artefact: the page
+   * count, the schema, the standard met, the platform absent. Those are facts
+   * about the build, checkable by opening the site, and they do not need
+   * anyone's permission to publish.
+   *
+   * Two of the five case studies ran to ~110 words because everything true
+   * about them that did not need a client's number had nowhere to go.
+   *
+   * Stripped of `PENDING` like every other list here - see `withoutPending`.
+   * Nothing in this field should ever carry one, since the whole point is
+   * that these are already known; the filter is there because the invariant
+   * is "no PENDING value leaves this module", not "none of the fields we
+   * remembered to filter".
+   */
+  delivered?: Bilingual[]
+  /**
    * Full-page screenshots driving the scrolling screen previews.
    *
    * Captured by `npm run shots`. Only publicly browsable sites have them -
@@ -302,6 +323,58 @@ const projects: Project[] = [
       { metric: '22', label: { he: 'עמודים', en: 'pages' } },
       { metric: 'PWA', label: { he: 'ניתן להתקנה בנייד', en: 'installable on mobile' } },
     ],
+    challenge: {
+      he: 'גרירה וחילוץ הוא שירות שמחפשים ברגע הגרוע ביום: ברכב שלא מניע, בשול של כביש, ביד אחת. החיפוש כמעט תמיד מקומי ומצבי - שם של שירות ועוד שם של אזור - ולכל צמד כזה יש כוונה אחרת וצריכה להיות לו תשובה אחרת.\n\nאתר של עמוד אחד יכול לענות על צמד אחד. על עשרים הוא לא יכול, כי אין בו עשרים כותרות, עשרים כתובות או עשרים עמודים שגוגל יכול לדרג בנפרד. זה היה האתגר כאן: מבנה שבו לכל שירות ולכל אזור שירות יש עמוד משלו ותוכן משלו, בלי שהאתר יהפוך לעשרים ושתיים גרסאות של אותו טקסט - ושייטען מהר על רשת סלולרית חלשה, כי זה התנאי שבו הוא נקרא בפועל.',
+      // TODO(i18n): approved Hebrew above; English is a literal rendering and
+      // has not been reviewed as marketing copy.
+      en: 'Towing and roadside recovery is a service people look for at the worst moment of their day: in a car that will not start, on the hard shoulder, one-handed. The search is almost always local and situational - the name of a service plus the name of an area - and every one of those pairs carries a different intent and needs a different answer.\n\nA single-page site can answer one such pair. It cannot answer twenty, because it does not contain twenty headings, twenty addresses or twenty pages Google can rank separately. That was the problem here: a structure in which every service and every service area has a page and a body of its own, without the site becoming twenty-two variants of one piece of text - and one that loads fast on a weak mobile connection, because that is the condition it will actually be read in.',
+    },
+    solution: {
+      he: 'האתר נבנה ב-HTML ו-CSS בלבד, בלי מערכת ניהול תוכן ובלי תוספים: 22 עמודים סטטיים שמוגשים כקבצים. זה מה שמייצר את זמן הטעינה בשטח, וזה גם מה שמוריד את משטח התקיפה: אין פאנל ניהול להיכנס אליו ואין תוסף שצריך לעדכן כל חודש.\n\nהמבנה הוא העבודה האמיתית. לכל שירות ולכל אזור שירות יש עמוד משלו עם כותרת H1 משלו, ועל כל עמוד יושבות סכמות Schema.org שמסבירות לגוגל שמדובר בעסק מקומי עם שירות, אזור שירות וטלפון - ולא בעמוד טקסט.\n\nהנגישות נבנתה פנימה ולא הודבקה מעל: היררכיית כותרות, טקסט חלופי לתמונות, ניווט מלא במקלדת וניגודיות לפי ת"י 5568, בלי ווידג\'ט נגישות חיצוני. והאתר ניתן להתקנה בנייד כ-PWA, כך שמי שקרא לגרר פעם אחת יכול להשאיר אותו על מסך הבית ולהגיע אליו בפעם הבאה בלי לחפש שוב.',
+      // TODO(i18n)
+      en: 'The site is built in HTML and CSS alone, with no content management system and no plugins: 22 static pages served as files. That is what produces the load time in the field, and it is also what reduces the attack surface - there is no admin panel to get into and no plugin that needs updating every month.\n\nThe structure is the real work. Every service and every service area has its own page with its own H1, and each page carries Schema.org markup telling Google this is a local business with a service, a service area and a telephone number rather than a page of text.\n\nAccessibility was built in rather than bolted on: heading hierarchy, alternative text, full keyboard navigation and contrast to the Israeli standard IS 5568, with no third-party accessibility widget. And the site is installable on a phone as a PWA, so someone who calls a tow truck once can leave it on their home screen and reach it next time without searching again.',
+    },
+    delivered: [
+      {
+        he: '22 עמודים סטטיים - עמוד נפרד לכל שירות ולכל אזור שירות',
+        en: '22 static pages - a separate page for every service and every service area',
+      },
+      {
+        he: 'סכמות Schema.org לעסק מקומי על כל עמוד: שירות, אזור שירות וטלפון',
+        en: 'Local-business Schema.org on every page: service, service area and telephone',
+      },
+      {
+        he: 'נגישות לפי ת"י 5568 - כותרות, טקסט חלופי, מקלדת וניגודיות, בלי תוסף',
+        en: 'Accessibility to IS 5568 - headings, alt text, keyboard and contrast, with no overlay',
+      },
+      {
+        he: 'התקנה בנייד כ-PWA, בלי לעבור דרך חנות אפליקציות',
+        en: 'Installable on a phone as a PWA, with no app store in the way',
+      },
+      {
+        he: 'בלי מערכת ניהול תוכן ובלי תוספים - אין פאנל לפרוץ ואין רישיונות שנתיים',
+        en: 'No CMS and no plugins - nothing to break into and no annual licences',
+      },
+    ],
+    /*
+     * The outcome lines, unanswered.
+     *
+     * Every one of these is a question for the client and not a sentence we
+     * can write: `getProjects` strips a `PENDING` line before it can render,
+     * so the page is honest while the answers are outstanding and each line
+     * appears the moment one arrives. Kept here rather than in a document,
+     * because next to the facts above is the only place it will not be lost.
+     */
+    changed: [
+      {
+        he: 'TODO(metric): כמה פניות בחודש מגיעות מהאתר - שיחות טלפון מהעמודים',
+        en: 'TODO(metric): enquiries per month from the site - calls placed from its pages',
+      },
+      {
+        he: 'TODO(metric): על אילו צמדי שירות-ואזור האתר מופיע בעמוד הראשון',
+        en: 'TODO(metric): which service-plus-area queries the site reaches the first page for',
+      },
+    ],
     techStack: ['HTML/CSS', 'SEO', 'PWA', 'Schema.org'],
     liveUrl: 'https://hagorer2.co.il',
     featured: true,
@@ -327,6 +400,55 @@ const projects: Project[] = [
     results: [
       { metric: '24', label: { he: 'עמודים', en: 'pages' } },
       { metric: '4', label: { he: 'עמודי מתודה', en: 'method pages' } },
+    ],
+    challenge: {
+      he: 'מכון טיפול והכשרה נמכר לפי מתודות, וכמעט איש לא מחפש "מכון טיפולי". מחפשים CBT, מחפשים NLP, מחפשים הוראה מתקנת - ומי שמחפש אחד מאלה רוצה לדעת מה המתודה עושה, למי היא מתאימה ואיך נראה טיפול בפועל - לא לקרוא עמוד שמונה את כולן בשורה.\n\nאתר שמאחד את כל המתודות בעמוד אחד מתחרה בעצמו על ארבע שאילתות שונות ולא עונה על אף אחת מהן במלואה. ההחלטה המבנית כאן הייתה לתת לכל מתודה עמוד משלה - כתובת, כותרת ותוכן שלה בלבד - וזה גם מה שהופך את הפנייה הראשונה לפנייה של מי שכבר יודע מה הוא מחפש.',
+      // TODO(i18n): approved Hebrew above; English is a literal rendering and
+      // has not been reviewed as marketing copy.
+      en: 'A therapy and training practice sells itself by method, and almost nobody searches for "therapy practice". They search for CBT, for NLP, for remedial teaching - and someone searching for one of those wants to know what that method does, who it suits and what a session actually looks like, not to read a page that lists all of them in a row.\n\nA site that gathers every method onto one page competes with itself across four different queries and answers none of them in full. The structural decision here was to give each method a page of its own - its own address, its own heading and only its own content - which is also what turns the first enquiry into one from somebody who already knows what they are looking for.',
+    },
+    solution: {
+      he: 'האתר נבנה ב-Next.js ו-Tailwind בתצוגת RTL מלאה: 24 עמודים, מהם ארבעה עמודי מתודה - CBT, NLP, EMR והוראה מתקנת. כל עמוד מתודה הוא כתובת נפרדת עם כותרת H1 משלו ועם הטקסט שמסביר את המתודה הזאת בלבד, כך שאין ארבע גרסאות של אותו עמוד שמתחרות ביניהן.\n\nRTL הוא לא הגדרה אחת בראש הקובץ. בעברית מתהפך הריווח, מתהפך כיוון החצים, וכל מקום שבו מופיע מונח לטיני - CBT, NLP, EMR - הוא קטע דו-כיווני בתוך משפט עברי שחייב לשמור את הפיסוק בצד הנכון. זה נבנה כך מההתחלה ולא תוקן אחר כך.\n\nמעל זה: היררכיית כותרות שמתארת את המכון כפי שהוא בנוי באמת, ונגישות שנכתבה לתוך הקוד - ניווט מקלדת, ניגודיות וטקסט חלופי - בלי ווידג\'ט חיצוני שמבטיח נגישות ולא מספק אותה.\n\nומעל כל אלה עיקרון אחד: כל עמוד עומד בפני עצמו. מי שנכנס מגוגל ישר לעמוד מתודה פנימי מקבל שם תשובה שלמה - מה המתודה עושה, למי היא מתאימה ואיך ממשיכים מכאן - ולא הפניה חזרה לעמוד הבית כדי להבין מה הוא קורא.',
+      // TODO(i18n)
+      en: 'The site is built in Next.js and Tailwind with full RTL layout: 24 pages, four of them method pages - CBT, NLP, EMR and remedial teaching. Each method page is a separate address with its own H1 and with the text that explains that method and nothing else, so there are not four variants of one page competing with each other.\n\nRTL is not one setting at the top of a file. In Hebrew the spacing flips, the arrows flip, and every place a Latin term appears - CBT, NLP, EMR - is a bidirectional run inside a Hebrew sentence that has to keep its punctuation on the correct side. It was built that way from the start rather than corrected afterwards.\n\nOn top of that: a heading hierarchy that describes the practice as it is actually organised, and accessibility written into the code - keyboard navigation, contrast and alternative text - with no third-party widget promising accessibility without supplying it.\n\nAnd above all of it one principle: every page stands on its own. Somebody arriving from Google straight onto an inner method page gets a complete answer there - what the method does, who it suits and how to go further - rather than a trip back to the homepage to work out what they are reading.',
+    },
+    delivered: [
+      {
+        he: '24 עמודים, מהם ארבעה עמודי מתודה: CBT, NLP, EMR והוראה מתקנת',
+        en: '24 pages, four of them method pages: CBT, NLP, EMR and remedial teaching',
+      },
+      {
+        he: 'כתובת, כותרת H1 ותוכן נפרדים לכל מתודה - בלי ארבע גרסאות של אותו עמוד',
+        en: 'A separate address, H1 and body per method - not four variants of one page',
+      },
+      {
+        he: 'RTL מלא: ריווח, כיווניות ומונחים לטיניים בתוך משפט עברי',
+        en: 'Full RTL: spacing, direction, and Latin terms inside a Hebrew sentence',
+      },
+      {
+        he: 'נבנה ב-Next.js ומוגש סטטי - בלי מערכת ניהול תוכן ובלי תוספים',
+        en: 'Built in Next.js and served statically - no CMS and no plugins',
+      },
+      {
+        he: 'נגישות בקוד: היררכיית כותרות, ניווט מקלדת, ניגודיות וטקסט חלופי',
+        en: 'Accessibility in the code: headings, keyboard navigation, contrast and alt text',
+      },
+      {
+        he: 'כל עמוד עומד בפני עצמו - כניסה מגוגל לעמוד פנימי מקבלת תשובה שלמה במקום',
+        en: 'Every page stands alone - an arrival from Google onto an inner page is answered there',
+      },
+    ],
+    // See the note on hagorer2's `changed`: questions for the client, stripped
+    // before they can render.
+    changed: [
+      {
+        he: 'TODO(metric): כמה פניות בחודש מגיעות מהאתר, ואיזה עמוד מתודה מביא את רובן',
+        en: 'TODO(metric): enquiries per month from the site, and which method page brings most of them',
+      },
+      {
+        he: 'TODO(metric): אילו שמות מתודה האתר מדורג עליהם בעמוד הראשון',
+        en: 'TODO(metric): which method names the site reaches the first page for',
+      },
     ],
     techStack: ['Next.js', 'Tailwind', 'RTL'],
     liveUrl: 'https://cnafim-lauf.co.il',
@@ -520,6 +642,9 @@ function withoutPending(project: Project): Project {
   const changed = (project.changed ?? []).filter(
     (line) => !isPending(line.he) && !isPending(line.en),
   )
+  const delivered = (project.delivered ?? []).filter(
+    (line) => !isPending(line.he) && !isPending(line.en),
+  )
   // Flow too - no node is pending today, but the invariant is "no PENDING
   // value leaves this module", not "none of the fields we remembered".
   const flow = (project.flow ?? []).filter(
@@ -536,6 +661,7 @@ function withoutPending(project: Project): Project {
     // test and no consumer has to distinguish "none" from "all pending".
     ...(results.length > 0 ? { results } : { results: undefined }),
     ...(changed.length > 0 ? { changed } : { changed: undefined }),
+    ...(delivered.length > 0 ? { delivered } : { delivered: undefined }),
     ...(flow.length > 0 ? { flow } : { flow: undefined }),
   }
 }

@@ -25,7 +25,7 @@
     "blog": "Blog"
   },
   "hero": {
-    "h1_pre": "Systems and automation for business",
+    "h1_pre": "PROPEL builds systems and automation for business",
     "h1_focus": "that stop costing you hours every month",
     "h1_post": "",
     "subtitle": "We build the one system your business runs on - ordering, management and automation - and the website that sits on top of it.",
@@ -166,7 +166,81 @@
     "hub_subtitle": "Five services, each with a page of its own: what it solves, how it works, and the projects that stand behind it.",
     "hub_meta_title": "Services - websites, systems and automation",
     "hub_meta_description": "Five services for businesses: websites, automation, management systems, online stores and migration to clean code you own. Each has a page of its own.",
-    "hub_proof_label": "Work that proves it"
+    "hub_proof_label": "Work that proves it",
+    "contact_note": "Prefer to write?",
+    "contact_link": "Send an enquiry through the form",
+    "audience_title": "Who this is for",
+    "process_title": "How the work runs, stage by stage",
+    "pricing_title": "What moves the price",
+    "faq_title": "Common questions",
+    "hub_choose_title": "How to choose between the five",
+    "hub_choose_body": "Most enquiries arrive with a symptom rather than the name of a service, which is perfectly fine. This is the translation: if your opening sentence sounds like one of these, that is the page to read first.",
+    "hub_choose_items": [
+      {
+        "slug": "websites",
+        "when": "Clients search for us in Google and do not find us, or there is a site and it brings in no enquiries."
+      },
+      {
+        "slug": "automation",
+        "when": "There is a process we do by hand several times a day, where somebody's whole job is moving figures from one place to another."
+      },
+      {
+        "slug": "management-systems",
+        "when": "There is no way to know what is open right now without calling to ask, and it is all run from a spreadsheet that has outgrown itself."
+      },
+      {
+        "slug": "ecommerce",
+        "when": "We want to sell online, and the order has to reach the people who fulfil it rather than an inbox somebody remembers to check."
+      },
+      {
+        "slug": "migration",
+        "when": "The site is slow, leans on twenty plugins, or the developer who built it has gone and we do not have the code."
+      }
+    ],
+    "hub_list_title": "Five services, a page each",
+    "hub_included_title": "What every project includes, whichever service it is",
+    "hub_included_body": "These are not paid extras and not a premium tier. They are how we work, and they are the same for a five-page business site as for an internal system running inside an organisation.",
+    "hub_included_items": [
+      "A twenty-minute scoping call before any proposal, with no commitment and no deck.",
+      "A written proposal with scope, stages, date and price - and what is not included, named rather than left vague.",
+      "Staged work: at the end of every stage there is something to look at, instead of a reveal at the end.",
+      "Accessibility written into the code to the Israeli standard IS 5568, with no third-party widget promising it instead of supplying it.",
+      "The code, the domain and the hosting access registered in your name at the end.",
+      "The first month of fixes and adjustments included after launch.",
+      "And if we are not the right people, you hear that on the first call, with a pointer to who is."
+    ],
+    "hub_price_title": "How a price is arrived at",
+    "hub_price_body": "We do not give a number over the phone before seeing the business, because a number like that is a guess both sides then stay attached to. A project usually starts in the low thousands of shekels, and a system with integrations costs more; the exact figure arrives in a written proposal. These are the steps that produce it:",
+    "hub_price_items": [
+      "The scoping call: what is stuck, what already exists, and what should have been happening instead.",
+      "A decision on scope: what goes into the first stage and what waits. There is almost always one piece worth building first.",
+      "The written proposal: scope, stages, date and price, and what stays out of it.",
+      "Timelines: a business site 2-3 weeks, a system 4-6 weeks, from the point the content and the access are in hand.",
+      "Each service page carries its own section on what moves the price for that service specifically."
+    ],
+    "hub_faq_title": "Questions about working with us",
+    "hub_faq_items": [
+      {
+        "question": "I do not know which service I need - what then?",
+        "answer": "Get in touch without deciding. Part of the work of the scoping call is saying which of the five this even is, and sometimes the answer is two of them in a particular order. The symptoms above are a better starting point than the name of a service."
+      },
+      {
+        "question": "Can several services be combined into one project?",
+        "answer": "Yes, and that is the common case. An online store is a website and an automation at once, and a management system almost always arrives with data to bring across from whatever came before. The proposal is divided into stages, so committing to all of it is never a condition of starting."
+      },
+      {
+        "question": "What is the smallest project you take?",
+        "answer": "There is no formal floor. If the budget does not suit a full project we will say what is worth doing with what there is - and sometimes the answer is one stage now and more in six months. Some of our best projects are one-person businesses."
+      },
+      {
+        "question": "Will you work alongside our existing suppliers?",
+        "answer": "Yes. A designer, a copywriter, an SEO consultant or a bookkeeper - we build and connect, and we do not ask you to replace anyone already working with you. What we do not do at all is written up on a page of its own."
+      },
+      {
+        "question": "Who actually works on the project?",
+        "answer": "We work directly with the business owner, with no layers of account management. That means the answer you get comes from the person doing the building, and it also means the number of parallel projects is limited - which is why we will not promise a timeline we know we cannot meet."
+      }
+    ]
   },
   "portfolio": {
     "section_title": "Sites and systems we built for clients in Israel and abroad",
@@ -200,7 +274,10 @@
       "cta_body": "Tell us what's stuck and we'll tell you honestly whether - and how - we can help.",
       "cta_label": "Let's talk",
       "related_service_title": "The service behind this work",
-      "prev_project": "Previous project"
+      "prev_project": "Previous project",
+      "delivered": "What was built",
+      "related_article_title": "From the blog, on this work",
+      "screens_alt": "Screenshots of {title}: the site in desktop and phone layout, scrolling from top to bottom"
     },
     "cta_title": "The next one could be yours",
     "cta_body": "Tell us what is slowing you down - a site, a manual process, systems that do not talk to each other - and we will come back with something concrete.",
@@ -350,7 +427,69 @@
     ],
     "fit_title": "Before you write",
     "fit_body": "There is work we do not take, and both sides are better off knowing that before a call. We wrote about it plainly on its own page.",
-    "fit_link": "When we are not the right fit"
+    "fit_link": "When we are not the right fit",
+    "call_title": "What the intro call looks like",
+    "call_body": "The first call runs twenty minutes and there is no deck in it. We ask, you describe, and by the end both sides know whether there is a project here. If there is not, you hear that on the call rather than in a follow-up email that never arrives.",
+    "call_items": [
+      "What is stuck today, and how the process actually runs - who types what, where it goes next, where it breaks.",
+      "What already exists: a site, a system, a spreadsheet, a WhatsApp group, a paper diary.",
+      "What should be happening instead, and which part of that is genuinely blocking you now.",
+      "The order to build in. There is almost always one piece worth building first, and it is not always the piece you called about."
+    ],
+    "deliver_title": "What you get after you reach out",
+    "deliver_body": "Nothing on this list commits you to anything or requires you to sign anything.",
+    "deliver_items": [
+      "A reply within one business day, on the channel you used.",
+      "A straight answer on fit. If the work belongs with a mobile studio, a media agency or a copywriter, we name which one.",
+      "Once the scope is clear: a written proposal - what gets built, in what stages, by what date, at what price.",
+      "What the proposal deliberately leaves out, named rather than left vague.",
+      "A plain statement of what is registered in your name at the end: the code, the domain and the hosting access."
+    ],
+    "response_title": "Response times and time zones",
+    "response_body": "We work across two time zones, Israel and Thailand, so a few hours of offset is the ordinary case here rather than an exception. Thailand runs four to five hours ahead of Israel depending on the time of year, which in practice means a message sent during a Thai afternoon is usually answered the same day, and one sent in a Thai evening is waiting at the start of the next Israeli morning.",
+    "response_items": [
+      "WhatsApp is the fast channel, and the one for a short question.",
+      "The form and email are answered within one business day, in the order they arrive.",
+      "Friday afternoon and Saturday are the weekend here. A message left then is answered on Sunday.",
+      "We work in English and in Hebrew, in writing and on a call, whichever suits you."
+    ],
+    "fit_yes_title": "Projects that suit us",
+    "fit_yes_items": [
+      "A manual process that repeats several times a day and eats hours - ordering, work orders, pricing.",
+      "Systems that do not talk to each other, so the same figure gets typed in twice or three times.",
+      "A site built on a closed platform that you want back as code you own.",
+      "A new business site or store, where the point is enquiries rather than presence."
+    ],
+    "work_title": "Worth reading before the call",
+    "work_body": "If you would rather arrive at the call with a clearer picture, two things help: the list of what we build, and real projects you can open and read - what was stuck in each one and what was built for it.",
+    "services_link": "All services",
+    "faq_title": "Questions about getting in touch",
+    "faq_items": [
+      {
+        "question": "How quickly do you reply?",
+        "answer": "Within one business day, on the channel you used. On WhatsApp it is usually sooner. An enquiry left on Friday afternoon or Saturday is answered on Sunday, which is the first working day of the Israeli week."
+      },
+      {
+        "question": "Can I get in touch before I know what to build?",
+        "answer": "Yes, and that is the common case. A description of what is not working is enough for us to say whether we are the right people. Deciding what to build and in what order is the work of the scoping call, not a condition for having one."
+      },
+      {
+        "question": "Does the intro call cost anything?",
+        "answer": "No. Twenty minutes, no commitment and no presentation. If it ends with us looking like the wrong fit, you hear that on the call."
+      },
+      {
+        "question": "What should I prepare for the call?",
+        "answer": "Nothing formal. A spreadsheet, a screenshot of the process as it runs today, or a link to the current site will shorten the call, but none of them are needed to have it."
+      },
+      {
+        "question": "Do you work with businesses outside Israel?",
+        "answer": "Yes. Part of our work is with a six-branch chain in Thailand, and the interfaces built there are bilingual. We work in English and in Hebrew, in writing and on a call."
+      },
+      {
+        "question": "What happens to the details I put in the form?",
+        "answer": "They are used only to get back to you. The form is submitted through Netlify Forms, run by the same provider that hosts this site, and nothing is passed to any other party. The privacy policy spells out the detail."
+      }
+    ]
   },
   "about": {
     "section_title": "Building websites for small businesses in Israel",
@@ -444,7 +583,16 @@
     "cta_title": "Got a question the articles don't answer?",
     "cta_body": "A 20-minute scoping call, no commitment. We'll tell you what we would do in your position - even if that isn't us.",
     "cta_button": "Talk to us",
-    "cta_whatsapp": "Hi PROPEL, I was reading your blog and I have a question."
+    "cta_whatsapp": "Hi PROPEL, I was reading your blog and I have a question.",
+    "home_eyebrow": "From the blog",
+    "home_title": "What we write, and why it matters for your business",
+    "home_subtitle": "Three pieces written out of real work - what a site actually costs over three years, what an accessibility plugin does not fix, and how one bug sent an order to the wrong branch.",
+    "home_view_all": "All articles",
+    "author_title": "About the author",
+    "author_role": "Founder of PROPEL",
+    "author_bio": "Builds websites, systems and automations for small and mid-sized businesses in Israel, working directly with the owner with no account-management layer in between. Everything here is written out of work that shipped: the articles describe real bugs, real architecture decisions and real cost trade-offs rather than theory.",
+    "author_profiles": "Profiles",
+    "author_more": "More about us"
   },
   "a11y_menu": {
     "title": "Accessibility",

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
-import { siteConfig } from '@/lib/config'
+import { siteConfig, authorNameFor } from '@/lib/config'
 import { pageMetadata } from '@/lib/pageMetadata'
 import { getWhatsAppURL } from '@/lib/whatsapp'
 import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/schema'
@@ -290,6 +290,21 @@ function renderBody(body: string, codeLabel: string) {
   return nodes
 }
 
+/**
+ * A profile link's label: its hostname, without a leading "www.".
+ *
+ * Derived rather than mapped, so adding a third profile to
+ * NEXT_PUBLIC_AUTHOR_SAME_AS needs no code change here - and so no handle or
+ * display name is invented for a profile nobody has seen.
+ */
+function profileLabel(href: string): string {
+  try {
+    return new URL(href).hostname.replace(/^www\./, '')
+  } catch {
+    return href
+  }
+}
+
 export default async function ArticlePage({ params }: Props) {
   const { lang, slug } = await params
   if (!isLocale(lang)) notFound()
@@ -326,6 +341,12 @@ export default async function ArticlePage({ params }: Props) {
   // 'migration' predates the service-page content file and keeps its own
   // route; the article template resolves it from the dictionary instead.
   const relatedService = article.relatedService ? getServicePage(article.relatedService) : undefined
+
+  /*
+   * '' until the owner sets NEXT_PUBLIC_AUTHOR_NAME, which is the switch for
+   * both the box below and the Person author in the Article schema.
+   */
+  const authorName = authorNameFor(lang)
   const relatedMigration = article.relatedService === 'migration'
 
   return (
@@ -559,6 +580,74 @@ export default async function ArticlePage({ params }: Props) {
               ))}
             </ul>
           </div>
+        )}
+
+        {/*
+          The author box.
+
+          Renders only once NEXT_PUBLIC_AUTHOR_NAME is set, which is what makes
+          it honest rather than decorative: the Article schema's `author`
+          switches from the organization to a `Person` on the same condition, so
+          the visible claim and the structured one appear together or not at
+          all. A box reading "About the author" over no name is worse than no
+          box, and a name invented here would be a statement about a real
+          person. See the TODO(owner) in lib/config.ts for the three variables.
+
+          `author_role` and `author_bio` are drafted from the About section's
+          own approved copy and are the owner's to change - they ship the moment
+          the name is set, which is the approval step.
+        */}
+        {authorName && (
+          <section
+            aria-labelledby="article-author"
+            className="mt-14 border-t border-brand-line pt-10"
+          >
+            <h2
+              id="article-author"
+              className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+            >
+              {dict.blog.author_title}
+            </h2>
+            <div className="card mt-6 p-6">
+              {/* min-w-0 + break-words: a person's name is one unbreakable run
+                  and this sits in a 768px column at 200% text. */}
+              <p className="min-w-0 break-words text-[1.0625rem] font-bold text-brand-ink">
+                {authorName}
+              </p>
+              <p className="mt-1 font-display text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-brand-slate">
+                {dict.blog.author_role}
+              </p>
+              <p className="body-text mt-4">{dict.blog.author_bio}</p>
+
+              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+                {/* The about section, which is the only place on the site that
+                    says who is behind it - and the same URL the Person node
+                    declares, so the two agree. */}
+                <Link
+                  href={`/${lang}#about`}
+                  className="text-[0.875rem] font-semibold text-brand-accent underline underline-offset-4 transition-colors duration-300 hover:text-brand-ink"
+                >
+                  {dict.blog.author_more}
+                </Link>
+                {/* The same URLs the schema publishes as `sameAs`. A profile
+                    link a reader can follow is what makes the structured claim
+                    checkable, and the hostname is the label so no profile
+                    handle is invented here either. */}
+                {siteConfig.authorSameAs.map((href) => (
+                  <a
+                    key={href}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer me"
+                    className="text-[0.875rem] font-medium text-brand-slate underline underline-offset-4 transition-colors duration-300 hover:text-brand-ink"
+                    dir="ltr"
+                  >
+                    {profileLabel(href)}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
         )}
 
         <a

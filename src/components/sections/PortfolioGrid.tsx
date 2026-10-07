@@ -29,6 +29,9 @@ type PortfolioDict = {
   showcase_label: string
   showcase_prev: string
   showcase_next: string
+  /* Only the one field is declared, not the whole case_study block: this
+     component needs the capture description and nothing else from it. */
+  case_study: { screens_alt: string }
 }
 
 type Props = {
@@ -101,7 +104,10 @@ export default function PortfolioGrid({ lang, dict, projects, categories }: Prop
                   <ProjectScreens
                     desktop={project.screens.desktop}
                     mobile={project.screens.mobile}
-                    title={`${projectTitle(project, lang)} - ${dict.categories[project.category]}`}
+                    title={dict.case_study.screens_alt.replace(
+                      '{title}',
+                      `${projectTitle(project, lang)} - ${dict.categories[project.category]}`,
+                    )}
                   />
                 ) : (
                   /* Behind a login: shows the owner's recordings once they

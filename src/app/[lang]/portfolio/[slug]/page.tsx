@@ -15,6 +15,7 @@ import PrivateProjectShowcase from '@/components/PrivateProjectShowcase'
 import FlowDiagram from '@/components/FlowDiagram'
 import { getProjects, getProjectBySlug, projectTitle, changedLines } from '@/content/projects'
 import { servicesForProject } from '@/content/services'
+import { articlesForProject } from '@/content/articles'
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>
@@ -98,9 +99,12 @@ export default async function ProjectPage({ params }: Props) {
     let n = 0
     return () => String(++n).padStart(2, '0')
   })()
+  const delivered = project.delivered ?? []
+
   const clauses = {
     stuck: project.challenge ? clause() : '',
     built: project.solution ? clause() : '',
+    delivered: delivered.length > 0 ? clause() : '',
     flow: project.flow?.length ? clause() : '',
     changed: changed.length > 0 ? clause() : '',
     stack: project.techStack.length > 0 ? clause() : '',
@@ -119,6 +123,15 @@ export default async function ProjectPage({ params }: Props) {
    * the thing it demonstrates.
    */
   const relatedServices = servicesForProject(project.slug)
+
+  /*
+   * The articles that argue from this work. Derived from the article side of
+   * the mapping - see `articlesForProject`. A case study had exactly two
+   * routes out that were not another case study: the service it proves and
+   * the WhatsApp CTA, so the blog and the portfolio linked in one direction
+   * only.
+   */
+  const relatedArticles = articlesForProject(project.slug)
 
   return (
     <div className="bg-brand-surface">
@@ -268,10 +281,17 @@ export default async function ProjectPage({ params }: Props) {
         >
           <div className="mx-auto max-w-5xl">
             {project.screens ? (
+              /* The accessible name was the brand name alone - "הגורר 2" -
+                 on a `role="img"` showing two device frames scrolling
+                 through a full-page capture. A screen reader therefore
+                 announced an image called nothing more than the client, and
+                 the only crawlable description of the only crawlable image
+                 of this project said the same. `screens_alt` describes what
+                 is actually in the frames. */
               <ProjectScreens
                 desktop={project.screens.desktop}
                 mobile={project.screens.mobile}
-                title={projectTitle(project, lang)}
+                title={t.screens_alt.replace('{title}', projectTitle(project, lang))}
               />
             ) : (
               /* A system behind a login. Full width here, where there is room
@@ -308,6 +328,42 @@ export default async function ProjectPage({ params }: Props) {
           <p className="max-w-2xl text-lg leading-relaxed text-brand-ink">
             {project.summary[lang]}
           </p>
+        )}
+
+        {/*
+          The build inventory.
+
+          Separate from `changed` below, and the split is what let two case
+          studies grow at all. `changed` is an outcome and needs a number from
+          the client, so every line of it is still `PENDING` and the block
+          renders for nobody. This is what was built - the page count, the
+          schema, the standard met, the platform absent - which is checkable
+          by opening the client's site and needs nobody's permission.
+
+          A reader skimming for "what do I actually get" was previously served
+          by the technology table at the bottom, which answers a different
+          question in a language they do not speak.
+        */}
+        {delivered.length > 0 && (
+          <div className="mt-14 lg:mt-20">
+            <SectionLabel clause={clauses.delivered}>{t.delivered}</SectionLabel>
+            <ul className="mt-6 grid max-w-3xl gap-3">
+              {delivered.map((line) => (
+                <li key={line[lang]} className="flex items-start gap-3 text-lg leading-relaxed">
+                  <Check
+                    className="mt-1.5 h-4 w-4 flex-shrink-0 text-brand-accent"
+                    aria-hidden="true"
+                  />
+                  {/* `anywhere`, as in Block: these lines name `Schema.org`,
+                      `Next.js` and `PWA`, and a Latin token at 200% text in a
+                      320px column is this project's recurring reflow trap. */}
+                  <span className="min-w-0 text-brand-ink [overflow-wrap:anywhere]">
+                    {line[lang]}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {/* The process we built, drawn from the approved narrative - every
@@ -487,6 +543,38 @@ export default async function ProjectPage({ params }: Props) {
                       />
                       <span className="font-semibold text-brand-ink">{service.title[lang]}</span>
                       <span className="body-text">{service.intro[lang]}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
+          {/* The writing that argues from this work.
+              The blog linked down into the portfolio and the portfolio never
+              linked back, so every article's proof link was a one-way street.
+              Same card shape as the service block above it. */}
+          {relatedArticles.length > 0 && (
+            <nav aria-labelledby="case-article" className="mt-8">
+              <h2
+                id="case-article"
+                className="text-xs font-bold uppercase tracking-[0.2em] text-brand-slate"
+              >
+                {t.related_article_title}
+              </h2>
+              <ul className="mt-4 flex flex-col gap-3">
+                {relatedArticles.map((article) => (
+                  <li key={article.slug}>
+                    <Link
+                      href={`/${lang}/blog/${article.slug}`}
+                      className="card flex flex-wrap items-baseline gap-3 p-5"
+                    >
+                      <ArrowRight
+                        className="h-4 w-4 flex-shrink-0 text-brand-accent rtl:-scale-x-100"
+                        aria-hidden="true"
+                      />
+                      <span className="font-semibold text-brand-ink">{article.title[lang]}</span>
+                      <span className="body-text">{article.excerpt[lang]}</span>
                     </Link>
                   </li>
                 ))}

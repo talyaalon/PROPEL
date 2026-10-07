@@ -31,36 +31,67 @@ import { getInternalArticles } from '@/content/articles'
  */
 
 /**
- * Path prefix -> the file whose content produces those pages.
+ * Path prefix -> the file or files whose content produces those pages.
  *
  * Longest match wins, so `/portfolio/acme` resolves to the projects file
  * rather than to the dictionary that produces the index above it.
+ *
+ * **`files`, plural, and the newest commit among them wins.** It was one file
+ * per prefix, and that silently went wrong the moment a page's copy was split
+ * across two modules: the five service pages took their date from
+ * `content/services.ts` alone, so the commit that added ~600 words of body to
+ * each of them - audience, process, price factors, FAQ, all in
+ * `content/serviceDetail.ts` - would have told Google those five URLs had not
+ * changed. A lastmod that is wrong for one URL is what teaches a crawler to
+ * ignore the field on all 42, which is the exact reasoning that put real dates
+ * here in the first place.
  */
-const CONTENT_SOURCE: { prefix: string; file: string }[] = [
-  { prefix: '/portfolio/', file: 'src/content/projects.ts' },
+const CONTENT_SOURCE: { prefix: string; files: string[] }[] = [
+  { prefix: '/portfolio/', files: ['src/content/projects.ts'] },
   /*
    * Before the '/services/' entry below, and longest match wins. The migration
-   * page predates content/services.ts and reads every string it renders from
+   * page predates content/services.ts and reads its headline copy from
    * `dict.migration`, so dating it from services.ts told Google it had not
    * changed on the commit that rewrote its meta description - and would tell
    * Google it HAD changed whenever one of the five other service pages was
-   * edited. A lastmod that is wrong for one URL is what teaches a crawler to
-   * ignore the field on all 42.
+   * edited.
+   *
+   * It takes its second half from `serviceDetail.ts` like the other five, so
+   * that file is listed here too and the newest of the two dates wins.
    */
-  { prefix: '/services/migration', file: 'src/dictionaries/he.json' },
-  { prefix: '/services/', file: 'src/content/services.ts' },
-  { prefix: '/accessibility', file: 'src/content/legal.ts' },
-  { prefix: '/privacy', file: 'src/content/legal.ts' },
-  // The copy for the homepage, both indexes and the not-a-fit page lives in
-  // the dictionaries and nowhere else.
-  { prefix: '', file: 'src/dictionaries/he.json' },
+  {
+    prefix: '/services/migration',
+    files: ['src/dictionaries/he.json', 'src/content/serviceDetail.ts'],
+  },
+  { prefix: '/services/', files: ['src/content/services.ts', 'src/content/serviceDetail.ts'] },
+  { prefix: '/accessibility', files: ['src/content/legal.ts'] },
+  { prefix: '/privacy', files: ['src/content/legal.ts'] },
+  // The copy for the homepage, the services hub, both indexes, the contact
+  // page and the not-a-fit page lives in the dictionaries and nowhere else.
+  { prefix: '', files: ['src/dictionaries/he.json'] },
 ]
 
-function sourceFile(path: string): string {
+function sourceFiles(path: string): string[] {
   const match = CONTENT_SOURCE.filter((entry) => path.startsWith(entry.prefix)).sort(
     (a, b) => b.prefix.length - a.prefix.length,
   )[0]
-  return match.file
+  return match.files
+}
+
+/**
+ * The newest commit date among a page's source files, or undefined when none
+ * of them can be dated honestly.
+ *
+ * ISO 8601 with the same offset sorts lexicographically, and `lastContentChange`
+ * returns `%cI` for every file from the same repository - so a string compare is
+ * a date compare here, with no Date parsing to get wrong.
+ */
+function newestChange(files: string[]): string | undefined {
+  return files
+    .map((file) => lastContentChange(file))
+    .filter((date): date is string => Boolean(date))
+    .sort()
+    .pop()
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -77,7 +108,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   )
 
   return allPaths.flatMap((path) => {
-    const lastModified = articleDates.get(path) ?? lastContentChange(sourceFile(path))
+    const lastModified = articleDates.get(path) ?? newestChange(sourceFiles(path))
 
     return locales.map((lang) => ({
       url: `${siteConfig.url}/${lang}${path}`,

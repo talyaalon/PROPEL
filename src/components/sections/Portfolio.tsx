@@ -26,6 +26,8 @@ type PortfolioDict = {
   showcase_label: string
   showcase_prev: string
   showcase_next: string
+  /* Forwarded to PortfolioGrid, which uses it as the capture description. */
+  case_study: { screens_alt: string }
 }
 
 type Props = {

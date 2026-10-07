@@ -8,8 +8,11 @@ import { getWhatsAppURL } from '@/lib/whatsapp'
 import { mdxPosts } from '@/content/generated/posts'
 import { getProjects, projectTitle } from '@/content/projects'
 import { siteConfig } from '@/lib/config'
-import { serviceSchema, breadcrumbSchema } from '@/lib/schema'
+import { serviceSchema, breadcrumbSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
+import ServiceDetailBody from '@/components/sections/ServiceDetailBody'
+import ServiceFaqSection from '@/components/sections/ServiceFaqSection'
+import { getServiceDetail } from '@/content/serviceDetail'
 
 /**
  * The migration service.
@@ -27,6 +30,13 @@ import JsonLd from '@/components/JsonLd'
  * featured service card's own copy, and the ownership section is the FAQ
  * answer that was previously buried in a collapsed accordion at 90% scroll
  * depth on a different page.
+ *
+ * It takes the same second half as the five pages under `[service]`, from the
+ * same `content/serviceDetail.ts` and through the same two components, which
+ * is why that file is keyed by slug rather than attached to `servicePages` -
+ * this page is not a member of that array and needed the blocks anyway. The
+ * one question this page answers that the others do not is whether a
+ * migration costs the rankings, and that is its first FAQ entry.
  */
 
 type Props = {
@@ -58,6 +68,8 @@ export default async function MigrationPage({ params }: Props) {
   const service = dict.services.items.find((item) => item.id === 'migration')
   if (!service) notFound()
 
+  const detail = getServiceDetail('migration')
+
   // The FAQ answer about ownership is this service's entire value proposition.
   const ownership = dict.faq.items.find(
     (item) => item.question.includes('קוד') || item.question.toLowerCase().includes('code'),
@@ -69,6 +81,28 @@ export default async function MigrationPage({ params }: Props) {
     ['hagorer2', 'cnafim-lauf'].includes(project.slug),
   )
 
+  /*
+   * One pass over the whole document, in render order - see the identical
+   * note on the `[service]` route for why a counter cannot be handed to the
+   * child components instead. The numbers were the literals 01 to 04 here,
+   * and four new sections landed in the middle of them.
+   */
+  const clauses = (() => {
+    let n = 0
+    const next = () => String(++n).padStart(2, '0')
+    return {
+      intro: next(),
+      outcomes: next(),
+      ownership: ownership ? next() : '',
+      audience: detail ? next() : '',
+      process: detail ? next() : '',
+      pricing: detail ? next() : '',
+      sections: (detail?.sections ?? []).map(() => next()),
+      proof: proof.length > 0 ? next() : '',
+      faq: detail && detail.faq.length > 0 ? next() : '',
+    }
+  })()
+
   return (
     <>
       <JsonLd
@@ -79,6 +113,17 @@ export default async function MigrationPage({ params }: Props) {
           description: dict.migration.meta_description,
         })}
       />
+      {/* This page's own FAQ. One FAQPage block per page, as elsewhere. */}
+      {detail && detail.faq.length > 0 && (
+        <JsonLd
+          schema={faqSchema(
+            detail.faq.map((item) => ({
+              question: item.question[lang],
+              answer: item.answer[lang],
+            })),
+          )}
+        />
+      )}
       <JsonLd
         /* PROPEL > Services > migration. The hub level was missing here too -
            see the note on the [service] route, which had the same gap. */
@@ -96,7 +141,7 @@ export default async function MigrationPage({ params }: Props) {
         <div className="mx-auto max-w-3xl">
           <p className="eyebrow mb-6">
             <span className="clause" aria-hidden="true">
-              01
+              {clauses.intro}
             </span>
             {service.badge}
           </p>
@@ -114,6 +159,18 @@ export default async function MigrationPage({ params }: Props) {
             <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
             {service.cta_label}
           </a>
+
+          {/* Same addition as the five pages under [service]: the only route
+              out of this page used to leave the site. See the note there. */}
+          <p className="mt-5 text-[0.9375rem] text-brand-slate">
+            {dict.services.contact_note}{' '}
+            <Link
+              href={`/${lang}/contact`}
+              className="font-semibold text-brand-accent underline underline-offset-4 transition-colors duration-300 hover:text-brand-ink"
+            >
+              {dict.services.contact_link}
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -121,7 +178,7 @@ export default async function MigrationPage({ params }: Props) {
         <div className="mx-auto max-w-3xl">
           <h2 id="migration-outcomes" className="text-brand-ink">
             <span className="clause" aria-hidden="true">
-              02
+              {clauses.outcomes}
             </span>
             {dict.migration.outcomes_title}
           </h2>
@@ -157,7 +214,7 @@ export default async function MigrationPage({ params }: Props) {
           <div className="mx-auto max-w-3xl">
             <h2 id="migration-ownership" className="text-brand-ink">
               <span className="clause" aria-hidden="true">
-                03
+                {clauses.ownership}
               </span>
               {dict.migration.ownership_title}
             </h2>
@@ -166,12 +223,23 @@ export default async function MigrationPage({ params }: Props) {
         </section>
       )}
 
+      {/* Who it is for, the stages, what moves the price. Same component and
+          same content module as the five pages under [service]. */}
+      {detail && (
+        <ServiceDetailBody
+          lang={lang}
+          detail={detail}
+          dict={dict.services}
+          clauses={clauses}
+        />
+      )}
+
       {proof.length > 0 && (
         <section className="section section--band" aria-labelledby="migration-proof">
           <div className="mx-auto max-w-3xl">
             <h2 id="migration-proof" className="text-brand-ink">
               <span className="clause" aria-hidden="true">
-                04
+                {clauses.proof}
               </span>
               {dict.migration.proof_title}
             </h2>
@@ -234,6 +302,17 @@ export default async function MigrationPage({ params }: Props) {
         )
       })()}
 
+      {/* The objections, after the evidence - including the only question a
+          migration lead actually hesitates over, which is whether it costs
+          them the rankings they already have. */}
+      {detail && (
+        <ServiceFaqSection
+          lang={lang}
+          items={detail.faq}
+          title={dict.services.faq_title}
+          clause={clauses.faq}
+        />
+      )}
     </>
   )
 }

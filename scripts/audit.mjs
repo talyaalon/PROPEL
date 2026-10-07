@@ -5,6 +5,7 @@
  *   npm run audit -- contrast      every text role, both themes, computed
  *   npm run audit -- tab           the real tab order, with visibility
  *   npm run audit -- headings      outline per page, flagging skipped levels
+ *   npm run audit -- reflow        320px at 200% text, every page, both themes
  *   npm run audit -- css <class>   did this Tailwind utility actually compile?
  *   npm run audit -- all
  *
@@ -45,6 +46,32 @@ const VIEWPORTS = [
   { name: '768 ', width: 768, height: 1024 },
   { name: '1440', width: 1440, height: 900 },
 ]
+
+/**
+ * Every prerendered page, from the build manifest.
+ *
+ * Shared by `headings` and `reflow`, which both had their own idea of what the
+ * site contains. The heading audit's was nine literals plus the case-study
+ * slugs, and it had never seen `/services`, the five pages under it,
+ * `/contact`, `/not-a-fit`, `/terms` or a blog article - 13 pages, reported as
+ * "clean" by never being opened. Reading the manifest covers a page the day it
+ * is added.
+ *
+ * `locale` defaults to the --locale option; pass `null` for both, which is what
+ * reflow wants - RTL and LTR break differently.
+ */
+function prerenderedRoutes(locale = LOCALE) {
+  const MANIFEST = '.next/prerender-manifest.json'
+  // Metadata leaves render a PNG and have no document to measure.
+  const METADATA_LEAF = /\/(opengraph-image|twitter-image|icon|apple-icon)$/
+  if (!existsSync(MANIFEST)) return locale ? [`/${locale}`] : ['/he', '/en']
+  const prefix = locale ? `(${locale})` : '(he|en)'
+  const inScope = new RegExp(`^/${prefix}(/|$)`)
+  return Object.keys(JSON.parse(readFileSync(MANIFEST, 'utf8')).routes)
+    .filter((route) => inScope.test(route))
+    .filter((route) => !METADATA_LEAF.test(route))
+    .sort()
+}
 
 function findBrowser() {
   const found = BROWSERS.find((p) => p && existsSync(p))
@@ -329,26 +356,10 @@ async function tab(browser) {
 async function headings(browser) {
   console.log('\n=== heading outline ===')
   /*
-   * Every route, not a sample. The h1 -> h3 skip on /portfolio lived for weeks
-   * because this list stopped at four routes - an audit that skips pages
-   * reports "clean" in exactly the places nobody looked. The project slugs are
-   * read from the build manifest so a new case study is audited by existing.
+   * Every prerendered page in the locale, discovered - see `prerenderedRoutes`
+   * for what the hand-kept list it replaced was missing.
    */
-  const slugs = existsSync('.next/prerender-manifest.json')
-    ? Object.keys(JSON.parse(readFileSync('.next/prerender-manifest.json', 'utf8')).routes)
-        .filter((r) => r.startsWith(`/${LOCALE}/portfolio/`))
-        .map((r) => r.replace(`/${LOCALE}`, ''))
-    : []
-  const routes = [
-    `/${LOCALE}`,
-    `/${LOCALE}/portfolio`,
-    ...slugs.map((s) => `/${LOCALE}${s}`),
-    `/${LOCALE}/services/migration`,
-    `/${LOCALE}/blog`,
-    `/${LOCALE}/privacy`,
-    `/${LOCALE}/accessibility`,
-    `/${LOCALE}/page-not-found`,
-  ]
+  const routes = prerenderedRoutes()
 
   for (const route of routes) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
@@ -472,6 +483,82 @@ function css(needle) {
   }
 }
 
+// ── Reflow ───────────────────────────────────────────────────────────────────
+
+/**
+ * WCAG 1.4.10: 320 CSS px at 200% text, with no horizontal scrolling.
+ *
+ * This lives here rather than in a reviewer's temp script because it is the
+ * check this project needs most often. `min-width: auto` on a flex or grid item
+ * is its most recurring defect - eight instances and counting, every one of
+ * which looked correct at 1440 and 100% - and every reviewer who looked for it
+ * wrote this measurement again from memory.
+ *
+ * Two things it does that the obvious version does not:
+ *
+ *  - It walks EVERY element for `scrollWidth > clientWidth`, because the
+ *    element that overflows is almost never the one that scrolls, and a
+ *    `getBoundingClientRect` on the container misses an overflowing inline.
+ *  - It skips elements that scroll on purpose. The article pages put a fenced
+ *    code block in an `overflow-x: auto` region with a focus stop, deliberately,
+ *    and reporting that as a reflow failure teaches everyone to ignore the
+ *    output.
+ *
+ * Both themes, because a very large number of this project's defects have
+ * appeared in exactly one of the four locale-and-theme combinations.
+ */
+async function reflow(browser) {
+  console.log('\n=== reflow: 320px / 200% text ===')
+  const routes = prerenderedRoutes()
+  const themes = THEME ? [THEME] : ['light', 'dark']
+  let failures = 0
+
+  for (const theme of themes) {
+    for (const route of routes) {
+      const page = await browser.newPage({ viewport: { width: 320, height: 720 } })
+      await page.goto(ORIGIN + route, { waitUntil: 'networkidle' })
+
+      await page.evaluate((t) => {
+        // The accessibility menu's own text control sets the root font size,
+        // so this is 200% reproduced the way a visitor produces it.
+        document.documentElement.style.fontSize = '200%'
+        document.documentElement.setAttribute('data-theme', t)
+        document.querySelectorAll('.reveal').forEach((e) => e.classList.add('is-visible'))
+      }, theme)
+      await page.waitForTimeout(250)
+
+      const { width, client, culprits } = await page.evaluate(() => {
+        const root = document.documentElement
+        const out = []
+        for (const el of document.querySelectorAll('*')) {
+          if (el.clientWidth === 0 || el.scrollWidth <= el.clientWidth + 1) continue
+          const style = getComputedStyle(el)
+          if (style.overflowX === 'auto' || style.overflowX === 'scroll') continue
+          const classes = (el.className || '').toString().split(/\s+/).slice(0, 2).join('.')
+          out.push(
+            `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}` +
+              `${classes ? '.' + classes : ''}  ${el.scrollWidth} > ${el.clientWidth}`,
+          )
+        }
+        return { width: root.scrollWidth, client: root.clientWidth, culprits: out.slice(0, 4) }
+      })
+
+      if (width > client) {
+        failures += 1
+        console.log(`  FAIL  ${theme.padEnd(5)} ${route.padEnd(44)} ${width} > ${client}`)
+        culprits.forEach((c) => console.log(`          ${c}`))
+      }
+      await page.close()
+    }
+  }
+
+  console.log(
+    failures === 0
+      ? `  clean - ${routes.length} route(s) x ${themes.length} theme(s)`
+      : `  ${failures} reflow failure(s)`,
+  )
+}
+
 // ── Run ──────────────────────────────────────────────────────────────────────
 
 if (command === 'css') {
@@ -483,6 +570,7 @@ if (command === 'css') {
     if (command === 'contrast' || command === 'all') await contrast(browser)
     if (command === 'tab' || command === 'all') await tab(browser)
     if (command === 'headings' || command === 'all') await headings(browser)
+    if (command === 'reflow' || command === 'all') await reflow(browser)
   } finally {
     await browser.close()
   }

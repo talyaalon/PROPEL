@@ -240,7 +240,7 @@ export default async function RootLayout({ children, params }: Props) {
             is one node with one @id, present on every page that references it
             - which is all of them. The WebSite node declares the locale. */}
         <JsonLd schema={professionalServiceSchema(lang, dict.meta.description)} />
-        <JsonLd schema={webSiteSchema(lang, dict.meta.title, dict.meta.description)} />
+        <JsonLd schema={webSiteSchema(lang, dict.meta.description)} />
 
         <main id="main" tabIndex={-1} className="outline-none">
           {children}

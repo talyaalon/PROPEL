@@ -143,9 +143,57 @@ export const siteConfig = {
     .map((url) => url.trim())
     .filter(Boolean),
 
+  /**
+   * The person who writes the articles.
+   *
+   * ── Why this is environment-only, and empty ──────────────────────────────
+   *
+   * Every `Article` on the site declares `author` as the ORGANIZATION. That is
+   * valid schema and it is a weak signal: Google's guidance on
+   * experience-and-expertise is about people, and a reader deciding whether to
+   * trust a technical article wants to know who wrote it. A named human author
+   * with a profile Google can already see is the strongest thing this blog is
+   * missing.
+   *
+   * It cannot be filled in from here. A person's name is the one fact on this
+   * site that nobody can derive, and a `sameAs` pointing at a LinkedIn profile
+   * that is not theirs is a false claim about a real individual - the worst
+   * version of the error `siteConfig.sameAs` already exists to avoid.
+   *
+   * TODO(owner): set these three and the Person author and the author box
+   * appear on every article at once. Until then `author` stays the
+   * organization, the box does not render, and nothing anywhere asserts a name.
+   *
+   *   NEXT_PUBLIC_AUTHOR_NAME     the name as it should read in Hebrew
+   *   NEXT_PUBLIC_AUTHOR_NAME_EN  the same name in Latin script (optional;
+   *                               falls back to the Hebrew one, which on /en
+   *                               would print Hebrew script inside an English
+   *                               page - the same defect `titleEn` fixes for
+   *                               the two Hebrew-branded case studies)
+   *   NEXT_PUBLIC_AUTHOR_SAME_AS  comma-separated profile URLs (LinkedIn,
+   *                               GitHub). Absent rather than guessed.
+   */
+  authorName: process.env.NEXT_PUBLIC_AUTHOR_NAME ?? '',
+  authorNameEn: process.env.NEXT_PUBLIC_AUTHOR_NAME_EN ?? '',
+  authorSameAs: (process.env.NEXT_PUBLIC_AUTHOR_SAME_AS ?? '')
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean),
+
   /** Last review date of the legal pages, ISO format. */
   legalUpdated: process.env.NEXT_PUBLIC_LEGAL_UPDATED ?? '2026-07-27',
 } as const
+
+/**
+ * The article author's name in a locale, or '' while none is set.
+ *
+ * One place, because three consumers need the same answer: the Article
+ * schema's `author`, the visible author box, and the box's heading.
+ */
+export function authorNameFor(locale: 'he' | 'en'): string {
+  if (locale === 'en') return siteConfig.authorNameEn || siteConfig.authorName
+  return siteConfig.authorName
+}
 
 // ── Deploy environment ────────────────────────────────────────────────────────
 

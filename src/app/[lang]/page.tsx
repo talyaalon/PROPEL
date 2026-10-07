@@ -15,6 +15,7 @@ import Portfolio from '@/components/sections/Portfolio'
 import Testimonials from '@/components/sections/Testimonials'
 import About from '@/components/sections/About'
 import Faq from '@/components/sections/Faq'
+import FromBlog from '@/components/sections/FromBlog'
 import Contact from '@/components/sections/Contact'
 
 type Props = {
@@ -66,6 +67,8 @@ export default async function Page({ params }: Props) {
       process: next(),
       portfolio: hasProjects ? next() : '',
       about: next(),
+      // The homepage had no link to a single article. See FromBlog.
+      blog: next(),
       faq: next(),
       contact: next(),
     }
@@ -84,7 +87,7 @@ export default async function Page({ params }: Props) {
 
  The hero is deliberately not wrapped in Reveal: it is above the fold,
  it already has its own entrance animation, and it is the LCP element. */}
-      <Hero lang={lang} dict={dict.hero} />
+      <Hero lang={lang} dict={dict.hero} screensAlt={dict.portfolio.case_study.screens_alt} />
       <TrustedBy label={dict.trusted_by} />
 
       <Reveal>
@@ -101,6 +104,13 @@ export default async function Page({ params }: Props) {
       </Reveal>
       <Reveal>
         <About dict={dict.about} clause={clauses.about} />
+      </Reveal>
+      {/* After About and before the FAQ: the reader has just been told who we
+          are, and the articles are the part they can check. It is also the
+          first editorial link from the homepage into the blog - the whole
+          point of the section. */}
+      <Reveal>
+        <FromBlog lang={lang} dict={dict.blog} clause={clauses.blog} />
       </Reveal>
       <Reveal>
         <Faq dict={dict.faq} clause={clauses.faq} />

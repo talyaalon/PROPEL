@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import { locales, isLocale } from '@/lib/i18n'
 import { getDictionary } from '@/lib/getDictionary'
 import { siteConfig } from '@/lib/config'
 import { pageMetadata } from '@/lib/pageMetadata'
-import { breadcrumbSchema, collectionPageSchema } from '@/lib/schema'
+import { breadcrumbSchema, collectionPageSchema, faqSchema } from '@/lib/schema'
 import JsonLd from '@/components/JsonLd'
 import { servicePages } from '@/content/services'
 import { getProjects, projectTitle } from '@/content/projects'
@@ -24,6 +24,28 @@ import { getProjects, projectTitle } from '@/content/projects'
  * that back it, so this page adds routing and proof rather than a fourth copy
  * of the same paragraph. The homepage section, the service page and this hub
  * each say something the other two do not.
+ *
+ * ── Why the expansion is written at hub ALTITUDE ─────────────────────────────
+ *
+ * The page sat at ~151 words, the thinnest commercial page on the site, and it
+ * is the one `scripts/overlap.mjs` watches most closely precisely because
+ * expanding a hub is the change that recreates the homepage-versus-portfolio
+ * duplication. So none of the three new blocks is a per-service block made
+ * generic:
+ *
+ *   - **How to choose** is a symptom-to-page map. It exists only where all
+ *     five are in one place, and it is also five contextual links with the
+ *     service name as the anchor text, which the cards alone did not give.
+ *   - **What every project includes** is the set of commitments that are
+ *     identical across the five. Repeating them on each service page would be
+ *     the duplication; stating them once, here, is what a hub is for.
+ *   - **How a price is arrived at** is the quoting PROCESS. What moves the
+ *     number is per-service and stays on each service page, and the last item
+ *     says so and points there.
+ *
+ * The FAQ is engagement-level - combining services, the smallest project,
+ * working alongside existing suppliers - and overlaps neither the homepage FAQ
+ * (what it costs, how long it takes, who owns the code) nor any service FAQ.
  */
 
 type Props = {
@@ -53,6 +75,23 @@ export default async function ServicesHub({ params }: Props) {
 
   const dict = await getDictionary(lang)
   const projects = getProjects()
+
+  /*
+   * The document's clause numbering, in one pass - the same shape as the two
+   * service routes. The eyebrow was the only numbered element on the page.
+   */
+  const clauses = (() => {
+    let n = 0
+    const next = () => String(++n).padStart(2, '0')
+    return {
+      intro: next(),
+      choose: next(),
+      list: next(),
+      included: next(),
+      price: next(),
+      faq: next(),
+    }
+  })()
 
   /*
    * The migration service predates `content/services.ts` and keeps its own
@@ -92,12 +131,16 @@ export default async function ServicesHub({ params }: Props) {
           { name: dict.services.hub_title, url: `${siteConfig.url}/${lang}/services` },
         ])}
       />
+      {/* The hub's own FAQ. One FAQPage per page is the limit seo-audit
+          enforces; the five service pages each carry their own, about their
+          own service, and this one is about the engagement. */}
+      <JsonLd schema={faqSchema(dict.services.hub_faq_items)} />
 
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 lg:mb-14">
           <p className="eyebrow mb-6">
             <span className="clause" aria-hidden="true">
-              01
+              {clauses.intro}
             </span>
             {dict.services.hub_eyebrow}
           </p>
@@ -107,7 +150,57 @@ export default async function ServicesHub({ params }: Props) {
           <p className="lead mt-5 max-w-2xl">{dict.services.hub_subtitle}</p>
         </div>
 
-        <ul className="grid gap-5 sm:gap-6 lg:grid-cols-2">
+        {/* ── Symptom to page ────────────────────────────────────────────
+            A reader arrives with "orders are read out loud to the kitchen",
+            not with "business automation". Five cards titled by service name
+            make them do that translation themselves, and the ones who get it
+            wrong land on the page that does not answer them.
+
+            It is also the page's only contextual links to its own children -
+            the cards link by title alone, which is a good anchor and gives a
+            crawler no sentence around it. */}
+        <div className="mb-12 border-y border-brand-line py-8 lg:mb-16">
+          <h2 className="text-brand-ink">
+            <span className="clause" aria-hidden="true">
+              {clauses.choose}
+            </span>
+            {dict.services.hub_choose_title}
+          </h2>
+          <p className="body-text mt-4 max-w-2xl">{dict.services.hub_choose_body}</p>
+          <ul className="mt-8 flex max-w-3xl flex-col gap-5">
+            {dict.services.hub_choose_items.map((item) => {
+              const card = cards.find((entry) => entry.slug === item.slug)
+              if (!card) return null
+              return (
+                <li key={item.slug} className="min-w-0">
+                  {/* The symptom reads first and the destination second,
+                      because the reader is scanning for their own sentence and
+                      not for a service name they do not have yet. */}
+                  <p className="body-text [overflow-wrap:anywhere]">{item.when}</p>
+                  <Link
+                    href={`/${lang}/services/${card.slug}`}
+                    className="group/pick mt-1.5 inline-flex items-center gap-1.5 py-1 font-semibold text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+                  >
+                    {card.title}
+                    <ArrowRight
+                      className="h-4 w-4 flex-shrink-0 transition-transform duration-300 group-hover/pick:translate-x-1 rtl:-scale-x-100 rtl:group-hover/pick:-translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+
+        <h2 className="text-brand-ink">
+          <span className="clause" aria-hidden="true">
+            {clauses.list}
+          </span>
+          {dict.services.hub_list_title}
+        </h2>
+
+        <ul className="mt-8 grid gap-5 sm:gap-6 lg:grid-cols-2">
           {cards.map((card, index) => {
             const proof = projects.filter((project) => card.proofSlugs.includes(project.slug))
 
@@ -179,6 +272,80 @@ export default async function ServicesHub({ params }: Props) {
             )
           })}
         </ul>
+
+        {/* ── What is the same whichever service it is ───────────────────
+            Stated once, here. On each service page this would be five copies
+            of one paragraph, which is the duplication the hub exists to
+            avoid. */}
+        <div className="mt-14 border-t border-brand-line pt-10 lg:mt-20">
+          <h2 className="text-brand-ink">
+            <span className="clause" aria-hidden="true">
+              {clauses.included}
+            </span>
+            {dict.services.hub_included_title}
+          </h2>
+          <p className="body-text mt-4 max-w-2xl">{dict.services.hub_included_body}</p>
+          <ul className="mt-8 grid max-w-4xl gap-x-10 gap-y-4 sm:grid-cols-2">
+            {dict.services.hub_included_items.map((item) => (
+              <li key={item} className="body-text flex min-w-0 items-start gap-2.5">
+                <Check
+                  className="mt-1 h-4 w-4 flex-shrink-0 text-brand-accent"
+                  aria-hidden="true"
+                />
+                <span className="min-w-0 [overflow-wrap:anywhere]">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ── How a number is reached ────────────────────────────────────
+            The PROCESS, not the factors. What moves the price is per service
+            and lives on each service page; the last item points there. */}
+        <div className="mt-14 border-t border-brand-line pt-10">
+          <h2 className="text-brand-ink">
+            <span className="clause" aria-hidden="true">
+              {clauses.price}
+            </span>
+            {dict.services.hub_price_title}
+          </h2>
+          <p className="body-text mt-4 max-w-2xl">{dict.services.hub_price_body}</p>
+          <ol className="mt-8 flex max-w-3xl flex-col gap-4">
+            {dict.services.hub_price_items.map((item, index) => (
+              <li key={item} className="body-text flex min-w-0 gap-4">
+                {/* aria-hidden: an <ol> is numbered for assistive technology
+                    already, so this would be read out twice. */}
+                <span className="num flex-shrink-0" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="min-w-0 [overflow-wrap:anywhere]">{item}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* ── The engagement FAQ ─────────────────────────────────────────
+            Visible h3/p, which is what the FAQPage block above declares. The
+            questions are about working with us; the homepage FAQ answers what
+            a project costs and how long it takes, and each service page
+            answers its own. */}
+        <div className="mt-14 border-t border-brand-line pt-10">
+          <h2 className="text-brand-ink">
+            <span className="clause" aria-hidden="true">
+              {clauses.faq}
+            </span>
+            {dict.services.hub_faq_title}
+          </h2>
+          <div className="mt-8 max-w-3xl divide-y divide-brand-line border-t border-brand-line">
+            {dict.services.hub_faq_items.map((item) => (
+              <div key={item.question} className="py-6">
+                <h3 className="min-w-0 break-words text-[1.0625rem] font-bold text-brand-ink">
+                  {item.question}
+                </h3>
+                <p className="body-text mt-3 [overflow-wrap:anywhere]">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* The honest counterweight to a page that lists five things we sell.
 

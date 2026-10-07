@@ -1,4 +1,4 @@
-import { siteConfig } from './config'
+import { siteConfig, usesPlaceholderDomain, authorNameFor } from './config'
 import type { Locale } from './i18n'
 import { projectTitle, type Project } from '@/content/projects'
 import { servicePages } from '@/content/services'
@@ -10,6 +10,27 @@ import { servicePages } from '@/content/services'
  */
 
 export type Json = Record<string, unknown>
+
+/**
+ * The brand, as people write it.
+ *
+ * The site did not appear first for its own name, in either script. `name` is
+ * the only string Google was given, and on the WebSite node that string was
+ * the full SERP line - slogan included - so nothing in the graph said that
+ * this business is called PROPEL and that Hebrew speakers write it `פרופל`.
+ *
+ * These are spellings of one existing name, not claims about anything: no
+ * profile, no number, nothing that could be wrong. The domain is appended
+ * from `siteConfig` rather than typed, and only when it is the real one -
+ * the placeholder is an RFC 2606 `.invalid` host and has no business being
+ * published as a name for the business.
+ */
+const ALTERNATE_NAMES = ['פרופל', 'Propel'] as const
+
+function brandNames(includeDomain: boolean): string[] {
+  if (!includeDomain || usesPlaceholderDomain) return [...ALTERNATE_NAMES]
+  return [...ALTERNATE_NAMES, new URL(siteConfig.url).hostname]
+}
 
 /**
  * The service names in the offer catalog, in the locale of the page carrying
@@ -46,8 +67,24 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
     // two half-entities in the knowledge graph describing one business.
     '@id': `${siteConfig.url}/#organization`,
     name: 'PROPEL',
+    /*
+     * The same business, written the way people write it. A query for
+     * `פרופל` had nothing in the graph to match: the only name here was
+     * the Latin one, on a site whose default locale is Hebrew.
+     */
+    alternateName: brandNames(false),
     legalName: siteConfig.legalName || undefined,
-    url: `${siteConfig.url}/${lang}`,
+    /*
+     * The site root, not the locale home.
+     *
+     * One `@id` carrying two different `url` values - `/he` on every Hebrew
+     * page and `/en` on every English one - is one node contradicting itself,
+     * which is the failure the locale-independent `@id` was introduced to
+     * fix and this field was still reproducing. The business has one website
+     * and this is its address; the per-locale homes are the two WebSite
+     * nodes below, which is where a locale-scoped URL belongs.
+     */
+    url: `${siteConfig.url}/`,
     logo: `${siteConfig.url}/icon.svg`,
     // The share card doubles as the business image. Without one there is no
     // photograph of the business anywhere in the graph.
@@ -75,8 +112,13 @@ export function professionalServiceSchema(lang: Locale, description: string): Js
         }
       : {}),
     /*
-     * Set NEXT_PUBLIC_SAME_AS once a Google Business Profile exists. Absent
-     * rather than guessed - see the note on the field in lib/config.ts.
+     * TODO(owner): set NEXT_PUBLIC_SAME_AS to the real profile URLs -
+     * LinkedIn, GitHub, and the Google Business Profile once one exists -
+     * comma-separated. This is the single most useful field the organization
+     * node is still missing for a brand query, and it is the one field here
+     * that cannot be derived: a `sameAs` pointing at a profile that is not
+     * this business is a false statement in the knowledge graph, so it stays
+     * absent until the owner supplies the addresses. See lib/config.ts.
      */
     ...(siteConfig.sameAs.length > 0 ? { sameAs: siteConfig.sameAs } : {}),
     /*
@@ -173,14 +215,34 @@ export function serviceSchema(input: {
  * what it is written in, both published by the one organization entity. The
  * `@id` is locale-scoped for that reason - unlike the organization, which is
  * one business and therefore one node.
+ *
+ * **`name` is the brand and nothing else.** It used to be `dict.meta.title`,
+ * so the site's name was given to Google as
+ * "מערכות ואוטומציה לעסקים | PROPEL" - a slogan with the name
+ * buried at the end, on both locales. A name field holding a sentence is a
+ * name field Google cannot match a brand query against, and the site was not
+ * ranking first for its own name in either script. The slogan has not been
+ * lost; it is `description`, below, which is the field for it.
+ *
+ * **`url` stays locale-scoped, deliberately.** The site root was considered
+ * and rejected: there are two of these nodes, so both would then claim
+ * `https://propel.co.il/` while carrying different `@id` and different
+ * `inLanguage` - two entities asserting the same address, which is the exact
+ * split the locale-independent organization `@id` exists to prevent. The root
+ * is the ORGANIZATION's url (see above), which is one node and can hold it
+ * without contradiction.
  */
-export function webSiteSchema(lang: Locale, name: string, description: string): Json {
+export function webSiteSchema(lang: Locale, description: string): Json {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${siteConfig.url}/${lang}#website`,
     url: `${siteConfig.url}/${lang}`,
-    name,
+    name: 'PROPEL',
+    // The domain is included here and not on the organization: a hostname is
+    // a name for a WEBSITE, and it is how a fair number of people type a
+    // brand into the search bar.
+    alternateName: brandNames(true),
     description,
     inLanguage: lang === 'he' ? 'he-IL' : 'en',
     publisher: { '@id': `${siteConfig.url}/#organization` },
@@ -215,7 +277,34 @@ export function articleSchema(input: {
      * inline copies with the same name would be a second entity for Google to
      * reconcile - the exact split the /#organization consolidation fixed.
      */
-    author: { '@id': `${siteConfig.url}/#organization` },
+    /*
+     * A Person once the owner names one, the organization until then.
+     *
+     * `author` pointed at `/#organization` on all six article URLs, which is
+     * valid and weak: the guidance on experience and expertise is about
+     * people, and the author line is the one place an article can carry a
+     * human. `worksFor` keeps the business in the graph, so naming a person
+     * adds an entity rather than replacing one.
+     *
+     * The branch is the honest part. `authorNameFor` returns '' until
+     * NEXT_PUBLIC_AUTHOR_NAME is set, so the old behaviour is what ships while
+     * the name is unknown - see the TODO(owner) in lib/config.ts. A `Person`
+     * node with an invented name, or a `sameAs` pointing at a stranger's
+     * LinkedIn, is a false claim about a real individual.
+     *
+     * The `url` is the homepage's about section, which is the only page on the
+     * site that describes who is behind it. It becomes a real /about page's
+     * URL the day there is one.
+     */
+    author: authorNameFor(input.lang)
+      ? {
+          '@type': 'Person',
+          name: authorNameFor(input.lang),
+          url: `${siteConfig.url}/${input.lang}#about`,
+          worksFor: { '@id': `${siteConfig.url}/#organization` },
+          ...(siteConfig.authorSameAs.length > 0 ? { sameAs: siteConfig.authorSameAs } : {}),
+        }
+      : { '@id': `${siteConfig.url}/#organization` },
     publisher: { '@id': `${siteConfig.url}/#organization` },
     /*
      * The per-article share card, which already exists and answers 200 at

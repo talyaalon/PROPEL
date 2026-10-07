@@ -42,9 +42,19 @@ type HeroDict = {
 type Props = {
   lang: Locale
   dict: HeroDict
+  /**
+   * The accessible name for the device frames, with `{title}` to fill.
+   *
+   * Passed in rather than read here: the string belongs with the other
+   * portfolio copy, and this component is handed `dict.hero` alone. The
+   * frames used to be announced as the brand name by itself, which told a
+   * screen-reader user that there is an image on the first screen and
+   * nothing about what is in it.
+   */
+  screensAlt: string
 }
 
-export default function Hero({ lang, dict }: Props) {
+export default function Hero({ lang, dict, screensAlt }: Props) {
   const projects = getProjects()
 
   /*
@@ -207,7 +217,7 @@ export default function Hero({ lang, dict }: Props) {
               <ProjectScreens
                 desktop={showcase.screens.desktop}
                 mobile={showcase.screens.mobile}
-                title={projectTitle(showcase, lang)}
+                title={screensAlt.replace('{title}', projectTitle(showcase, lang))}
                 eager
               />
 
