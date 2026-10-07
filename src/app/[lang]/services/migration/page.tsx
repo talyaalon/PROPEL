@@ -313,6 +313,29 @@ export default async function MigrationPage({ params }: Props) {
           clause={clauses.faq}
         />
       )}
+
+      {/* Up to the hub.
+
+          The five pages under `[service]` were each given this link when the
+          hub turned out to have no editorial inbound link from its own
+          children. This page was missed, because it is the one service page
+          that is not under that route - the same reason its breadcrumb was
+          missing the hub level. Measured on the built site: every English
+          service page linked the hub except this one. */}
+      <section className="section pt-0">
+        <div className="mx-auto max-w-3xl">
+          <Link
+            href={`/${lang}/services`}
+            className="group/all inline-flex items-center gap-2 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+          >
+            {dict.services.view_all}
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-300 group-hover/all:translate-x-1 rtl:-scale-x-100 rtl:group-hover/all:-translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
+      </section>
     </>
   )
 }

@@ -358,10 +358,29 @@ export default async function ServicesHub({ params }: Props) {
             The label is `contact.fit_link`, the string already approved and
             already used for this link on /contact and in the footer. Nothing
             new is claimed here. */}
-        <div className="mt-12 border-t border-brand-line pt-8 lg:mt-16">
+        {/* Two ways out of the hub, and both were missing one.
+
+            `/not-a-fit` is the honest counterweight. The contact link beside it
+            is the other half: this page's first price step is "the scoping
+            call", and the hub was the one commercial page with no route to the
+            form in its body - the five pages under it all got one. A link that
+            exists only in the header and the footer is a chrome link, which is
+            counted separately by `scripts/inlinks.mjs` precisely because it is
+            satisfied before any real link exists. */}
+        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-brand-line pt-8 lg:mt-16">
+          <Link
+            href={`/${lang}/contact`}
+            className="group/go inline-flex items-center gap-1.5 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+          >
+            {dict.services.contact_link}
+            <ArrowRight
+              className="h-4 w-4 transition-transform duration-300 group-hover/go:translate-x-1 rtl:-scale-x-100 rtl:group-hover/go:-translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
           <Link
             href={`/${lang}/not-a-fit`}
-            className="group/fit inline-flex items-center gap-1.5 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-accent transition-colors duration-300 hover:text-brand-ink"
+            className="group/fit inline-flex items-center gap-1.5 py-1.5 font-display text-[0.875rem] font-bold uppercase tracking-[.08em] text-brand-slate transition-colors duration-300 hover:text-brand-ink"
           >
             {dict.contact.fit_link}
             <ArrowRight
