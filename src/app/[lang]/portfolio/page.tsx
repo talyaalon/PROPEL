@@ -69,6 +69,25 @@ export default async function PortfolioIndex({ params }: Props) {
           path: 'portfolio',
           name: dict.portfolio.index_title,
           description: dict.portfolio.index_subtitle,
+          /*
+           * The case studies this page actually lists.
+           *
+           * The blog index and the services hub both declare `hasPart`; this
+           * one did not, and it is the collection with the most members. A
+           * `CollectionPage` with no `hasPart` tells Google it is a collection
+           * and declines to say of what, which is the one thing the type is
+           * for. Found by inventorying every JSON-LD node on all 42 URLs and
+           * diffing the recommended fields per @type - it is invisible to a
+           * per-page check, because nothing about this page in isolation is
+           * wrong.
+           *
+           * Derived from `projects` above, which is `getProjects()` - so a
+           * draft project is absent here exactly as it is absent from the grid
+           * below it and from the sitemap.
+           */
+          hasPart: projects.map(
+            (project) => `${siteConfig.url}/${lang}/portfolio/${project.slug}`,
+          ),
         })}
       />
       {/* PROPEL > this page. Search Console reported 0 valid breadcrumbs
