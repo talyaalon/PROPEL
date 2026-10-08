@@ -41,6 +41,33 @@ import type { NextConfig } from 'next'
  * was the wrong thing to want, not because it could not fire.
  */
 const securityHeaders = [
+  /*
+   * HSTS, declared here as well as emitted by Netlify.
+   *
+   * Netlify adds `Strict-Transport-Security: max-age=31536000` to every
+   * response on its own once Force HTTPS is on, measured on production. What
+   * it does not add is `includeSubDomains`, so a subdomain of propel.co.il
+   * could be reached over plain HTTP and strip the protection the apex has.
+   * No subdomain serves anything today, which is exactly why now is the
+   * cheap moment to close it.
+   *
+   * `preload` is deliberately ABSENT. It requires submitting the domain to a
+   * list baked into browser binaries, and removal takes months to propagate -
+   * an irreversible decision that belongs to the owner and not to a header
+   * list. It is written up as an open question in docs/seo-audit-report.md.
+   *
+   * VERIFY AFTER DEPLOY: Netlify's own HSTS and this one may both land, and a
+   * browser honours whichever arrives first. Two identical-intent headers are
+   * harmless but one of them is then doing nothing, which is worth knowing
+   * rather than assuming:
+   *
+   *   curl -sI https://propel.co.il/he | grep -ci strict-transport-security
+   *
+   * If that prints 2, check which value wins and keep only the layer that
+   * does. If it prints 1 with `includeSubDomains`, this replaced Netlify's
+   * and the job is done.
+   */
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },

@@ -37,14 +37,73 @@
   force = true
 
 # ─────────────────────────────────────────────────────────────────────────────
+# The one entry point that took two hops
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Measured on 2026-10-08, every non-canonical variant, hop by hop:
+#
+#   http://propel.co.il/         301 -> https://propel.co.il/        1 hop
+#   https://www.propel.co.il/    301 -> https://propel.co.il/        1 hop
+#   http://www.propel.co.il/     301 -> https://www.propel.co.il/
+#                                301 -> https://propel.co.il/        2 HOPS
+#
+# Three of the four were already single-hop. The fourth was not, because
+# Netlify does the HTTPS upgrade and the apex consolidation as two separate
+# edge steps and neither is configurable. This rule collapses them by matching
+# the scheme and host together.
+#
+# `force = true` for the same reason as the rule above: the path IS served by
+# the Next handler, and a rule that merely matches an existing route does not
+# win without it.
+#
+# VERIFY AFTER DEPLOY. This cannot be tested from a local build - `next start`
+# never sees the scheme or the host, so there is no way to know from here
+# whether Netlify's redirect engine runs before its own forced-HTTPS step. The
+# netlify.app rule above proves host-scoped matching works; it does not prove
+# scheme-scoped matching does.
+#
+#   curl -sI http://www.propel.co.il/ | grep -iE '^HTTP|^location'
+#
+# Want exactly one 301 with `location: https://propel.co.il/`. If it still
+# shows two hops, this rule did not fire and should be DELETED rather than
+# left in place - see the 404 note at the bottom of this file for why a rule
+# that looks like it works and does not is worse than no rule.
+[[redirects]]
+  from = "http://www.propel.co.il/*"
+  to = "https://propel.co.il/:splat"
+  status = 301
+  force = true
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Caching
 # ─────────────────────────────────────────────────────────────────────────────
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Why these blocks also carry X-Content-Type-Options
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# The five security headers live in `next.config.ts`, and the comment there
+# records the measurement: pages and generated `opengraph-image` routes carry
+# all five, and files served straight off the CDN carry none. Measured on
+# production on 2026-10-08:
+#
+#   curl -sI https://propel.co.il/he          all five present
+#   curl -sI https://propel.co.il/paper.webp  none of them
+#
+# A Next `headers()` rule is applied by the Next handler, and a file in
+# `public/` never reaches it. So the one header that is worth having on a
+# static asset is added here, in the blocks that already exist for caching.
+#
+# Only `nosniff`. The other four are meaningless on an image: there is no
+# document to frame, no referrer policy to express, no CSP to enforce on a PNG,
+# and HSTS is already added by Netlify on every response.
+#
 # The build output is content-hashed, so it can never go stale.
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Content-Type-Options = "nosniff"
 
 # Everything under public/ was served `max-age=0, must-revalidate` - Next's
 # default - so every repeat visitor re-downloaded the paper texture and all
@@ -66,16 +125,19 @@
   for = "/*.webp"
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/projects/*"
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/*.svg"
   [headers.values]
     Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    X-Content-Type-Options = "nosniff"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # What is deliberately NOT here
