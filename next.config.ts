@@ -6,8 +6,39 @@ import type { NextConfig } from 'next'
  * Netlify's `[[headers]]` rules do reach files under /_next/static, but HTML
  * pages are served through the Next.js runtime and bypass them - verified
  * against the live deploy, where the static CSS carried all four headers and
- * the pages carried none. Declaring them at the framework level applies them to
- * every response, and keeps them working if the site ever moves off Netlify.
+ * the pages carried none. Declaring them at the framework level is what gets
+ * them onto every page, and keeps them working if the site ever moves off
+ * Netlify.
+ *
+ * ── What this does NOT cover, measured ──────────────────────────────────────
+ *
+ * This block used to claim it "applies them to every response". It does not.
+ * Measured on production on 2026-10-08, header by header:
+ *
+ *   /he                                              all five present
+ *   /he/opengraph-image                              all five present
+ *   /he/blog/<slug>/opengraph-image                  all five present
+ *   /paper.webp                                      NONE of them
+ *
+ * The line is drawn at the Next runtime, not at "HTML versus images": a
+ * generated `opengraph-image` is a route and is covered, while a file sitting
+ * in `public/` is served straight off Netlify's CDN and never consults a
+ * `headers()` rule. So every page and every generated image carries the five;
+ * the static assets in `public/` carry only what `netlify.toml` gives them,
+ * which today is `Cache-Control` plus the HSTS that Netlify adds itself.
+ *
+ * The remaining gap is `X-Content-Type-Options: nosniff` on the files in
+ * `public/` - the paper texture and the five project captures. It is real and
+ * it is small: they are images served with a correct `Content-Type`, so
+ * `nosniff` buys little. It is written up as a recommendation in
+ * docs/seo-audit-report.md rather than fixed here, because it is a security
+ * change and that report is an SEO audit.
+ *
+ * One correction worth leaving in place, because the first draft of this
+ * comment got it backwards: a `headers()` rule here CAN reach an
+ * `opengraph-image` response. The `X-Robots-Tag` experiment described at the
+ * bottom of this file would have worked technically. It was removed because it
+ * was the wrong thing to want, not because it could not fire.
  */
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
