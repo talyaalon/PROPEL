@@ -86,7 +86,9 @@ understanding. Neither is a ranking lever.
 
 | File | Change | Reason |
 |---|---|---|
-| none | No code change | All four non-canonical host variants already behave. Three of four are single-hop 301s. The fourth is documented below as a measured 2-hop with a judgement not to chase it. |
+| `netlify.toml` | Added a scheme-and-host scoped 301 for `http://www.propel.co.il/*` | Three of the four non-canonical variants were already single-hop. `http://www.` took two, because Netlify does the HTTPS upgrade and the apex consolidation as separate edge steps. Annotated VERIFY AFTER DEPLOY: nothing local can see a scheme or a host, so whether the rule fires is only knowable on production. Delete it if it does not. |
+| `next.config.ts` | `Strict-Transport-Security: max-age=31536000; includeSubDomains` | Netlify emits HSTS without `includeSubDomains`, so a subdomain could be reached over plain HTTP and strip the apex protection. `preload` deliberately omitted, see section F.7. |
+| `netlify.toml` | `X-Content-Type-Options = "nosniff"` on all four static header blocks | The framework headers reach pages and generated image routes and never reach files in `public/`, measured header by header. Only `nosniff` is useful on an image. |
 
 ### Sitemap
 
@@ -116,7 +118,7 @@ understanding. Neither is a ranking lever.
 
 | File | Change | Reason |
 |---|---|---|
-| none | No code change | Nothing was worth changing. `lcp-discovery-insight` scores a perfect 1 on both homepages: `fetchpriority=high` applied, request discoverable in the initial document, not lazy-loaded. Two measured opportunities are listed in section E as recommendations with their trade-offs, not applied. |
+| none | No code change | Nothing was worth changing. `lcp-discovery-insight` scores a perfect 1 on both homepages: `fetchpriority=high` applied, request discoverable in the initial document, not lazy-loaded. Two measured opportunities remain unapplied on purpose, with reasoning in section F.8: inlining the 11 KB stylesheet, and tightening `browserslist`. |
 
 ### Tooling and documentation
 
@@ -126,6 +128,7 @@ understanding. Neither is a ranking lever.
 | `scripts/schema-check.mjs` (new), `package.json` | `npm run audit:schema`: per-`@type` required/recommended fields, site-wide `@id` resolution, `FAQPage` answer visibility, `@type` census | The old check verified JSON-LD *parses*. This answers whether it is *correct*, and it is what found the `hasPart` gap. |
 | `src/app/robots.ts` | Replaced the false `X-Robots-Tag` claim with the measurement and the decision | See section A item 3. |
 | `next.config.ts` | Replaced "applies to every response" with the per-header, per-URL-shape measurement | See section A item 4. Also corrects an error in my own first draft of that comment, which asserted the opposite. |
+| `docs/keyword-research.md` (new) | Five Hebrew commercial SERPs, read by running the queries | Replaces section E's hypotheses with observed competitor composition. No volume data: no keyword tool was available, and the document says so rather than estimating. |
 
 **No visible copy or design changed in this branch.** The only user-facing
 difference is 534 bytes of JSON-LD on each portfolio index page.
