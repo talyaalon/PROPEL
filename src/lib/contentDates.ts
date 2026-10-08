@@ -25,7 +25,42 @@ import { execFileSync } from 'node:child_process'
  *
  * Memoised: the sitemap asks for the same handful of files once per locale,
  * and this runs at build time inside the Next build process.
+ *
+ * ── Every date comes back as UTC, and that is not cosmetic ───────────────────
+ *
+ * `git log --format=%cI` emits the committer's own offset, frozen at commit
+ * time. The owner commits from a machine on Asia/Bangkok, so every one of the
+ * sitemap's 42 `lastmod` values shipped as `+07:00` - a Thailand offset on an
+ * Israeli business's sitemap, which is confusing to read and was flagged in a
+ * Search Console review.
+ *
+ * Worse than confusing, it was unstable. `%cI` is the offset of whoever made
+ * the commit, so the same commit produces `+07:00` here and would produce a
+ * different string for a commit made from Israel - and `--date=iso-strict-local`,
+ * the obvious alternative, reads the BUILD machine's `TZ` instead, which means
+ * a local build and a Netlify build would disagree about the same commit.
+ * Google's requirement for `lastmod` is that it be consistently and verifiably
+ * accurate; a field whose text depends on who committed or where it was built
+ * fails the "consistently" half even when the instant it names is right.
+ *
+ * Normalising in JavaScript rather than through `TZ` is what makes the output
+ * depend on nothing but the commit itself.
  */
+
+/**
+ * A git ISO timestamp as UTC, seconds precision: `2026-10-07T07:53:21Z`.
+ *
+ * Milliseconds are dropped because the commit never had any - `.000Z` would be
+ * three digits of invented precision in a public file. An unparseable input is
+ * returned untouched rather than turned into `Invalid Date`: a date this
+ * module cannot normalise is still a date git vouched for, and the guards in
+ * this file exist to prefer no answer over a wrong one.
+ */
+function toUtc(iso: string): string {
+  const parsed = new Date(iso)
+  if (Number.isNaN(parsed.getTime())) return iso
+  return parsed.toISOString().replace(/\.\d{3}Z$/, 'Z')
+}
 
 const cache = new Map<string, string | undefined>()
 
@@ -80,7 +115,7 @@ export function lastContentChange(file: string): string | undefined {
       }).trim()
       // An empty string means the file has no commits - a new file in a dirty
       // tree, typically. Not an error, just nothing to report.
-      result = iso.length > 0 ? iso : undefined
+      result = iso.length > 0 ? toUtc(iso) : undefined
     } catch {
       result = undefined
     }
