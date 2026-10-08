@@ -86,7 +86,7 @@ understanding. Neither is a ranking lever.
 
 | File | Change | Reason |
 |---|---|---|
-| `netlify.toml` | Added a scheme-and-host scoped 301 for `http://www.propel.co.il/*` | Three of the four non-canonical variants were already single-hop. `http://www.` took two, because Netlify does the HTTPS upgrade and the apex consolidation as separate edge steps. Annotated VERIFY AFTER DEPLOY: nothing local can see a scheme or a host, so whether the rule fires is only knowable on production. Delete it if it does not. |
+| `netlify.toml` | Tried a scheme-scoped 301 for `http://www.propel.co.il/*`, measured it on production, **removed it** | It did not fire: Netlify upgrades to HTTPS before consulting the redirect table, so an `http://`-scoped `from` can never match. The negative result is recorded in the file so nobody tries it a third time. See F.4. |
 | `next.config.ts` | `Strict-Transport-Security: max-age=31536000; includeSubDomains` | Netlify emits HSTS without `includeSubDomains`, so a subdomain could be reached over plain HTTP and strip the apex protection. `preload` deliberately omitted, see section F.7. |
 | `netlify.toml` | `X-Content-Type-Options = "nosniff"` on all four static header blocks | The framework headers reach pages and generated image routes and never reach files in `public/`, measured header by header. Only `nosniff` is useful on an image. |
 
@@ -531,7 +531,7 @@ share-card routes, a `Disallow` in `robots.txt` becomes worth discussing - but
 that trades every share preview on WhatsApp for crawl efficiency, which on this
 site is probably the wrong trade.
 
-### 4. `http://www.propel.co.il/` took 2 hops. APPLIED, and needs verifying live.
+### 4. `http://www.propel.co.il/` takes 2 hops. TRIED, MEASURED, REVERTED.
 
 Chain: `http://www` → `https://www` (301) → `https://` (301) → locale. Both
 hops are Netlify's own, the forced-HTTPS upgrade and the primary-domain
@@ -560,21 +560,34 @@ unverifiable rule was the only real objection.
   force = true
 ```
 
-**It is annotated in `netlify.toml` as VERIFY AFTER DEPLOY and it means it.**
-`next start` never sees a scheme or a host, so nothing local can tell whether
-Netlify's redirect engine runs before its own forced-HTTPS step. The
-netlify.app rule above it proves host-scoped matching works; it does not prove
-scheme-scoped matching does.
+**It was deployed, measured on production, and it did not fire.** The chain
+was unchanged:
 
-```bash
-curl -sI http://www.propel.co.il/ | grep -iE '^HTTP|^location'
-# want: one 301, location: https://propel.co.il/
+```
+curl -s -o /dev/null -D - -L http://www.propel.co.il/
+301 -> https://www.propel.co.il/      Netlify's HTTPS upgrade, first
+301 -> https://propel.co.il/          Netlify's apex consolidation
 ```
 
-If it still shows two hops, **delete the rule** rather than leave it. This file
-already carries a scar from a `[[redirects]]` block that was written, deployed,
-measured and never fired, and its own comment says a rule that looks like a
-safeguard and is not one is worse than no rule.
+Netlify's forced-HTTPS step runs **before** the redirect table is consulted, so
+an `http://`-scoped `from` can never match. The netlify.app rule works because
+it is `https://`-scoped: host matching is available to the redirect engine,
+scheme matching is not.
+
+**The rule has been removed** and the negative result is recorded in
+`netlify.toml` where the next person will look. This file already carried a
+scar from a `[[redirects]]` block that was written, deployed, measured and
+never fired, and its own comment says a rule that looks like a safeguard and
+is not one is worse than no rule. That is now the second time this repository
+has learned it from the same table.
+
+So the original judgement stands after all, for a better reason than the one I
+gave: it is not merely not worth fixing, it is **not fixable from this
+repository**. Two 301 hops from a rare entry point costs approximately
+nothing - Google follows chains of this length without losing signal, and the
+self-referential canonical on every page settles the host question
+independently of any redirect. Closing `http://www.` would need a change at
+the DNS or CDN layer, not in the codebase.
 
 ### 5. The root `/` is a 307, not a 301. Deliberate, and I recommend keeping it.
 

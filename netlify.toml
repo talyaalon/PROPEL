@@ -37,7 +37,7 @@
   force = true
 
 # ─────────────────────────────────────────────────────────────────────────────
-# The one entry point that took two hops
+# `http://www.` takes two hops, and no rule here can change that
 # ─────────────────────────────────────────────────────────────────────────────
 #
 # Measured on 2026-10-08, every non-canonical variant, hop by hop:
@@ -47,32 +47,33 @@
 #   http://www.propel.co.il/     301 -> https://www.propel.co.il/
 #                                301 -> https://propel.co.il/        2 HOPS
 #
-# Three of the four were already single-hop. The fourth was not, because
-# Netlify does the HTTPS upgrade and the apex consolidation as two separate
-# edge steps and neither is configurable. This rule collapses them by matching
-# the scheme and host together.
+# A scheme-and-host scoped rule was written to collapse the two, deployed, and
+# measured on production. **It did not fire.** The chain was unchanged:
 #
-# `force = true` for the same reason as the rule above: the path IS served by
-# the Next handler, and a rule that merely matches an existing route does not
-# win without it.
+#   [[redirects]]
+#     from = "http://www.propel.co.il/*"
+#     to = "https://propel.co.il/:splat"
+#     status = 301
+#     force = true
 #
-# VERIFY AFTER DEPLOY. This cannot be tested from a local build - `next start`
-# never sees the scheme or the host, so there is no way to know from here
-# whether Netlify's redirect engine runs before its own forced-HTTPS step. The
-# netlify.app rule above proves host-scoped matching works; it does not prove
-# scheme-scoped matching does.
+#   curl -s -o /dev/null -D - -L http://www.propel.co.il/
+#   301 -> https://www.propel.co.il/      <- Netlify's HTTPS upgrade, first
+#   301 -> https://propel.co.il/          <- Netlify's apex consolidation
 #
-#   curl -sI http://www.propel.co.il/ | grep -iE '^HTTP|^location'
+# So Netlify's forced-HTTPS step runs BEFORE the redirect table is consulted,
+# and an `http://`-scoped `from` can never match. The netlify.app rule above
+# works because it is `https://`-scoped: host matching is available, scheme
+# matching is not.
 #
-# Want exactly one 301 with `location: https://propel.co.il/`. If it still
-# shows two hops, this rule did not fire and should be DELETED rather than
-# left in place - see the 404 note at the bottom of this file for why a rule
-# that looks like it works and does not is worse than no rule.
-[[redirects]]
-  from = "http://www.propel.co.il/*"
-  to = "https://propel.co.il/:splat"
-  status = 301
-  force = true
+# The rule was deleted rather than left in place, because this file's own note
+# at the bottom is right - a rule that looks like a safeguard and is not one is
+# worse than no rule, and that is the second time this repository has learned
+# it from the Netlify redirect table.
+#
+# Not worth pursuing further. Two 301 hops from a rare entry point costs
+# approximately nothing: Google follows chains of this length without losing
+# signal, and the self-referential canonical on every page settles the host
+# question independently of any redirect.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Caching
