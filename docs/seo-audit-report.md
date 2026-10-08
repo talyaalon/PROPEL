@@ -1,7 +1,19 @@
 # SEO indexing audit - what was measured, what changed, what to do next
 
-Branch: `seo/indexing-audit`. Nothing is pushed or deployed; every commit is
-local and waiting on approval.
+Branch: `seo/indexing-audit`.
+
+**Update, 2026-10-08, after approval.** The owner approved applying every
+recommendation. Three items this report had deferred are now implemented and
+are marked `APPLIED` in section F: the `http://www.` redirect, HSTS
+`includeSubDomains`, and `nosniff` on the static assets. Two recommendations
+were deliberately **not** applied even under a blanket approval, and section F
+says why in each case: `preload` on HSTS, and tightening `browserslist`. Both
+change behaviour for real visitors in ways that are not mine to decide.
+
+Keyword research was also carried out and lives in
+`docs/keyword-research.md`. It replaces the hypotheses in section E with
+observed SERP composition for five Hebrew commercial queries. It contains no
+volume data, because no keyword tool was available here.
 
 Measured on 2026-10-08 against **production** (`https://propel.co.il`) for the
 "before" state, and against a **local production build** served by
@@ -305,6 +317,20 @@ I cannot touch Search Console from here. In priority order:
 
 ## E. Organic growth, prioritized
 
+**Superseded in part: see `docs/keyword-research.md`.** That document was
+written after this one, by running the actual queries and reading who ranks,
+and it replaces the guesswork below with observed SERP composition for the
+five Hebrew money terms. The three findings worth jumping to:
+
+- **Migration is genuine white space.** Every result for the Wix and WordPress
+  migration queries assumes the destination is WordPress. One competitor
+  ranking for the query argues PROPEL's case verbatim.
+- **The ecommerce cost page is the only result on its SERP with no numbers.**
+  Every competitor publishes shekel ranges. Two numbers from you fixes it.
+- **Accessibility and service-call systems are both the wrong fights.** The
+  first SERP is overlay vendors at 450 to 850 shekels; the second is seven
+  off-the-shelf SaaS products. Neither head term is winnable or worth winning.
+
 **Every keyword below is a hypothesis to validate with a keyword tool. I have
 no search-volume data and have invented none.** Where a real signal exists it
 is attributed; everything else is reasoning from the services you sell and the
@@ -502,7 +528,7 @@ share-card routes, a `Disallow` in `robots.txt` becomes worth discussing - but
 that trades every share preview on WhatsApp for crawl efficiency, which on this
 site is probably the wrong trade.
 
-### 4. `http://www.propel.co.il/` takes 2 hops. I did not fix it. Your call.
+### 4. `http://www.propel.co.il/` took 2 hops. APPLIED, and needs verifying live.
 
 Chain: `http://www` → `https://www` (301) → `https://` (301) → locale. Both
 hops are Netlify's own, the forced-HTTPS upgrade and the primary-domain
@@ -516,11 +542,12 @@ on exactly this: a `[[redirects]]` block with `status = 404` was written,
 deployed, measured, and never fired, and the file now warns that "a rule that
 looks like a safeguard and is not one is worse than no rule."
 
-My judgement: **not worth it.** SEO impact is approximately zero. Google
-follows redirect chains of this length without losing signal, the canonical on
-every page settles the host question independently, and `http://www.` is a rare
-entry point. If you want it anyway, this is the rule to try and the command to
-verify it with:
+My original judgement was **not worth it** - SEO impact is approximately zero,
+Google follows chains of this length without losing signal, and the canonical
+on every page settles the host question independently. Under the blanket
+approval it is now in `netlify.toml` anyway, because the approval also removed
+the blocker: with a deploy available the rule becomes testable, and an
+unverifiable rule was the only real objection.
 
 ```toml
 [[redirects]]
@@ -530,10 +557,21 @@ verify it with:
   force = true
 ```
 
+**It is annotated in `netlify.toml` as VERIFY AFTER DEPLOY and it means it.**
+`next start` never sees a scheme or a host, so nothing local can tell whether
+Netlify's redirect engine runs before its own forced-HTTPS step. The
+netlify.app rule above it proves host-scoped matching works; it does not prove
+scheme-scoped matching does.
+
 ```bash
 curl -sI http://www.propel.co.il/ | grep -iE '^HTTP|^location'
 # want: one 301, location: https://propel.co.il/
 ```
+
+If it still shows two hops, **delete the rule** rather than leave it. This file
+already carries a scar from a `[[redirects]]` block that was written, deployed,
+measured and never fired, and its own comment says a rule that looks like a
+safeguard and is not one is worse than no rule.
 
 ### 5. The root `/` is a 307, not a 301. Deliberate, and I recommend keeping it.
 
@@ -561,22 +599,35 @@ in the knowledge graph.
 Send LinkedIn, GitHub and (once it exists) the Google Business Profile URL, and
 `NEXT_PUBLIC_SAME_AS` takes them comma-separated with no code change.
 
-### 7. HSTS is set but minimal. Decision needed on hardening.
+### 7. HSTS hardening. `includeSubDomains` APPLIED, `preload` still your call.
 
 `Strict-Transport-Security: max-age=31536000` is present on every response,
 added by Netlify rather than declared in this repository. It has no
 `includeSubDomains` and no `preload`.
 
-I did not change it, for a specific reason: declaring HSTS in `next.config.ts`
-would put a second `Strict-Transport-Security` header on every response
-alongside Netlify's, and I cannot verify the combined result without deploying.
-The repository already warns about exactly this failure mode for duplicate CSP
-headers.
+`includeSubDomains` is now declared in `next.config.ts`:
+`max-age=31536000; includeSubDomains`. Without it a subdomain of propel.co.il
+could be reached over plain HTTP and strip the protection the apex has, and
+since no subdomain serves anything today this is the cheapest moment to close
+it.
 
-**Open questions:** do you want `includeSubDomains` (safe today, since no
-subdomain serves anything, but it is a commitment), and do you want `preload`
-(effectively irreversible for months, and requires submission to the browser
-preload list)? Neither affects SEO. Both are worth a deliberate yes or no.
+**Verify after deploy**, because Netlify's own HSTS and this one may both land
+and a browser honours whichever arrives first:
+
+```bash
+curl -sI https://propel.co.il/he | grep -ci strict-transport-security
+```
+
+If that prints `2`, check which value wins and keep only the layer that is
+doing the work. If it prints `1` and the value carries `includeSubDomains`,
+this one replaced Netlify's and the job is done.
+
+**`preload` is deliberately NOT applied, even under a blanket approval.** It
+requires submitting the domain to a list compiled into browser binaries, and
+removal takes months to reach users. That is an irreversible commitment about
+the domain rather than a header preference, and it is not a decision a code
+audit should make on your behalf. It has no SEO effect either way. Say the word
+and it is one more token on one line.
 
 ### 8. Two measured performance opportunities I did not take.
 
@@ -590,8 +641,16 @@ fixes:
 - **12 KiB of legacy JavaScript polyfills** (`Array.prototype.at` and friends)
   in a Next chunk, driven by the `browserslist` in `package.json`
   (`last 2 versions, not dead, > 0.5%, not op_mini all`). Tightening it drops
-  the polyfills and also drops support for older browsers. That is your call
-  about your audience, not mine.
+  the polyfills and also drops support for older browsers.
+
+  **Still not applied, deliberately, despite the blanket approval.** The
+  polyfills that would go are for methods that need roughly Chrome 92 and
+  Safari 15.4, so tightening the list means some real visitors on older phones
+  get a broken page instead of a slightly slower one. Saving 12 KiB is not
+  worth finding that out from a customer, it has no SEO effect, and I have no
+  data on what your visitors actually use - Search Console has no field data
+  for this property at all. If you know your audience is current, say so and
+  it is a one-line change.
 
 ### 9. `lastmod` timestamps are still identical across most pages. On purpose.
 
@@ -607,13 +666,21 @@ build to locate each entity's line range, and a plausible-looking wrong date is
 worse for `lastmod` credibility than an honestly coarse one. Say the word if
 you want it anyway.
 
-### 10. `X-Content-Type-Options: nosniff` does not reach `public/` files.
+### 10. `nosniff` on `public/` files. APPLIED.
 
 Measured: pages and generated image routes carry all five security headers;
 `/paper.webp` and the five project captures carry none, because Netlify's CDN
 serves them without consulting a Next `headers()` rule. The fix is a one-line
 addition to the existing `netlify.toml` header blocks.
 
-I did not make it, because this branch is an SEO audit and that is a security
-change that should be reviewed as one. It is written up in the `next.config.ts`
-comment so it is not lost.
+Applied: `X-Content-Type-Options = "nosniff"` is now on all four existing
+`[[headers]]` blocks in `netlify.toml` - `/_next/static/*`, `/*.webp`,
+`/projects/*` and `/*.svg`.
+
+Only `nosniff`. The other four headers say nothing useful about a PNG: there is
+no document to frame, no referrer policy to express and no CSP to enforce, and
+HSTS is already on every response. Verify with:
+
+```bash
+curl -sI https://propel.co.il/paper.webp | grep -i x-content-type-options
+```
